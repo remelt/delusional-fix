@@ -1,0 +1,759 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Beta|Win32">
+      <Configuration>Beta</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Beta|x64">
+      <Configuration>Beta</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Dev|Win32">
+      <Configuration>Dev</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Dev|x64">
+      <Configuration>Dev</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{0d587cb8-c127-4bc9-8117-72fbb62010a8}</ProjectGuid>
+    <RootNamespace>Parallax</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>delusional</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Beta|Win32'">
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Beta|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Dev|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>.\bin</OutDir>
+    <IntDir>.\intermediate</IntDir>
+    <TargetName>debug</TargetName>
+    <IncludePath>C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\src;includes\imgui\freetype\include;includes;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\lib;includes\imgui\freetype\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>.\bin\release</OutDir>
+    <IntDir>.\intermediate</IntDir>
+    <TargetName>release</TargetName>
+    <IncludePath>C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\src;includes\imgui\freetype\include;includes;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\lib;includes\imgui\freetype\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>.\bin\release</OutDir>
+    <IntDir>.\intermediate</IntDir>
+    <TargetName>release</TargetName>
+    <IncludePath>C:\Users\Justin\Desktop\Github\delusional\includes\lua\src;C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\src;includes\imgui\freetype\include;includes;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Justin\Desktop\Github\delusional\includes\lua\lib;C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\lib;includes\imgui\freetype\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\Justin\Desktop\Github\delusional\includes\lua\src;C:\Users\Justin\Desktop\Github\delusional\includes\imgui\freetype\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Justin\Desktop\Github\delusional\includes\imgui\freetype\lib;C:\Users\Justin\Desktop\Github\delusional\includes\lua\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>
+    </LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Beta|Win32'">
+    <IncludePath>C:\Users\Moi\Documents\GitHub\delusional-master\includes\lua\src;includes\imgui\freetype\include;includes;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Moi\Documents\GitHub\delusional-master\includes\lua\lib;includes\imgui\freetype\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>.\bin\release</OutDir>
+    <IntDir>.\intermediate</IntDir>
+    <TargetName>release</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;PARALLAX_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalOptions>/std:c++latest  /EHsc %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dev|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;PARALLAX_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <SupportJustMyCode>false</SupportJustMyCode>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions>/std:c++latest  /EHsc %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;PARALLAX_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <OmitFramePointers>true</OmitFramePointers>
+      <UseStandardPreprocessor>
+      </UseStandardPreprocessor>
+      <AdditionalOptions>/std:c++latest  /EHsc %(AdditionalOptions)</AdditionalOptions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;PARALLAX_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;PARALLAX_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;PARALLAX_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>
+      </OmitFramePointers>
+      <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Beta|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <AdditionalOptions>/std:c++latest  /EHsc %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <Link>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="features\aimbot\aimbot.cpp" />
+    <ClCompile Include="features\aimbot\autowall.cpp" />
+    <ClCompile Include="features\aimbot\backtrack.cpp" />
+    <ClCompile Include="features\aimbot\triggerbot.cpp" />
+    <ClCompile Include="features\cache\cache.cpp" />
+    <ClCompile Include="features\events\events.cpp" />
+    <ClCompile Include="features\misc\jumpstats.cpp" />
+    <ClCompile Include="features\misc\misc.cpp" />
+    <ClCompile Include="features\movement\calculator.cpp" />
+    <ClCompile Include="features\movement\movement.cpp" />
+    <ClCompile Include="features\movement\recorder.cpp" />
+    <ClCompile Include="features\panorama\scaleform.cpp" />
+    <ClCompile Include="features\movement\prediction\prediction.cpp" />
+    <ClCompile Include="features\skins\knife_proxy.cpp" />
+    <ClCompile Include="features\skins\parser.cpp" />
+    <ClCompile Include="features\skins\skins.cpp" />
+    <ClCompile Include="features\visuals\chams.cpp" />
+    <ClCompile Include="features\visuals\glow.cpp" />
+    <ClCompile Include="features\visuals\grenade_prediction.cpp" />
+    <ClCompile Include="features\visuals\player.cpp" />
+    <ClCompile Include="features\visuals\visuals.cpp" />
+    <ClCompile Include="features\visuals\weather.cpp" />
+    <ClCompile Include="hooks\functions\alloc_key_values_memory.cpp" />
+    <ClCompile Include="hooks\functions\base_player.cpp" />
+    <ClCompile Include="hooks\functions\create_move.cpp" />
+    <ClCompile Include="hooks\functions\d3d.cpp" />
+    <ClCompile Include="hooks\functions\do_post_screen_effects.cpp" />
+    <ClCompile Include="hooks\functions\draw_model_execute.cpp" />
+    <ClCompile Include="hooks\functions\draw_set_color.cpp" />
+    <ClCompile Include="hooks\functions\emit_sound.cpp" />
+    <ClCompile Include="hooks\functions\fire_event.cpp" />
+    <ClCompile Include="hooks\functions\frame_stage_notify.cpp" />
+    <ClCompile Include="hooks\functions\get_color_modulation.cpp" />
+    <ClCompile Include="hooks\functions\get_screen_aspect_ratio.cpp" />
+    <ClCompile Include="hooks\functions\is_connected.cpp" />
+    <ClCompile Include="hooks\functions\level_init_pre_entity.cpp" />
+    <ClCompile Include="hooks\functions\list_leaves_in_box.cpp" />
+    <ClCompile Include="hooks\functions\lock_cursor.cpp" />
+    <ClCompile Include="hooks\functions\modify_eye_position.cpp" />
+    <ClCompile Include="hooks\functions\on_jump.cpp" />
+    <ClCompile Include="hooks\functions\on_screen_size_changed.cpp" />
+    <ClCompile Include="hooks\functions\override_mouse_input.cpp" />
+    <ClCompile Include="hooks\functions\override_view.cpp" />
+    <ClCompile Include="hooks\functions\paint_traverse.cpp" />
+    <ClCompile Include="hooks\functions\push_notice.cpp" />
+    <ClCompile Include="hooks\functions\send_datagram.cpp" />
+    <ClCompile Include="hooks\functions\set_visuals_data.cpp" />
+    <ClCompile Include="hooks\functions\should_draw_viewmodel.cpp" />
+    <ClCompile Include="hooks\functions\supports_full_depth.cpp" />
+    <ClCompile Include="hooks\functions\sv_pure.cpp" />
+    <ClCompile Include="hooks\functions\vsnprintf.cpp" />
+    <ClCompile Include="hooks\hooks.cpp" />
+    <ClCompile Include="includes\discord\discord_rpc_load.cpp" />
+    <ClCompile Include="includes\discord\SourceFiles\connection_win.cpp" />
+    <ClCompile Include="includes\discord\SourceFiles\discord_register_win.cpp" />
+    <ClCompile Include="includes\discord\SourceFiles\discord_rpc.cpp" />
+    <ClCompile Include="includes\discord\SourceFiles\rpc_connection.cpp" />
+    <ClCompile Include="includes\discord\SourceFiles\serialization.cpp" />
+    <ClCompile Include="includes\imgui\imgui.cpp" />
+    <ClCompile Include="includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="includes\imgui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="includes\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="includes\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="includes\imgui\imgui_tables.cpp" />
+    <ClCompile Include="includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="includes\imgui\misc\freetype\imgui_freetype.cpp" />
+    <ClCompile Include="includes\json\jsoncpp.cpp" />
+    <ClCompile Include="includes\lua\src\lapi.c" />
+    <ClCompile Include="includes\lua\src\lauxlib.c" />
+    <ClCompile Include="includes\lua\src\lbaselib.c" />
+    <ClCompile Include="includes\lua\src\lbitlib.c" />
+    <ClCompile Include="includes\lua\src\lcode.c" />
+    <ClCompile Include="includes\lua\src\lcorolib.c" />
+    <ClCompile Include="includes\lua\src\lctype.c" />
+    <ClCompile Include="includes\lua\src\ldblib.c" />
+    <ClCompile Include="includes\lua\src\ldebug.c" />
+    <ClCompile Include="includes\lua\src\ldo.c" />
+    <ClCompile Include="includes\lua\src\ldump.c" />
+    <ClCompile Include="includes\lua\src\lfunc.c" />
+    <ClCompile Include="includes\lua\src\lgc.c" />
+    <ClCompile Include="includes\lua\src\linit.c" />
+    <ClCompile Include="includes\lua\src\liolib.c" />
+    <ClCompile Include="includes\lua\src\llex.c" />
+    <ClCompile Include="includes\lua\src\lmathlib.c" />
+    <ClCompile Include="includes\lua\src\lmem.c" />
+    <ClCompile Include="includes\lua\src\loadlib.c" />
+    <ClCompile Include="includes\lua\src\lobject.c" />
+    <ClCompile Include="includes\lua\src\lopcodes.c" />
+    <ClCompile Include="includes\lua\src\loslib.c" />
+    <ClCompile Include="includes\lua\src\lparser.c" />
+    <ClCompile Include="includes\lua\src\lstate.c" />
+    <ClCompile Include="includes\lua\src\lstring.c" />
+    <ClCompile Include="includes\lua\src\lstrlib.c" />
+    <ClCompile Include="includes\lua\src\ltable.c" />
+    <ClCompile Include="includes\lua\src\ltablib.c" />
+    <ClCompile Include="includes\lua\src\ltm.c" />
+    <ClCompile Include="includes\lua\src\lua.c" />
+    <ClCompile Include="includes\lua\src\lundump.c" />
+    <ClCompile Include="includes\lua\src\lutf8lib.c" />
+    <ClCompile Include="includes\lua\src\lvm.c" />
+    <ClCompile Include="includes\lua\src\lzio.c" />
+    <ClCompile Include="includes\minhook\buffer.c" />
+    <ClCompile Include="includes\minhook\hde\hde32.c" />
+    <ClCompile Include="includes\minhook\hde\hde64.c" />
+    <ClCompile Include="includes\minhook\hook.c" />
+    <ClCompile Include="includes\minhook\trampoline.c" />
+    <ClCompile Include="menu\config\config.cpp" />
+    <ClCompile Include="menu\custom.cpp" />
+    <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="sdk\math\vec3.cpp" />
+    <ClCompile Include="sdk\math\view_matrix.cpp" />
+    <ClCompile Include="sdk\netvars\netvars.cpp" />
+    <ClCompile Include="sdk\sdk.cpp" />
+    <ClCompile Include="sdk\structs\color.cpp" />
+    <ClCompile Include="utils\render\draw.cpp" />
+    <ClCompile Include="utils\render\render.cpp" />
+    <ClCompile Include="utils\render\structures.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="features\aimbot\aimbot.hpp" />
+    <ClInclude Include="features\cache\cache.hpp" />
+    <ClInclude Include="features\events\events.hpp" />
+    <ClInclude Include="features\misc\misc.hpp" />
+    <ClInclude Include="features\model\model.hpp" />
+    <ClInclude Include="features\movement\movement.hpp" />
+    <ClInclude Include="features\panorama\icons.hpp" />
+    <ClInclude Include="features\panorama\scaleform.hpp" />
+    <ClInclude Include="features\movement\prediction\prediction.hpp" />
+    <ClInclude Include="features\skins\proxy_hook.hpp" />
+    <ClInclude Include="features\visuals\visuals.hpp" />
+    <ClInclude Include="hooks\hooks.hpp" />
+    <ClInclude Include="includes\discord\discord_rpc.h" />
+    <ClInclude Include="includes\discord\Includes\discord_register.h" />
+    <ClInclude Include="includes\discord\Includes\discord_rpc.h" />
+    <ClInclude Include="includes\discord\SourceFiles\backoff.h" />
+    <ClInclude Include="includes\discord\SourceFiles\connection.h" />
+    <ClInclude Include="includes\discord\SourceFiles\msg_queue.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\allocators.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\document.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\encodedstream.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\encodings.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\error\en.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\error\error.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\filereadstream.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\filewritestream.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\fwd.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\clzll.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\itoa.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\meta.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\pow10.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\regex.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\stack.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\strtod.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\internal\swap.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\memorybuffer.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\memorystream.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\pointer.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\prettywriter.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\rapidjson.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\reader.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\schema.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\stream.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\stringbuffer.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rapidjson\writer.h" />
+    <ClInclude Include="includes\discord\SourceFiles\rpc_connection.h" />
+    <ClInclude Include="includes\discord\SourceFiles\serialization.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\ftconfig.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\ftheader.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\ftmodule.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\ftoption.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\ftstdlib.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\integer-types.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\mac-support.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\config\public-macros.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\freetype.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftadvanc.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftbbox.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftbdf.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftbitmap.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftbzip2.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftcache.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftchapters.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftcid.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftcolor.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftdriver.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\fterrdef.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\fterrors.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftfntfmt.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftgasp.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftglyph.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftgxval.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftgzip.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftimage.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftincrem.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftlcdfil.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftlist.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftlogging.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftlzw.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftmac.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftmm.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftmodapi.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftmoderr.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftotval.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftoutln.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftparams.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftpfr.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftrender.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftsizes.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftsnames.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftstroke.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftsynth.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftsystem.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\fttrigon.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\fttypes.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ftwinfnt.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\t1tables.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\ttnameid.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\tttables.h" />
+    <ClInclude Include="includes\imgui\freetype\include\freetype\tttags.h" />
+    <ClInclude Include="includes\imgui\freetype\include\ft2build.h" />
+    <ClInclude Include="includes\imgui\imconfig.h" />
+    <ClInclude Include="includes\imgui\imgui.h" />
+    <ClInclude Include="includes\imgui\imgui_impl_dx9.h" />
+    <ClInclude Include="includes\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="includes\imgui\imgui_internal.h" />
+    <ClInclude Include="includes\imgui\imgui_stdlib.h" />
+    <ClInclude Include="includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="includes\imgui\imstb_truetype.h" />
+    <ClInclude Include="includes\imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="includes\json\json-forwards.h" />
+    <ClInclude Include="includes\json\json.h" />
+    <ClInclude Include="includes\lua\src\lapi.h" />
+    <ClInclude Include="includes\lua\src\lauxlib.h" />
+    <ClInclude Include="includes\lua\src\lcode.h" />
+    <ClInclude Include="includes\lua\src\lctype.h" />
+    <ClInclude Include="includes\lua\src\ldebug.h" />
+    <ClInclude Include="includes\lua\src\ldo.h" />
+    <ClInclude Include="includes\lua\src\lfunc.h" />
+    <ClInclude Include="includes\lua\src\lgc.h" />
+    <ClInclude Include="includes\lua\src\llex.h" />
+    <ClInclude Include="includes\lua\src\llimits.h" />
+    <ClInclude Include="includes\lua\src\lmem.h" />
+    <ClInclude Include="includes\lua\src\lobject.h" />
+    <ClInclude Include="includes\lua\src\lopcodes.h" />
+    <ClInclude Include="includes\lua\src\lparser.h" />
+    <ClInclude Include="includes\lua\src\lprefix.h" />
+    <ClInclude Include="includes\lua\src\lstate.h" />
+    <ClInclude Include="includes\lua\src\lstring.h" />
+    <ClInclude Include="includes\lua\src\ltable.h" />
+    <ClInclude Include="includes\lua\src\ltm.h" />
+    <ClInclude Include="includes\lua\src\lua.h" />
+    <ClInclude Include="includes\lua\src\lua.hpp" />
+    <ClInclude Include="includes\lua\src\luaconf.h" />
+    <ClInclude Include="includes\lua\src\lualib.h" />
+    <ClInclude Include="includes\lua\src\lundump.h" />
+    <ClInclude Include="includes\lua\src\lvm.h" />
+    <ClInclude Include="includes\lua\src\lzio.h" />
+    <ClInclude Include="includes\minhook\buffer.h" />
+    <ClInclude Include="includes\minhook\hde\hde32.h" />
+    <ClInclude Include="includes\minhook\hde\hde64.h" />
+    <ClInclude Include="includes\minhook\hde\pstdint.h" />
+    <ClInclude Include="includes\minhook\hde\table32.h" />
+    <ClInclude Include="includes\minhook\hde\table64.h" />
+    <ClInclude Include="includes\minhook\minhook.h" />
+    <ClInclude Include="includes\minhook\trampoline.h" />
+    <ClInclude Include="includes\nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="includes\nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\conversions\from_json.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\conversions\to_json.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\exceptions.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\hash.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\input\binary_reader.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\input\input_adapters.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\input\json_sax.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\input\lexer.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\input\parser.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\input\position_t.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\json_pointer.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\json_ref.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\macro_scope.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\macro_unscope.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\meta\detected.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\meta\identity_tag.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\meta\is_sax.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\meta\type_traits.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\meta\void_t.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\output\binary_writer.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\output\output_adapters.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\output\serializer.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\string_escape.hpp" />
+    <ClInclude Include="includes\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="includes\nlohmann\json.hpp" />
+    <ClInclude Include="includes\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="includes\nlohmann\ordered_map.hpp" />
+    <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="menu\config\config.hpp" />
+    <ClInclude Include="menu\fonts\icon.h" />
+    <ClInclude Include="menu\fonts\menu_font.hpp" />
+    <ClInclude Include="menu\menu.hpp" />
+    <ClInclude Include="sdk\classes\animstate.hpp" />
+    <ClInclude Include="sdk\classes\collideable.hpp" />
+    <ClInclude Include="sdk\classes\convar.hpp" />
+    <ClInclude Include="sdk\classes\c_view_setup.hpp" />
+    <ClInclude Include="sdk\classes\studio.hpp" />
+    <ClInclude Include="sdk\classes\view_setup_t.hpp" />
+    <ClInclude Include="sdk\interfaces\cglobalvarsbase.hpp" />
+    <ClInclude Include="sdk\interfaces\chudchat.hpp" />
+    <ClInclude Include="sdk\interfaces\glow_manager.hpp" />
+    <ClInclude Include="sdk\interfaces\iappsystem.hpp" />
+    <ClInclude Include="sdk\interfaces\ibaseclientdll.hpp" />
+    <ClInclude Include="sdk\interfaces\iclientstate.hpp" />
+    <ClInclude Include="sdk\interfaces\iconsole.hpp" />
+    <ClInclude Include="sdk\interfaces\ilocalize.hpp" />
+    <ClInclude Include="sdk\interfaces\imaterialsystem.hpp" />
+    <ClInclude Include="sdk\interfaces\imdlcache.hpp" />
+    <ClInclude Include="sdk\interfaces\ipanel.hpp" />
+    <ClInclude Include="sdk\interfaces\isurface.hpp" />
+    <ClInclude Include="sdk\interfaces\ivcliententitylist.hpp" />
+    <ClInclude Include="sdk\interfaces\ivengineclient.hpp" />
+    <ClInclude Include="sdk\interfaces\ivmodelinfo.hpp" />
+    <ClInclude Include="sdk\interfaces\iplayermovement.hpp" />
+    <ClInclude Include="sdk\interfaces\iv_debug_overlay.hpp" />
+    <ClInclude Include="sdk\interfaces\iv_effects.hpp" />
+    <ClInclude Include="sdk\interfaces\iv_model_render.hpp" />
+    <ClInclude Include="sdk\interfaces\iv_render_beams.hpp" />
+    <ClInclude Include="sdk\interfaces\i_filesystem.hpp" />
+    <ClInclude Include="sdk\interfaces\i_game_event_manager.hpp" />
+    <ClInclude Include="sdk\interfaces\i_input.hpp" />
+    <ClInclude Include="sdk\interfaces\i_render_view.hpp" />
+    <ClInclude Include="sdk\interfaces\i_trace.hpp" />
+    <ClInclude Include="sdk\interfaces\i_weapon_system.hpp" />
+    <ClInclude Include="sdk\interfaces\panorama.hpp" />
+    <ClInclude Include="sdk\interfaces\physics.hpp" />
+    <ClInclude Include="sdk\math\math.hpp" />
+    <ClInclude Include="sdk\math\vec2.hpp" />
+    <ClInclude Include="sdk\math\vec3.hpp" />
+    <ClInclude Include="sdk\math\view_matrix.hpp" />
+    <ClInclude Include="sdk\netvars\datamap.hpp" />
+    <ClInclude Include="sdk\netvars\netvars.hpp" />
+    <ClInclude Include="sdk\sdk.hpp" />
+    <ClInclude Include="sdk\structs\color.hpp" />
+    <ClInclude Include="sdk\structs\dlight.hpp" />
+    <ClInclude Include="sdk\structs\imageformats.h" />
+    <ClInclude Include="sdk\structs\materials.hpp" />
+    <ClInclude Include="sdk\structs\models.hpp" />
+    <ClInclude Include="sdk\structs\usercmd.hpp" />
+    <ClInclude Include="sdk\structs\vertex.hpp" />
+    <ClInclude Include="sdk\structs\weaponinfo.hpp" />
+    <ClInclude Include="utils\key_values.hpp" />
+    <ClInclude Include="utils\render\draw.hpp" />
+    <ClInclude Include="utils\render\render.hpp" />
+    <ClInclude Include="utils\render\structures.hpp" />
+    <ClInclude Include="utils\singleton.hpp" />
+    <ClInclude Include="utils\steamtypes.h" />
+    <ClInclude Include="utils\utilities.hpp" />
+    <ClInclude Include="utils\utlvector.hpp" />
+    <ClInclude Include="utils\fnv.hpp" />
+    <ClInclude Include="utils\padding.hpp" />
+    <ClInclude Include="utils\utlmemory.hpp" />
+    <ClInclude Include="utils\vfunc.hpp" />
+    <ClInclude Include="utils\xor.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="includes\imgui\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="features\skins\skins.hpp" />
+    <None Include="includes\imgui\misc\freetype\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="includes\imgui\freetype\lib\freetype.lib" />
+    <Library Include="includes\lua\lib\lua.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
