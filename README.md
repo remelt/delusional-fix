@@ -13,6 +13,7 @@
 + Aimbot
     - multiple hitboxes choice
     - awall only if lethal
+    - simple smooth
     - autoshoot
 + Movement
     - added misshop for inui gaming (s/o @flowars)
@@ -21,7 +22,7 @@
 
 # TODO :
 + Fix chatprintf in jumpstats
-+ Fix precipition
++ Fix precipitation
 + Add skinchanger for guns
 + Add edgebug, ps and bounce assist from lobotomy
 
