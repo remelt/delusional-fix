@@ -5,6 +5,7 @@
 
 std::vector<int> hitbox_unfiltered;
 int hitbox;
+float smooth;
 int aimbot_fov;
 int autowall_dmg;
 bool autowall_lethal;
@@ -140,6 +141,7 @@ void get_aimbot_settings(void* weapon) {
 	{
 		//hitbox_num = c::aimbot::pistol_hitbox;
 		aimbot_fov = c::aimbot::pistol_aimbot_fov;
+		smooth = c::aimbot::pistol_aimbot_smooth;
 		autowall_dmg = c::aimbot::pistol_autowall_dmg;
 		autowall_lethal = c::aimbot::pistol_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_pistol);
@@ -147,6 +149,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_heavy_pistol(weapon)) {
 		//hitbox_num = c::aimbot::heavy_pistol_hitbox;
 		aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
+		smooth = c::aimbot::heavy_pistol_aimbot_smooth;
 		autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
 		autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_heavy_pistol);
@@ -154,6 +157,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_shotgun(weapon)) {
 		//hitbox_num = c::aimbot::shotgun_hitbox;
 		aimbot_fov = c::aimbot::shotgun_aimbot_fov;
+		smooth = c::aimbot::shotgun_aimbot_smooth;
 		autowall_dmg = c::aimbot::shotgun_autowall_dmg;
 		autowall_lethal = c::aimbot::shotgun_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_shotgun);
@@ -161,6 +165,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_heavy(weapon)) {
 		//hitbox_num = c::aimbot::heavy_hitbox;
 		aimbot_fov = c::aimbot::heavy_aimbot_fov;
+		smooth = c::aimbot::heavy_aimbot_smooth;
 		autowall_dmg = c::aimbot::heavy_autowall_dmg;
 		autowall_lethal = c::aimbot::heavy_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_heavy);
@@ -168,6 +173,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_smg(weapon)) {
 		//hitbox_num = c::aimbot::smg_hitbox;
 		aimbot_fov = c::aimbot::smg_aimbot_fov;
+		smooth = c::aimbot::smg_aimbot_smooth;
 		autowall_dmg = c::aimbot::smg_autowall_dmg;
 		autowall_lethal = c::aimbot::smg_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_smg);
@@ -175,6 +181,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_rifle(weapon)) {
 		//hitbox_num = c::aimbot::rifle_hitbox;
 		aimbot_fov = c::aimbot::rifle_aimbot_fov;
+		smooth = c::aimbot::rifle_aimbot_smooth;
 		autowall_dmg = c::aimbot::rifle_autowall_dmg;
 		autowall_lethal = c::aimbot::rifle_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_rifle);
@@ -182,6 +189,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_sniper(weapon)) {
 		//hitbox_num = c::aimbot::sniper_hitbox;
 		aimbot_fov = c::aimbot::sniper_aimbot_fov;
+		smooth = c::aimbot::sniper_aimbot_smooth;
 		autowall_dmg = c::aimbot::sniper_autowall_dmg;
 		autowall_lethal = c::aimbot::sniper_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_sniper);
@@ -189,6 +197,7 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_auto_sniper(weapon)) {
 		//hitbox_num = c::aimbot::autosniper_hitbox;
 		aimbot_fov = c::aimbot::autosniper_aimbot_fov;
+		smooth = c::aimbot::autosniper_aimbot_smooth;
 		autowall_dmg = c::aimbot::autosniper_autowall_dmg;
 		autowall_lethal = c::aimbot::autosniper_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_autosniper);
@@ -379,64 +388,12 @@ player_t* get_best_target(c_usercmd* cmd) {
     return target;
 }
 
-//void aimbot::StopMovement(c_usercmd* cmd)
-//{
-//	constexpr bool isHexagoneGodlike = true;
-//
-//	if (g::local->move_type() != movetype_ladder)
-//		return; // Not implemented otherwise :(
-//
-//	vec3_t hvel = g::local->velocity();
-//	hvel.z = 0;
-//	float speed = hvel.length_2d();
-//
-//	if (speed < 1.f) // Will be clipped to zero anyways
-//	{
-//		cmd->forward_move = 0.f;
-//		cmd->side_move = 0.f;
-//		return;
-//	}
-//
-//	// Homework: Get these dynamically
-//	float accel = 5.5f;
-//	float maxSpeed = 320.f;
-//	float playerSurfaceFriction = 1.0f; // I'm a slimy boi
-//	float max_accelspeed = accel * interfaces::globals->interval_per_tick * maxSpeed * playerSurfaceFriction;
-//
-//	float wishspeed{};
-//
-//	// Only do custom deceleration if it won't end at zero when applying max_accel
-//	// Gamemovement truncates speed < 1 to 0
-//	if (speed - max_accelspeed <= -1.f)
-//	{
-//		// We try to solve for speed being zero after acceleration:
-//		// speed - accelspeed = 0
-//		// speed - accel*frametime*wishspeed = 0
-//		// accel*frametime*wishspeed = speed
-//		// wishspeed = speed / (accel*frametime)
-//		// ^ Theoretically, that's the right equation, but it doesn't work as nice as 
-//		//   doing the reciprocal of that times max_accelspeed, so I'm doing that :shrug:
-//		wishspeed = max_accelspeed / (speed / (accel * interfaces::globals->interval_per_tick));
-//	}
-//	else // Full deceleration, since it won't overshoot
-//	{
-//		// Or use max_accelspeed, doesn't matter
-//		wishspeed = max_accelspeed;
-//	}
-//
-//	// Calculate the negative movement of our velocity, relative to our viewangles
-//	vec3_t ndir = (hvel * -1.f).to_angle();
-//	ndir.y = cmd->view_angles.y - ndir.y; // Relative to local view
-//	ndir = ndir.to_angle(); // Back to vector, y'all
-//
-//	cmd->forward_move = ndir.x * wishspeed;
-//	cmd->side_move = ndir.y * wishspeed;
-//}
-
 void aimbot::run(c_usercmd* cmd) {
 	if (!c::aimbot::aimbot || !g::local->is_alive())
 		return;
 	if (!c::aimbot::aimbot_autoshoot && !GetAsyncKeyState(c::aimbot::aimbot_key))
+		return;
+	if (menu::open)
 		return;
 
 	auto weapon = g::local->active_weapon();
@@ -498,7 +455,17 @@ void aimbot::run(c_usercmd* cmd) {
 		viewangles.clamp();
 		vec3_t delta = cmd->view_angles - viewangles;
 		delta.clamp();
-		vec3_t finalang = cmd->view_angles - delta;
+		vec3_t finalang;
+
+		//https://www.unknowncheats.me/forum/counterstrike-global-offensive/291427-smoothing-aimbot.html
+		if (smooth > 0 && !c::aimbot::aimbot_silent && !c::aimbot::aimbot_autoshoot) {
+			finalang.x = cmd->view_angles.x - delta.x / (smooth / 25.f + 1.f);
+			finalang.y = cmd->view_angles.y - delta.y / (smooth / 25.f + 1.f);
+			finalang.z = cmd->view_angles.z;
+		}
+		else {
+			finalang = cmd->view_angles - delta;
+		}
 		finalang.clamp();
 
 		if ((can_fire(weapon, cmd) && GetAsyncKeyState(c::aimbot::aimbot_key) && !c::aimbot::non_sticky_aimbot) || (can_fire(weapon, cmd) && GetAsyncKeyState(c::aimbot::aimbot_key) && c::aimbot::non_sticky_aimbot && cmd->buttons & in_attack) || (can_fire(weapon, cmd) && c::aimbot::aimbot_autoshoot)) {

@@ -100,6 +100,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_pistol, IM_ARRAYSIZE(c::aimbot::hitboxes_pistol));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov1"), &c::aimbot::pistol_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth1"), &c::aimbot::pistol_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin1"), &c::aimbot::pistol_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::pistol_autowall_lethal);
@@ -109,6 +111,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_heavy_pistol, IM_ARRAYSIZE(c::aimbot::hitboxes_heavy_pistol));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov2"), &c::aimbot::heavy_pistol_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth2"), &c::aimbot::heavy_pistol_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin2"), &c::aimbot::heavy_pistol_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_pistol_autowall_lethal);
@@ -118,6 +122,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_shotgun, IM_ARRAYSIZE(c::aimbot::hitboxes_shotgun));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov3"), &c::aimbot::shotgun_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth3"), &c::aimbot::shotgun_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin3"), &c::aimbot::shotgun_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::shotgun_autowall_lethal);
@@ -127,6 +133,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_heavy, IM_ARRAYSIZE(c::aimbot::hitboxes_heavy));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov4"), &c::aimbot::heavy_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth4"), &c::aimbot::heavy_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin4"), &c::aimbot::heavy_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_autowall_lethal);
@@ -136,6 +144,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_smg, IM_ARRAYSIZE(c::aimbot::hitboxes_smg));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov5"), &c::aimbot::smg_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth5"), &c::aimbot::smg_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin5"), &c::aimbot::smg_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::smg_autowall_lethal);
@@ -145,6 +155,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_rifle, IM_ARRAYSIZE(c::aimbot::hitboxes_rifle));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov6"), &c::aimbot::rifle_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth6"), &c::aimbot::rifle_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin6"), &c::aimbot::rifle_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::rifle_autowall_lethal);
@@ -154,6 +166,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_sniper, IM_ARRAYSIZE(c::aimbot::hitboxes_sniper));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov7"), &c::aimbot::sniper_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth7"), &c::aimbot::sniper_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin7"), &c::aimbot::sniper_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::sniper_autowall_lethal);
@@ -163,6 +177,8 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_autosniper, IM_ARRAYSIZE(c::aimbot::hitboxes_autosniper));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov8"), &c::aimbot::autosniper_aimbot_fov, 0, 180);
+                ImGui::Text(("smoothing"));
+                ImGui::SliderInt(("##aimsmooth8"), &c::aimbot::autosniper_aimbot_smooth, 0, 100);
                 ImGui::Text(("autowall min damage"));
                 ImGui::SliderInt(("##awmin8"), &c::aimbot::autosniper_autowall_dmg, 1, 100);
                 ImGui::Checkbox("autowall if lethal", &c::aimbot::autosniper_autowall_lethal);
