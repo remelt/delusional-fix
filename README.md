@@ -24,7 +24,7 @@
     - simple smooth
     - autoshoot
 + Movement
-    - added misshop for inui gaming (s/o @flowars)
+    - added misshop for inui gaming (s/o [@flowars](https://github.com/flowars))
 + Misc
     - added only local spectatorlist option
 + Config
@@ -39,4 +39,3 @@
 
 # s/o
 [delusional leaked source](https://github.com/clearlyst/delusional/tree/main)
-[best forum](www.unknowncheats.me)  
