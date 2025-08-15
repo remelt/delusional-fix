@@ -10,6 +10,11 @@ namespace c {
 	void delete_file(const std::size_t index);
 	void save(const std::size_t index);
 	void load(const std::size_t index);
+	void load_aimbot(const std::size_t index);
+	void load_mvm(const std::size_t index);
+	void load_visuals(const std::size_t index);
+	void load_skins(const std::size_t index);
+	void load_misc(const std::size_t index);
 	inline std::string directory_path_lua;
 	inline std::string directory_path_fonts;
 	inline std::string directory_path;
@@ -31,8 +36,11 @@ namespace c {
 
 	namespace aimbot {
 		inline bool aimbot;
+		inline bool aimbot_panic;
 		inline int aimbot_key;
 		inline int aimbot_key_s = 1;
+		inline int aimbot_panic_key;
+		inline int aimbot_panic_key_s = 1;
 		inline int aimbot_only_enemy;
 		inline bool aimbot_silent;
 		inline bool aimbot_autoshoot = 0;
@@ -43,6 +51,9 @@ namespace c {
 		inline int pistol_autowall_dmg = 1;
 		inline bool pistol_autowall_lethal;
 		inline int pistol_aimbot_fov;
+		inline bool pistol_aimbot_rcs;
+		inline int pistol_aimbot_rcs_p;
+		inline bool pistol_aimbot_silent;
 		inline int pistol_aimbot_smooth;
 		inline bool hitboxes_pistol[4];
 		inline int pistol_hitbox;
@@ -50,6 +61,9 @@ namespace c {
 		inline int heavy_pistol_autowall_dmg = 1;
 		inline bool heavy_pistol_autowall_lethal;
 		inline int heavy_pistol_aimbot_fov;
+		inline bool heavy_pistol_aimbot_rcs;
+		inline int heavy_pistol_aimbot_rcs_p;
+		inline bool heavy_pistol_aimbot_silent;
 		inline int heavy_pistol_aimbot_smooth;
 		inline bool hitboxes_heavy_pistol[4];
 		inline int heavy_pistol_hitbox;
@@ -57,6 +71,9 @@ namespace c {
 		inline int shotgun_autowall_dmg = 1;
 		inline bool shotgun_autowall_lethal;
 		inline int shotgun_aimbot_fov;
+		inline bool shotgun_aimbot_rcs;
+		inline int shotgun_aimbot_rcs_p;
+		inline bool shotgun_aimbot_silent;
 		inline int shotgun_aimbot_smooth;
 		inline bool hitboxes_shotgun[4];
 		inline int shotgun_hitbox;
@@ -64,6 +81,9 @@ namespace c {
 		inline int heavy_autowall_dmg = 1;
 		inline bool heavy_autowall_lethal;
 		inline int heavy_aimbot_fov;
+		inline bool heavy_aimbot_rcs;
+		inline int heavy_aimbot_rcs_p;
+		inline bool heavy_aimbot_silent;
 		inline int heavy_aimbot_smooth;
 		inline bool hitboxes_heavy[4];
 		inline int heavy_hitbox;
@@ -71,6 +91,9 @@ namespace c {
 		inline int smg_autowall_dmg = 1;
 		inline bool smg_autowall_lethal;
 		inline int smg_aimbot_fov;
+		inline bool smg_aimbot_rcs;
+		inline int smg_aimbot_rcs_p;
+		inline bool smg_aimbot_silent;
 		inline int smg_aimbot_smooth;
 		inline bool hitboxes_smg[4];
 		inline int smg_hitbox;
@@ -78,6 +101,9 @@ namespace c {
 		inline int rifle_autowall_dmg = 1;
 		inline bool rifle_autowall_lethal;
 		inline int rifle_aimbot_fov;
+		inline bool rifle_aimbot_rcs;
+		inline int rifle_aimbot_rcs_p;
+		inline bool rifle_aimbot_silent;
 		inline int rifle_aimbot_smooth;
 		inline bool hitboxes_rifle[4];
 		inline int rifle_hitbox;
@@ -85,6 +111,9 @@ namespace c {
 		inline int sniper_autowall_dmg = 1;
 		inline bool sniper_autowall_lethal;
 		inline int sniper_aimbot_fov;
+		inline bool sniper_aimbot_rcs;
+		inline int sniper_aimbot_rcs_p;
+		inline bool sniper_aimbot_silent;
 		inline int sniper_aimbot_smooth;
 		inline bool hitboxes_sniper[4];
 		inline int sniper_hitbox;
@@ -92,13 +121,16 @@ namespace c {
 		inline int autosniper_autowall_dmg = 1;
 		inline bool autosniper_autowall_lethal;
 		inline int autosniper_aimbot_fov;
+		inline bool autosniper_aimbot_rcs;
+		inline int autosniper_aimbot_rcs_p;
+		inline bool autosniper_aimbot_silent;
 		inline int autosniper_aimbot_smooth;
 		inline bool hitboxes_autosniper[4];
 		inline int autosniper_hitbox;
 	}
 
 	namespace movement {
-		inline int  dh_tick = 1;
+		inline int dh_tick = 1;
 		inline float stamina_fade_clr[4]{ 1.f, 1.f, 1.f };
 		inline bool auto_strafe = false;
 		inline int  auto_strafe_key = 0;

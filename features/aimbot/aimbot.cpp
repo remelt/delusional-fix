@@ -6,10 +6,13 @@
 std::vector<int> hitbox_unfiltered;
 int hitbox;
 float smooth;
+float rcs_p;
 int aimbot_fov;
 int autowall_dmg;
 bool autowall_lethal;
-bool autowall_b = true;
+bool autowall_b;
+bool silent;
+bool rcs;
 
 bool is_knife(void* weapon) {
 	if (!weapon)
@@ -141,7 +144,11 @@ void get_aimbot_settings(void* weapon) {
 	{
 		//hitbox_num = c::aimbot::pistol_hitbox;
 		aimbot_fov = c::aimbot::pistol_aimbot_fov;
+		silent = c::aimbot::pistol_aimbot_silent;
 		smooth = c::aimbot::pistol_aimbot_smooth;
+		rcs = c::aimbot::pistol_aimbot_rcs;
+		rcs_p = c::aimbot::pistol_aimbot_rcs_p;
+		autowall_b = c::aimbot::pistol_autowall;
 		autowall_dmg = c::aimbot::pistol_autowall_dmg;
 		autowall_lethal = c::aimbot::pistol_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_pistol);
@@ -149,7 +156,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_heavy_pistol(weapon)) {
 		//hitbox_num = c::aimbot::heavy_pistol_hitbox;
 		aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
+		silent = c::aimbot::heavy_pistol_aimbot_silent;
 		smooth = c::aimbot::heavy_pistol_aimbot_smooth;
+		rcs = c::aimbot::heavy_pistol_aimbot_rcs;
+		rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
+		autowall_b = c::aimbot::heavy_pistol_autowall;
 		autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
 		autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_heavy_pistol);
@@ -157,7 +168,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_shotgun(weapon)) {
 		//hitbox_num = c::aimbot::shotgun_hitbox;
 		aimbot_fov = c::aimbot::shotgun_aimbot_fov;
+		silent = c::aimbot::shotgun_aimbot_silent;
 		smooth = c::aimbot::shotgun_aimbot_smooth;
+		rcs = c::aimbot::shotgun_aimbot_rcs;
+		rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
+		autowall_b = c::aimbot::shotgun_autowall;
 		autowall_dmg = c::aimbot::shotgun_autowall_dmg;
 		autowall_lethal = c::aimbot::shotgun_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_shotgun);
@@ -165,7 +180,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_heavy(weapon)) {
 		//hitbox_num = c::aimbot::heavy_hitbox;
 		aimbot_fov = c::aimbot::heavy_aimbot_fov;
+		silent = c::aimbot::heavy_aimbot_silent;
 		smooth = c::aimbot::heavy_aimbot_smooth;
+		rcs = c::aimbot::heavy_aimbot_rcs;
+		rcs_p = c::aimbot::heavy_aimbot_rcs_p;
+		autowall_b = c::aimbot::heavy_autowall;
 		autowall_dmg = c::aimbot::heavy_autowall_dmg;
 		autowall_lethal = c::aimbot::heavy_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_heavy);
@@ -173,7 +192,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_smg(weapon)) {
 		//hitbox_num = c::aimbot::smg_hitbox;
 		aimbot_fov = c::aimbot::smg_aimbot_fov;
+		silent = c::aimbot::smg_aimbot_silent;
 		smooth = c::aimbot::smg_aimbot_smooth;
+		rcs = c::aimbot::smg_aimbot_rcs;
+		rcs_p = c::aimbot::smg_aimbot_rcs_p;
+		autowall_b = c::aimbot::smg_autowall;
 		autowall_dmg = c::aimbot::smg_autowall_dmg;
 		autowall_lethal = c::aimbot::smg_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_smg);
@@ -181,7 +204,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_rifle(weapon)) {
 		//hitbox_num = c::aimbot::rifle_hitbox;
 		aimbot_fov = c::aimbot::rifle_aimbot_fov;
+		silent = c::aimbot::rifle_aimbot_silent;
 		smooth = c::aimbot::rifle_aimbot_smooth;
+		rcs = c::aimbot::rifle_aimbot_rcs;
+		rcs_p = c::aimbot::rifle_aimbot_rcs_p;
+		autowall_b = c::aimbot::rifle_autowall;
 		autowall_dmg = c::aimbot::rifle_autowall_dmg;
 		autowall_lethal = c::aimbot::rifle_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_rifle);
@@ -189,7 +216,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_sniper(weapon)) {
 		//hitbox_num = c::aimbot::sniper_hitbox;
 		aimbot_fov = c::aimbot::sniper_aimbot_fov;
+		silent = c::aimbot::sniper_aimbot_silent;
 		smooth = c::aimbot::sniper_aimbot_smooth;
+		rcs = c::aimbot::sniper_aimbot_rcs;
+		rcs_p = c::aimbot::sniper_aimbot_rcs_p;
+		autowall_b = c::aimbot::sniper_autowall;
 		autowall_dmg = c::aimbot::sniper_autowall_dmg;
 		autowall_lethal = c::aimbot::sniper_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_sniper);
@@ -197,7 +228,11 @@ void get_aimbot_settings(void* weapon) {
 	else if (is_auto_sniper(weapon)) {
 		//hitbox_num = c::aimbot::autosniper_hitbox;
 		aimbot_fov = c::aimbot::autosniper_aimbot_fov;
+		silent = c::aimbot::autosniper_aimbot_silent;
 		smooth = c::aimbot::autosniper_aimbot_smooth;
+		rcs = c::aimbot::autosniper_aimbot_rcs;
+		rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
+		autowall_b = c::aimbot::autosniper_autowall;
 		autowall_dmg = c::aimbot::autosniper_autowall_dmg;
 		autowall_lethal = c::aimbot::autosniper_autowall_lethal;
 		hitbox_unfiltered = get_selected_hitboxes(c::aimbot::hitboxes_autosniper);
@@ -393,6 +428,8 @@ void aimbot::run(c_usercmd* cmd) {
 		return;
 	if (!c::aimbot::aimbot_autoshoot && !GetAsyncKeyState(c::aimbot::aimbot_key))
 		return;
+	if (c::aimbot::aimbot_panic && menu::checkkey(c::aimbot::aimbot_panic_key, c::aimbot::aimbot_panic_key_s))
+		return;
 	if (menu::open)
 		return;
 
@@ -458,7 +495,7 @@ void aimbot::run(c_usercmd* cmd) {
 		vec3_t finalang;
 
 		//https://www.unknowncheats.me/forum/counterstrike-global-offensive/291427-smoothing-aimbot.html
-		if (smooth > 0 && !c::aimbot::aimbot_silent && !c::aimbot::aimbot_autoshoot) {
+		if (smooth > 0 && !silent && !c::aimbot::aimbot_autoshoot) {
 			finalang.x = cmd->view_angles.x - delta.x / (smooth / 25.f + 1.f);
 			finalang.y = cmd->view_angles.y - delta.y / (smooth / 25.f + 1.f);
 			finalang.z = cmd->view_angles.z;
@@ -469,9 +506,14 @@ void aimbot::run(c_usercmd* cmd) {
 		finalang.clamp();
 
 		if ((can_fire(weapon, cmd) && GetAsyncKeyState(c::aimbot::aimbot_key) && !c::aimbot::non_sticky_aimbot) || (can_fire(weapon, cmd) && GetAsyncKeyState(c::aimbot::aimbot_key) && c::aimbot::non_sticky_aimbot && cmd->buttons & in_attack) || (can_fire(weapon, cmd) && c::aimbot::aimbot_autoshoot)) {
-			cmd->view_angles = finalang - (g::local->aim_punch_angle() * weapon_recoil_scale);
+			if (rcs) {
+				cmd->view_angles = finalang - (g::local->aim_punch_angle() * weapon_recoil_scale * rcs_p / 100.f);
+			}
+			else {
+				cmd->view_angles = finalang;
+			}
 
-			if (!c::aimbot::aimbot_silent)
+			if (!silent)
 				interfaces::engine->set_view_angles(cmd->view_angles);
 			if (c::aimbot::aimbot_autoshoot)
 				// we shoot =￣ω￣=

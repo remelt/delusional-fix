@@ -48,6 +48,24 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 	case FNV1A::HashConst(("#delusional#_print_loaded")):
 		return print_text(ecx, edx, xs("loaded config"));
 		break;
+	case FNV1A::HashConst(("#delusional#_print_loaded_aimbot")):
+		return print_text(ecx, edx, xs("loaded aimbot settings"));
+		break;
+	case FNV1A::HashConst(("#delusional#_print_loaded_mvm")):
+		return print_text(ecx, edx, xs("loaded movement settings"));
+		break;
+	case FNV1A::HashConst(("#delusional#_print_loaded_visuals")):
+		return print_text(ecx, edx, xs("loaded visual settings"));
+		break;
+	case FNV1A::HashConst(("#delusional#_print_loaded_misc")):
+		return print_text(ecx, edx, xs("loaded misc settings"));
+		break;
+	case FNV1A::HashConst(("#delusional#_print_loaded_skins")):
+		return print_text(ecx, edx, xs("loaded skins & models"));
+		break;
+	case FNV1A::HashConst(("#delusional#_print_failed")):
+		return print_text(ecx, edx, xs("pls choose needed config"));
+		break;
 	case FNV1A::HashConst(("#delusional#_print_refreshed")):
 		return print_text(ecx, edx, xs("refreshed config"));
 		break;
@@ -85,10 +103,10 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 		return print_text(ecx, edx, xs("pixelsurfed"));
 		break;
 	case FNV1A::HashConst(("#delusional#_print_hit_1")):
-		//return print_text(ecx, edx, std::vformat(xs("hit {} for {} damage ({} remaining)."), std::make_format_args(features::misc::hitinfo.player_name.c_str(), features::misc::hitinfo.damage, features::misc::hitinfo.health)));
+		return print_text(ecx, edx, std::vformat(xs("hit {} for {} damage ({} remaining)"), std::make_format_args(features::misc::hitinfo.player_name, features::misc::hitinfo.damage, features::misc::hitinfo.health)));
 		break;
 	case FNV1A::HashConst(("#delusional#_print_hit_2")):
-	//	return print_text(ecx, edx, std::vformat(xs("hit {} in the {} for {} damage ({} remaining)."), std::make_format_args(features::misc::hitinfo.player_name.c_str(), features::misc::hitinfo.hitgroup, features::misc::hitinfo.damage, features::misc::hitinfo.health)));
+		return print_text(ecx, edx, std::vformat(xs("hit {} in the {} for {} damage ({} remaining)"), std::make_format_args(features::misc::hitinfo.player_name, features::misc::hitinfo.hitgroup, features::misc::hitinfo.damage, features::misc::hitinfo.health)));
 		break;
 	case FNV1A::HashConst(("#delusional#_spotify_paused")):
 		return spotify_text(ecx, edx, xs("now paused"));

@@ -49,7 +49,8 @@ void legitbot() {
 
             ImGui::Checkbox("enable aimbot", &c::aimbot::aimbot);
             ImGui::Keybind(("##aimbot key"), &c::aimbot::aimbot_key, &c::aimbot::aimbot_key_s);
-            ImGui::Checkbox("silent aim", &c::aimbot::aimbot_silent);
+            ImGui::Checkbox("aimbot panic key", &c::aimbot::aimbot_panic);
+            ImGui::Keybind(("##aimbot panic key"), &c::aimbot::aimbot_panic_key, &c::aimbot::aimbot_panic_key_s);
             ImGui::Checkbox("autoshoot", &c::aimbot::aimbot_autoshoot);
             ImGui::Checkbox("nonsticky", &c::aimbot::non_sticky_aimbot);
             ImGui::Checkbox("backtrack##bt", &c::backtrack::backtrack);
@@ -100,88 +101,168 @@ void legitbot() {
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_pistol, IM_ARRAYSIZE(c::aimbot::hitboxes_pistol));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov1"), &c::aimbot::pistol_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth1"), &c::aimbot::pistol_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin1"), &c::aimbot::pistol_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::pistol_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::pistol_aimbot_silent);
+                if (!c::aimbot::pistol_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth1"), &c::aimbot::pistol_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::pistol_aimbot_rcs);
+                if (c::aimbot::pistol_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::pistol_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::pistol_autowall);
+                if (c::aimbot::pistol_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin1"), &c::aimbot::pistol_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::pistol_autowall_lethal);
+                }
                 break;
             case 1:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_heavy_pistol, IM_ARRAYSIZE(c::aimbot::hitboxes_heavy_pistol));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov2"), &c::aimbot::heavy_pistol_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth2"), &c::aimbot::heavy_pistol_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin2"), &c::aimbot::heavy_pistol_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_pistol_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::heavy_pistol_aimbot_silent);
+                if (!c::aimbot::heavy_pistol_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth2"), &c::aimbot::heavy_pistol_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::heavy_pistol_aimbot_rcs);
+                if (c::aimbot::heavy_pistol_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::heavy_pistol_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::heavy_pistol_autowall);
+                if (c::aimbot::heavy_pistol_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin2"), &c::aimbot::heavy_pistol_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_pistol_autowall_lethal);
+                }
                 break;
             case 2:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_shotgun, IM_ARRAYSIZE(c::aimbot::hitboxes_shotgun));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov3"), &c::aimbot::shotgun_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth3"), &c::aimbot::shotgun_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin3"), &c::aimbot::shotgun_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::shotgun_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::shotgun_aimbot_silent);
+                if (!c::aimbot::shotgun_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth3"), &c::aimbot::shotgun_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::shotgun_aimbot_rcs);
+                if (c::aimbot::shotgun_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::shotgun_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::shotgun_autowall);
+                if (c::aimbot::shotgun_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin3"), &c::aimbot::shotgun_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::shotgun_autowall_lethal);
+                }
                 break;
             case 3:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_heavy, IM_ARRAYSIZE(c::aimbot::hitboxes_heavy));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov4"), &c::aimbot::heavy_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth4"), &c::aimbot::heavy_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin4"), &c::aimbot::heavy_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::heavy_aimbot_silent);
+                if (!c::aimbot::heavy_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth4"), &c::aimbot::heavy_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::heavy_aimbot_rcs);
+                if (c::aimbot::heavy_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::heavy_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::heavy_autowall);
+                if (c::aimbot::heavy_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin4"), &c::aimbot::heavy_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_autowall_lethal);
+                }
                 break;
             case 4:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_smg, IM_ARRAYSIZE(c::aimbot::hitboxes_smg));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov5"), &c::aimbot::smg_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth5"), &c::aimbot::smg_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin5"), &c::aimbot::smg_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::smg_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::smg_aimbot_silent);
+                if (!c::aimbot::smg_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth5"), &c::aimbot::smg_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::smg_aimbot_rcs);
+                if (c::aimbot::smg_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::smg_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::smg_autowall);
+                if (c::aimbot::smg_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin5"), &c::aimbot::smg_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::smg_autowall_lethal);
+                }
                 break;
             case 5:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_rifle, IM_ARRAYSIZE(c::aimbot::hitboxes_rifle));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov6"), &c::aimbot::rifle_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth6"), &c::aimbot::rifle_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin6"), &c::aimbot::rifle_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::rifle_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::rifle_aimbot_silent);
+                if (!c::aimbot::rifle_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth6"), &c::aimbot::rifle_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::rifle_aimbot_rcs);
+                if (c::aimbot::rifle_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::rifle_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::rifle_autowall);
+                if (c::aimbot::rifle_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin6"), &c::aimbot::rifle_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::rifle_autowall_lethal);
+                }
                 break;
             case 6:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_sniper, IM_ARRAYSIZE(c::aimbot::hitboxes_sniper));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov7"), &c::aimbot::sniper_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth7"), &c::aimbot::sniper_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin7"), &c::aimbot::sniper_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::sniper_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::sniper_aimbot_silent);
+                if (!c::aimbot::sniper_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth7"), &c::aimbot::sniper_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::sniper_aimbot_rcs);
+                if (c::aimbot::sniper_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::sniper_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::sniper_autowall);
+                if (c::aimbot::sniper_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin7"), &c::aimbot::sniper_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::sniper_autowall_lethal);
+                }
                 break;
             case 7:
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_autosniper, IM_ARRAYSIZE(c::aimbot::hitboxes_autosniper));
                 ImGui::Text(("field of view"));
                 ImGui::SliderInt(("##aimfov8"), &c::aimbot::autosniper_aimbot_fov, 0, 180);
-                ImGui::Text(("smoothing"));
-                ImGui::SliderInt(("##aimsmooth8"), &c::aimbot::autosniper_aimbot_smooth, 0, 100);
-                ImGui::Text(("autowall min damage"));
-                ImGui::SliderInt(("##awmin8"), &c::aimbot::autosniper_autowall_dmg, 1, 100);
-                ImGui::Checkbox("autowall if lethal", &c::aimbot::autosniper_autowall_lethal);
+                ImGui::Checkbox("silent aim", &c::aimbot::autosniper_aimbot_silent);
+                if (!c::aimbot::autosniper_aimbot_silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth8"), &c::aimbot::autosniper_aimbot_smooth, 0, 100);
+                }
+                ImGui::Checkbox("enable rcs", &c::aimbot::autosniper_aimbot_rcs);
+                if (c::aimbot::autosniper_aimbot_rcs) {
+                    ImGui::SliderInt(("##aimrcs1"), &c::aimbot::autosniper_aimbot_rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &c::aimbot::autosniper_autowall);
+                if (c::aimbot::autosniper_autowall) {
+                    ImGui::Text(("autowall min damage"));
+                    ImGui::SliderInt(("##awmin8"), &c::aimbot::autosniper_autowall_dmg, 1, 100);
+                    ImGui::Checkbox("autowall if lethal", &c::aimbot::autosniper_autowall_lethal);
+                }
                 break;
             }
 
@@ -844,13 +925,19 @@ void miscellaneous() {
                     for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
                         if (ImGui::Selectable(choices[i]))
                             if (i == 0) {
-                                c::save(config_index);
+                                if (config_index == -1) {
+                                    if (interfaces::engine->is_in_game()) {
+                                        interfaces::chat_element->chatprintf("#delusional#_print_failed");
+                                    }
+                                }
+                                else {
+                                    c::save(config_index);
+                                    //std::stringstream ss;
+                                    //ss << "\x08" << " \x08" << "%c" << "delusional" << "\x08" << "\x08 | saved config " << c::configs.at(config_index);
 
-                                //std::stringstream ss;
-                                //ss << "\x08" << " \x08" << "%c" << "delusional" << "\x08" << "\x08 | saved config " << c::configs.at(config_index);
-
-                                if (interfaces::engine->is_in_game()) {
-                                    interfaces::chat_element->chatprintf("#delusional#_print_saved");
+                                    if (interfaces::engine->is_in_game()) {
+                                        interfaces::chat_element->chatprintf("#delusional#_print_saved");
+                                    }
                                 }
                             }
 
@@ -858,17 +945,82 @@ void miscellaneous() {
                 }
 
                 if (ImGui::Button("load", ImVec2(-1, 15))) {
-                    c::load(config_index);
-                    //std::stringstream ss;
-                    //ss << "\x08" << " \x08" << "%c" << "delusional" << "\x08" << "\x08 | loaded config " << c::configs.at(config_index);
-
-                    if (interfaces::engine->is_in_game()) {
-                        interfaces::chat_element->chatprintf("#delusional#_print_loaded");
-                        features::skins::forcing_update = true;
+                    if (config_index == -1) {
+                        if (interfaces::engine->is_in_game()) {
+                            interfaces::chat_element->chatprintf("#delusional#_print_failed");
+                        }
                     }
-                    menu::load_font_index();
-                    surface::initialize();
-                    menu::fonts_initialized = true;
+                    else {
+                        c::load(config_index);
+                        //std::stringstream ss;
+                        //ss << "\x08" << " \x08" << "%c" << "delusional" << "\x08" << "\x08 | loaded config " << c::configs.at(config_index);
+
+                        if (interfaces::engine->is_in_game()) {
+                            interfaces::chat_element->chatprintf("#delusional#_print_loaded");
+                            features::skins::forcing_update = true;
+                        }
+                        menu::load_font_index();
+                        surface::initialize();
+                        menu::fonts_initialized = true;
+                    }
+                }
+                if (ImGui::Button("load only...", ImVec2(-1, 15))) {
+                    ImGui::OpenPopup(("load only popup"));
+                }
+                if (ImGui::BeginPopup(("load only popup"))) {
+                    ImGui::Text(("what features do u want to load? "));
+
+                    static const char* choices[]{ "  aimbot", "  visuals", "  movement", "  skins", "  misc" };
+
+                    for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
+                        if (ImGui::Selectable(choices[i]))
+                            // we check if config is chosen
+                            if (config_index == -1) {
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_failed");
+                                }
+                            }
+                            else if (i == 0) {
+                                c::load_aimbot(config_index);
+
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_loaded_aimbot");
+                                }
+                            }
+                            else if (i == 1) {
+                                c::load_visuals(config_index);
+
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_loaded_visuals");
+                                }
+                                menu::load_font_index();
+                                surface::initialize();
+                                menu::fonts_initialized = true;
+                            }
+                            else if (i == 2) {
+                                c::load_mvm(config_index);
+
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_loaded_mvm");
+                                }
+                            }
+                            else if (i == 3) {
+                                c::load_skins(config_index);
+
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_loaded_skins");
+                                    features::skins::forcing_update = true;
+                                }
+                            }
+                            else if (i == 4) {
+                                c::load_misc(config_index);
+
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_loaded_misc");
+                                }
+                            }
+
+                    ImGui::EndPopup();
                 }
                 if (ImGui::Button("refresh", ImVec2(-1, 15))) {
                     c::update_configs();
