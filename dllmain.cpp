@@ -68,16 +68,22 @@ DWORD WINAPI on_attach(void* instance) {
         interfaces::console->console_printf(std::string("successfully injected").append(" \n").c_str());
 	}();
 
-    while (!GetAsyncKeyState(VK_END) && !GetAsyncKeyState(VK_DELETE))
+    while (!GetAsyncKeyState(VK_F1) || !GetAsyncKeyState(VK_F2))
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 	[&]() {
+        if (menu::open)
+            menu::open = false;
 
-        events.unload();
+        if (c::misc::view_model)
+            c::misc::view_model = false;
+
+        c::skins::knife_changer_model = 0;
+
+        features::skins::full_update();
+
         sdk::hooks::unload();
-        im_render.unload();
        // lua::unload();
-
 	}();
 
 	(FreeLibraryAndExitThread)(static_cast<HMODULE>(instance), 0);
