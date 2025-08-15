@@ -426,6 +426,35 @@ player_t* get_best_target(c_usercmd* cmd) {
 void aimbot::run(c_usercmd* cmd) {
 	if (!c::aimbot::aimbot || !g::local->is_alive())
 		return;
+
+	auto weapon = g::local->active_weapon();
+
+	if (!menu::open) {
+		if (is_pistol(weapon)) {
+			menu::weapon_selection = 0;
+		}
+		else if (is_heavy_pistol(weapon)) {
+			menu::weapon_selection = 1;
+		}
+		else if (is_shotgun(weapon)) {
+			menu::weapon_selection = 2;
+		}
+		else if (is_heavy(weapon)) {
+			menu::weapon_selection = 3;
+		}
+		else if (is_smg(weapon)) {
+			menu::weapon_selection = 4;
+		}
+		else if (is_rifle(weapon)) {
+			menu::weapon_selection = 5;
+		}
+		else if (is_sniper(weapon)) {
+			menu::weapon_selection = 6;
+		}
+		else if (is_auto_sniper(weapon)) {
+			menu::weapon_selection = 7;
+		}
+	}
 	if (!c::aimbot::aimbot_autoshoot && !GetAsyncKeyState(c::aimbot::aimbot_key))
 		return;
 	if (c::aimbot::aimbot_panic && menu::checkkey(c::aimbot::aimbot_panic_key, c::aimbot::aimbot_panic_key_s))
@@ -433,7 +462,6 @@ void aimbot::run(c_usercmd* cmd) {
 	if (menu::open)
 		return;
 
-	auto weapon = g::local->active_weapon();
 	if (!is_rifle(weapon) && !is_shotgun(weapon) && !is_heavy_pistol(weapon) && !is_auto_sniper(weapon) && !is_pistol(weapon) && !is_sniper(weapon) && !is_smg(weapon) && !is_heavy(weapon))
 		return;
 

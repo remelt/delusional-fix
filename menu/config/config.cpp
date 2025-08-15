@@ -446,6 +446,7 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("pistol_aimbot_fov")], aimbot::pistol_aimbot_fov);
 		write_value(json[xs("aimbot")][xs("pistol_aimbot_rcs")], aimbot::pistol_aimbot_rcs);
 		write_value(json[xs("aimbot")][xs("pistol_aimbot_rcs_p")], aimbot::pistol_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("pistol_aimbot_silent")], aimbot::pistol_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("pistol_aimbot_smooth")], aimbot::pistol_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_pistol[0]")], aimbot::hitboxes_pistol[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_pistol[1]")], aimbot::hitboxes_pistol[1]);
@@ -458,6 +459,7 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("heavy_pistol_aimbot_fov")], aimbot::heavy_pistol_aimbot_fov);
 		write_value(json[xs("aimbot")][xs("heavy_pistol_aimbot_rcs")], aimbot::heavy_pistol_aimbot_rcs);
 		write_value(json[xs("aimbot")][xs("heavy_pistol_aimbot_rcs_p")], aimbot::heavy_pistol_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("heavy_pistol_aimbot_silent")], aimbot::heavy_pistol_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("heavy_pistol_aimbot_smooth")], aimbot::heavy_pistol_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_heavy_pistol[0]")], aimbot::hitboxes_heavy_pistol[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_heavy_pistol[1]")], aimbot::hitboxes_heavy_pistol[1]);
@@ -470,6 +472,7 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("shotgun_aimbot_fov")], aimbot::shotgun_aimbot_fov);
 		write_value(json[xs("aimbot")][xs("shotgun_aimbot_rcs")], aimbot::shotgun_aimbot_rcs);
 		write_value(json[xs("aimbot")][xs("shotgun_aimbot_rcs_p")], aimbot::shotgun_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("shotgun_aimbot_silent")], aimbot::shotgun_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("shotgun_aimbot_smooth")], aimbot::shotgun_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_shotgun[0]")], aimbot::hitboxes_shotgun[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_shotgun[1]")], aimbot::hitboxes_shotgun[1]);
@@ -480,8 +483,9 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("shotgun_autowall_lethal")], aimbot::shotgun_autowall_lethal);
 		write_value(json[xs("aimbot")][xs("heavy_hitbox")], aimbot::heavy_hitbox);
 		write_value(json[xs("aimbot")][xs("heavy_aimbot_fov")], aimbot::heavy_aimbot_fov);
-		write_value(json[xs("aimbot")][xs("smg_aimbot_rcs")], aimbot::smg_aimbot_rcs);
-		write_value(json[xs("aimbot")][xs("smg_aimbot_rcs_p")], aimbot::smg_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("heavy_aimbot_rcs")], aimbot::heavy_aimbot_rcs);
+		write_value(json[xs("aimbot")][xs("heavy_aimbot_rcs_p")], aimbot::heavy_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("heavy_aimbot_silent")], aimbot::heavy_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("heavy_aimbot_smooth")], aimbot::heavy_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_heavy[0]")], aimbot::hitboxes_heavy[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_heavy[1]")], aimbot::hitboxes_heavy[1]);
@@ -492,8 +496,9 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("heavy_autowall_lethal")], aimbot::heavy_autowall_lethal);
 		write_value(json[xs("aimbot")][xs("smg_hitbox")], aimbot::smg_hitbox);
 		write_value(json[xs("aimbot")][xs("smg_aimbot_fov")], aimbot::smg_aimbot_fov);
-		write_value(json[xs("aimbot")][xs("rifle_aimbot_rcs")], aimbot::rifle_aimbot_rcs);
-		write_value(json[xs("aimbot")][xs("rifle_aimbot_rcs_p")], aimbot::rifle_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("smg_aimbot_rcs")], aimbot::smg_aimbot_rcs);
+		write_value(json[xs("aimbot")][xs("smg_aimbot_rcs_p")], aimbot::smg_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("smg_aimbot_silent")], aimbot::smg_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("smg_aimbot_smooth")], aimbot::smg_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_smg[0]")], aimbot::hitboxes_smg[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_smg[1]")], aimbot::hitboxes_smg[1]);
@@ -504,6 +509,9 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("smg_autowall_lethal")], aimbot::smg_autowall_lethal);
 		write_value(json[xs("aimbot")][xs("rifle_hitbox")], aimbot::rifle_hitbox);
 		write_value(json[xs("aimbot")][xs("rifle_aimbot_fov")], aimbot::rifle_aimbot_fov);
+		write_value(json[xs("aimbot")][xs("rifle_aimbot_rcs")], aimbot::rifle_aimbot_rcs);
+		write_value(json[xs("aimbot")][xs("rifle_aimbot_rcs_p")], aimbot::rifle_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("rifle_aimbot_silent")], aimbot::rifle_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("rifle_aimbot_smooth")], aimbot::rifle_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_rifle[0]")], aimbot::hitboxes_rifle[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_rifle[1]")], aimbot::hitboxes_rifle[1]);
@@ -516,6 +524,7 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("sniper_aimbot_fov")], aimbot::sniper_aimbot_fov);
 		write_value(json[xs("aimbot")][xs("sniper_aimbot_rcs")], aimbot::sniper_aimbot_rcs);
 		write_value(json[xs("aimbot")][xs("sniper_aimbot_rcs_p")], aimbot::sniper_aimbot_rcs_p);
+		write_value(json[xs("aimbot")][xs("sniper_aimbot_silent")], aimbot::sniper_aimbot_silent);
 		write_value(json[xs("aimbot")][xs("sniper_aimbot_smooth")], aimbot::sniper_aimbot_smooth);
 		write_value(json[xs("aimbot")][xs("hitboxes_sniper[0]")], aimbot::hitboxes_sniper[0]);
 		write_value(json[xs("aimbot")][xs("hitboxes_sniper[1]")], aimbot::hitboxes_sniper[1]);
@@ -1530,7 +1539,6 @@ namespace c {
 			read_value(json[xs("aimbot")][xs("fake")], backtrack::fake);
 			read_value(json[xs("aimbot")][xs("fake_latency")], backtrack::fake_latency);
 			read_value(json[xs("aimbot")][xs("selected_tick")], backtrack::selected_tick);
-			read_value(json[xs("movement")][xs("auto_align")], movement::auto_align);
 			read_value(json[xs("aimbot")][xs("aimbot")], aimbot::aim_at_bt);
 			read_value(json[xs("aimbot")][xs("aimbot")], aimbot::aimbot);
 			read_value(json[xs("aimbot")][xs("aimbot_key")], aimbot::aimbot_key);
