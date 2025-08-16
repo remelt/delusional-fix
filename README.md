@@ -9,7 +9,7 @@
 + Skins
     - model changer now applies ur default agent after disabling it
 + Misc
-    - fixed hit chatprint
+    - fixed hitlog chatprint
 + Config
     - fixed crashes when trying to load if config wasnt selected
 
@@ -34,7 +34,6 @@
 + Fix chatprintf in jumpstats
 + Fix precipitation
 + Fix unload
-+ Add skinchanger for guns
 + Add edgebug, ps and bounce assist from lobotomy
 
 # s/o
