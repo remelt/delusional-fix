@@ -2,6 +2,7 @@
 #include "../../sdk/math/math.hpp"
 #include "../../menu/config/config.hpp"
 #include <vector>
+#include "../misc/misc.hpp"
 
 std::vector<int> hitbox_unfiltered;
 int hitbox;
@@ -13,6 +14,7 @@ bool autowall_lethal;
 bool autowall_b;
 bool silent;
 bool rcs;
+bool katai = true;
 
 bool is_knife(void* weapon) {
 	if (!weapon)
@@ -426,6 +428,17 @@ player_t* get_best_target(c_usercmd* cmd) {
 void aimbot::run(c_usercmd* cmd) {
 	if (!c::aimbot::aimbot || !g::local->is_alive())
 		return;
+	if (c::aimbot::aimbot_panic && menu::checkkey(c::aimbot::aimbot_panic_key, c::aimbot::aimbot_panic_key_s)) {
+		if (katai) {
+			features::misc::notify(("aimbot is off"), color(255, 255, 255, 255));
+			katai = false;
+		}
+		return;
+	}
+	if (!katai) {
+		features::misc::notify(("aimbot is on"), color(255, 255, 255, 255));
+		katai = true;
+	}
 
 	auto weapon = g::local->active_weapon();
 
@@ -456,8 +469,6 @@ void aimbot::run(c_usercmd* cmd) {
 		}
 	}
 	if (!c::aimbot::aimbot_autoshoot && !GetAsyncKeyState(c::aimbot::aimbot_key))
-		return;
-	if (c::aimbot::aimbot_panic && menu::checkkey(c::aimbot::aimbot_panic_key, c::aimbot::aimbot_panic_key_s))
 		return;
 	if (menu::open)
 		return;

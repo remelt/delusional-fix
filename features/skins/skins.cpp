@@ -100,6 +100,30 @@ void features::skins::full_update() {
 	forcing_update = false;
 }
 
+float weapon_wear(int weapon) {
+	float weapon_wear = 0.0f;
+
+	switch (weapon) {
+	case 0:
+		weapon_wear = 0.0000001f;
+		break;
+	case 1:
+		weapon_wear = 0.07f;
+		break;
+	case 2:
+		weapon_wear = 0.15f;
+		break;
+	case 3:
+		weapon_wear = 0.38f;
+		break;
+	case 4:
+		weapon_wear = 0.45f;
+		break;
+	}
+
+	return weapon_wear;
+}
+
 void features::skins::gloves_changer() {
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
 		return;
@@ -437,116 +461,113 @@ void features::skins::knife_changer( ) {
 				}
 			}
 		}
-		/*
 		if (c::skins::weapon_endable) {
 			//apply weapon skins
 			switch (weapon->item_definition_index()) {
-			case WEAPON_USP_SILENCER:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_usp, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_HKP2000:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_p2000, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_GLOCK:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_glock, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_P250:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_p250, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_FIVESEVEN:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_fiveseven, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_TEC9:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_tec, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_CZ75A:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_cz, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_ELITE:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_duals, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_DEAGLE:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_deagle, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_REVOLVER:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_revolver, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_FAMAS:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_famas, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_GALILAR:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_galil, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_M4A1:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_m4a4, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_M4A1_SILENCER:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_m4a1, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_AK47:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_ak47, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_SG556:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_sg553, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_AUG:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_aug, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_SSG08:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_ssg08, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_AWP:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_awp, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_SCAR20:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_scar, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_G3SG1:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_g3sg1, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_SAWEDOFF:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_sawoff, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_M249:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_m249, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_NEGEV:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_negev, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_MAG7:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_mag7, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_XM1014:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_xm1014, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_NOVA:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_nova, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_BIZON:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_bizon, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_MP5SD:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_mp5sd, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_MP7:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_mp7, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_MP9:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_mp9, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_MAC10:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_mac10, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_P90:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_p90, weapon->fallback_wear() = wear;
-				break;
-			case WEAPON_UMP45:
-				weapon->fallback_paint_kit() = c::skins::paint_kit_index_ump45, weapon->fallback_wear() = wear;
-				break;
+				case WEAPON_USP_SILENCER:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_usp, weapon->fallback_wear() = weapon_wear(c::skins::wear_usp);
+					break;
+				case WEAPON_HKP2000:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_p2000, weapon->fallback_wear() = weapon_wear(c::skins::wear_p2000);
+					break;
+				case WEAPON_GLOCK:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_glock, weapon->fallback_wear() = weapon_wear(c::skins::wear_glock);
+					break;
+				case WEAPON_P250:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_p250, weapon->fallback_wear() = weapon_wear(c::skins::wear_p250);
+					break;
+				case WEAPON_FIVESEVEN:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_fiveseven, weapon->fallback_wear() = weapon_wear(c::skins::wear_fiveseven);
+					break;
+				case WEAPON_TEC9:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_tec, weapon->fallback_wear() = weapon_wear(c::skins::wear_tec);
+					break;
+				case WEAPON_CZ75A:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_cz, weapon->fallback_wear() = weapon_wear(c::skins::wear_cz);
+					break;
+				case WEAPON_ELITE:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_duals, weapon->fallback_wear() = weapon_wear(c::skins::wear_duals);
+					break;
+				case WEAPON_DEAGLE:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_deagle, weapon->fallback_wear() = weapon_wear(c::skins::wear_deagle);
+					break;
+				case WEAPON_REVOLVER:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_revolver, weapon->fallback_wear() = weapon_wear(c::skins::wear_revolver);
+					break;
+				case WEAPON_FAMAS:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_famas, weapon->fallback_wear() = weapon_wear(c::skins::wear_famas);
+					break;
+				case WEAPON_GALILAR:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_galil, weapon->fallback_wear() = weapon_wear(c::skins::wear_galil);
+					break;
+				case WEAPON_M4A1:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_m4a4, weapon->fallback_wear() = weapon_wear(c::skins::wear_m4a4);
+					break;
+				case WEAPON_M4A1_SILENCER:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_m4a1, weapon->fallback_wear() = weapon_wear(c::skins::wear_m4a1);
+					break;
+				case WEAPON_AK47:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_ak47, weapon->fallback_wear() = weapon_wear(c::skins::wear_ak47);
+					break;
+				case WEAPON_SG556:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_sg553, weapon->fallback_wear() = weapon_wear(c::skins::wear_sg553);
+					break;
+				case WEAPON_AUG:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_aug, weapon->fallback_wear() = weapon_wear(c::skins::wear_aug);
+					break;
+				case WEAPON_SSG08:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_ssg08, weapon->fallback_wear() = weapon_wear(c::skins::wear_ssg08);
+					break;
+				case WEAPON_AWP:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_awp, weapon->fallback_wear() = weapon_wear(c::skins::wear_awp);
+					break;
+				case WEAPON_SCAR20:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_scar, weapon->fallback_wear() = weapon_wear(c::skins::wear_scar);
+					break;
+				case WEAPON_G3SG1:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_g3sg1, weapon->fallback_wear() = weapon_wear(c::skins::wear_g3sg1);
+					break;
+				case WEAPON_SAWEDOFF:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_sawoff, weapon->fallback_wear() = weapon_wear(c::skins::wear_sawoff);
+					break;
+				case WEAPON_M249:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_m249, weapon->fallback_wear() = weapon_wear(c::skins::wear_m249);
+					break;
+				case WEAPON_NEGEV:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_negev, weapon->fallback_wear() = weapon_wear(c::skins::wear_negev);
+					break;
+				case WEAPON_MAG7:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_mag7, weapon->fallback_wear() = weapon_wear(c::skins::wear_mag7);
+					break;
+				case WEAPON_XM1014:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_xm1014, weapon->fallback_wear() = weapon_wear(c::skins::wear_xm1014);
+					break;
+				case WEAPON_NOVA:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_nova, weapon->fallback_wear() = weapon_wear(c::skins::wear_nova);
+					break;
+				case WEAPON_BIZON:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_bizon, weapon->fallback_wear() = weapon_wear(c::skins::wear_bizon);
+					break;
+				case WEAPON_MP5SD:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_mp5sd, weapon->fallback_wear() = weapon_wear(c::skins::wear_mp5sd);
+					break;
+				case WEAPON_MP7:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_mp7, weapon->fallback_wear() = weapon_wear(c::skins::wear_mp7);
+					break;
+				case WEAPON_MP9:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_mp9, weapon->fallback_wear() = weapon_wear(c::skins::wear_mp9);
+					break;
+				case WEAPON_MAC10:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_mac10, weapon->fallback_wear() = weapon_wear(c::skins::wear_mac10);
+					break;
+				case WEAPON_P90:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_p90, weapon->fallback_wear() = weapon_wear(c::skins::wear_p90);
+					break;
+				case WEAPON_UMP45:
+					weapon->fallback_paint_kit() = c::skins::paint_kit_index_ump45, weapon->fallback_wear() = weapon_wear(c::skins::wear_ump45);
+					break;
 			}
 		}
-		*/
-		
 
 		weapon->original_owner_xuid_low() = 0;
 		weapon->original_owner_xuid_high() = 0;

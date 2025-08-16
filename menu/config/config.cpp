@@ -111,6 +111,144 @@ namespace c {
 		write_value(json[xs("skins")][xs("gloves_skin_id")], skins::gloves_skin_id);
 		write_value(json[xs("skins")][xs("gloves_wear")], skins::gloves_wear);
 		write_value(json[xs("skins")][xs("weapon_endable")], skins::weapon_endable);
+
+		//usp
+		write_value(json[xs("skins")][xs("wear_usp")], skins::wear_usp);
+		write_value(json[xs("skins")][xs("vector_paint_kit_usp")], skins::vector_paint_kit_usp);
+		write_value(json[xs("skins")][xs("paint_kit_index_usp")], skins::paint_kit_index_usp);
+		//p2000
+		write_value(json[xs("skins")][xs("wear_p2000")], skins::wear_p2000);
+		write_value(json[xs("skins")][xs("vector_paint_kit_p2000")], skins::vector_paint_kit_p2000);
+		write_value(json[xs("skins")][xs("paint_kit_index_p2000")], skins::paint_kit_index_p2000);
+		//glock
+		write_value(json[xs("skins")][xs("wear_glock")], skins::wear_glock);
+		write_value(json[xs("skins")][xs("vector_paint_kit_glock")], skins::vector_paint_kit_glock);
+		write_value(json[xs("skins")][xs("paint_kit_index_glock")], skins::paint_kit_index_glock);
+		//p250
+		write_value(json[xs("skins")][xs("wear_p250")], skins::wear_p250);
+		write_value(json[xs("skins")][xs("vector_paint_kit_p250")], skins::vector_paint_kit_p250);
+		write_value(json[xs("skins")][xs("paint_kit_index_p250")], skins::paint_kit_index_p250);
+		//fiveseven
+		write_value(json[xs("skins")][xs("wear_fiveseven")], skins::wear_fiveseven);
+		write_value(json[xs("skins")][xs("vector_paint_kit_fiveseven")], skins::vector_paint_kit_fiveseven);
+		write_value(json[xs("skins")][xs("paint_kit_index_fiveseven")], skins::paint_kit_index_fiveseven);
+		//tec
+		write_value(json[xs("skins")][xs("wear_tec")], skins::wear_tec);
+		write_value(json[xs("skins")][xs("vector_paint_kit_tec")], skins::vector_paint_kit_tec);
+		write_value(json[xs("skins")][xs("paint_kit_index_tec")], skins::paint_kit_index_tec);
+		//cz
+		write_value(json[xs("skins")][xs("wear_cz")], skins::wear_cz);
+		write_value(json[xs("skins")][xs("vector_paint_kit_cz")], skins::vector_paint_kit_cz);
+		write_value(json[xs("skins")][xs("paint_kit_index_cz")], skins::paint_kit_index_cz);
+		//duals
+		write_value(json[xs("skins")][xs("wear_duals")], skins::wear_duals);
+		write_value(json[xs("skins")][xs("vector_paint_kit_duals")], skins::vector_paint_kit_duals);
+		write_value(json[xs("skins")][xs("paint_kit_index_duals")], skins::paint_kit_index_duals);
+		//deagle
+		write_value(json[xs("skins")][xs("wear_deagle")], skins::wear_deagle);
+		write_value(json[xs("skins")][xs("vector_paint_kit_deagle")], skins::vector_paint_kit_deagle);
+		write_value(json[xs("skins")][xs("paint_kit_index_deagle")], skins::paint_kit_index_deagle);
+		//revolver
+		write_value(json[xs("skins")][xs("wear_revolver")], skins::wear_revolver);
+		write_value(json[xs("skins")][xs("vector_paint_kit_revolver")], skins::vector_paint_kit_revolver);
+		write_value(json[xs("skins")][xs("paint_kit_index_revolver")], skins::paint_kit_index_revolver);
+		//famas
+		write_value(json[xs("skins")][xs("wear_famas")], skins::wear_famas);
+		write_value(json[xs("skins")][xs("vector_paint_kit_famas")], skins::vector_paint_kit_famas);
+		write_value(json[xs("skins")][xs("paint_kit_index_famas")], skins::paint_kit_index_famas);
+		//galil
+		write_value(json[xs("skins")][xs("wear_galil")], skins::wear_galil);
+		write_value(json[xs("skins")][xs("vector_paint_kit_galil")], skins::vector_paint_kit_galil);
+		write_value(json[xs("skins")][xs("paint_kit_index_galil")], skins::paint_kit_index_galil);
+		//m4a4
+		write_value(json[xs("skins")][xs("wear_m4a4")], skins::wear_m4a4);
+		write_value(json[xs("skins")][xs("vector_paint_kit_m4a4")], skins::vector_paint_kit_m4a4);
+		write_value(json[xs("skins")][xs("paint_kit_index_m4a4")], skins::paint_kit_index_m4a4);
+		//m4a1
+		write_value(json[xs("skins")][xs("wear_m4a1")], skins::wear_m4a1);
+		write_value(json[xs("skins")][xs("vector_paint_kit_m4a1")], skins::vector_paint_kit_m4a1);
+		write_value(json[xs("skins")][xs("paint_kit_index_m4a1")], skins::paint_kit_index_m4a1);
+		//ak47
+		write_value(json[xs("skins")][xs("wear_ak47")], skins::wear_ak47);
+		write_value(json[xs("skins")][xs("vector_paint_kit_ak47")], skins::vector_paint_kit_ak47);
+		write_value(json[xs("skins")][xs("paint_kit_index_ak47")], skins::paint_kit_index_ak47);
+		//sg553
+		write_value(json[xs("skins")][xs("wear_sg553")], skins::wear_sg553);
+		write_value(json[xs("skins")][xs("vector_paint_kit_sg553")], skins::vector_paint_kit_sg553);
+		write_value(json[xs("skins")][xs("paint_kit_index_sg553")], skins::paint_kit_index_sg553);
+		//aug
+		write_value(json[xs("skins")][xs("wear_aug")], skins::wear_aug);
+		write_value(json[xs("skins")][xs("vector_paint_kit_aug")], skins::vector_paint_kit_aug);
+		write_value(json[xs("skins")][xs("paint_kit_index_aug")], skins::paint_kit_index_aug);
+		//ssg08
+		write_value(json[xs("skins")][xs("wear_ssg08")], skins::wear_ssg08);
+		write_value(json[xs("skins")][xs("vector_paint_kit_ssg08")], skins::vector_paint_kit_ssg08);
+		write_value(json[xs("skins")][xs("paint_kit_index_ssg08")], skins::paint_kit_index_ssg08);
+		//awp
+		write_value(json[xs("skins")][xs("wear_awp")], skins::wear_awp);
+		write_value(json[xs("skins")][xs("vector_paint_kit_awp")], skins::vector_paint_kit_awp);
+		write_value(json[xs("skins")][xs("paint_kit_index_awp")], skins::paint_kit_index_awp);
+		//scar
+		write_value(json[xs("skins")][xs("wear_scar")], skins::wear_scar);
+		write_value(json[xs("skins")][xs("vector_paint_kit_scar")], skins::vector_paint_kit_scar);
+		write_value(json[xs("skins")][xs("paint_kit_index_scar")], skins::paint_kit_index_scar);
+		//g3sg1
+		write_value(json[xs("skins")][xs("wear_g3sg1")], skins::wear_g3sg1);
+		write_value(json[xs("skins")][xs("vector_paint_kit_g3sg1")], skins::vector_paint_kit_g3sg1);
+		write_value(json[xs("skins")][xs("paint_kit_index_g3sg1")], skins::paint_kit_index_g3sg1);
+		//sawoff
+		write_value(json[xs("skins")][xs("wear_sawoff")], skins::wear_sawoff);
+		write_value(json[xs("skins")][xs("vector_paint_kit_sawoff")], skins::vector_paint_kit_sawoff);
+		write_value(json[xs("skins")][xs("paint_kit_index_sawoff")], skins::paint_kit_index_sawoff);
+		//m249
+		write_value(json[xs("skins")][xs("wear_m249")], skins::wear_m249);
+		write_value(json[xs("skins")][xs("vector_paint_kit_m249")], skins::vector_paint_kit_m249);
+		write_value(json[xs("skins")][xs("paint_kit_index_m249")], skins::paint_kit_index_m249);
+		//negev
+		write_value(json[xs("skins")][xs("wear_negev")], skins::wear_negev);
+		write_value(json[xs("skins")][xs("vector_paint_kit_negev")], skins::vector_paint_kit_negev);
+		write_value(json[xs("skins")][xs("paint_kit_index_negev")], skins::paint_kit_index_negev);
+		//mag7
+		write_value(json[xs("skins")][xs("wear_mag7")], skins::wear_mag7);
+		write_value(json[xs("skins")][xs("vector_paint_kit_mag7")], skins::vector_paint_kit_mag7);
+		write_value(json[xs("skins")][xs("paint_kit_index_mag7")], skins::paint_kit_index_mag7);
+		//xm1014
+		write_value(json[xs("skins")][xs("wear_xm1014")], skins::wear_xm1014);
+		write_value(json[xs("skins")][xs("vector_paint_kit_xm1014")], skins::vector_paint_kit_xm1014);
+		write_value(json[xs("skins")][xs("paint_kit_index_xm1014")], skins::paint_kit_index_xm1014);
+		//nova
+		write_value(json[xs("skins")][xs("wear_nova")], skins::wear_nova);
+		write_value(json[xs("skins")][xs("vector_paint_kit_nova")], skins::vector_paint_kit_nova);
+		write_value(json[xs("skins")][xs("paint_kit_index_nova")], skins::paint_kit_index_nova);
+		//bizon
+		write_value(json[xs("skins")][xs("wear_bizon")], skins::wear_bizon);
+		write_value(json[xs("skins")][xs("vector_paint_kit_bizon")], skins::vector_paint_kit_bizon);
+		write_value(json[xs("skins")][xs("paint_kit_index_bizon")], skins::paint_kit_index_bizon);
+		//mp5sd
+		write_value(json[xs("skins")][xs("wear_mp5sd")], skins::wear_mp5sd);
+		write_value(json[xs("skins")][xs("vector_paint_kit_mp5sd")], skins::vector_paint_kit_mp5sd);
+		write_value(json[xs("skins")][xs("paint_kit_index_mp5sd")], skins::paint_kit_index_mp5sd);
+		//mp7
+		write_value(json[xs("skins")][xs("wear_mp7")], skins::wear_mp7);
+		write_value(json[xs("skins")][xs("vector_paint_kit_mp7")], skins::vector_paint_kit_mp7);
+		write_value(json[xs("skins")][xs("paint_kit_index_mp7")], skins::paint_kit_index_mp7);
+		//mp9
+		write_value(json[xs("skins")][xs("wear_mp9")], skins::wear_mp9);
+		write_value(json[xs("skins")][xs("vector_paint_kit_mp9")], skins::vector_paint_kit_mp9);
+		write_value(json[xs("skins")][xs("paint_kit_index_mp9")], skins::paint_kit_index_mp9);
+		//mac10
+		write_value(json[xs("skins")][xs("wear_mac10")], skins::wear_mac10);
+		write_value(json[xs("skins")][xs("vector_paint_kit_mac10")], skins::vector_paint_kit_mac10);
+		write_value(json[xs("skins")][xs("paint_kit_index_mac10")], skins::paint_kit_index_mac10);
+		//p90
+		write_value(json[xs("skins")][xs("wear_p90")], skins::wear_p90);
+		write_value(json[xs("skins")][xs("vector_paint_kit_p90")], skins::vector_paint_kit_p90);
+		write_value(json[xs("skins")][xs("paint_kit_index_p90")], skins::paint_kit_index_p90);
+		//ump45
+		write_value(json[xs("skins")][xs("wear_ump45")], skins::wear_ump45);
+		write_value(json[xs("skins")][xs("vector_paint_kit_ump45")], skins::vector_paint_kit_ump45);
+		write_value(json[xs("skins")][xs("paint_kit_index_ump45")], skins::paint_kit_index_ump45);
+
 		write_value(json[xs("movement")][xs("bhop")], movement::bhop);
 		write_value(json[xs("movement")][xs("bhopmiss")], movement::bhopmiss);
 		write_value(json[xs("movement")][xs("perfecthops")], movement::whathopmiss);
@@ -844,6 +982,145 @@ namespace c {
 			read_value(json[xs("skins")][xs("gloves_skin_id")], skins::gloves_skin_id);
 			read_value(json[xs("skins")][xs("gloves_wear")], skins::gloves_wear);
 			read_value(json[xs("skins")][xs("weapon_endable")], skins::weapon_endable);
+
+			//usp
+			read_value(json[xs("skins")][xs("wear_usp")], skins::wear_usp);
+			read_value(json[xs("skins")][xs("vector_paint_kit_usp")], skins::vector_paint_kit_usp);
+			read_value(json[xs("skins")][xs("paint_kit_index_usp")], skins::paint_kit_index_usp);
+			//p2000
+			read_value(json[xs("skins")][xs("wear_p2000")], skins::wear_p2000);
+			read_value(json[xs("skins")][xs("vector_paint_kit_p2000")], skins::vector_paint_kit_p2000);
+			read_value(json[xs("skins")][xs("paint_kit_index_p2000")], skins::paint_kit_index_p2000);
+			//glock
+			read_value(json[xs("skins")][xs("wear_glock")], skins::wear_glock);
+			read_value(json[xs("skins")][xs("vector_paint_kit_glock")], skins::vector_paint_kit_glock);
+			read_value(json[xs("skins")][xs("paint_kit_index_glock")], skins::paint_kit_index_glock);
+			//p250
+			read_value(json[xs("skins")][xs("wear_p250")], skins::wear_p250);
+			read_value(json[xs("skins")][xs("vector_paint_kit_p250")], skins::vector_paint_kit_p250);
+			read_value(json[xs("skins")][xs("paint_kit_index_p250")], skins::paint_kit_index_p250);
+			//fiveseven
+			read_value(json[xs("skins")][xs("wear_fiveseven")], skins::wear_fiveseven);
+			read_value(json[xs("skins")][xs("vector_paint_kit_fiveseven")], skins::vector_paint_kit_fiveseven);
+			read_value(json[xs("skins")][xs("paint_kit_index_fiveseven")], skins::paint_kit_index_fiveseven);
+			//tec
+			read_value(json[xs("skins")][xs("wear_tec")], skins::wear_tec);
+			read_value(json[xs("skins")][xs("vector_paint_kit_tec")], skins::vector_paint_kit_tec);
+			read_value(json[xs("skins")][xs("paint_kit_index_tec")], skins::paint_kit_index_tec);
+			//cz
+			read_value(json[xs("skins")][xs("wear_cz")], skins::wear_cz);
+			read_value(json[xs("skins")][xs("vector_paint_kit_cz")], skins::vector_paint_kit_cz);
+			read_value(json[xs("skins")][xs("paint_kit_index_cz")], skins::paint_kit_index_cz);
+			//duals
+			read_value(json[xs("skins")][xs("wear_duals")], skins::wear_duals);
+			read_value(json[xs("skins")][xs("vector_paint_kit_duals")], skins::vector_paint_kit_duals);
+			read_value(json[xs("skins")][xs("paint_kit_index_duals")], skins::paint_kit_index_duals);
+			//deagle
+			read_value(json[xs("skins")][xs("wear_deagle")], skins::wear_deagle);
+			read_value(json[xs("skins")][xs("vector_paint_kit_deagle")], skins::vector_paint_kit_deagle);
+			read_value(json[xs("skins")][xs("paint_kit_index_deagle")], skins::paint_kit_index_deagle);
+			//revolver
+			read_value(json[xs("skins")][xs("wear_revolver")], skins::wear_revolver);
+			read_value(json[xs("skins")][xs("vector_paint_kit_revolver")], skins::vector_paint_kit_revolver);
+			read_value(json[xs("skins")][xs("paint_kit_index_revolver")], skins::paint_kit_index_revolver);
+			//famas
+			read_value(json[xs("skins")][xs("wear_famas")], skins::wear_famas);
+			read_value(json[xs("skins")][xs("vector_paint_kit_famas")], skins::vector_paint_kit_famas);
+			read_value(json[xs("skins")][xs("paint_kit_index_famas")], skins::paint_kit_index_famas);
+			//galil
+			read_value(json[xs("skins")][xs("wear_galil")], skins::wear_galil);
+			read_value(json[xs("skins")][xs("vector_paint_kit_galil")], skins::vector_paint_kit_galil);
+			read_value(json[xs("skins")][xs("paint_kit_index_galil")], skins::paint_kit_index_galil);
+			//m4a4
+			read_value(json[xs("skins")][xs("wear_m4a4")], skins::wear_m4a4);
+			read_value(json[xs("skins")][xs("vector_paint_kit_m4a4")], skins::vector_paint_kit_m4a4);
+			read_value(json[xs("skins")][xs("paint_kit_index_m4a4")], skins::paint_kit_index_m4a4);
+			//m4a1
+			read_value(json[xs("skins")][xs("wear_m4a1")], skins::wear_m4a1);
+			read_value(json[xs("skins")][xs("vector_paint_kit_m4a1")], skins::vector_paint_kit_m4a1);
+			read_value(json[xs("skins")][xs("paint_kit_index_m4a1")], skins::paint_kit_index_m4a1);
+			//ak47
+			read_value(json[xs("skins")][xs("wear_ak47")], skins::wear_ak47);
+			read_value(json[xs("skins")][xs("vector_paint_kit_ak47")], skins::vector_paint_kit_ak47);
+			read_value(json[xs("skins")][xs("paint_kit_index_ak47")], skins::paint_kit_index_ak47);
+			//sg553
+			read_value(json[xs("skins")][xs("wear_sg553")], skins::wear_sg553);
+			read_value(json[xs("skins")][xs("vector_paint_kit_sg553")], skins::vector_paint_kit_sg553);
+			read_value(json[xs("skins")][xs("paint_kit_index_sg553")], skins::paint_kit_index_sg553);
+			//aug
+			read_value(json[xs("skins")][xs("wear_aug")], skins::wear_aug);
+			read_value(json[xs("skins")][xs("vector_paint_kit_aug")], skins::vector_paint_kit_aug);
+			read_value(json[xs("skins")][xs("paint_kit_index_aug")], skins::paint_kit_index_aug);
+			//ssg08
+			read_value(json[xs("skins")][xs("wear_ssg08")], skins::wear_ssg08);
+			read_value(json[xs("skins")][xs("vector_paint_kit_ssg08")], skins::vector_paint_kit_ssg08);
+			read_value(json[xs("skins")][xs("paint_kit_index_ssg08")], skins::paint_kit_index_ssg08);
+			//awp
+			read_value(json[xs("skins")][xs("wear_awp")], skins::wear_awp);
+			read_value(json[xs("skins")][xs("vector_paint_kit_awp")], skins::vector_paint_kit_awp);
+			read_value(json[xs("skins")][xs("paint_kit_index_awp")], skins::paint_kit_index_awp);
+			//scar
+			read_value(json[xs("skins")][xs("wear_scar")], skins::wear_scar);
+			read_value(json[xs("skins")][xs("vector_paint_kit_scar")], skins::vector_paint_kit_scar);
+			read_value(json[xs("skins")][xs("paint_kit_index_scar")], skins::paint_kit_index_scar);
+			//g3sg1
+			read_value(json[xs("skins")][xs("wear_g3sg1")], skins::wear_g3sg1);
+			read_value(json[xs("skins")][xs("vector_paint_kit_g3sg1")], skins::vector_paint_kit_g3sg1);
+			read_value(json[xs("skins")][xs("paint_kit_index_g3sg1")], skins::paint_kit_index_g3sg1);
+			//sawoff
+			read_value(json[xs("skins")][xs("wear_sawoff")], skins::wear_sawoff);
+			read_value(json[xs("skins")][xs("vector_paint_kit_sawoff")], skins::vector_paint_kit_sawoff);
+			read_value(json[xs("skins")][xs("paint_kit_index_sawoff")], skins::paint_kit_index_sawoff);
+			//m249
+			read_value(json[xs("skins")][xs("wear_m249")], skins::wear_m249);
+			read_value(json[xs("skins")][xs("vector_paint_kit_m249")], skins::vector_paint_kit_m249);
+			read_value(json[xs("skins")][xs("paint_kit_index_m249")], skins::paint_kit_index_m249);
+			//negev
+			read_value(json[xs("skins")][xs("wear_negev")], skins::wear_negev);
+			read_value(json[xs("skins")][xs("vector_paint_kit_negev")], skins::vector_paint_kit_negev);
+			read_value(json[xs("skins")][xs("paint_kit_index_negev")], skins::paint_kit_index_negev);
+			//mag7
+			read_value(json[xs("skins")][xs("wear_mag7")], skins::wear_mag7);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mag7")], skins::vector_paint_kit_mag7);
+			read_value(json[xs("skins")][xs("paint_kit_index_mag7")], skins::paint_kit_index_mag7);
+			//xm1014
+			read_value(json[xs("skins")][xs("wear_xm1014")], skins::wear_xm1014);
+			read_value(json[xs("skins")][xs("vector_paint_kit_xm1014")], skins::vector_paint_kit_xm1014);
+			read_value(json[xs("skins")][xs("paint_kit_index_xm1014")], skins::paint_kit_index_xm1014);
+			//nova
+			read_value(json[xs("skins")][xs("wear_nova")], skins::wear_nova);
+			read_value(json[xs("skins")][xs("vector_paint_kit_nova")], skins::vector_paint_kit_nova);
+			read_value(json[xs("skins")][xs("paint_kit_index_nova")], skins::paint_kit_index_nova);
+			//bizon
+			read_value(json[xs("skins")][xs("wear_bizon")], skins::wear_bizon);
+			read_value(json[xs("skins")][xs("vector_paint_kit_bizon")], skins::vector_paint_kit_bizon);
+			read_value(json[xs("skins")][xs("paint_kit_index_bizon")], skins::paint_kit_index_bizon);
+			//mp5sd
+			read_value(json[xs("skins")][xs("wear_mp5sd")], skins::wear_mp5sd);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mp5sd")], skins::vector_paint_kit_mp5sd);
+			read_value(json[xs("skins")][xs("paint_kit_index_mp5sd")], skins::paint_kit_index_mp5sd);
+			//mp7
+			read_value(json[xs("skins")][xs("wear_mp7")], skins::wear_mp7);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mp7")], skins::vector_paint_kit_mp7);
+			read_value(json[xs("skins")][xs("paint_kit_index_mp7")], skins::paint_kit_index_mp7);
+			//mp9
+			read_value(json[xs("skins")][xs("wear_mp9")], skins::wear_mp9);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mp9")], skins::vector_paint_kit_mp9);
+			read_value(json[xs("skins")][xs("paint_kit_index_mp9")], skins::paint_kit_index_mp9);
+			//mac10
+			read_value(json[xs("skins")][xs("wear_mac10")], skins::wear_mac10);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mac10")], skins::vector_paint_kit_mac10);
+			read_value(json[xs("skins")][xs("paint_kit_index_mac10")], skins::paint_kit_index_mac10);
+			//p90
+			read_value(json[xs("skins")][xs("wear_p90")], skins::wear_p90);
+			read_value(json[xs("skins")][xs("vector_paint_kit_p90")], skins::vector_paint_kit_p90);
+			read_value(json[xs("skins")][xs("paint_kit_index_p90")], skins::paint_kit_index_p90);
+			//ump45
+			read_value(json[xs("skins")][xs("wear_ump45")], skins::wear_ump45);
+			read_value(json[xs("skins")][xs("vector_paint_kit_ump45")], skins::vector_paint_kit_ump45);
+			read_value(json[xs("skins")][xs("paint_kit_index_ump45")], skins::paint_kit_index_ump45);
+
+
 			read_value(json[xs("movement")][xs("bhop")], movement::bhop);
 			read_value(json[xs("movement")][xs("bhopmiss")], movement::bhopmiss);
 			read_value(json[xs("movement")][xs("perfecthops")], movement::whathopmiss);
@@ -2191,6 +2468,143 @@ namespace c {
 			read_value(json[xs("skins")][xs("gloves_skin_id")], skins::gloves_skin_id);
 			read_value(json[xs("skins")][xs("gloves_wear")], skins::gloves_wear);
 			read_value(json[xs("skins")][xs("weapon_endable")], skins::weapon_endable);
+
+			//usp
+			read_value(json[xs("skins")][xs("wear_usp")], skins::wear_usp);
+			read_value(json[xs("skins")][xs("vector_paint_kit_usp")], skins::vector_paint_kit_usp);
+			read_value(json[xs("skins")][xs("paint_kit_index_usp")], skins::paint_kit_index_usp);
+			//p2000
+			read_value(json[xs("skins")][xs("wear_p2000")], skins::wear_p2000);
+			read_value(json[xs("skins")][xs("vector_paint_kit_p2000")], skins::vector_paint_kit_p2000);
+			read_value(json[xs("skins")][xs("paint_kit_index_p2000")], skins::paint_kit_index_p2000);
+			//glock
+			read_value(json[xs("skins")][xs("wear_glock")], skins::wear_glock);
+			read_value(json[xs("skins")][xs("vector_paint_kit_glock")], skins::vector_paint_kit_glock);
+			read_value(json[xs("skins")][xs("paint_kit_index_glock")], skins::paint_kit_index_glock);
+			//p250
+			read_value(json[xs("skins")][xs("wear_p250")], skins::wear_p250);
+			read_value(json[xs("skins")][xs("vector_paint_kit_p250")], skins::vector_paint_kit_p250);
+			read_value(json[xs("skins")][xs("paint_kit_index_p250")], skins::paint_kit_index_p250);
+			//fiveseven
+			read_value(json[xs("skins")][xs("wear_fiveseven")], skins::wear_fiveseven);
+			read_value(json[xs("skins")][xs("vector_paint_kit_fiveseven")], skins::vector_paint_kit_fiveseven);
+			read_value(json[xs("skins")][xs("paint_kit_index_fiveseven")], skins::paint_kit_index_fiveseven);
+			//tec
+			read_value(json[xs("skins")][xs("wear_tec")], skins::wear_tec);
+			read_value(json[xs("skins")][xs("vector_paint_kit_tec")], skins::vector_paint_kit_tec);
+			read_value(json[xs("skins")][xs("paint_kit_index_tec")], skins::paint_kit_index_tec);
+			//cz
+			read_value(json[xs("skins")][xs("wear_cz")], skins::wear_cz);
+			read_value(json[xs("skins")][xs("vector_paint_kit_cz")], skins::vector_paint_kit_cz);
+			read_value(json[xs("skins")][xs("paint_kit_index_cz")], skins::paint_kit_index_cz);
+			//duals
+			read_value(json[xs("skins")][xs("wear_duals")], skins::wear_duals);
+			read_value(json[xs("skins")][xs("vector_paint_kit_duals")], skins::vector_paint_kit_duals);
+			read_value(json[xs("skins")][xs("paint_kit_index_duals")], skins::paint_kit_index_duals);
+			//deagle
+			read_value(json[xs("skins")][xs("wear_deagle")], skins::wear_deagle);
+			read_value(json[xs("skins")][xs("vector_paint_kit_deagle")], skins::vector_paint_kit_deagle);
+			read_value(json[xs("skins")][xs("paint_kit_index_deagle")], skins::paint_kit_index_deagle);
+			//revolver
+			read_value(json[xs("skins")][xs("wear_revolver")], skins::wear_revolver);
+			read_value(json[xs("skins")][xs("vector_paint_kit_revolver")], skins::vector_paint_kit_revolver);
+			read_value(json[xs("skins")][xs("paint_kit_index_revolver")], skins::paint_kit_index_revolver);
+			//famas
+			read_value(json[xs("skins")][xs("wear_famas")], skins::wear_famas);
+			read_value(json[xs("skins")][xs("vector_paint_kit_famas")], skins::vector_paint_kit_famas);
+			read_value(json[xs("skins")][xs("paint_kit_index_famas")], skins::paint_kit_index_famas);
+			//galil
+			read_value(json[xs("skins")][xs("wear_galil")], skins::wear_galil);
+			read_value(json[xs("skins")][xs("vector_paint_kit_galil")], skins::vector_paint_kit_galil);
+			read_value(json[xs("skins")][xs("paint_kit_index_galil")], skins::paint_kit_index_galil);
+			//m4a4
+			read_value(json[xs("skins")][xs("wear_m4a4")], skins::wear_m4a4);
+			read_value(json[xs("skins")][xs("vector_paint_kit_m4a4")], skins::vector_paint_kit_m4a4);
+			read_value(json[xs("skins")][xs("paint_kit_index_m4a4")], skins::paint_kit_index_m4a4);
+			//m4a1
+			read_value(json[xs("skins")][xs("wear_m4a1")], skins::wear_m4a1);
+			read_value(json[xs("skins")][xs("vector_paint_kit_m4a1")], skins::vector_paint_kit_m4a1);
+			read_value(json[xs("skins")][xs("paint_kit_index_m4a1")], skins::paint_kit_index_m4a1);
+			//ak47
+			read_value(json[xs("skins")][xs("wear_ak47")], skins::wear_ak47);
+			read_value(json[xs("skins")][xs("vector_paint_kit_ak47")], skins::vector_paint_kit_ak47);
+			read_value(json[xs("skins")][xs("paint_kit_index_ak47")], skins::paint_kit_index_ak47);
+			//sg553
+			read_value(json[xs("skins")][xs("wear_sg553")], skins::wear_sg553);
+			read_value(json[xs("skins")][xs("vector_paint_kit_sg553")], skins::vector_paint_kit_sg553);
+			read_value(json[xs("skins")][xs("paint_kit_index_sg553")], skins::paint_kit_index_sg553);
+			//aug
+			read_value(json[xs("skins")][xs("wear_aug")], skins::wear_aug);
+			read_value(json[xs("skins")][xs("vector_paint_kit_aug")], skins::vector_paint_kit_aug);
+			read_value(json[xs("skins")][xs("paint_kit_index_aug")], skins::paint_kit_index_aug);
+			//ssg08
+			read_value(json[xs("skins")][xs("wear_ssg08")], skins::wear_ssg08);
+			read_value(json[xs("skins")][xs("vector_paint_kit_ssg08")], skins::vector_paint_kit_ssg08);
+			read_value(json[xs("skins")][xs("paint_kit_index_ssg08")], skins::paint_kit_index_ssg08);
+			//awp
+			read_value(json[xs("skins")][xs("wear_awp")], skins::wear_awp);
+			read_value(json[xs("skins")][xs("vector_paint_kit_awp")], skins::vector_paint_kit_awp);
+			read_value(json[xs("skins")][xs("paint_kit_index_awp")], skins::paint_kit_index_awp);
+			//scar
+			read_value(json[xs("skins")][xs("wear_scar")], skins::wear_scar);
+			read_value(json[xs("skins")][xs("vector_paint_kit_scar")], skins::vector_paint_kit_scar);
+			read_value(json[xs("skins")][xs("paint_kit_index_scar")], skins::paint_kit_index_scar);
+			//g3sg1
+			read_value(json[xs("skins")][xs("wear_g3sg1")], skins::wear_g3sg1);
+			read_value(json[xs("skins")][xs("vector_paint_kit_g3sg1")], skins::vector_paint_kit_g3sg1);
+			read_value(json[xs("skins")][xs("paint_kit_index_g3sg1")], skins::paint_kit_index_g3sg1);
+			//sawoff
+			read_value(json[xs("skins")][xs("wear_sawoff")], skins::wear_sawoff);
+			read_value(json[xs("skins")][xs("vector_paint_kit_sawoff")], skins::vector_paint_kit_sawoff);
+			read_value(json[xs("skins")][xs("paint_kit_index_sawoff")], skins::paint_kit_index_sawoff);
+			//m249
+			read_value(json[xs("skins")][xs("wear_m249")], skins::wear_m249);
+			read_value(json[xs("skins")][xs("vector_paint_kit_m249")], skins::vector_paint_kit_m249);
+			read_value(json[xs("skins")][xs("paint_kit_index_m249")], skins::paint_kit_index_m249);
+			//negev
+			read_value(json[xs("skins")][xs("wear_negev")], skins::wear_negev);
+			read_value(json[xs("skins")][xs("vector_paint_kit_negev")], skins::vector_paint_kit_negev);
+			read_value(json[xs("skins")][xs("paint_kit_index_negev")], skins::paint_kit_index_negev);
+			//mag7
+			read_value(json[xs("skins")][xs("wear_mag7")], skins::wear_mag7);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mag7")], skins::vector_paint_kit_mag7);
+			read_value(json[xs("skins")][xs("paint_kit_index_mag7")], skins::paint_kit_index_mag7);
+			//xm1014
+			read_value(json[xs("skins")][xs("wear_xm1014")], skins::wear_xm1014);
+			read_value(json[xs("skins")][xs("vector_paint_kit_xm1014")], skins::vector_paint_kit_xm1014);
+			read_value(json[xs("skins")][xs("paint_kit_index_xm1014")], skins::paint_kit_index_xm1014);
+			//nova
+			read_value(json[xs("skins")][xs("wear_nova")], skins::wear_nova);
+			read_value(json[xs("skins")][xs("vector_paint_kit_nova")], skins::vector_paint_kit_nova);
+			read_value(json[xs("skins")][xs("paint_kit_index_nova")], skins::paint_kit_index_nova);
+			//bizon
+			read_value(json[xs("skins")][xs("wear_bizon")], skins::wear_bizon);
+			read_value(json[xs("skins")][xs("vector_paint_kit_bizon")], skins::vector_paint_kit_bizon);
+			read_value(json[xs("skins")][xs("paint_kit_index_bizon")], skins::paint_kit_index_bizon);
+			//mp5sd
+			read_value(json[xs("skins")][xs("wear_mp5sd")], skins::wear_mp5sd);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mp5sd")], skins::vector_paint_kit_mp5sd);
+			read_value(json[xs("skins")][xs("paint_kit_index_mp5sd")], skins::paint_kit_index_mp5sd);
+			//mp7
+			read_value(json[xs("skins")][xs("wear_mp7")], skins::wear_mp7);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mp7")], skins::vector_paint_kit_mp7);
+			read_value(json[xs("skins")][xs("paint_kit_index_mp7")], skins::paint_kit_index_mp7);
+			//mp9
+			read_value(json[xs("skins")][xs("wear_mp9")], skins::wear_mp9);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mp9")], skins::vector_paint_kit_mp9);
+			read_value(json[xs("skins")][xs("paint_kit_index_mp9")], skins::paint_kit_index_mp9);
+			//mac10
+			read_value(json[xs("skins")][xs("wear_mac10")], skins::wear_mac10);
+			read_value(json[xs("skins")][xs("vector_paint_kit_mac10")], skins::vector_paint_kit_mac10);
+			read_value(json[xs("skins")][xs("paint_kit_index_mac10")], skins::paint_kit_index_mac10);
+			//p90
+			read_value(json[xs("skins")][xs("wear_p90")], skins::wear_p90);
+			read_value(json[xs("skins")][xs("vector_paint_kit_p90")], skins::vector_paint_kit_p90);
+			read_value(json[xs("skins")][xs("paint_kit_index_p90")], skins::paint_kit_index_p90);
+			//ump45
+			read_value(json[xs("skins")][xs("wear_ump45")], skins::wear_ump45);
+			read_value(json[xs("skins")][xs("vector_paint_kit_ump45")], skins::vector_paint_kit_ump45);
+			read_value(json[xs("skins")][xs("paint_kit_index_ump45")], skins::paint_kit_index_ump45);
 
 		}
 

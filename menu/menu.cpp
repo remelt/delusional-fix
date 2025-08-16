@@ -30,10 +30,375 @@ const char* data_center_list_names[] = { "australia", "austria", "brazil", "chil
 std::string data_center_list[] = { "syd", "vie", "gru", "scl", "dxb", "par", "fra", "hkg",
    "maa", "bom", "tyo", "lux", "ams", "limc", "man", "waw", "sgp", "jnb",
    "mad", "sto", "lhr", "atl", "eat", "ord", "lax", "mwh", "okc", "sea", "iad" };
+static const char* choices_copy[]{ "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
+static const char* choices_copy1[]{ "  pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
+static const char* choices_copy2[]{ "  pistol", "  heavy pistol", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
+static const char* choices_copy3[]{ "  pistol", "  heavy pistol", "  shotgun", "  smg", "  rifle", "  sniper", "  auto sniper" };
+static const char* choices_copy4[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  rifle", "  sniper", "  auto sniper" };
+static const char* choices_copy7[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  sniper", "  auto sniper" };
+static const char* choices_copy6[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  auto sniper" };
+static const char* choices_copy5[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper" };
 
 ImGuiColorEditFlags no_alpha = ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
 ImGuiColorEditFlags w_alpha = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
 
+int vector_paint_kit;
+int weapon_skin;
+int wear;
+
+int weapon_model = -1;
+
+bool skin_custom_clr;
+
+void getskins() {
+    switch (c::skins::weapon_model) {
+    case 0:
+        wear = c::skins::wear_usp;
+        vector_paint_kit = c::skins::vector_paint_kit_usp;
+        weapon_skin = c::skins::paint_kit_index_usp;
+        break;
+    case 1:
+        wear = c::skins::wear_p2000;
+        vector_paint_kit = c::skins::vector_paint_kit_p2000;
+        weapon_skin = c::skins::paint_kit_index_p2000;
+        break;
+    case 2:
+        wear = c::skins::wear_glock;
+        vector_paint_kit = c::skins::vector_paint_kit_glock;
+        weapon_skin = c::skins::paint_kit_index_glock;
+        break;
+    case 3:
+        wear = c::skins::wear_p250;
+        vector_paint_kit = c::skins::vector_paint_kit_p250;
+        weapon_skin = c::skins::paint_kit_index_p250;
+        break;
+    case 4:
+        wear = c::skins::wear_fiveseven;
+        vector_paint_kit = c::skins::vector_paint_kit_fiveseven;
+        weapon_skin = c::skins::paint_kit_index_fiveseven;
+        break;
+    case 5:
+        wear = c::skins::wear_tec;
+        vector_paint_kit = c::skins::vector_paint_kit_tec;
+        weapon_skin = c::skins::paint_kit_index_tec;
+        break;
+    case 6:
+        wear = c::skins::wear_cz;
+        vector_paint_kit = c::skins::vector_paint_kit_cz;
+        weapon_skin = c::skins::paint_kit_index_cz;
+        break;
+    case 7:
+        wear = c::skins::wear_duals;
+        vector_paint_kit = c::skins::vector_paint_kit_duals;
+        weapon_skin = c::skins::paint_kit_index_duals;
+        break;
+    case 8:
+        wear = c::skins::wear_deagle;
+        vector_paint_kit = c::skins::vector_paint_kit_deagle;
+        weapon_skin = c::skins::paint_kit_index_deagle;
+        break;
+    case 9:
+        wear = c::skins::wear_revolver;
+        vector_paint_kit = c::skins::vector_paint_kit_revolver;
+        weapon_skin = c::skins::paint_kit_index_revolver;
+        break;
+    case 10:
+        wear = c::skins::wear_famas;
+        vector_paint_kit = c::skins::vector_paint_kit_famas;
+        weapon_skin = c::skins::paint_kit_index_famas;
+        break;
+    case 11:
+        wear = c::skins::wear_galil;
+        vector_paint_kit = c::skins::vector_paint_kit_galil;
+        weapon_skin = c::skins::paint_kit_index_galil;
+        break;
+    case 12:
+        wear = c::skins::wear_m4a4;
+        vector_paint_kit = c::skins::vector_paint_kit_m4a4;
+        weapon_skin = c::skins::paint_kit_index_m4a4;
+        break;
+    case 13:
+        wear = c::skins::wear_m4a1;
+        vector_paint_kit = c::skins::vector_paint_kit_m4a1;
+        weapon_skin = c::skins::paint_kit_index_m4a1;
+        break;
+    case 14:
+        wear = c::skins::wear_ak47;
+        vector_paint_kit = c::skins::vector_paint_kit_ak47;
+        weapon_skin = c::skins::paint_kit_index_ak47;
+        break;
+    case 15:
+        wear = c::skins::wear_sg553;
+        vector_paint_kit = c::skins::vector_paint_kit_sg553;
+        weapon_skin = c::skins::paint_kit_index_sg553;
+        break;
+    case 16:
+        wear = c::skins::wear_aug;
+        vector_paint_kit = c::skins::vector_paint_kit_aug;
+        weapon_skin = c::skins::paint_kit_index_aug;
+        break;
+    case 17:
+        wear = c::skins::wear_ssg08;
+        vector_paint_kit = c::skins::vector_paint_kit_ssg08;
+        weapon_skin = c::skins::paint_kit_index_ssg08;
+        break;
+    case 18:
+        wear = c::skins::wear_awp;
+        vector_paint_kit = c::skins::vector_paint_kit_awp;
+        weapon_skin = c::skins::paint_kit_index_awp;
+        break;
+    case 19:
+        wear = c::skins::wear_scar;
+        vector_paint_kit = c::skins::vector_paint_kit_scar;
+        weapon_skin = c::skins::paint_kit_index_scar;
+        break;
+    case 20:
+        wear = c::skins::wear_g3sg1;
+        vector_paint_kit = c::skins::vector_paint_kit_g3sg1;
+        weapon_skin = c::skins::paint_kit_index_g3sg1;
+        break;
+    case 21:
+        wear = c::skins::wear_sawoff;
+        vector_paint_kit = c::skins::vector_paint_kit_sawoff;
+        weapon_skin = c::skins::paint_kit_index_sawoff;
+        break;
+    case 22:
+        wear = c::skins::wear_m249;
+        vector_paint_kit = c::skins::vector_paint_kit_m249;
+        weapon_skin = c::skins::paint_kit_index_m249;
+        break;
+    case 23:
+        wear = c::skins::wear_negev;
+        vector_paint_kit = c::skins::vector_paint_kit_negev;
+        weapon_skin = c::skins::paint_kit_index_negev;
+        break;
+    case 24:
+        wear = c::skins::wear_mag7;
+        vector_paint_kit = c::skins::vector_paint_kit_mag7;
+        weapon_skin = c::skins::paint_kit_index_mag7;
+        break;
+    case 25:
+        wear = c::skins::wear_xm1014;
+        vector_paint_kit = c::skins::vector_paint_kit_xm1014;
+        weapon_skin = c::skins::paint_kit_index_xm1014;
+        break;
+    case 26:
+        wear = c::skins::wear_nova;
+        vector_paint_kit = c::skins::vector_paint_kit_nova;
+        weapon_skin = c::skins::paint_kit_index_nova;
+        break;
+    case 27:
+        wear = c::skins::wear_bizon;
+        vector_paint_kit = c::skins::vector_paint_kit_bizon;
+        weapon_skin = c::skins::paint_kit_index_bizon;
+        break;
+    case 28:
+        wear = c::skins::wear_mp5sd;
+        vector_paint_kit = c::skins::vector_paint_kit_mp5sd;
+        weapon_skin = c::skins::paint_kit_index_mp5sd;
+        break;
+    case 29:
+        wear = c::skins::wear_mp7;
+        vector_paint_kit = c::skins::vector_paint_kit_mp7;
+        weapon_skin = c::skins::paint_kit_index_mp7;
+        break;
+    case 30:
+        wear = c::skins::wear_mp9;
+        vector_paint_kit = c::skins::vector_paint_kit_mp9;
+        weapon_skin = c::skins::paint_kit_index_mp9;
+        break;
+    case 31:
+        wear = c::skins::wear_mac10;
+        vector_paint_kit = c::skins::vector_paint_kit_mac10;
+        weapon_skin = c::skins::paint_kit_index_mac10;
+        break;
+    case 32:
+        wear = c::skins::wear_p90;
+        vector_paint_kit = c::skins::vector_paint_kit_p90;
+        weapon_skin = c::skins::paint_kit_index_p90;
+        break;
+    case 33:
+        wear = c::skins::wear_ump45;
+        vector_paint_kit = c::skins::vector_paint_kit_ump45;
+        weapon_skin = c::skins::paint_kit_index_ump45;
+        break;
+    }
+}
+
+void setskins() {
+    switch (c::skins::weapon_model) {
+    case 0:
+        c::skins::wear_usp = wear;
+        c::skins::vector_paint_kit_usp = vector_paint_kit;
+        c::skins::paint_kit_index_usp = weapon_skin;
+        break;
+    case 1:
+        c::skins::wear_p2000 = wear;
+        c::skins::vector_paint_kit_p2000 = vector_paint_kit;
+        c::skins::paint_kit_index_p2000 = weapon_skin;
+        break;
+    case 2:
+        c::skins::wear_glock = wear;
+        c::skins::vector_paint_kit_glock = vector_paint_kit;
+        c::skins::paint_kit_index_glock = weapon_skin;
+        break;
+    case 3:
+        c::skins::wear_p250 = wear;
+        c::skins::vector_paint_kit_p250 = vector_paint_kit;
+        c::skins::paint_kit_index_p250 = weapon_skin;
+        break;
+    case 4:
+        c::skins::wear_fiveseven = wear;
+        c::skins::vector_paint_kit_fiveseven = vector_paint_kit;
+        c::skins::paint_kit_index_fiveseven = weapon_skin;
+        break;
+    case 5:
+        c::skins::wear_tec = wear;
+        c::skins::vector_paint_kit_tec = vector_paint_kit;
+        c::skins::paint_kit_index_tec = weapon_skin;
+        break;
+    case 6:
+        c::skins::wear_cz = wear;
+        c::skins::vector_paint_kit_cz = vector_paint_kit;
+        c::skins::paint_kit_index_cz = weapon_skin;
+        break;
+    case 7:
+        c::skins::wear_duals = wear;
+        c::skins::vector_paint_kit_duals = vector_paint_kit;
+        c::skins::paint_kit_index_duals = weapon_skin;
+        break;
+    case 8:
+        c::skins::wear_deagle = wear;
+        c::skins::vector_paint_kit_deagle = vector_paint_kit;
+        c::skins::paint_kit_index_deagle = weapon_skin;
+        break;
+    case 9:
+        c::skins::wear_revolver = wear;
+        c::skins::vector_paint_kit_revolver = vector_paint_kit;
+        c::skins::paint_kit_index_revolver = weapon_skin;
+        break;
+    case 10:
+        c::skins::wear_famas = wear;
+        c::skins::vector_paint_kit_famas = vector_paint_kit;
+        c::skins::paint_kit_index_famas = weapon_skin;
+        break;
+    case 11:
+        c::skins::wear_galil = wear;
+        c::skins::vector_paint_kit_galil = vector_paint_kit;
+        c::skins::paint_kit_index_galil = weapon_skin;
+        break;
+    case 12:
+        c::skins::wear_m4a4 = wear;
+        c::skins::vector_paint_kit_m4a4 = vector_paint_kit;
+        c::skins::paint_kit_index_m4a4 = weapon_skin;
+        break;
+    case 13:
+        c::skins::wear_m4a1 = wear;
+        c::skins::vector_paint_kit_m4a1 = vector_paint_kit;
+        c::skins::paint_kit_index_m4a1 = weapon_skin;
+        break;
+    case 14:
+        c::skins::wear_ak47 = wear;
+        c::skins::vector_paint_kit_ak47 = vector_paint_kit;
+        c::skins::paint_kit_index_ak47 = weapon_skin;
+        break;
+    case 15:
+        c::skins::wear_sg553 = wear;
+        c::skins::vector_paint_kit_sg553 = vector_paint_kit;
+        c::skins::paint_kit_index_sg553 = weapon_skin;
+        break;
+    case 16:
+        c::skins::wear_aug = wear;
+        c::skins::vector_paint_kit_aug = vector_paint_kit;
+        c::skins::paint_kit_index_aug = weapon_skin;
+        break;
+    case 17:
+        c::skins::wear_ssg08 = wear;
+        c::skins::vector_paint_kit_ssg08 = vector_paint_kit;
+        c::skins::paint_kit_index_ssg08 = weapon_skin;
+        break;
+    case 18:
+        c::skins::wear_awp = wear;
+        c::skins::vector_paint_kit_awp = vector_paint_kit;
+        c::skins::paint_kit_index_awp = weapon_skin;
+        break;
+    case 19:
+        c::skins::wear_scar = wear;
+        c::skins::vector_paint_kit_scar = vector_paint_kit;
+        c::skins::paint_kit_index_scar = weapon_skin;
+        break;
+    case 20:
+        c::skins::wear_g3sg1 = wear;
+        c::skins::vector_paint_kit_g3sg1 = vector_paint_kit;
+        c::skins::paint_kit_index_g3sg1 = weapon_skin;
+        break;
+    case 21:
+        c::skins::wear_sawoff = wear;
+        c::skins::vector_paint_kit_sawoff = vector_paint_kit;
+        c::skins::paint_kit_index_sawoff = weapon_skin;
+        break;
+    case 22:
+        c::skins::wear_m249 = wear;
+        c::skins::vector_paint_kit_m249 = vector_paint_kit;
+        c::skins::paint_kit_index_m249 = weapon_skin;
+        break;
+    case 23:
+        c::skins::wear_negev = wear;
+        c::skins::vector_paint_kit_negev = vector_paint_kit;
+        c::skins::paint_kit_index_negev = weapon_skin;
+        break;
+    case 24:
+        c::skins::wear_mag7 = wear;
+        c::skins::vector_paint_kit_mag7 = vector_paint_kit;
+        c::skins::paint_kit_index_mag7 = weapon_skin;
+        break;
+    case 25:
+        c::skins::wear_xm1014 = wear;
+        c::skins::vector_paint_kit_xm1014 = vector_paint_kit;
+        c::skins::paint_kit_index_xm1014 = weapon_skin;
+        break;
+    case 26:
+        c::skins::wear_nova = wear;
+        c::skins::vector_paint_kit_nova = vector_paint_kit;
+        c::skins::paint_kit_index_nova = weapon_skin;
+        break;
+    case 27:
+        c::skins::wear_bizon = wear;
+        c::skins::vector_paint_kit_bizon = vector_paint_kit;
+        c::skins::paint_kit_index_bizon = weapon_skin;
+        break;
+    case 28:
+        c::skins::wear_mp5sd = wear;
+        c::skins::vector_paint_kit_mp5sd = vector_paint_kit;
+        c::skins::paint_kit_index_mp5sd = weapon_skin;
+        break;
+    case 29:
+        c::skins::wear_mp7 = wear;
+        c::skins::vector_paint_kit_mp7 = vector_paint_kit;
+        c::skins::paint_kit_index_mp7 = weapon_skin;
+        break;
+    case 30:
+        c::skins::wear_mp9 = wear;
+        c::skins::vector_paint_kit_mp9 = vector_paint_kit;
+        c::skins::paint_kit_index_mp9 = weapon_skin;
+        break;
+    case 31:
+        c::skins::wear_mac10 = wear;
+        c::skins::vector_paint_kit_mac10 = vector_paint_kit;
+        c::skins::paint_kit_index_mac10 = weapon_skin;
+        break;
+    case 32:
+        c::skins::wear_p90 = wear;
+        c::skins::vector_paint_kit_p90 = vector_paint_kit;
+        c::skins::paint_kit_index_p90 = weapon_skin;
+        break;
+    case 33:
+        c::skins::wear_ump45 = wear;
+        c::skins::vector_paint_kit_ump45 = vector_paint_kit;
+        c::skins::paint_kit_index_ump45 = weapon_skin;
+        break;
+    }
+}
 
 void legitbot() {
     ImGuiStyle& style = ImGui::GetStyle();
@@ -271,14 +636,6 @@ void legitbot() {
             }
             if (ImGui::BeginPopup(("copy from popup"))) {
                 ImGui::Text(("copy aimbot settings from : "));
-                static const char* choices_copy[]{ "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
-                static const char* choices_copy1[]{ "  pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
-                static const char* choices_copy2[]{ "  pistol", "  heavy pistol", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
-                static const char* choices_copy3[]{ "  pistol", "  heavy pistol", "  shotgun", "  smg", "  rifle", "  sniper", "  auto sniper" };
-                static const char* choices_copy4[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  rifle", "  sniper", "  auto sniper" };
-                static const char* choices_copy7[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  sniper", "  auto sniper" };
-                static const char* choices_copy6[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  auto sniper" };
-                static const char* choices_copy5[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper" };
                 switch (menu::weapon_selection) {
                 case 0:
                     for (auto i = 0; i < IM_ARRAYSIZE(choices_copy); i++)
@@ -1787,6 +2144,7 @@ void miscellaneous() {
                     }
                     else {
                         c::load(config_index);
+                        getskins();
                         //std::stringstream ss;
                         //ss << "\x08" << " \x08" << "%c" << "delusional" << "\x08" << "\x08 | loaded config " << c::configs.at(config_index);
 
@@ -1841,7 +2199,7 @@ void miscellaneous() {
                             }
                             else if (i == 3) {
                                 c::load_skins(config_index);
-
+                                getskins();
                                 if (interfaces::engine->is_in_game()) {
                                     interfaces::chat_element->chatprintf("#delusional#_print_loaded_skins");
                                     features::skins::forcing_update = true;
@@ -2425,7 +2783,7 @@ void skins() {
 
 
             ImGui::Text(("item"));
-            ImGui::Combo("##item", &menu::skin_selection, "knife\0glove\0");
+            ImGui::Combo("##item", &menu::skin_selection, "knife\0glove\0weapon\0");
 
             switch (menu::skin_selection) {
             case 0:
@@ -2436,6 +2794,10 @@ void skins() {
             case 1:
                 ImGui::Checkbox(("enabled##gloves"), &c::skins::gloves_endable);
                 ImGui::Combo("##glovesmodel", &c::skins::gloves_model, "default\0blood\0sport\0slick\0leather\0moto\0speci\0hydra");
+                break;
+            case 2:
+                ImGui::Checkbox(("enabled##weapon"), &c::skins::weapon_endable);
+                ImGui::Combo("##weaponmodel", &c::skins::weapon_model, "usp-s\0p2000\0glock\0p250\0five-seven\0tec-10\0cz-75\0duals\0deagle\0revolver\0famas\0galil\0m4a4\0m4a1-s\0ak-47\0sg-553\0aug\0ssg-08\0awp\0scar\0g3sg1\0sawed-off\0m-249\0negev\0mag-7\0xm-1014\0nova\0pp-bizon\0mp5-sd\0mp-7\0mp-9\0mac-10\0p-90\0ump-45\0");
                 break;
             }
 
@@ -2584,6 +2946,49 @@ void skins() {
                 ImGui::Combo("##gloveswear", &c::skins::gloves_wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
 
                 break;
+            case 2:
+                if (!(weapon_model == c::skins::weapons_model)) {
+                    getskins();
+                    weapon_model = c::skins::weapons_model;
+                }
+                ImGui::Text(("weapon skin"));
+                ImGui::ListBoxHeader("##weaponskin", ImVec2(-1, 200)); {
+                    std::string name = ("elpepe");
+
+                    for (int i = 0; i < features::skins::parser_skins.size(); i++) {
+                        bool is_selected = (vector_paint_kit == i);
+
+                        std::string name = features::skins::parser_skins[i].name;
+
+                        if (filter.PassFilter(name.c_str())) {
+
+                            if (name == features::skins::parser_skins[i].name)
+                                ImGui::PushID(std::hash<std::string>{}(features::skins::parser_skins[i].name)* i);
+
+                            if (ImGui::Selectable(features::skins::parser_skins[i].name.c_str(), &is_selected)) {
+                                vector_paint_kit = i;
+                                weapon_skin = features::skins::parser_skins[vector_paint_kit].id;
+                            }
+
+                            if (name == features::skins::parser_skins[i].name)
+                                ImGui::PopID();
+
+                            name = features::skins::parser_skins[i].name;
+                        }
+
+                        if (is_selected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::ListBoxFooter();
+                }
+
+                ImGui::Text(("search skin"));
+                filter.Draw("##filter_skin");
+
+                ImGui::Text(("wear"));
+                ImGui::Combo(("##weaponcondition"), &wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
+
+                setskins();
             }
 
             if (ImGui::Button(("update"))) {

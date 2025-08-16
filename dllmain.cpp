@@ -15,7 +15,6 @@
 #include "features/movement/movement.hpp"
 #include "includes/discord/discord_rpc.h"
 
-
 #ifdef _DEBUG
 bool unload( HMODULE module ) {
     while (!GetAsyncKeyState( VK_END )) {
@@ -82,11 +81,14 @@ DWORD WINAPI on_attach(void* instance) {
 
         features::skins::full_update();
 
+        events.unload();
         sdk::hooks::unload();
-       // lua::unload();
-	}();
+        im_render.unload();
 
-	(FreeLibraryAndExitThread)(static_cast<HMODULE>(instance), 0);
+	}();
+    
+    //idk later
+	//FreeLibraryAndExitThread(static_cast<HMODULE>(instance), 0);
 
 	return 0;
 }
@@ -101,6 +103,8 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD  call_reason, LPVOID reserved)
 
             CloseHandle(thread);
         }
+    }
+    else if (call_reason == DLL_PROCESS_DETACH) {
     }
     return TRUE;
 }
