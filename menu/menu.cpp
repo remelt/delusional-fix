@@ -42,13 +42,19 @@ static const char* choices_copy5[]{ "  pistol", "  heavy pistol", "  shotgun", "
 ImGuiColorEditFlags no_alpha = ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
 ImGuiColorEditFlags w_alpha = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
 
+int weapon_model = -1;
+
+bool skin_custom_clr;
+
 int vector_paint_kit;
 int weapon_skin;
 int wear;
 
-int weapon_model = -1;
-
-bool skin_custom_clr;
+bool wpn_skin_custom_clr = false;
+float wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+float wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+float wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+float wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 void getskins() {
     switch (c::skins::weapon_model) {
@@ -56,171 +62,409 @@ void getskins() {
         wear = c::skins::wear_usp;
         vector_paint_kit = c::skins::vector_paint_kit_usp;
         weapon_skin = c::skins::paint_kit_index_usp;
+        wpn_skin_custom_clr = c::skins::usp_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::usp_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::usp_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::usp_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::usp_wpn_skin_modulation4[i];
+        }
         break;
     case 1:
         wear = c::skins::wear_p2000;
         vector_paint_kit = c::skins::vector_paint_kit_p2000;
         weapon_skin = c::skins::paint_kit_index_p2000;
+        wpn_skin_custom_clr = c::skins::p2000_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::p2000_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::p2000_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::p2000_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::p2000_wpn_skin_modulation4[i];
+        }
         break;
     case 2:
         wear = c::skins::wear_glock;
         vector_paint_kit = c::skins::vector_paint_kit_glock;
         weapon_skin = c::skins::paint_kit_index_glock;
+        wpn_skin_custom_clr = c::skins::glock_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::glock_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::glock_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::glock_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::glock_wpn_skin_modulation4[i];
+        }
         break;
     case 3:
         wear = c::skins::wear_p250;
         vector_paint_kit = c::skins::vector_paint_kit_p250;
         weapon_skin = c::skins::paint_kit_index_p250;
+        wpn_skin_custom_clr = c::skins::p250_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::p250_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::p250_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::p250_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::p250_wpn_skin_modulation4[i];
+        }
         break;
     case 4:
         wear = c::skins::wear_fiveseven;
         vector_paint_kit = c::skins::vector_paint_kit_fiveseven;
         weapon_skin = c::skins::paint_kit_index_fiveseven;
+        wpn_skin_custom_clr = c::skins::fiveseven_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::fiveseven_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::fiveseven_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::fiveseven_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::fiveseven_wpn_skin_modulation4[i];
+        }
         break;
     case 5:
         wear = c::skins::wear_tec;
         vector_paint_kit = c::skins::vector_paint_kit_tec;
         weapon_skin = c::skins::paint_kit_index_tec;
+        wpn_skin_custom_clr = c::skins::tec_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::tec_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::tec_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::tec_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::tec_wpn_skin_modulation4[i];
+        }
         break;
     case 6:
         wear = c::skins::wear_cz;
         vector_paint_kit = c::skins::vector_paint_kit_cz;
         weapon_skin = c::skins::paint_kit_index_cz;
+        wpn_skin_custom_clr = c::skins::cz_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::cz_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::cz_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::cz_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::cz_wpn_skin_modulation4[i];
+        }
         break;
     case 7:
         wear = c::skins::wear_duals;
         vector_paint_kit = c::skins::vector_paint_kit_duals;
         weapon_skin = c::skins::paint_kit_index_duals;
+        wpn_skin_custom_clr = c::skins::duals_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::duals_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::duals_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::duals_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::duals_wpn_skin_modulation4[i];
+        }
         break;
     case 8:
         wear = c::skins::wear_deagle;
         vector_paint_kit = c::skins::vector_paint_kit_deagle;
         weapon_skin = c::skins::paint_kit_index_deagle;
+        wpn_skin_custom_clr = c::skins::deagle_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::deagle_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::deagle_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::deagle_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::deagle_wpn_skin_modulation4[i];
+        }
         break;
     case 9:
         wear = c::skins::wear_revolver;
         vector_paint_kit = c::skins::vector_paint_kit_revolver;
         weapon_skin = c::skins::paint_kit_index_revolver;
+        wpn_skin_custom_clr = c::skins::revolver_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::revolver_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::revolver_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::revolver_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::revolver_wpn_skin_modulation4[i];
+        }
         break;
     case 10:
         wear = c::skins::wear_famas;
         vector_paint_kit = c::skins::vector_paint_kit_famas;
         weapon_skin = c::skins::paint_kit_index_famas;
+        wpn_skin_custom_clr = c::skins::famas_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::famas_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::famas_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::famas_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::famas_wpn_skin_modulation4[i];
+        }
         break;
     case 11:
         wear = c::skins::wear_galil;
         vector_paint_kit = c::skins::vector_paint_kit_galil;
         weapon_skin = c::skins::paint_kit_index_galil;
+        wpn_skin_custom_clr = c::skins::galil_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::galil_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::galil_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::galil_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::galil_wpn_skin_modulation4[i];
+        }
         break;
     case 12:
         wear = c::skins::wear_m4a4;
         vector_paint_kit = c::skins::vector_paint_kit_m4a4;
         weapon_skin = c::skins::paint_kit_index_m4a4;
+        wpn_skin_custom_clr = c::skins::m4a4_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::m4a4_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::m4a4_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::m4a4_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::m4a4_wpn_skin_modulation4[i];
+        }
         break;
     case 13:
         wear = c::skins::wear_m4a1;
         vector_paint_kit = c::skins::vector_paint_kit_m4a1;
         weapon_skin = c::skins::paint_kit_index_m4a1;
+        wpn_skin_custom_clr = c::skins::m4a1_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::m4a1_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::m4a1_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::m4a1_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::m4a1_wpn_skin_modulation4[i];
+        }
         break;
     case 14:
         wear = c::skins::wear_ak47;
         vector_paint_kit = c::skins::vector_paint_kit_ak47;
         weapon_skin = c::skins::paint_kit_index_ak47;
+        wpn_skin_custom_clr = c::skins::ak47_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::ak47_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::ak47_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::ak47_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::ak47_wpn_skin_modulation4[i];
+        }
         break;
     case 15:
         wear = c::skins::wear_sg553;
         vector_paint_kit = c::skins::vector_paint_kit_sg553;
         weapon_skin = c::skins::paint_kit_index_sg553;
+        wpn_skin_custom_clr = c::skins::sg553_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::sg553_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::sg553_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::sg553_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::sg553_wpn_skin_modulation4[i];
+        }
         break;
     case 16:
         wear = c::skins::wear_aug;
         vector_paint_kit = c::skins::vector_paint_kit_aug;
         weapon_skin = c::skins::paint_kit_index_aug;
+        wpn_skin_custom_clr = c::skins::aug_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::aug_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::aug_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::aug_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::aug_wpn_skin_modulation4[i];
+        }
         break;
     case 17:
         wear = c::skins::wear_ssg08;
         vector_paint_kit = c::skins::vector_paint_kit_ssg08;
         weapon_skin = c::skins::paint_kit_index_ssg08;
+        wpn_skin_custom_clr = c::skins::ssg08_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::ssg08_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::ssg08_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::ssg08_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::ssg08_wpn_skin_modulation4[i];
+        }
         break;
     case 18:
         wear = c::skins::wear_awp;
         vector_paint_kit = c::skins::vector_paint_kit_awp;
         weapon_skin = c::skins::paint_kit_index_awp;
+        wpn_skin_custom_clr = c::skins::awp_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::awp_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::awp_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::awp_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::awp_wpn_skin_modulation4[i];
+        }
         break;
     case 19:
         wear = c::skins::wear_scar;
         vector_paint_kit = c::skins::vector_paint_kit_scar;
         weapon_skin = c::skins::paint_kit_index_scar;
+        wpn_skin_custom_clr = c::skins::scar_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::scar_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::scar_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::scar_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::scar_wpn_skin_modulation4[i];
+        }
         break;
     case 20:
         wear = c::skins::wear_g3sg1;
         vector_paint_kit = c::skins::vector_paint_kit_g3sg1;
         weapon_skin = c::skins::paint_kit_index_g3sg1;
+        wpn_skin_custom_clr = c::skins::g3sg1_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::g3sg1_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::g3sg1_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::g3sg1_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::g3sg1_wpn_skin_modulation4[i];
+        }
         break;
     case 21:
         wear = c::skins::wear_sawoff;
         vector_paint_kit = c::skins::vector_paint_kit_sawoff;
         weapon_skin = c::skins::paint_kit_index_sawoff;
+        wpn_skin_custom_clr = c::skins::sawoff_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::sawoff_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::sawoff_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::sawoff_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::sawoff_wpn_skin_modulation4[i];
+        }
         break;
     case 22:
         wear = c::skins::wear_m249;
         vector_paint_kit = c::skins::vector_paint_kit_m249;
         weapon_skin = c::skins::paint_kit_index_m249;
+        wpn_skin_custom_clr = c::skins::m249_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::m249_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::m249_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::m249_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::m249_wpn_skin_modulation4[i];
+        }
         break;
     case 23:
         wear = c::skins::wear_negev;
         vector_paint_kit = c::skins::vector_paint_kit_negev;
         weapon_skin = c::skins::paint_kit_index_negev;
+        wpn_skin_custom_clr = c::skins::negev_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::negev_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::negev_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::negev_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::negev_wpn_skin_modulation4[i];
+        }
         break;
     case 24:
         wear = c::skins::wear_mag7;
         vector_paint_kit = c::skins::vector_paint_kit_mag7;
         weapon_skin = c::skins::paint_kit_index_mag7;
+        wpn_skin_custom_clr = c::skins::mag7_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::mag7_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::mag7_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::mag7_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::mag7_wpn_skin_modulation4[i];
+        }
         break;
     case 25:
         wear = c::skins::wear_xm1014;
         vector_paint_kit = c::skins::vector_paint_kit_xm1014;
         weapon_skin = c::skins::paint_kit_index_xm1014;
+        wpn_skin_custom_clr = c::skins::xm1014_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::xm1014_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::xm1014_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::xm1014_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::xm1014_wpn_skin_modulation4[i];
+        }
         break;
     case 26:
         wear = c::skins::wear_nova;
         vector_paint_kit = c::skins::vector_paint_kit_nova;
         weapon_skin = c::skins::paint_kit_index_nova;
+        wpn_skin_custom_clr = c::skins::nova_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::nova_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::nova_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::nova_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::nova_wpn_skin_modulation4[i];
+        }
         break;
     case 27:
         wear = c::skins::wear_bizon;
         vector_paint_kit = c::skins::vector_paint_kit_bizon;
         weapon_skin = c::skins::paint_kit_index_bizon;
+        wpn_skin_custom_clr = c::skins::bizon_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::bizon_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::bizon_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::bizon_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::bizon_wpn_skin_modulation4[i];
+        }
         break;
     case 28:
         wear = c::skins::wear_mp5sd;
         vector_paint_kit = c::skins::vector_paint_kit_mp5sd;
         weapon_skin = c::skins::paint_kit_index_mp5sd;
+        wpn_skin_custom_clr = c::skins::mp5sd_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::mp5sd_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::mp5sd_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::mp5sd_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::mp5sd_wpn_skin_modulation4[i];
+        }
         break;
     case 29:
         wear = c::skins::wear_mp7;
         vector_paint_kit = c::skins::vector_paint_kit_mp7;
         weapon_skin = c::skins::paint_kit_index_mp7;
+        wpn_skin_custom_clr = c::skins::mp7_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::mp7_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::mp7_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::mp7_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::mp7_wpn_skin_modulation4[i];
+        }
         break;
     case 30:
         wear = c::skins::wear_mp9;
         vector_paint_kit = c::skins::vector_paint_kit_mp9;
         weapon_skin = c::skins::paint_kit_index_mp9;
+        wpn_skin_custom_clr = c::skins::mp9_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::mp9_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::mp9_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::mp9_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::mp9_wpn_skin_modulation4[i];
+        }
         break;
     case 31:
         wear = c::skins::wear_mac10;
         vector_paint_kit = c::skins::vector_paint_kit_mac10;
         weapon_skin = c::skins::paint_kit_index_mac10;
+        wpn_skin_custom_clr = c::skins::mac10_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::mac10_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::mac10_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::mac10_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::mac10_wpn_skin_modulation4[i];
+        }
         break;
     case 32:
         wear = c::skins::wear_p90;
         vector_paint_kit = c::skins::vector_paint_kit_p90;
         weapon_skin = c::skins::paint_kit_index_p90;
+        wpn_skin_custom_clr = c::skins::p90_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::p90_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::p90_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::p90_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::p90_wpn_skin_modulation4[i];
+        }
         break;
     case 33:
         wear = c::skins::wear_ump45;
         vector_paint_kit = c::skins::vector_paint_kit_ump45;
         weapon_skin = c::skins::paint_kit_index_ump45;
+        wpn_skin_custom_clr = c::skins::ump45_wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            wpn_skin_modulation1[i] = c::skins::ump45_wpn_skin_modulation1[i];
+            wpn_skin_modulation2[i] = c::skins::ump45_wpn_skin_modulation2[i];
+            wpn_skin_modulation3[i] = c::skins::ump45_wpn_skin_modulation3[i];
+            wpn_skin_modulation4[i] = c::skins::ump45_wpn_skin_modulation4[i];
+        }
         break;
     }
 }
@@ -231,174 +475,413 @@ void setskins() {
         c::skins::wear_usp = wear;
         c::skins::vector_paint_kit_usp = vector_paint_kit;
         c::skins::paint_kit_index_usp = weapon_skin;
+        c::skins::usp_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::usp_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::usp_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::usp_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::usp_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 1:
         c::skins::wear_p2000 = wear;
         c::skins::vector_paint_kit_p2000 = vector_paint_kit;
         c::skins::paint_kit_index_p2000 = weapon_skin;
+        c::skins::p2000_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::p2000_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::p2000_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::p2000_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::p2000_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 2:
         c::skins::wear_glock = wear;
         c::skins::vector_paint_kit_glock = vector_paint_kit;
         c::skins::paint_kit_index_glock = weapon_skin;
+        c::skins::glock_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::glock_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::glock_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::glock_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::glock_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 3:
         c::skins::wear_p250 = wear;
         c::skins::vector_paint_kit_p250 = vector_paint_kit;
         c::skins::paint_kit_index_p250 = weapon_skin;
+        c::skins::p250_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::p250_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::p250_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::p250_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::p250_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 4:
         c::skins::wear_fiveseven = wear;
         c::skins::vector_paint_kit_fiveseven = vector_paint_kit;
         c::skins::paint_kit_index_fiveseven = weapon_skin;
+        c::skins::fiveseven_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::fiveseven_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::fiveseven_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::fiveseven_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::fiveseven_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 5:
         c::skins::wear_tec = wear;
         c::skins::vector_paint_kit_tec = vector_paint_kit;
         c::skins::paint_kit_index_tec = weapon_skin;
+        c::skins::tec_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::tec_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::tec_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::tec_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::tec_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 6:
         c::skins::wear_cz = wear;
         c::skins::vector_paint_kit_cz = vector_paint_kit;
         c::skins::paint_kit_index_cz = weapon_skin;
+        c::skins::cz_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::cz_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::cz_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::cz_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::cz_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 7:
         c::skins::wear_duals = wear;
         c::skins::vector_paint_kit_duals = vector_paint_kit;
         c::skins::paint_kit_index_duals = weapon_skin;
+        c::skins::duals_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::duals_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::duals_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::duals_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::duals_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 8:
         c::skins::wear_deagle = wear;
         c::skins::vector_paint_kit_deagle = vector_paint_kit;
         c::skins::paint_kit_index_deagle = weapon_skin;
+        c::skins::deagle_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::deagle_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::deagle_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::deagle_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::deagle_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 9:
         c::skins::wear_revolver = wear;
         c::skins::vector_paint_kit_revolver = vector_paint_kit;
         c::skins::paint_kit_index_revolver = weapon_skin;
+        c::skins::revolver_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::revolver_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::revolver_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::revolver_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::revolver_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 10:
         c::skins::wear_famas = wear;
         c::skins::vector_paint_kit_famas = vector_paint_kit;
         c::skins::paint_kit_index_famas = weapon_skin;
+        c::skins::famas_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::famas_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::famas_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::famas_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::famas_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 11:
         c::skins::wear_galil = wear;
         c::skins::vector_paint_kit_galil = vector_paint_kit;
         c::skins::paint_kit_index_galil = weapon_skin;
+        c::skins::galil_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::galil_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::galil_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::galil_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::galil_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 12:
         c::skins::wear_m4a4 = wear;
         c::skins::vector_paint_kit_m4a4 = vector_paint_kit;
         c::skins::paint_kit_index_m4a4 = weapon_skin;
+        c::skins::m4a4_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::m4a4_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::m4a4_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::m4a4_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::m4a4_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 13:
         c::skins::wear_m4a1 = wear;
         c::skins::vector_paint_kit_m4a1 = vector_paint_kit;
         c::skins::paint_kit_index_m4a1 = weapon_skin;
+        c::skins::m4a1_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::m4a1_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::m4a1_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::m4a1_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::m4a1_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 14:
         c::skins::wear_ak47 = wear;
         c::skins::vector_paint_kit_ak47 = vector_paint_kit;
         c::skins::paint_kit_index_ak47 = weapon_skin;
+        c::skins::ak47_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::ak47_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::ak47_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::ak47_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::ak47_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 15:
         c::skins::wear_sg553 = wear;
         c::skins::vector_paint_kit_sg553 = vector_paint_kit;
         c::skins::paint_kit_index_sg553 = weapon_skin;
+        c::skins::sg553_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::sg553_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::sg553_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::sg553_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::sg553_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 16:
         c::skins::wear_aug = wear;
         c::skins::vector_paint_kit_aug = vector_paint_kit;
         c::skins::paint_kit_index_aug = weapon_skin;
+        c::skins::aug_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::aug_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::aug_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::aug_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::aug_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 17:
         c::skins::wear_ssg08 = wear;
         c::skins::vector_paint_kit_ssg08 = vector_paint_kit;
         c::skins::paint_kit_index_ssg08 = weapon_skin;
+        c::skins::ssg08_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::ssg08_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::ssg08_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::ssg08_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::ssg08_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 18:
         c::skins::wear_awp = wear;
         c::skins::vector_paint_kit_awp = vector_paint_kit;
         c::skins::paint_kit_index_awp = weapon_skin;
+        c::skins::awp_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::awp_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::awp_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::awp_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::awp_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 19:
         c::skins::wear_scar = wear;
         c::skins::vector_paint_kit_scar = vector_paint_kit;
         c::skins::paint_kit_index_scar = weapon_skin;
+        c::skins::scar_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::scar_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::scar_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::scar_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::scar_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 20:
         c::skins::wear_g3sg1 = wear;
         c::skins::vector_paint_kit_g3sg1 = vector_paint_kit;
         c::skins::paint_kit_index_g3sg1 = weapon_skin;
+        c::skins::g3sg1_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::g3sg1_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::g3sg1_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::g3sg1_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::g3sg1_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 21:
         c::skins::wear_sawoff = wear;
         c::skins::vector_paint_kit_sawoff = vector_paint_kit;
         c::skins::paint_kit_index_sawoff = weapon_skin;
+        c::skins::sawoff_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::sawoff_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::sawoff_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::sawoff_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::sawoff_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 22:
         c::skins::wear_m249 = wear;
         c::skins::vector_paint_kit_m249 = vector_paint_kit;
         c::skins::paint_kit_index_m249 = weapon_skin;
+        c::skins::m249_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::m249_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::m249_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::m249_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::m249_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 23:
         c::skins::wear_negev = wear;
         c::skins::vector_paint_kit_negev = vector_paint_kit;
         c::skins::paint_kit_index_negev = weapon_skin;
+        c::skins::negev_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::negev_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::negev_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::negev_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::negev_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 24:
         c::skins::wear_mag7 = wear;
         c::skins::vector_paint_kit_mag7 = vector_paint_kit;
         c::skins::paint_kit_index_mag7 = weapon_skin;
+        c::skins::mag7_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::mag7_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::mag7_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::mag7_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::mag7_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 25:
         c::skins::wear_xm1014 = wear;
         c::skins::vector_paint_kit_xm1014 = vector_paint_kit;
         c::skins::paint_kit_index_xm1014 = weapon_skin;
+        c::skins::xm1014_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::xm1014_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::xm1014_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::xm1014_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::xm1014_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 26:
         c::skins::wear_nova = wear;
         c::skins::vector_paint_kit_nova = vector_paint_kit;
         c::skins::paint_kit_index_nova = weapon_skin;
+        c::skins::nova_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::nova_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::nova_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::nova_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::nova_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 27:
         c::skins::wear_bizon = wear;
         c::skins::vector_paint_kit_bizon = vector_paint_kit;
         c::skins::paint_kit_index_bizon = weapon_skin;
+        c::skins::bizon_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::bizon_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::bizon_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::bizon_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::bizon_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 28:
         c::skins::wear_mp5sd = wear;
         c::skins::vector_paint_kit_mp5sd = vector_paint_kit;
         c::skins::paint_kit_index_mp5sd = weapon_skin;
+        c::skins::mp5sd_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::mp5sd_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::mp5sd_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::mp5sd_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::mp5sd_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 29:
         c::skins::wear_mp7 = wear;
         c::skins::vector_paint_kit_mp7 = vector_paint_kit;
         c::skins::paint_kit_index_mp7 = weapon_skin;
+        c::skins::mp7_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::mp7_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::mp7_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::mp7_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::mp7_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 30:
         c::skins::wear_mp9 = wear;
         c::skins::vector_paint_kit_mp9 = vector_paint_kit;
         c::skins::paint_kit_index_mp9 = weapon_skin;
+        c::skins::mp9_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::mp9_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::mp9_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::mp9_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::mp9_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 31:
         c::skins::wear_mac10 = wear;
         c::skins::vector_paint_kit_mac10 = vector_paint_kit;
         c::skins::paint_kit_index_mac10 = weapon_skin;
+        c::skins::mac10_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::mac10_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::mac10_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::mac10_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::mac10_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 32:
         c::skins::wear_p90 = wear;
         c::skins::vector_paint_kit_p90 = vector_paint_kit;
         c::skins::paint_kit_index_p90 = weapon_skin;
+        c::skins::p90_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::p90_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::p90_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::p90_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::p90_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     case 33:
         c::skins::wear_ump45 = wear;
         c::skins::vector_paint_kit_ump45 = vector_paint_kit;
         c::skins::paint_kit_index_ump45 = weapon_skin;
+        c::skins::ump45_wpn_skin_custom_clr = wpn_skin_custom_clr;
+        for (int i = 0; i < 3; i++) {
+            c::skins::ump45_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
+            c::skins::ump45_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
+            c::skins::ump45_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
+            c::skins::ump45_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
+        }
         break;
     }
 }
+
 
 void legitbot() {
     ImGuiStyle& style = ImGui::GetStyle();
@@ -2770,6 +3253,9 @@ void font() {
 }
 
 void skins() {
+
+    //TODO: ADD NAMETAGS AND STATTRACKS
+
     ImGuiStyle& style = ImGui::GetStyle();
 
     ImGui::Columns(2, nullptr, false); {
@@ -2987,6 +3473,18 @@ void skins() {
 
                 ImGui::Text(("wear"));
                 ImGui::Combo(("##weaponcondition"), &wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
+
+                ImGui::Checkbox(("custom color"), &wpn_skin_custom_clr);
+                if (wpn_skin_custom_clr) {
+                    ImGui::SameLine(group_w - 20);
+                    ImGui::ColorEdit4(("##modulate1"), wpn_skin_modulation1, no_alpha);
+                    ImGui::SameLine(group_w - 40);
+                    ImGui::ColorEdit4(("##modulate2"), wpn_skin_modulation2, no_alpha);
+                    ImGui::SameLine(group_w - 60);
+                    ImGui::ColorEdit4(("##modulate3"), wpn_skin_modulation3, no_alpha);
+                    ImGui::SameLine(group_w - 80);
+                    ImGui::ColorEdit4(("##modulate4"), wpn_skin_modulation4, no_alpha);
+                }
 
                 setskins();
             }

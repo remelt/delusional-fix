@@ -42,6 +42,8 @@ inline int random_sequence( int low, int high ) {
 	return ( rand( ) % ( high - low + 1 ) + low );
 }
 
+// TODO : UNDERSTAND WHY THE SECOND ANIMATION ISNT WORKING
+
 const static std::unordered_map<std::string, int( * )( int )> animation_fix_map
 {
 	{ "models/weapons/v_knife_butterfly.mdl", [ ] ( int sequence ) -> int

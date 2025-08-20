@@ -394,171 +394,342 @@ namespace c {
 		inline int wear_usp = 0;
 		inline int vector_paint_kit_usp = 0;
 		inline int paint_kit_index_usp = 0;
+		inline bool usp_wpn_skin_custom_clr = false;
+		inline float usp_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float usp_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float usp_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float usp_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//p2000
 		inline int wear_p2000 = 0;
 		inline int vector_paint_kit_p2000 = 0;
 		inline int paint_kit_index_p2000 = 0;
+		inline bool p2000_wpn_skin_custom_clr = false;
+		inline float p2000_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float p2000_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float p2000_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float p2000_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//glock
 		inline int wear_glock = 0;
 		inline int vector_paint_kit_glock = 0;
 		inline int paint_kit_index_glock = 0;
+		inline bool glock_wpn_skin_custom_clr = false;
+		inline float glock_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float glock_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float glock_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float glock_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//p250
 		inline int wear_p250 = 0;
 		inline int vector_paint_kit_p250 = 0;
 		inline int paint_kit_index_p250 = 0;
+		inline bool p250_wpn_skin_custom_clr = false;
+		inline float p250_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float p250_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float p250_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float p250_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//fiveseven
 		inline int wear_fiveseven = 0;
 		inline int vector_paint_kit_fiveseven = 0;
 		inline int paint_kit_index_fiveseven = 0;
+		inline bool fiveseven_wpn_skin_custom_clr = false;
+		inline float fiveseven_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float fiveseven_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float fiveseven_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float fiveseven_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//tec
 		inline int wear_tec = 0;
 		inline int vector_paint_kit_tec = 0;
 		inline int paint_kit_index_tec = 0;
+		inline bool tec_wpn_skin_custom_clr = false;
+		inline float tec_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float tec_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float tec_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float tec_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//cz
 		inline int wear_cz = 0;
 		inline int vector_paint_kit_cz = 0;
 		inline int paint_kit_index_cz = 0;
+		inline bool cz_wpn_skin_custom_clr = false;
+		inline float cz_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float cz_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float cz_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float cz_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//duals
 		inline int wear_duals = 0;
 		inline int vector_paint_kit_duals = 0;
 		inline int paint_kit_index_duals = 0;
+		inline bool duals_wpn_skin_custom_clr = false;
+		inline float duals_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float duals_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float duals_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float duals_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//deagle
 		inline int wear_deagle = 0;
 		inline int vector_paint_kit_deagle = 0;
 		inline int paint_kit_index_deagle = 0;
+		inline bool deagle_wpn_skin_custom_clr = false;
+		inline float deagle_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float deagle_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float deagle_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float deagle_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//revolver
 		inline int wear_revolver = 0;
 		inline int vector_paint_kit_revolver = 0;
 		inline int paint_kit_index_revolver = 0;
+		inline bool revolver_wpn_skin_custom_clr = false;
+		inline float revolver_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float revolver_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float revolver_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float revolver_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//famas
 		inline int wear_famas = 0;
 		inline int vector_paint_kit_famas = 0;
 		inline int paint_kit_index_famas = 0;
+		inline bool famas_wpn_skin_custom_clr = false;
+		inline float famas_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float famas_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float famas_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float famas_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//galil
 		inline int wear_galil = 0;
 		inline int vector_paint_kit_galil = 0;
 		inline int paint_kit_index_galil = 0;
+		inline bool galil_wpn_skin_custom_clr = false;
+		inline float galil_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float galil_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float galil_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float galil_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//m4a4
 		inline int wear_m4a4 = 0;
 		inline int vector_paint_kit_m4a4 = 0;
 		inline int paint_kit_index_m4a4 = 0;
+		inline bool m4a4_wpn_skin_custom_clr = false;
+		inline float m4a4_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float m4a4_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float m4a4_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float m4a4_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//m4a1
 		inline int wear_m4a1 = 0;
 		inline int vector_paint_kit_m4a1 = 0;
 		inline int paint_kit_index_m4a1 = 0;
+		inline bool m4a1_wpn_skin_custom_clr = false;
+		inline float m4a1_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float m4a1_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float m4a1_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float m4a1_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//ak47
 		inline int wear_ak47 = 0;
 		inline int vector_paint_kit_ak47 = 0;
 		inline int paint_kit_index_ak47 = 0;
+		inline bool ak47_wpn_skin_custom_clr = false;
+		inline float ak47_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float ak47_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float ak47_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float ak47_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//sg553
 		inline int wear_sg553 = 0;
 		inline int vector_paint_kit_sg553 = 0;
 		inline int paint_kit_index_sg553 = 0;
+		inline bool sg553_wpn_skin_custom_clr = false;
+		inline float sg553_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float sg553_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float sg553_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float sg553_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//aug
 		inline int wear_aug = 0;
 		inline int vector_paint_kit_aug = 0;
 		inline int paint_kit_index_aug = 0;
+		inline bool aug_wpn_skin_custom_clr = false;
+		inline float aug_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float aug_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float aug_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float aug_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//ssg08
 		inline int wear_ssg08 = 0;
 		inline int vector_paint_kit_ssg08 = 0;
 		inline int paint_kit_index_ssg08 = 0;
+		inline bool ssg08_wpn_skin_custom_clr = false;
+		inline float ssg08_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float ssg08_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float ssg08_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float ssg08_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//awp
 		inline int wear_awp = 0;
 		inline int vector_paint_kit_awp = 0;
 		inline int paint_kit_index_awp = 0;
+		inline bool awp_wpn_skin_custom_clr = false;
+		inline float awp_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float awp_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float awp_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float awp_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//scar
 		inline int wear_scar = 0;
 		inline int vector_paint_kit_scar = 0;
 		inline int paint_kit_index_scar = 0;
+		inline bool scar_wpn_skin_custom_clr = false;
+		inline float scar_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float scar_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float scar_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float scar_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//g3sg1
 		inline int wear_g3sg1 = 0;
 		inline int vector_paint_kit_g3sg1 = 0;
 		inline int paint_kit_index_g3sg1 = 0;
+		inline bool g3sg1_wpn_skin_custom_clr = false;
+		inline float g3sg1_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float g3sg1_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float g3sg1_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float g3sg1_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//sawoff
 		inline int wear_sawoff = 0;
 		inline int vector_paint_kit_sawoff = 0;
 		inline int paint_kit_index_sawoff = 0;
+		inline bool sawoff_wpn_skin_custom_clr = false;
+		inline float sawoff_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float sawoff_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float sawoff_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float sawoff_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//m249
 		inline int wear_m249 = 0;
 		inline int vector_paint_kit_m249 = 0;
 		inline int paint_kit_index_m249 = 0;
+		inline bool m249_wpn_skin_custom_clr = false;
+		inline float m249_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float m249_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float m249_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float m249_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//negev
 		inline int wear_negev = 0;
 		inline int vector_paint_kit_negev = 0;
 		inline int paint_kit_index_negev = 0;
+		inline bool negev_wpn_skin_custom_clr = false;
+		inline float negev_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float negev_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float negev_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float negev_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//mag7
 		inline int wear_mag7 = 0;
 		inline int vector_paint_kit_mag7 = 0;
 		inline int paint_kit_index_mag7 = 0;
+		inline bool mag7_wpn_skin_custom_clr = false;
+		inline float mag7_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float mag7_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float mag7_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float mag7_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//xm1014
 		inline int wear_xm1014 = 0;
 		inline int vector_paint_kit_xm1014 = 0;
 		inline int paint_kit_index_xm1014 = 0;
+		inline bool xm1014_wpn_skin_custom_clr = false;
+		inline float xm1014_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float xm1014_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float xm1014_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float xm1014_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//nova
 		inline int wear_nova = 0;
 		inline int vector_paint_kit_nova = 0;
 		inline int paint_kit_index_nova = 0;
+		inline bool nova_wpn_skin_custom_clr = false;
+		inline float nova_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float nova_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float nova_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float nova_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//bizon
 		inline int wear_bizon = 0;
 		inline int vector_paint_kit_bizon = 0;
 		inline int paint_kit_index_bizon = 0;
+		inline bool bizon_wpn_skin_custom_clr = false;
+		inline float bizon_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float bizon_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float bizon_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float bizon_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//mp5sd
 		inline int wear_mp5sd = 0;
 		inline int vector_paint_kit_mp5sd = 0;
 		inline int paint_kit_index_mp5sd = 0;
+		inline bool mp5sd_wpn_skin_custom_clr = false;
+		inline float mp5sd_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float mp5sd_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float mp5sd_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float mp5sd_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//mp7
 		inline int wear_mp7 = 0;
 		inline int vector_paint_kit_mp7 = 0;
 		inline int paint_kit_index_mp7 = 0;
+		inline bool mp7_wpn_skin_custom_clr = false;
+		inline float mp7_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float mp7_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float mp7_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float mp7_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//mp9
 		inline int wear_mp9 = 0;
 		inline int vector_paint_kit_mp9 = 0;
 		inline int paint_kit_index_mp9 = 0;
+		inline bool mp9_wpn_skin_custom_clr = false;
+		inline float mp9_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float mp9_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float mp9_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float mp9_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//mac10
 		inline int wear_mac10 = 0;
 		inline int vector_paint_kit_mac10 = 0;
 		inline int paint_kit_index_mac10 = 0;
+		inline bool mac10_wpn_skin_custom_clr = false;
+		inline float mac10_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float mac10_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float mac10_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float mac10_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//p90
 		inline int wear_p90 = 0;
 		inline int vector_paint_kit_p90 = 0;
 		inline int paint_kit_index_p90 = 0;
+		inline bool p90_wpn_skin_custom_clr = false;
+		inline float p90_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float p90_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float p90_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float p90_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
 		//ump45
 		inline int wear_ump45 = 0;
 		inline int vector_paint_kit_ump45 = 0;
 		inline int paint_kit_index_ump45 = 0;
+		inline bool ump45_wpn_skin_custom_clr = false;
+		inline float ump45_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+		inline float ump45_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+		inline float ump45_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+		inline float ump45_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
+
 
 		inline bool skin_custom_clr = false;
 		inline float skin_modulation1[3]{ 1.f, 1.f, 1.f };

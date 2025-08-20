@@ -116,138 +116,613 @@ namespace c {
 		write_value(json[xs("skins")][xs("wear_usp")], skins::wear_usp);
 		write_value(json[xs("skins")][xs("vector_paint_kit_usp")], skins::vector_paint_kit_usp);
 		write_value(json[xs("skins")][xs("paint_kit_index_usp")], skins::paint_kit_index_usp);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_custom_clr")], skins::usp_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[0]")], skins::usp_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[1]")], skins::usp_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[2]")], skins::usp_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[0]")], skins::usp_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[1]")], skins::usp_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[2]")], skins::usp_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[0]")], skins::usp_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[1]")], skins::usp_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[2]")], skins::usp_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[0]")], skins::usp_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[1]")], skins::usp_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[2]")], skins::usp_wpn_skin_modulation4[2]);
+
 		//p2000
 		write_value(json[xs("skins")][xs("wear_p2000")], skins::wear_p2000);
 		write_value(json[xs("skins")][xs("vector_paint_kit_p2000")], skins::vector_paint_kit_p2000);
 		write_value(json[xs("skins")][xs("paint_kit_index_p2000")], skins::paint_kit_index_p2000);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_custom_clr")], skins::p2000_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[0]")], skins::p2000_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[1]")], skins::p2000_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[2]")], skins::p2000_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[0]")], skins::p2000_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[1]")], skins::p2000_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[2]")], skins::p2000_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[0]")], skins::p2000_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[1]")], skins::p2000_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[2]")], skins::p2000_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[0]")], skins::p2000_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[1]")], skins::p2000_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[2]")], skins::p2000_wpn_skin_modulation4[2]);
+
 		//glock
 		write_value(json[xs("skins")][xs("wear_glock")], skins::wear_glock);
 		write_value(json[xs("skins")][xs("vector_paint_kit_glock")], skins::vector_paint_kit_glock);
 		write_value(json[xs("skins")][xs("paint_kit_index_glock")], skins::paint_kit_index_glock);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_custom_clr")], skins::glock_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[0]")], skins::glock_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[1]")], skins::glock_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[2]")], skins::glock_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[0]")], skins::glock_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[1]")], skins::glock_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[2]")], skins::glock_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[0]")], skins::glock_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[1]")], skins::glock_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[2]")], skins::glock_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[0]")], skins::glock_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[1]")], skins::glock_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[2]")], skins::glock_wpn_skin_modulation4[2]);
+
 		//p250
 		write_value(json[xs("skins")][xs("wear_p250")], skins::wear_p250);
 		write_value(json[xs("skins")][xs("vector_paint_kit_p250")], skins::vector_paint_kit_p250);
 		write_value(json[xs("skins")][xs("paint_kit_index_p250")], skins::paint_kit_index_p250);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_custom_clr")], skins::p250_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[0]")], skins::p250_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[1]")], skins::p250_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[2]")], skins::p250_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[0]")], skins::p250_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[1]")], skins::p250_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[2]")], skins::p250_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[0]")], skins::p250_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[1]")], skins::p250_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[2]")], skins::p250_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[0]")], skins::p250_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[1]")], skins::p250_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[2]")], skins::p250_wpn_skin_modulation4[2]);
+
 		//fiveseven
 		write_value(json[xs("skins")][xs("wear_fiveseven")], skins::wear_fiveseven);
 		write_value(json[xs("skins")][xs("vector_paint_kit_fiveseven")], skins::vector_paint_kit_fiveseven);
 		write_value(json[xs("skins")][xs("paint_kit_index_fiveseven")], skins::paint_kit_index_fiveseven);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_custom_clr")], skins::fiveseven_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[0]")], skins::fiveseven_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[1]")], skins::fiveseven_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[2]")], skins::fiveseven_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[0]")], skins::fiveseven_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[1]")], skins::fiveseven_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[2]")], skins::fiveseven_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[0]")], skins::fiveseven_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[1]")], skins::fiveseven_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[2]")], skins::fiveseven_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[0]")], skins::fiveseven_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[1]")], skins::fiveseven_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[2]")], skins::fiveseven_wpn_skin_modulation4[2]);
+
 		//tec
 		write_value(json[xs("skins")][xs("wear_tec")], skins::wear_tec);
 		write_value(json[xs("skins")][xs("vector_paint_kit_tec")], skins::vector_paint_kit_tec);
 		write_value(json[xs("skins")][xs("paint_kit_index_tec")], skins::paint_kit_index_tec);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_custom_clr")], skins::tec_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[0]")], skins::tec_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[1]")], skins::tec_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[2]")], skins::tec_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[0]")], skins::tec_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[1]")], skins::tec_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[2]")], skins::tec_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[0]")], skins::tec_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[1]")], skins::tec_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[2]")], skins::tec_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[0]")], skins::tec_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[1]")], skins::tec_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[2]")], skins::tec_wpn_skin_modulation4[2]);
+
 		//cz
 		write_value(json[xs("skins")][xs("wear_cz")], skins::wear_cz);
 		write_value(json[xs("skins")][xs("vector_paint_kit_cz")], skins::vector_paint_kit_cz);
 		write_value(json[xs("skins")][xs("paint_kit_index_cz")], skins::paint_kit_index_cz);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_custom_clr")], skins::cz_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[0]")], skins::cz_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[1]")], skins::cz_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[2]")], skins::cz_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[0]")], skins::cz_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[1]")], skins::cz_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[2]")], skins::cz_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[0]")], skins::cz_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[1]")], skins::cz_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[2]")], skins::cz_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[0]")], skins::cz_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[1]")], skins::cz_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[2]")], skins::cz_wpn_skin_modulation4[2]);
+
 		//duals
 		write_value(json[xs("skins")][xs("wear_duals")], skins::wear_duals);
 		write_value(json[xs("skins")][xs("vector_paint_kit_duals")], skins::vector_paint_kit_duals);
 		write_value(json[xs("skins")][xs("paint_kit_index_duals")], skins::paint_kit_index_duals);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_custom_clr")], skins::duals_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[0]")], skins::duals_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[1]")], skins::duals_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[2]")], skins::duals_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[0]")], skins::duals_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[1]")], skins::duals_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[2]")], skins::duals_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[0]")], skins::duals_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[1]")], skins::duals_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[2]")], skins::duals_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[0]")], skins::duals_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[1]")], skins::duals_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[2]")], skins::duals_wpn_skin_modulation4[2]);
+
 		//deagle
 		write_value(json[xs("skins")][xs("wear_deagle")], skins::wear_deagle);
 		write_value(json[xs("skins")][xs("vector_paint_kit_deagle")], skins::vector_paint_kit_deagle);
 		write_value(json[xs("skins")][xs("paint_kit_index_deagle")], skins::paint_kit_index_deagle);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_custom_clr")], skins::deagle_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[0]")], skins::deagle_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[1]")], skins::deagle_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[2]")], skins::deagle_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[0]")], skins::deagle_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[1]")], skins::deagle_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[2]")], skins::deagle_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[0]")], skins::deagle_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[1]")], skins::deagle_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[2]")], skins::deagle_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[0]")], skins::deagle_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[1]")], skins::deagle_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[2]")], skins::deagle_wpn_skin_modulation4[2]);
+
 		//revolver
 		write_value(json[xs("skins")][xs("wear_revolver")], skins::wear_revolver);
 		write_value(json[xs("skins")][xs("vector_paint_kit_revolver")], skins::vector_paint_kit_revolver);
 		write_value(json[xs("skins")][xs("paint_kit_index_revolver")], skins::paint_kit_index_revolver);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_custom_clr")], skins::revolver_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[0]")], skins::revolver_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[1]")], skins::revolver_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[2]")], skins::revolver_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[0]")], skins::revolver_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[1]")], skins::revolver_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[2]")], skins::revolver_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[0]")], skins::revolver_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[1]")], skins::revolver_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[2]")], skins::revolver_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[0]")], skins::revolver_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[1]")], skins::revolver_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[2]")], skins::revolver_wpn_skin_modulation4[2]);
+
 		//famas
 		write_value(json[xs("skins")][xs("wear_famas")], skins::wear_famas);
 		write_value(json[xs("skins")][xs("vector_paint_kit_famas")], skins::vector_paint_kit_famas);
 		write_value(json[xs("skins")][xs("paint_kit_index_famas")], skins::paint_kit_index_famas);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_custom_clr")], skins::famas_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[0]")], skins::famas_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[1]")], skins::famas_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[2]")], skins::famas_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[0]")], skins::famas_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[1]")], skins::famas_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[2]")], skins::famas_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[0]")], skins::famas_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[1]")], skins::famas_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[2]")], skins::famas_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[0]")], skins::famas_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[1]")], skins::famas_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[2]")], skins::famas_wpn_skin_modulation4[2]);
+
 		//galil
 		write_value(json[xs("skins")][xs("wear_galil")], skins::wear_galil);
 		write_value(json[xs("skins")][xs("vector_paint_kit_galil")], skins::vector_paint_kit_galil);
 		write_value(json[xs("skins")][xs("paint_kit_index_galil")], skins::paint_kit_index_galil);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_custom_clr")], skins::galil_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[0]")], skins::galil_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[1]")], skins::galil_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[2]")], skins::galil_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[0]")], skins::galil_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[1]")], skins::galil_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[2]")], skins::galil_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[0]")], skins::galil_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[1]")], skins::galil_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[2]")], skins::galil_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[0]")], skins::galil_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[1]")], skins::galil_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[2]")], skins::galil_wpn_skin_modulation4[2]);
+
 		//m4a4
 		write_value(json[xs("skins")][xs("wear_m4a4")], skins::wear_m4a4);
 		write_value(json[xs("skins")][xs("vector_paint_kit_m4a4")], skins::vector_paint_kit_m4a4);
 		write_value(json[xs("skins")][xs("paint_kit_index_m4a4")], skins::paint_kit_index_m4a4);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_custom_clr")], skins::m4a4_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[0]")], skins::m4a4_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[1]")], skins::m4a4_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[2]")], skins::m4a4_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[0]")], skins::m4a4_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[1]")], skins::m4a4_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[2]")], skins::m4a4_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[0]")], skins::m4a4_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[1]")], skins::m4a4_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[2]")], skins::m4a4_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[0]")], skins::m4a4_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[1]")], skins::m4a4_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[2]")], skins::m4a4_wpn_skin_modulation4[2]);
+
 		//m4a1
 		write_value(json[xs("skins")][xs("wear_m4a1")], skins::wear_m4a1);
 		write_value(json[xs("skins")][xs("vector_paint_kit_m4a1")], skins::vector_paint_kit_m4a1);
 		write_value(json[xs("skins")][xs("paint_kit_index_m4a1")], skins::paint_kit_index_m4a1);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_custom_clr")], skins::m4a1_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[0]")], skins::m4a1_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[1]")], skins::m4a1_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[2]")], skins::m4a1_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[0]")], skins::m4a1_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[1]")], skins::m4a1_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[2]")], skins::m4a1_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[0]")], skins::m4a1_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[1]")], skins::m4a1_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[2]")], skins::m4a1_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[0]")], skins::m4a1_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[1]")], skins::m4a1_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[2]")], skins::m4a1_wpn_skin_modulation4[2]);
+
 		//ak47
 		write_value(json[xs("skins")][xs("wear_ak47")], skins::wear_ak47);
 		write_value(json[xs("skins")][xs("vector_paint_kit_ak47")], skins::vector_paint_kit_ak47);
 		write_value(json[xs("skins")][xs("paint_kit_index_ak47")], skins::paint_kit_index_ak47);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_custom_clr")], skins::ak47_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[0]")], skins::ak47_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[1]")], skins::ak47_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[2]")], skins::ak47_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[0]")], skins::ak47_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[1]")], skins::ak47_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[2]")], skins::ak47_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[0]")], skins::ak47_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[1]")], skins::ak47_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[2]")], skins::ak47_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[0]")], skins::ak47_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[1]")], skins::ak47_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[2]")], skins::ak47_wpn_skin_modulation4[2]);
+
 		//sg553
 		write_value(json[xs("skins")][xs("wear_sg553")], skins::wear_sg553);
 		write_value(json[xs("skins")][xs("vector_paint_kit_sg553")], skins::vector_paint_kit_sg553);
 		write_value(json[xs("skins")][xs("paint_kit_index_sg553")], skins::paint_kit_index_sg553);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_custom_clr")], skins::sg553_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[0]")], skins::sg553_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[1]")], skins::sg553_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[2]")], skins::sg553_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[0]")], skins::sg553_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[1]")], skins::sg553_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[2]")], skins::sg553_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[0]")], skins::sg553_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[1]")], skins::sg553_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[2]")], skins::sg553_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[0]")], skins::sg553_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[1]")], skins::sg553_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[2]")], skins::sg553_wpn_skin_modulation4[2]);
+
 		//aug
 		write_value(json[xs("skins")][xs("wear_aug")], skins::wear_aug);
 		write_value(json[xs("skins")][xs("vector_paint_kit_aug")], skins::vector_paint_kit_aug);
 		write_value(json[xs("skins")][xs("paint_kit_index_aug")], skins::paint_kit_index_aug);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_custom_clr")], skins::aug_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[0]")], skins::aug_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[1]")], skins::aug_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[2]")], skins::aug_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[0]")], skins::aug_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[1]")], skins::aug_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[2]")], skins::aug_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[0]")], skins::aug_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[1]")], skins::aug_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[2]")], skins::aug_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[0]")], skins::aug_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[1]")], skins::aug_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[2]")], skins::aug_wpn_skin_modulation4[2]);
+
 		//ssg08
 		write_value(json[xs("skins")][xs("wear_ssg08")], skins::wear_ssg08);
 		write_value(json[xs("skins")][xs("vector_paint_kit_ssg08")], skins::vector_paint_kit_ssg08);
 		write_value(json[xs("skins")][xs("paint_kit_index_ssg08")], skins::paint_kit_index_ssg08);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_custom_clr")], skins::ssg08_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[0]")], skins::ssg08_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[1]")], skins::ssg08_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[2]")], skins::ssg08_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[0]")], skins::ssg08_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[1]")], skins::ssg08_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[2]")], skins::ssg08_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[0]")], skins::ssg08_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[1]")], skins::ssg08_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[2]")], skins::ssg08_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[0]")], skins::ssg08_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[1]")], skins::ssg08_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[2]")], skins::ssg08_wpn_skin_modulation4[2]);
+
 		//awp
 		write_value(json[xs("skins")][xs("wear_awp")], skins::wear_awp);
 		write_value(json[xs("skins")][xs("vector_paint_kit_awp")], skins::vector_paint_kit_awp);
 		write_value(json[xs("skins")][xs("paint_kit_index_awp")], skins::paint_kit_index_awp);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_custom_clr")], skins::awp_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[0]")], skins::awp_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[1]")], skins::awp_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[2]")], skins::awp_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[0]")], skins::awp_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[1]")], skins::awp_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[2]")], skins::awp_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[0]")], skins::awp_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[1]")], skins::awp_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[2]")], skins::awp_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[0]")], skins::awp_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[1]")], skins::awp_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[2]")], skins::awp_wpn_skin_modulation4[2]);
+
 		//scar
 		write_value(json[xs("skins")][xs("wear_scar")], skins::wear_scar);
 		write_value(json[xs("skins")][xs("vector_paint_kit_scar")], skins::vector_paint_kit_scar);
 		write_value(json[xs("skins")][xs("paint_kit_index_scar")], skins::paint_kit_index_scar);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_custom_clr")], skins::scar_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[0]")], skins::scar_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[1]")], skins::scar_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[2]")], skins::scar_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[0]")], skins::scar_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[1]")], skins::scar_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[2]")], skins::scar_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[0]")], skins::scar_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[1]")], skins::scar_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[2]")], skins::scar_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[0]")], skins::scar_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[1]")], skins::scar_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[2]")], skins::scar_wpn_skin_modulation4[2]);
+
 		//g3sg1
 		write_value(json[xs("skins")][xs("wear_g3sg1")], skins::wear_g3sg1);
 		write_value(json[xs("skins")][xs("vector_paint_kit_g3sg1")], skins::vector_paint_kit_g3sg1);
 		write_value(json[xs("skins")][xs("paint_kit_index_g3sg1")], skins::paint_kit_index_g3sg1);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_custom_clr")], skins::g3sg1_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[0]")], skins::g3sg1_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[1]")], skins::g3sg1_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[2]")], skins::g3sg1_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[0]")], skins::g3sg1_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[1]")], skins::g3sg1_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[2]")], skins::g3sg1_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[0]")], skins::g3sg1_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[1]")], skins::g3sg1_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[2]")], skins::g3sg1_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[0]")], skins::g3sg1_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[1]")], skins::g3sg1_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[2]")], skins::g3sg1_wpn_skin_modulation4[2]);
+
 		//sawoff
 		write_value(json[xs("skins")][xs("wear_sawoff")], skins::wear_sawoff);
 		write_value(json[xs("skins")][xs("vector_paint_kit_sawoff")], skins::vector_paint_kit_sawoff);
 		write_value(json[xs("skins")][xs("paint_kit_index_sawoff")], skins::paint_kit_index_sawoff);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_custom_clr")], skins::sawoff_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[0]")], skins::sawoff_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[1]")], skins::sawoff_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[2]")], skins::sawoff_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[0]")], skins::sawoff_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[1]")], skins::sawoff_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[2]")], skins::sawoff_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[0]")], skins::sawoff_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[1]")], skins::sawoff_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[2]")], skins::sawoff_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[0]")], skins::sawoff_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[1]")], skins::sawoff_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[2]")], skins::sawoff_wpn_skin_modulation4[2]);
+
 		//m249
 		write_value(json[xs("skins")][xs("wear_m249")], skins::wear_m249);
 		write_value(json[xs("skins")][xs("vector_paint_kit_m249")], skins::vector_paint_kit_m249);
 		write_value(json[xs("skins")][xs("paint_kit_index_m249")], skins::paint_kit_index_m249);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_custom_clr")], skins::m249_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[0]")], skins::m249_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[1]")], skins::m249_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[2]")], skins::m249_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[0]")], skins::m249_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[1]")], skins::m249_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[2]")], skins::m249_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[0]")], skins::m249_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[1]")], skins::m249_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[2]")], skins::m249_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[0]")], skins::m249_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[1]")], skins::m249_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[2]")], skins::m249_wpn_skin_modulation4[2]);
+
 		//negev
 		write_value(json[xs("skins")][xs("wear_negev")], skins::wear_negev);
 		write_value(json[xs("skins")][xs("vector_paint_kit_negev")], skins::vector_paint_kit_negev);
 		write_value(json[xs("skins")][xs("paint_kit_index_negev")], skins::paint_kit_index_negev);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_custom_clr")], skins::negev_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[0]")], skins::negev_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[1]")], skins::negev_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[2]")], skins::negev_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[0]")], skins::negev_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[1]")], skins::negev_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[2]")], skins::negev_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[0]")], skins::negev_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[1]")], skins::negev_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[2]")], skins::negev_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[0]")], skins::negev_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[1]")], skins::negev_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[2]")], skins::negev_wpn_skin_modulation4[2]);
+
 		//mag7
 		write_value(json[xs("skins")][xs("wear_mag7")], skins::wear_mag7);
 		write_value(json[xs("skins")][xs("vector_paint_kit_mag7")], skins::vector_paint_kit_mag7);
 		write_value(json[xs("skins")][xs("paint_kit_index_mag7")], skins::paint_kit_index_mag7);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_custom_clr")], skins::mag7_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[0]")], skins::mag7_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[1]")], skins::mag7_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[2]")], skins::mag7_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[0]")], skins::mag7_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[1]")], skins::mag7_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[2]")], skins::mag7_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[0]")], skins::mag7_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[1]")], skins::mag7_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[2]")], skins::mag7_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[0]")], skins::mag7_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[1]")], skins::mag7_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[2]")], skins::mag7_wpn_skin_modulation4[2]);
+
 		//xm1014
 		write_value(json[xs("skins")][xs("wear_xm1014")], skins::wear_xm1014);
 		write_value(json[xs("skins")][xs("vector_paint_kit_xm1014")], skins::vector_paint_kit_xm1014);
 		write_value(json[xs("skins")][xs("paint_kit_index_xm1014")], skins::paint_kit_index_xm1014);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_custom_clr")], skins::xm1014_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[0]")], skins::xm1014_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[1]")], skins::xm1014_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[2]")], skins::xm1014_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[0]")], skins::xm1014_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[1]")], skins::xm1014_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[2]")], skins::xm1014_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[0]")], skins::xm1014_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[1]")], skins::xm1014_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[2]")], skins::xm1014_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[0]")], skins::xm1014_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[1]")], skins::xm1014_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[2]")], skins::xm1014_wpn_skin_modulation4[2]);
+
 		//nova
 		write_value(json[xs("skins")][xs("wear_nova")], skins::wear_nova);
 		write_value(json[xs("skins")][xs("vector_paint_kit_nova")], skins::vector_paint_kit_nova);
 		write_value(json[xs("skins")][xs("paint_kit_index_nova")], skins::paint_kit_index_nova);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_custom_clr")], skins::nova_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[0]")], skins::nova_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[1]")], skins::nova_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[2]")], skins::nova_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[0]")], skins::nova_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[1]")], skins::nova_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[2]")], skins::nova_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[0]")], skins::nova_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[1]")], skins::nova_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[2]")], skins::nova_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[0]")], skins::nova_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[1]")], skins::nova_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[2]")], skins::nova_wpn_skin_modulation4[2]);
+
 		//bizon
 		write_value(json[xs("skins")][xs("wear_bizon")], skins::wear_bizon);
 		write_value(json[xs("skins")][xs("vector_paint_kit_bizon")], skins::vector_paint_kit_bizon);
 		write_value(json[xs("skins")][xs("paint_kit_index_bizon")], skins::paint_kit_index_bizon);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_custom_clr")], skins::bizon_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[0]")], skins::bizon_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[1]")], skins::bizon_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[2]")], skins::bizon_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[0]")], skins::bizon_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[1]")], skins::bizon_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[2]")], skins::bizon_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[0]")], skins::bizon_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[1]")], skins::bizon_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[2]")], skins::bizon_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[0]")], skins::bizon_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[1]")], skins::bizon_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[2]")], skins::bizon_wpn_skin_modulation4[2]);
+
 		//mp5sd
 		write_value(json[xs("skins")][xs("wear_mp5sd")], skins::wear_mp5sd);
 		write_value(json[xs("skins")][xs("vector_paint_kit_mp5sd")], skins::vector_paint_kit_mp5sd);
 		write_value(json[xs("skins")][xs("paint_kit_index_mp5sd")], skins::paint_kit_index_mp5sd);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_custom_clr")], skins::mp5sd_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[0]")], skins::mp5sd_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[1]")], skins::mp5sd_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[2]")], skins::mp5sd_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[0]")], skins::mp5sd_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[1]")], skins::mp5sd_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[2]")], skins::mp5sd_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[0]")], skins::mp5sd_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[1]")], skins::mp5sd_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[2]")], skins::mp5sd_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[0]")], skins::mp5sd_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[1]")], skins::mp5sd_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[2]")], skins::mp5sd_wpn_skin_modulation4[2]);
+
 		//mp7
 		write_value(json[xs("skins")][xs("wear_mp7")], skins::wear_mp7);
 		write_value(json[xs("skins")][xs("vector_paint_kit_mp7")], skins::vector_paint_kit_mp7);
 		write_value(json[xs("skins")][xs("paint_kit_index_mp7")], skins::paint_kit_index_mp7);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_custom_clr")], skins::mp7_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[0]")], skins::mp7_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[1]")], skins::mp7_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[2]")], skins::mp7_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[0]")], skins::mp7_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[1]")], skins::mp7_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[2]")], skins::mp7_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[0]")], skins::mp7_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[1]")], skins::mp7_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[2]")], skins::mp7_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[0]")], skins::mp7_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[1]")], skins::mp7_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[2]")], skins::mp7_wpn_skin_modulation4[2]);
+
 		//mp9
 		write_value(json[xs("skins")][xs("wear_mp9")], skins::wear_mp9);
 		write_value(json[xs("skins")][xs("vector_paint_kit_mp9")], skins::vector_paint_kit_mp9);
 		write_value(json[xs("skins")][xs("paint_kit_index_mp9")], skins::paint_kit_index_mp9);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_custom_clr")], skins::mp9_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[0]")], skins::mp9_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[1]")], skins::mp9_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[2]")], skins::mp9_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[0]")], skins::mp9_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[1]")], skins::mp9_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[2]")], skins::mp9_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[0]")], skins::mp9_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[1]")], skins::mp9_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[2]")], skins::mp9_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[0]")], skins::mp9_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[1]")], skins::mp9_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[2]")], skins::mp9_wpn_skin_modulation4[2]);
+
 		//mac10
 		write_value(json[xs("skins")][xs("wear_mac10")], skins::wear_mac10);
 		write_value(json[xs("skins")][xs("vector_paint_kit_mac10")], skins::vector_paint_kit_mac10);
 		write_value(json[xs("skins")][xs("paint_kit_index_mac10")], skins::paint_kit_index_mac10);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_custom_clr")], skins::mac10_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[0]")], skins::mac10_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[1]")], skins::mac10_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[2]")], skins::mac10_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[0]")], skins::mac10_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[1]")], skins::mac10_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[2]")], skins::mac10_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[0]")], skins::mac10_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[1]")], skins::mac10_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[2]")], skins::mac10_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[0]")], skins::mac10_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[1]")], skins::mac10_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[2]")], skins::mac10_wpn_skin_modulation4[2]);
+
 		//p90
 		write_value(json[xs("skins")][xs("wear_p90")], skins::wear_p90);
 		write_value(json[xs("skins")][xs("vector_paint_kit_p90")], skins::vector_paint_kit_p90);
 		write_value(json[xs("skins")][xs("paint_kit_index_p90")], skins::paint_kit_index_p90);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_custom_clr")], skins::p90_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[0]")], skins::p90_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[1]")], skins::p90_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[2]")], skins::p90_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[0]")], skins::p90_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[1]")], skins::p90_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[2]")], skins::p90_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[0]")], skins::p90_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[1]")], skins::p90_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[2]")], skins::p90_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[0]")], skins::p90_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[1]")], skins::p90_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[2]")], skins::p90_wpn_skin_modulation4[2]);
+
 		//ump45
 		write_value(json[xs("skins")][xs("wear_ump45")], skins::wear_ump45);
 		write_value(json[xs("skins")][xs("vector_paint_kit_ump45")], skins::vector_paint_kit_ump45);
 		write_value(json[xs("skins")][xs("paint_kit_index_ump45")], skins::paint_kit_index_ump45);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_custom_clr")], skins::ump45_wpn_skin_custom_clr);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[0]")], skins::ump45_wpn_skin_modulation1[0]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[1]")], skins::ump45_wpn_skin_modulation1[1]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[2]")], skins::ump45_wpn_skin_modulation1[2]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[0]")], skins::ump45_wpn_skin_modulation2[0]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[1]")], skins::ump45_wpn_skin_modulation2[1]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[2]")], skins::ump45_wpn_skin_modulation2[2]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[0]")], skins::ump45_wpn_skin_modulation3[0]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[1]")], skins::ump45_wpn_skin_modulation3[1]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[2]")], skins::ump45_wpn_skin_modulation3[2]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[0]")], skins::ump45_wpn_skin_modulation4[0]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[1]")], skins::ump45_wpn_skin_modulation4[1]);
+		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[2]")], skins::ump45_wpn_skin_modulation4[2]);
 
 		write_value(json[xs("movement")][xs("bhop")], movement::bhop);
 		write_value(json[xs("movement")][xs("bhopmiss")], movement::bhopmiss);
@@ -987,139 +1462,613 @@ namespace c {
 			read_value(json[xs("skins")][xs("wear_usp")], skins::wear_usp);
 			read_value(json[xs("skins")][xs("vector_paint_kit_usp")], skins::vector_paint_kit_usp);
 			read_value(json[xs("skins")][xs("paint_kit_index_usp")], skins::paint_kit_index_usp);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_custom_clr")], skins::usp_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[0]")], skins::usp_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[1]")], skins::usp_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[2]")], skins::usp_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[0]")], skins::usp_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[1]")], skins::usp_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[2]")], skins::usp_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[0]")], skins::usp_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[1]")], skins::usp_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[2]")], skins::usp_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[0]")], skins::usp_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[1]")], skins::usp_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[2]")], skins::usp_wpn_skin_modulation4[2]);
+
 			//p2000
 			read_value(json[xs("skins")][xs("wear_p2000")], skins::wear_p2000);
 			read_value(json[xs("skins")][xs("vector_paint_kit_p2000")], skins::vector_paint_kit_p2000);
 			read_value(json[xs("skins")][xs("paint_kit_index_p2000")], skins::paint_kit_index_p2000);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_custom_clr")], skins::p2000_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[0]")], skins::p2000_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[1]")], skins::p2000_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[2]")], skins::p2000_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[0]")], skins::p2000_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[1]")], skins::p2000_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[2]")], skins::p2000_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[0]")], skins::p2000_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[1]")], skins::p2000_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[2]")], skins::p2000_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[0]")], skins::p2000_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[1]")], skins::p2000_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[2]")], skins::p2000_wpn_skin_modulation4[2]);
+
 			//glock
 			read_value(json[xs("skins")][xs("wear_glock")], skins::wear_glock);
 			read_value(json[xs("skins")][xs("vector_paint_kit_glock")], skins::vector_paint_kit_glock);
 			read_value(json[xs("skins")][xs("paint_kit_index_glock")], skins::paint_kit_index_glock);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_custom_clr")], skins::glock_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[0]")], skins::glock_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[1]")], skins::glock_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[2]")], skins::glock_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[0]")], skins::glock_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[1]")], skins::glock_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[2]")], skins::glock_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[0]")], skins::glock_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[1]")], skins::glock_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[2]")], skins::glock_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[0]")], skins::glock_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[1]")], skins::glock_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[2]")], skins::glock_wpn_skin_modulation4[2]);
+
 			//p250
 			read_value(json[xs("skins")][xs("wear_p250")], skins::wear_p250);
 			read_value(json[xs("skins")][xs("vector_paint_kit_p250")], skins::vector_paint_kit_p250);
 			read_value(json[xs("skins")][xs("paint_kit_index_p250")], skins::paint_kit_index_p250);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_custom_clr")], skins::p250_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[0]")], skins::p250_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[1]")], skins::p250_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[2]")], skins::p250_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[0]")], skins::p250_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[1]")], skins::p250_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[2]")], skins::p250_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[0]")], skins::p250_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[1]")], skins::p250_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[2]")], skins::p250_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[0]")], skins::p250_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[1]")], skins::p250_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[2]")], skins::p250_wpn_skin_modulation4[2]);
+
 			//fiveseven
 			read_value(json[xs("skins")][xs("wear_fiveseven")], skins::wear_fiveseven);
 			read_value(json[xs("skins")][xs("vector_paint_kit_fiveseven")], skins::vector_paint_kit_fiveseven);
 			read_value(json[xs("skins")][xs("paint_kit_index_fiveseven")], skins::paint_kit_index_fiveseven);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_custom_clr")], skins::fiveseven_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[0]")], skins::fiveseven_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[1]")], skins::fiveseven_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[2]")], skins::fiveseven_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[0]")], skins::fiveseven_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[1]")], skins::fiveseven_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[2]")], skins::fiveseven_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[0]")], skins::fiveseven_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[1]")], skins::fiveseven_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[2]")], skins::fiveseven_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[0]")], skins::fiveseven_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[1]")], skins::fiveseven_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[2]")], skins::fiveseven_wpn_skin_modulation4[2]);
+
 			//tec
 			read_value(json[xs("skins")][xs("wear_tec")], skins::wear_tec);
 			read_value(json[xs("skins")][xs("vector_paint_kit_tec")], skins::vector_paint_kit_tec);
 			read_value(json[xs("skins")][xs("paint_kit_index_tec")], skins::paint_kit_index_tec);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_custom_clr")], skins::tec_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[0]")], skins::tec_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[1]")], skins::tec_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[2]")], skins::tec_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[0]")], skins::tec_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[1]")], skins::tec_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[2]")], skins::tec_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[0]")], skins::tec_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[1]")], skins::tec_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[2]")], skins::tec_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[0]")], skins::tec_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[1]")], skins::tec_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[2]")], skins::tec_wpn_skin_modulation4[2]);
+
 			//cz
 			read_value(json[xs("skins")][xs("wear_cz")], skins::wear_cz);
 			read_value(json[xs("skins")][xs("vector_paint_kit_cz")], skins::vector_paint_kit_cz);
 			read_value(json[xs("skins")][xs("paint_kit_index_cz")], skins::paint_kit_index_cz);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_custom_clr")], skins::cz_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[0]")], skins::cz_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[1]")], skins::cz_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[2]")], skins::cz_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[0]")], skins::cz_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[1]")], skins::cz_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[2]")], skins::cz_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[0]")], skins::cz_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[1]")], skins::cz_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[2]")], skins::cz_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[0]")], skins::cz_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[1]")], skins::cz_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[2]")], skins::cz_wpn_skin_modulation4[2]);
+
 			//duals
 			read_value(json[xs("skins")][xs("wear_duals")], skins::wear_duals);
 			read_value(json[xs("skins")][xs("vector_paint_kit_duals")], skins::vector_paint_kit_duals);
 			read_value(json[xs("skins")][xs("paint_kit_index_duals")], skins::paint_kit_index_duals);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_custom_clr")], skins::duals_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[0]")], skins::duals_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[1]")], skins::duals_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[2]")], skins::duals_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[0]")], skins::duals_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[1]")], skins::duals_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[2]")], skins::duals_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[0]")], skins::duals_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[1]")], skins::duals_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[2]")], skins::duals_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[0]")], skins::duals_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[1]")], skins::duals_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[2]")], skins::duals_wpn_skin_modulation4[2]);
+
 			//deagle
 			read_value(json[xs("skins")][xs("wear_deagle")], skins::wear_deagle);
 			read_value(json[xs("skins")][xs("vector_paint_kit_deagle")], skins::vector_paint_kit_deagle);
 			read_value(json[xs("skins")][xs("paint_kit_index_deagle")], skins::paint_kit_index_deagle);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_custom_clr")], skins::deagle_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[0]")], skins::deagle_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[1]")], skins::deagle_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[2]")], skins::deagle_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[0]")], skins::deagle_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[1]")], skins::deagle_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[2]")], skins::deagle_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[0]")], skins::deagle_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[1]")], skins::deagle_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[2]")], skins::deagle_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[0]")], skins::deagle_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[1]")], skins::deagle_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[2]")], skins::deagle_wpn_skin_modulation4[2]);
+
 			//revolver
 			read_value(json[xs("skins")][xs("wear_revolver")], skins::wear_revolver);
 			read_value(json[xs("skins")][xs("vector_paint_kit_revolver")], skins::vector_paint_kit_revolver);
 			read_value(json[xs("skins")][xs("paint_kit_index_revolver")], skins::paint_kit_index_revolver);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_custom_clr")], skins::revolver_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[0]")], skins::revolver_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[1]")], skins::revolver_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[2]")], skins::revolver_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[0]")], skins::revolver_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[1]")], skins::revolver_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[2]")], skins::revolver_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[0]")], skins::revolver_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[1]")], skins::revolver_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[2]")], skins::revolver_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[0]")], skins::revolver_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[1]")], skins::revolver_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[2]")], skins::revolver_wpn_skin_modulation4[2]);
+
 			//famas
 			read_value(json[xs("skins")][xs("wear_famas")], skins::wear_famas);
 			read_value(json[xs("skins")][xs("vector_paint_kit_famas")], skins::vector_paint_kit_famas);
 			read_value(json[xs("skins")][xs("paint_kit_index_famas")], skins::paint_kit_index_famas);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_custom_clr")], skins::famas_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[0]")], skins::famas_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[1]")], skins::famas_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[2]")], skins::famas_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[0]")], skins::famas_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[1]")], skins::famas_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[2]")], skins::famas_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[0]")], skins::famas_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[1]")], skins::famas_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[2]")], skins::famas_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[0]")], skins::famas_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[1]")], skins::famas_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[2]")], skins::famas_wpn_skin_modulation4[2]);
+
 			//galil
 			read_value(json[xs("skins")][xs("wear_galil")], skins::wear_galil);
 			read_value(json[xs("skins")][xs("vector_paint_kit_galil")], skins::vector_paint_kit_galil);
 			read_value(json[xs("skins")][xs("paint_kit_index_galil")], skins::paint_kit_index_galil);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_custom_clr")], skins::galil_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[0]")], skins::galil_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[1]")], skins::galil_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[2]")], skins::galil_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[0]")], skins::galil_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[1]")], skins::galil_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[2]")], skins::galil_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[0]")], skins::galil_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[1]")], skins::galil_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[2]")], skins::galil_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[0]")], skins::galil_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[1]")], skins::galil_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[2]")], skins::galil_wpn_skin_modulation4[2]);
+
 			//m4a4
 			read_value(json[xs("skins")][xs("wear_m4a4")], skins::wear_m4a4);
 			read_value(json[xs("skins")][xs("vector_paint_kit_m4a4")], skins::vector_paint_kit_m4a4);
 			read_value(json[xs("skins")][xs("paint_kit_index_m4a4")], skins::paint_kit_index_m4a4);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_custom_clr")], skins::m4a4_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[0]")], skins::m4a4_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[1]")], skins::m4a4_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[2]")], skins::m4a4_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[0]")], skins::m4a4_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[1]")], skins::m4a4_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[2]")], skins::m4a4_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[0]")], skins::m4a4_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[1]")], skins::m4a4_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[2]")], skins::m4a4_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[0]")], skins::m4a4_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[1]")], skins::m4a4_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[2]")], skins::m4a4_wpn_skin_modulation4[2]);
+
 			//m4a1
 			read_value(json[xs("skins")][xs("wear_m4a1")], skins::wear_m4a1);
 			read_value(json[xs("skins")][xs("vector_paint_kit_m4a1")], skins::vector_paint_kit_m4a1);
 			read_value(json[xs("skins")][xs("paint_kit_index_m4a1")], skins::paint_kit_index_m4a1);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_custom_clr")], skins::m4a1_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[0]")], skins::m4a1_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[1]")], skins::m4a1_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[2]")], skins::m4a1_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[0]")], skins::m4a1_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[1]")], skins::m4a1_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[2]")], skins::m4a1_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[0]")], skins::m4a1_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[1]")], skins::m4a1_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[2]")], skins::m4a1_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[0]")], skins::m4a1_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[1]")], skins::m4a1_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[2]")], skins::m4a1_wpn_skin_modulation4[2]);
+
 			//ak47
 			read_value(json[xs("skins")][xs("wear_ak47")], skins::wear_ak47);
 			read_value(json[xs("skins")][xs("vector_paint_kit_ak47")], skins::vector_paint_kit_ak47);
 			read_value(json[xs("skins")][xs("paint_kit_index_ak47")], skins::paint_kit_index_ak47);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_custom_clr")], skins::ak47_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[0]")], skins::ak47_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[1]")], skins::ak47_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[2]")], skins::ak47_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[0]")], skins::ak47_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[1]")], skins::ak47_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[2]")], skins::ak47_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[0]")], skins::ak47_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[1]")], skins::ak47_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[2]")], skins::ak47_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[0]")], skins::ak47_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[1]")], skins::ak47_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[2]")], skins::ak47_wpn_skin_modulation4[2]);
+
 			//sg553
 			read_value(json[xs("skins")][xs("wear_sg553")], skins::wear_sg553);
 			read_value(json[xs("skins")][xs("vector_paint_kit_sg553")], skins::vector_paint_kit_sg553);
 			read_value(json[xs("skins")][xs("paint_kit_index_sg553")], skins::paint_kit_index_sg553);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_custom_clr")], skins::sg553_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[0]")], skins::sg553_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[1]")], skins::sg553_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[2]")], skins::sg553_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[0]")], skins::sg553_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[1]")], skins::sg553_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[2]")], skins::sg553_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[0]")], skins::sg553_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[1]")], skins::sg553_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[2]")], skins::sg553_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[0]")], skins::sg553_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[1]")], skins::sg553_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[2]")], skins::sg553_wpn_skin_modulation4[2]);
+
 			//aug
 			read_value(json[xs("skins")][xs("wear_aug")], skins::wear_aug);
 			read_value(json[xs("skins")][xs("vector_paint_kit_aug")], skins::vector_paint_kit_aug);
 			read_value(json[xs("skins")][xs("paint_kit_index_aug")], skins::paint_kit_index_aug);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_custom_clr")], skins::aug_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[0]")], skins::aug_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[1]")], skins::aug_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[2]")], skins::aug_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[0]")], skins::aug_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[1]")], skins::aug_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[2]")], skins::aug_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[0]")], skins::aug_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[1]")], skins::aug_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[2]")], skins::aug_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[0]")], skins::aug_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[1]")], skins::aug_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[2]")], skins::aug_wpn_skin_modulation4[2]);
+
 			//ssg08
 			read_value(json[xs("skins")][xs("wear_ssg08")], skins::wear_ssg08);
 			read_value(json[xs("skins")][xs("vector_paint_kit_ssg08")], skins::vector_paint_kit_ssg08);
 			read_value(json[xs("skins")][xs("paint_kit_index_ssg08")], skins::paint_kit_index_ssg08);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_custom_clr")], skins::ssg08_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[0]")], skins::ssg08_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[1]")], skins::ssg08_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[2]")], skins::ssg08_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[0]")], skins::ssg08_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[1]")], skins::ssg08_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[2]")], skins::ssg08_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[0]")], skins::ssg08_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[1]")], skins::ssg08_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[2]")], skins::ssg08_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[0]")], skins::ssg08_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[1]")], skins::ssg08_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[2]")], skins::ssg08_wpn_skin_modulation4[2]);
+
 			//awp
 			read_value(json[xs("skins")][xs("wear_awp")], skins::wear_awp);
 			read_value(json[xs("skins")][xs("vector_paint_kit_awp")], skins::vector_paint_kit_awp);
 			read_value(json[xs("skins")][xs("paint_kit_index_awp")], skins::paint_kit_index_awp);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_custom_clr")], skins::awp_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[0]")], skins::awp_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[1]")], skins::awp_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[2]")], skins::awp_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[0]")], skins::awp_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[1]")], skins::awp_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[2]")], skins::awp_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[0]")], skins::awp_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[1]")], skins::awp_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[2]")], skins::awp_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[0]")], skins::awp_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[1]")], skins::awp_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[2]")], skins::awp_wpn_skin_modulation4[2]);
+
 			//scar
 			read_value(json[xs("skins")][xs("wear_scar")], skins::wear_scar);
 			read_value(json[xs("skins")][xs("vector_paint_kit_scar")], skins::vector_paint_kit_scar);
 			read_value(json[xs("skins")][xs("paint_kit_index_scar")], skins::paint_kit_index_scar);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_custom_clr")], skins::scar_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[0]")], skins::scar_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[1]")], skins::scar_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[2]")], skins::scar_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[0]")], skins::scar_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[1]")], skins::scar_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[2]")], skins::scar_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[0]")], skins::scar_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[1]")], skins::scar_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[2]")], skins::scar_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[0]")], skins::scar_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[1]")], skins::scar_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[2]")], skins::scar_wpn_skin_modulation4[2]);
+
 			//g3sg1
 			read_value(json[xs("skins")][xs("wear_g3sg1")], skins::wear_g3sg1);
 			read_value(json[xs("skins")][xs("vector_paint_kit_g3sg1")], skins::vector_paint_kit_g3sg1);
 			read_value(json[xs("skins")][xs("paint_kit_index_g3sg1")], skins::paint_kit_index_g3sg1);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_custom_clr")], skins::g3sg1_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[0]")], skins::g3sg1_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[1]")], skins::g3sg1_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[2]")], skins::g3sg1_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[0]")], skins::g3sg1_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[1]")], skins::g3sg1_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[2]")], skins::g3sg1_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[0]")], skins::g3sg1_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[1]")], skins::g3sg1_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[2]")], skins::g3sg1_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[0]")], skins::g3sg1_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[1]")], skins::g3sg1_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[2]")], skins::g3sg1_wpn_skin_modulation4[2]);
+
 			//sawoff
 			read_value(json[xs("skins")][xs("wear_sawoff")], skins::wear_sawoff);
 			read_value(json[xs("skins")][xs("vector_paint_kit_sawoff")], skins::vector_paint_kit_sawoff);
 			read_value(json[xs("skins")][xs("paint_kit_index_sawoff")], skins::paint_kit_index_sawoff);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_custom_clr")], skins::sawoff_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[0]")], skins::sawoff_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[1]")], skins::sawoff_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[2]")], skins::sawoff_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[0]")], skins::sawoff_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[1]")], skins::sawoff_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[2]")], skins::sawoff_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[0]")], skins::sawoff_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[1]")], skins::sawoff_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[2]")], skins::sawoff_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[0]")], skins::sawoff_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[1]")], skins::sawoff_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[2]")], skins::sawoff_wpn_skin_modulation4[2]);
+
 			//m249
 			read_value(json[xs("skins")][xs("wear_m249")], skins::wear_m249);
 			read_value(json[xs("skins")][xs("vector_paint_kit_m249")], skins::vector_paint_kit_m249);
 			read_value(json[xs("skins")][xs("paint_kit_index_m249")], skins::paint_kit_index_m249);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_custom_clr")], skins::m249_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[0]")], skins::m249_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[1]")], skins::m249_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[2]")], skins::m249_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[0]")], skins::m249_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[1]")], skins::m249_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[2]")], skins::m249_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[0]")], skins::m249_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[1]")], skins::m249_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[2]")], skins::m249_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[0]")], skins::m249_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[1]")], skins::m249_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[2]")], skins::m249_wpn_skin_modulation4[2]);
+
 			//negev
 			read_value(json[xs("skins")][xs("wear_negev")], skins::wear_negev);
 			read_value(json[xs("skins")][xs("vector_paint_kit_negev")], skins::vector_paint_kit_negev);
 			read_value(json[xs("skins")][xs("paint_kit_index_negev")], skins::paint_kit_index_negev);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_custom_clr")], skins::negev_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[0]")], skins::negev_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[1]")], skins::negev_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[2]")], skins::negev_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[0]")], skins::negev_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[1]")], skins::negev_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[2]")], skins::negev_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[0]")], skins::negev_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[1]")], skins::negev_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[2]")], skins::negev_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[0]")], skins::negev_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[1]")], skins::negev_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[2]")], skins::negev_wpn_skin_modulation4[2]);
+
 			//mag7
 			read_value(json[xs("skins")][xs("wear_mag7")], skins::wear_mag7);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mag7")], skins::vector_paint_kit_mag7);
 			read_value(json[xs("skins")][xs("paint_kit_index_mag7")], skins::paint_kit_index_mag7);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_custom_clr")], skins::mag7_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[0]")], skins::mag7_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[1]")], skins::mag7_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[2]")], skins::mag7_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[0]")], skins::mag7_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[1]")], skins::mag7_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[2]")], skins::mag7_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[0]")], skins::mag7_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[1]")], skins::mag7_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[2]")], skins::mag7_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[0]")], skins::mag7_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[1]")], skins::mag7_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[2]")], skins::mag7_wpn_skin_modulation4[2]);
+
 			//xm1014
 			read_value(json[xs("skins")][xs("wear_xm1014")], skins::wear_xm1014);
 			read_value(json[xs("skins")][xs("vector_paint_kit_xm1014")], skins::vector_paint_kit_xm1014);
 			read_value(json[xs("skins")][xs("paint_kit_index_xm1014")], skins::paint_kit_index_xm1014);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_custom_clr")], skins::xm1014_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[0]")], skins::xm1014_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[1]")], skins::xm1014_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[2]")], skins::xm1014_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[0]")], skins::xm1014_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[1]")], skins::xm1014_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[2]")], skins::xm1014_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[0]")], skins::xm1014_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[1]")], skins::xm1014_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[2]")], skins::xm1014_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[0]")], skins::xm1014_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[1]")], skins::xm1014_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[2]")], skins::xm1014_wpn_skin_modulation4[2]);
+
 			//nova
 			read_value(json[xs("skins")][xs("wear_nova")], skins::wear_nova);
 			read_value(json[xs("skins")][xs("vector_paint_kit_nova")], skins::vector_paint_kit_nova);
 			read_value(json[xs("skins")][xs("paint_kit_index_nova")], skins::paint_kit_index_nova);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_custom_clr")], skins::nova_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[0]")], skins::nova_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[1]")], skins::nova_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[2]")], skins::nova_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[0]")], skins::nova_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[1]")], skins::nova_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[2]")], skins::nova_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[0]")], skins::nova_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[1]")], skins::nova_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[2]")], skins::nova_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[0]")], skins::nova_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[1]")], skins::nova_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[2]")], skins::nova_wpn_skin_modulation4[2]);
+
 			//bizon
 			read_value(json[xs("skins")][xs("wear_bizon")], skins::wear_bizon);
 			read_value(json[xs("skins")][xs("vector_paint_kit_bizon")], skins::vector_paint_kit_bizon);
 			read_value(json[xs("skins")][xs("paint_kit_index_bizon")], skins::paint_kit_index_bizon);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_custom_clr")], skins::bizon_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[0]")], skins::bizon_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[1]")], skins::bizon_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[2]")], skins::bizon_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[0]")], skins::bizon_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[1]")], skins::bizon_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[2]")], skins::bizon_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[0]")], skins::bizon_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[1]")], skins::bizon_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[2]")], skins::bizon_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[0]")], skins::bizon_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[1]")], skins::bizon_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[2]")], skins::bizon_wpn_skin_modulation4[2]);
+
 			//mp5sd
 			read_value(json[xs("skins")][xs("wear_mp5sd")], skins::wear_mp5sd);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mp5sd")], skins::vector_paint_kit_mp5sd);
 			read_value(json[xs("skins")][xs("paint_kit_index_mp5sd")], skins::paint_kit_index_mp5sd);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_custom_clr")], skins::mp5sd_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[0]")], skins::mp5sd_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[1]")], skins::mp5sd_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[2]")], skins::mp5sd_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[0]")], skins::mp5sd_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[1]")], skins::mp5sd_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[2]")], skins::mp5sd_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[0]")], skins::mp5sd_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[1]")], skins::mp5sd_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[2]")], skins::mp5sd_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[0]")], skins::mp5sd_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[1]")], skins::mp5sd_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[2]")], skins::mp5sd_wpn_skin_modulation4[2]);
+
 			//mp7
 			read_value(json[xs("skins")][xs("wear_mp7")], skins::wear_mp7);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mp7")], skins::vector_paint_kit_mp7);
 			read_value(json[xs("skins")][xs("paint_kit_index_mp7")], skins::paint_kit_index_mp7);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_custom_clr")], skins::mp7_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[0]")], skins::mp7_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[1]")], skins::mp7_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[2]")], skins::mp7_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[0]")], skins::mp7_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[1]")], skins::mp7_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[2]")], skins::mp7_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[0]")], skins::mp7_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[1]")], skins::mp7_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[2]")], skins::mp7_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[0]")], skins::mp7_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[1]")], skins::mp7_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[2]")], skins::mp7_wpn_skin_modulation4[2]);
+
 			//mp9
 			read_value(json[xs("skins")][xs("wear_mp9")], skins::wear_mp9);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mp9")], skins::vector_paint_kit_mp9);
 			read_value(json[xs("skins")][xs("paint_kit_index_mp9")], skins::paint_kit_index_mp9);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_custom_clr")], skins::mp9_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[0]")], skins::mp9_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[1]")], skins::mp9_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[2]")], skins::mp9_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[0]")], skins::mp9_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[1]")], skins::mp9_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[2]")], skins::mp9_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[0]")], skins::mp9_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[1]")], skins::mp9_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[2]")], skins::mp9_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[0]")], skins::mp9_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[1]")], skins::mp9_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[2]")], skins::mp9_wpn_skin_modulation4[2]);
+
 			//mac10
 			read_value(json[xs("skins")][xs("wear_mac10")], skins::wear_mac10);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mac10")], skins::vector_paint_kit_mac10);
 			read_value(json[xs("skins")][xs("paint_kit_index_mac10")], skins::paint_kit_index_mac10);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_custom_clr")], skins::mac10_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[0]")], skins::mac10_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[1]")], skins::mac10_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[2]")], skins::mac10_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[0]")], skins::mac10_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[1]")], skins::mac10_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[2]")], skins::mac10_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[0]")], skins::mac10_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[1]")], skins::mac10_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[2]")], skins::mac10_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[0]")], skins::mac10_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[1]")], skins::mac10_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[2]")], skins::mac10_wpn_skin_modulation4[2]);
+
 			//p90
 			read_value(json[xs("skins")][xs("wear_p90")], skins::wear_p90);
 			read_value(json[xs("skins")][xs("vector_paint_kit_p90")], skins::vector_paint_kit_p90);
 			read_value(json[xs("skins")][xs("paint_kit_index_p90")], skins::paint_kit_index_p90);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_custom_clr")], skins::p90_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[0]")], skins::p90_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[1]")], skins::p90_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[2]")], skins::p90_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[0]")], skins::p90_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[1]")], skins::p90_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[2]")], skins::p90_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[0]")], skins::p90_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[1]")], skins::p90_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[2]")], skins::p90_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[0]")], skins::p90_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[1]")], skins::p90_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[2]")], skins::p90_wpn_skin_modulation4[2]);
+
 			//ump45
 			read_value(json[xs("skins")][xs("wear_ump45")], skins::wear_ump45);
 			read_value(json[xs("skins")][xs("vector_paint_kit_ump45")], skins::vector_paint_kit_ump45);
 			read_value(json[xs("skins")][xs("paint_kit_index_ump45")], skins::paint_kit_index_ump45);
-
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_custom_clr")], skins::ump45_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[0]")], skins::ump45_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[1]")], skins::ump45_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[2]")], skins::ump45_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[0]")], skins::ump45_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[1]")], skins::ump45_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[2]")], skins::ump45_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[0]")], skins::ump45_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[1]")], skins::ump45_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[2]")], skins::ump45_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[0]")], skins::ump45_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[1]")], skins::ump45_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[2]")], skins::ump45_wpn_skin_modulation4[2]);
 
 			read_value(json[xs("movement")][xs("bhop")], movement::bhop);
 			read_value(json[xs("movement")][xs("bhopmiss")], movement::bhopmiss);
@@ -2473,138 +3422,613 @@ namespace c {
 			read_value(json[xs("skins")][xs("wear_usp")], skins::wear_usp);
 			read_value(json[xs("skins")][xs("vector_paint_kit_usp")], skins::vector_paint_kit_usp);
 			read_value(json[xs("skins")][xs("paint_kit_index_usp")], skins::paint_kit_index_usp);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_custom_clr")], skins::usp_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[0]")], skins::usp_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[1]")], skins::usp_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation1[2]")], skins::usp_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[0]")], skins::usp_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[1]")], skins::usp_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation2[2]")], skins::usp_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[0]")], skins::usp_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[1]")], skins::usp_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation3[2]")], skins::usp_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[0]")], skins::usp_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[1]")], skins::usp_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("usp_wpn_skin_modulation4[2]")], skins::usp_wpn_skin_modulation4[2]);
+
 			//p2000
 			read_value(json[xs("skins")][xs("wear_p2000")], skins::wear_p2000);
 			read_value(json[xs("skins")][xs("vector_paint_kit_p2000")], skins::vector_paint_kit_p2000);
 			read_value(json[xs("skins")][xs("paint_kit_index_p2000")], skins::paint_kit_index_p2000);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_custom_clr")], skins::p2000_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[0]")], skins::p2000_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[1]")], skins::p2000_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation1[2]")], skins::p2000_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[0]")], skins::p2000_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[1]")], skins::p2000_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation2[2]")], skins::p2000_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[0]")], skins::p2000_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[1]")], skins::p2000_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation3[2]")], skins::p2000_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[0]")], skins::p2000_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[1]")], skins::p2000_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("p2000_wpn_skin_modulation4[2]")], skins::p2000_wpn_skin_modulation4[2]);
+
 			//glock
 			read_value(json[xs("skins")][xs("wear_glock")], skins::wear_glock);
 			read_value(json[xs("skins")][xs("vector_paint_kit_glock")], skins::vector_paint_kit_glock);
 			read_value(json[xs("skins")][xs("paint_kit_index_glock")], skins::paint_kit_index_glock);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_custom_clr")], skins::glock_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[0]")], skins::glock_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[1]")], skins::glock_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation1[2]")], skins::glock_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[0]")], skins::glock_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[1]")], skins::glock_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation2[2]")], skins::glock_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[0]")], skins::glock_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[1]")], skins::glock_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation3[2]")], skins::glock_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[0]")], skins::glock_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[1]")], skins::glock_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("glock_wpn_skin_modulation4[2]")], skins::glock_wpn_skin_modulation4[2]);
+
 			//p250
 			read_value(json[xs("skins")][xs("wear_p250")], skins::wear_p250);
 			read_value(json[xs("skins")][xs("vector_paint_kit_p250")], skins::vector_paint_kit_p250);
 			read_value(json[xs("skins")][xs("paint_kit_index_p250")], skins::paint_kit_index_p250);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_custom_clr")], skins::p250_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[0]")], skins::p250_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[1]")], skins::p250_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation1[2]")], skins::p250_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[0]")], skins::p250_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[1]")], skins::p250_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation2[2]")], skins::p250_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[0]")], skins::p250_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[1]")], skins::p250_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation3[2]")], skins::p250_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[0]")], skins::p250_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[1]")], skins::p250_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("p250_wpn_skin_modulation4[2]")], skins::p250_wpn_skin_modulation4[2]);
+
 			//fiveseven
 			read_value(json[xs("skins")][xs("wear_fiveseven")], skins::wear_fiveseven);
 			read_value(json[xs("skins")][xs("vector_paint_kit_fiveseven")], skins::vector_paint_kit_fiveseven);
 			read_value(json[xs("skins")][xs("paint_kit_index_fiveseven")], skins::paint_kit_index_fiveseven);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_custom_clr")], skins::fiveseven_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[0]")], skins::fiveseven_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[1]")], skins::fiveseven_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation1[2]")], skins::fiveseven_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[0]")], skins::fiveseven_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[1]")], skins::fiveseven_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation2[2]")], skins::fiveseven_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[0]")], skins::fiveseven_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[1]")], skins::fiveseven_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation3[2]")], skins::fiveseven_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[0]")], skins::fiveseven_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[1]")], skins::fiveseven_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("fiveseven_wpn_skin_modulation4[2]")], skins::fiveseven_wpn_skin_modulation4[2]);
+
 			//tec
 			read_value(json[xs("skins")][xs("wear_tec")], skins::wear_tec);
 			read_value(json[xs("skins")][xs("vector_paint_kit_tec")], skins::vector_paint_kit_tec);
 			read_value(json[xs("skins")][xs("paint_kit_index_tec")], skins::paint_kit_index_tec);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_custom_clr")], skins::tec_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[0]")], skins::tec_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[1]")], skins::tec_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation1[2]")], skins::tec_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[0]")], skins::tec_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[1]")], skins::tec_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation2[2]")], skins::tec_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[0]")], skins::tec_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[1]")], skins::tec_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation3[2]")], skins::tec_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[0]")], skins::tec_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[1]")], skins::tec_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("tec_wpn_skin_modulation4[2]")], skins::tec_wpn_skin_modulation4[2]);
+
 			//cz
 			read_value(json[xs("skins")][xs("wear_cz")], skins::wear_cz);
 			read_value(json[xs("skins")][xs("vector_paint_kit_cz")], skins::vector_paint_kit_cz);
 			read_value(json[xs("skins")][xs("paint_kit_index_cz")], skins::paint_kit_index_cz);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_custom_clr")], skins::cz_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[0]")], skins::cz_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[1]")], skins::cz_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation1[2]")], skins::cz_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[0]")], skins::cz_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[1]")], skins::cz_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation2[2]")], skins::cz_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[0]")], skins::cz_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[1]")], skins::cz_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation3[2]")], skins::cz_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[0]")], skins::cz_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[1]")], skins::cz_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("cz_wpn_skin_modulation4[2]")], skins::cz_wpn_skin_modulation4[2]);
+
 			//duals
 			read_value(json[xs("skins")][xs("wear_duals")], skins::wear_duals);
 			read_value(json[xs("skins")][xs("vector_paint_kit_duals")], skins::vector_paint_kit_duals);
 			read_value(json[xs("skins")][xs("paint_kit_index_duals")], skins::paint_kit_index_duals);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_custom_clr")], skins::duals_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[0]")], skins::duals_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[1]")], skins::duals_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation1[2]")], skins::duals_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[0]")], skins::duals_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[1]")], skins::duals_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation2[2]")], skins::duals_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[0]")], skins::duals_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[1]")], skins::duals_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation3[2]")], skins::duals_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[0]")], skins::duals_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[1]")], skins::duals_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("duals_wpn_skin_modulation4[2]")], skins::duals_wpn_skin_modulation4[2]);
+
 			//deagle
 			read_value(json[xs("skins")][xs("wear_deagle")], skins::wear_deagle);
 			read_value(json[xs("skins")][xs("vector_paint_kit_deagle")], skins::vector_paint_kit_deagle);
 			read_value(json[xs("skins")][xs("paint_kit_index_deagle")], skins::paint_kit_index_deagle);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_custom_clr")], skins::deagle_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[0]")], skins::deagle_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[1]")], skins::deagle_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation1[2]")], skins::deagle_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[0]")], skins::deagle_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[1]")], skins::deagle_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation2[2]")], skins::deagle_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[0]")], skins::deagle_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[1]")], skins::deagle_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation3[2]")], skins::deagle_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[0]")], skins::deagle_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[1]")], skins::deagle_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("deagle_wpn_skin_modulation4[2]")], skins::deagle_wpn_skin_modulation4[2]);
+
 			//revolver
 			read_value(json[xs("skins")][xs("wear_revolver")], skins::wear_revolver);
 			read_value(json[xs("skins")][xs("vector_paint_kit_revolver")], skins::vector_paint_kit_revolver);
 			read_value(json[xs("skins")][xs("paint_kit_index_revolver")], skins::paint_kit_index_revolver);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_custom_clr")], skins::revolver_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[0]")], skins::revolver_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[1]")], skins::revolver_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation1[2]")], skins::revolver_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[0]")], skins::revolver_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[1]")], skins::revolver_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation2[2]")], skins::revolver_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[0]")], skins::revolver_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[1]")], skins::revolver_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation3[2]")], skins::revolver_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[0]")], skins::revolver_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[1]")], skins::revolver_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("revolver_wpn_skin_modulation4[2]")], skins::revolver_wpn_skin_modulation4[2]);
+
 			//famas
 			read_value(json[xs("skins")][xs("wear_famas")], skins::wear_famas);
 			read_value(json[xs("skins")][xs("vector_paint_kit_famas")], skins::vector_paint_kit_famas);
 			read_value(json[xs("skins")][xs("paint_kit_index_famas")], skins::paint_kit_index_famas);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_custom_clr")], skins::famas_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[0]")], skins::famas_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[1]")], skins::famas_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation1[2]")], skins::famas_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[0]")], skins::famas_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[1]")], skins::famas_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation2[2]")], skins::famas_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[0]")], skins::famas_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[1]")], skins::famas_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation3[2]")], skins::famas_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[0]")], skins::famas_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[1]")], skins::famas_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("famas_wpn_skin_modulation4[2]")], skins::famas_wpn_skin_modulation4[2]);
+
 			//galil
 			read_value(json[xs("skins")][xs("wear_galil")], skins::wear_galil);
 			read_value(json[xs("skins")][xs("vector_paint_kit_galil")], skins::vector_paint_kit_galil);
 			read_value(json[xs("skins")][xs("paint_kit_index_galil")], skins::paint_kit_index_galil);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_custom_clr")], skins::galil_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[0]")], skins::galil_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[1]")], skins::galil_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation1[2]")], skins::galil_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[0]")], skins::galil_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[1]")], skins::galil_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation2[2]")], skins::galil_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[0]")], skins::galil_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[1]")], skins::galil_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation3[2]")], skins::galil_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[0]")], skins::galil_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[1]")], skins::galil_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("galil_wpn_skin_modulation4[2]")], skins::galil_wpn_skin_modulation4[2]);
+
 			//m4a4
 			read_value(json[xs("skins")][xs("wear_m4a4")], skins::wear_m4a4);
 			read_value(json[xs("skins")][xs("vector_paint_kit_m4a4")], skins::vector_paint_kit_m4a4);
 			read_value(json[xs("skins")][xs("paint_kit_index_m4a4")], skins::paint_kit_index_m4a4);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_custom_clr")], skins::m4a4_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[0]")], skins::m4a4_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[1]")], skins::m4a4_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation1[2]")], skins::m4a4_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[0]")], skins::m4a4_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[1]")], skins::m4a4_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation2[2]")], skins::m4a4_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[0]")], skins::m4a4_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[1]")], skins::m4a4_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation3[2]")], skins::m4a4_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[0]")], skins::m4a4_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[1]")], skins::m4a4_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("m4a4_wpn_skin_modulation4[2]")], skins::m4a4_wpn_skin_modulation4[2]);
+
 			//m4a1
 			read_value(json[xs("skins")][xs("wear_m4a1")], skins::wear_m4a1);
 			read_value(json[xs("skins")][xs("vector_paint_kit_m4a1")], skins::vector_paint_kit_m4a1);
 			read_value(json[xs("skins")][xs("paint_kit_index_m4a1")], skins::paint_kit_index_m4a1);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_custom_clr")], skins::m4a1_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[0]")], skins::m4a1_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[1]")], skins::m4a1_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation1[2]")], skins::m4a1_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[0]")], skins::m4a1_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[1]")], skins::m4a1_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation2[2]")], skins::m4a1_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[0]")], skins::m4a1_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[1]")], skins::m4a1_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation3[2]")], skins::m4a1_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[0]")], skins::m4a1_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[1]")], skins::m4a1_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("m4a1_wpn_skin_modulation4[2]")], skins::m4a1_wpn_skin_modulation4[2]);
+
 			//ak47
 			read_value(json[xs("skins")][xs("wear_ak47")], skins::wear_ak47);
 			read_value(json[xs("skins")][xs("vector_paint_kit_ak47")], skins::vector_paint_kit_ak47);
 			read_value(json[xs("skins")][xs("paint_kit_index_ak47")], skins::paint_kit_index_ak47);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_custom_clr")], skins::ak47_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[0]")], skins::ak47_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[1]")], skins::ak47_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation1[2]")], skins::ak47_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[0]")], skins::ak47_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[1]")], skins::ak47_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation2[2]")], skins::ak47_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[0]")], skins::ak47_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[1]")], skins::ak47_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation3[2]")], skins::ak47_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[0]")], skins::ak47_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[1]")], skins::ak47_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("ak47_wpn_skin_modulation4[2]")], skins::ak47_wpn_skin_modulation4[2]);
+
 			//sg553
 			read_value(json[xs("skins")][xs("wear_sg553")], skins::wear_sg553);
 			read_value(json[xs("skins")][xs("vector_paint_kit_sg553")], skins::vector_paint_kit_sg553);
 			read_value(json[xs("skins")][xs("paint_kit_index_sg553")], skins::paint_kit_index_sg553);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_custom_clr")], skins::sg553_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[0]")], skins::sg553_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[1]")], skins::sg553_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation1[2]")], skins::sg553_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[0]")], skins::sg553_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[1]")], skins::sg553_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation2[2]")], skins::sg553_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[0]")], skins::sg553_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[1]")], skins::sg553_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation3[2]")], skins::sg553_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[0]")], skins::sg553_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[1]")], skins::sg553_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("sg553_wpn_skin_modulation4[2]")], skins::sg553_wpn_skin_modulation4[2]);
+
 			//aug
 			read_value(json[xs("skins")][xs("wear_aug")], skins::wear_aug);
 			read_value(json[xs("skins")][xs("vector_paint_kit_aug")], skins::vector_paint_kit_aug);
 			read_value(json[xs("skins")][xs("paint_kit_index_aug")], skins::paint_kit_index_aug);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_custom_clr")], skins::aug_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[0]")], skins::aug_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[1]")], skins::aug_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation1[2]")], skins::aug_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[0]")], skins::aug_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[1]")], skins::aug_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation2[2]")], skins::aug_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[0]")], skins::aug_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[1]")], skins::aug_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation3[2]")], skins::aug_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[0]")], skins::aug_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[1]")], skins::aug_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("aug_wpn_skin_modulation4[2]")], skins::aug_wpn_skin_modulation4[2]);
+
 			//ssg08
 			read_value(json[xs("skins")][xs("wear_ssg08")], skins::wear_ssg08);
 			read_value(json[xs("skins")][xs("vector_paint_kit_ssg08")], skins::vector_paint_kit_ssg08);
 			read_value(json[xs("skins")][xs("paint_kit_index_ssg08")], skins::paint_kit_index_ssg08);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_custom_clr")], skins::ssg08_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[0]")], skins::ssg08_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[1]")], skins::ssg08_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation1[2]")], skins::ssg08_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[0]")], skins::ssg08_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[1]")], skins::ssg08_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation2[2]")], skins::ssg08_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[0]")], skins::ssg08_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[1]")], skins::ssg08_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation3[2]")], skins::ssg08_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[0]")], skins::ssg08_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[1]")], skins::ssg08_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("ssg08_wpn_skin_modulation4[2]")], skins::ssg08_wpn_skin_modulation4[2]);
+
 			//awp
 			read_value(json[xs("skins")][xs("wear_awp")], skins::wear_awp);
 			read_value(json[xs("skins")][xs("vector_paint_kit_awp")], skins::vector_paint_kit_awp);
 			read_value(json[xs("skins")][xs("paint_kit_index_awp")], skins::paint_kit_index_awp);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_custom_clr")], skins::awp_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[0]")], skins::awp_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[1]")], skins::awp_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation1[2]")], skins::awp_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[0]")], skins::awp_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[1]")], skins::awp_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation2[2]")], skins::awp_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[0]")], skins::awp_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[1]")], skins::awp_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation3[2]")], skins::awp_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[0]")], skins::awp_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[1]")], skins::awp_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("awp_wpn_skin_modulation4[2]")], skins::awp_wpn_skin_modulation4[2]);
+
 			//scar
 			read_value(json[xs("skins")][xs("wear_scar")], skins::wear_scar);
 			read_value(json[xs("skins")][xs("vector_paint_kit_scar")], skins::vector_paint_kit_scar);
 			read_value(json[xs("skins")][xs("paint_kit_index_scar")], skins::paint_kit_index_scar);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_custom_clr")], skins::scar_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[0]")], skins::scar_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[1]")], skins::scar_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation1[2]")], skins::scar_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[0]")], skins::scar_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[1]")], skins::scar_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation2[2]")], skins::scar_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[0]")], skins::scar_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[1]")], skins::scar_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation3[2]")], skins::scar_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[0]")], skins::scar_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[1]")], skins::scar_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("scar_wpn_skin_modulation4[2]")], skins::scar_wpn_skin_modulation4[2]);
+
 			//g3sg1
 			read_value(json[xs("skins")][xs("wear_g3sg1")], skins::wear_g3sg1);
 			read_value(json[xs("skins")][xs("vector_paint_kit_g3sg1")], skins::vector_paint_kit_g3sg1);
 			read_value(json[xs("skins")][xs("paint_kit_index_g3sg1")], skins::paint_kit_index_g3sg1);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_custom_clr")], skins::g3sg1_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[0]")], skins::g3sg1_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[1]")], skins::g3sg1_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation1[2]")], skins::g3sg1_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[0]")], skins::g3sg1_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[1]")], skins::g3sg1_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation2[2]")], skins::g3sg1_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[0]")], skins::g3sg1_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[1]")], skins::g3sg1_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation3[2]")], skins::g3sg1_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[0]")], skins::g3sg1_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[1]")], skins::g3sg1_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("g3sg1_wpn_skin_modulation4[2]")], skins::g3sg1_wpn_skin_modulation4[2]);
+
 			//sawoff
 			read_value(json[xs("skins")][xs("wear_sawoff")], skins::wear_sawoff);
 			read_value(json[xs("skins")][xs("vector_paint_kit_sawoff")], skins::vector_paint_kit_sawoff);
 			read_value(json[xs("skins")][xs("paint_kit_index_sawoff")], skins::paint_kit_index_sawoff);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_custom_clr")], skins::sawoff_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[0]")], skins::sawoff_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[1]")], skins::sawoff_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation1[2]")], skins::sawoff_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[0]")], skins::sawoff_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[1]")], skins::sawoff_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation2[2]")], skins::sawoff_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[0]")], skins::sawoff_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[1]")], skins::sawoff_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation3[2]")], skins::sawoff_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[0]")], skins::sawoff_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[1]")], skins::sawoff_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("sawoff_wpn_skin_modulation4[2]")], skins::sawoff_wpn_skin_modulation4[2]);
+
 			//m249
 			read_value(json[xs("skins")][xs("wear_m249")], skins::wear_m249);
 			read_value(json[xs("skins")][xs("vector_paint_kit_m249")], skins::vector_paint_kit_m249);
 			read_value(json[xs("skins")][xs("paint_kit_index_m249")], skins::paint_kit_index_m249);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_custom_clr")], skins::m249_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[0]")], skins::m249_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[1]")], skins::m249_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation1[2]")], skins::m249_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[0]")], skins::m249_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[1]")], skins::m249_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation2[2]")], skins::m249_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[0]")], skins::m249_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[1]")], skins::m249_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation3[2]")], skins::m249_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[0]")], skins::m249_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[1]")], skins::m249_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("m249_wpn_skin_modulation4[2]")], skins::m249_wpn_skin_modulation4[2]);
+
 			//negev
 			read_value(json[xs("skins")][xs("wear_negev")], skins::wear_negev);
 			read_value(json[xs("skins")][xs("vector_paint_kit_negev")], skins::vector_paint_kit_negev);
 			read_value(json[xs("skins")][xs("paint_kit_index_negev")], skins::paint_kit_index_negev);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_custom_clr")], skins::negev_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[0]")], skins::negev_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[1]")], skins::negev_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation1[2]")], skins::negev_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[0]")], skins::negev_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[1]")], skins::negev_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation2[2]")], skins::negev_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[0]")], skins::negev_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[1]")], skins::negev_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation3[2]")], skins::negev_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[0]")], skins::negev_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[1]")], skins::negev_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("negev_wpn_skin_modulation4[2]")], skins::negev_wpn_skin_modulation4[2]);
+
 			//mag7
 			read_value(json[xs("skins")][xs("wear_mag7")], skins::wear_mag7);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mag7")], skins::vector_paint_kit_mag7);
 			read_value(json[xs("skins")][xs("paint_kit_index_mag7")], skins::paint_kit_index_mag7);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_custom_clr")], skins::mag7_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[0]")], skins::mag7_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[1]")], skins::mag7_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation1[2]")], skins::mag7_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[0]")], skins::mag7_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[1]")], skins::mag7_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation2[2]")], skins::mag7_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[0]")], skins::mag7_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[1]")], skins::mag7_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation3[2]")], skins::mag7_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[0]")], skins::mag7_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[1]")], skins::mag7_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mag7_wpn_skin_modulation4[2]")], skins::mag7_wpn_skin_modulation4[2]);
+
 			//xm1014
 			read_value(json[xs("skins")][xs("wear_xm1014")], skins::wear_xm1014);
 			read_value(json[xs("skins")][xs("vector_paint_kit_xm1014")], skins::vector_paint_kit_xm1014);
 			read_value(json[xs("skins")][xs("paint_kit_index_xm1014")], skins::paint_kit_index_xm1014);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_custom_clr")], skins::xm1014_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[0]")], skins::xm1014_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[1]")], skins::xm1014_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation1[2]")], skins::xm1014_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[0]")], skins::xm1014_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[1]")], skins::xm1014_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation2[2]")], skins::xm1014_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[0]")], skins::xm1014_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[1]")], skins::xm1014_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation3[2]")], skins::xm1014_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[0]")], skins::xm1014_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[1]")], skins::xm1014_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("xm1014_wpn_skin_modulation4[2]")], skins::xm1014_wpn_skin_modulation4[2]);
+
 			//nova
 			read_value(json[xs("skins")][xs("wear_nova")], skins::wear_nova);
 			read_value(json[xs("skins")][xs("vector_paint_kit_nova")], skins::vector_paint_kit_nova);
 			read_value(json[xs("skins")][xs("paint_kit_index_nova")], skins::paint_kit_index_nova);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_custom_clr")], skins::nova_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[0]")], skins::nova_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[1]")], skins::nova_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation1[2]")], skins::nova_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[0]")], skins::nova_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[1]")], skins::nova_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation2[2]")], skins::nova_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[0]")], skins::nova_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[1]")], skins::nova_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation3[2]")], skins::nova_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[0]")], skins::nova_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[1]")], skins::nova_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("nova_wpn_skin_modulation4[2]")], skins::nova_wpn_skin_modulation4[2]);
+
 			//bizon
 			read_value(json[xs("skins")][xs("wear_bizon")], skins::wear_bizon);
 			read_value(json[xs("skins")][xs("vector_paint_kit_bizon")], skins::vector_paint_kit_bizon);
 			read_value(json[xs("skins")][xs("paint_kit_index_bizon")], skins::paint_kit_index_bizon);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_custom_clr")], skins::bizon_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[0]")], skins::bizon_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[1]")], skins::bizon_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation1[2]")], skins::bizon_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[0]")], skins::bizon_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[1]")], skins::bizon_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation2[2]")], skins::bizon_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[0]")], skins::bizon_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[1]")], skins::bizon_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation3[2]")], skins::bizon_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[0]")], skins::bizon_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[1]")], skins::bizon_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("bizon_wpn_skin_modulation4[2]")], skins::bizon_wpn_skin_modulation4[2]);
+
 			//mp5sd
 			read_value(json[xs("skins")][xs("wear_mp5sd")], skins::wear_mp5sd);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mp5sd")], skins::vector_paint_kit_mp5sd);
 			read_value(json[xs("skins")][xs("paint_kit_index_mp5sd")], skins::paint_kit_index_mp5sd);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_custom_clr")], skins::mp5sd_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[0]")], skins::mp5sd_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[1]")], skins::mp5sd_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation1[2]")], skins::mp5sd_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[0]")], skins::mp5sd_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[1]")], skins::mp5sd_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation2[2]")], skins::mp5sd_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[0]")], skins::mp5sd_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[1]")], skins::mp5sd_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation3[2]")], skins::mp5sd_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[0]")], skins::mp5sd_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[1]")], skins::mp5sd_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mp5sd_wpn_skin_modulation4[2]")], skins::mp5sd_wpn_skin_modulation4[2]);
+
 			//mp7
 			read_value(json[xs("skins")][xs("wear_mp7")], skins::wear_mp7);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mp7")], skins::vector_paint_kit_mp7);
 			read_value(json[xs("skins")][xs("paint_kit_index_mp7")], skins::paint_kit_index_mp7);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_custom_clr")], skins::mp7_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[0]")], skins::mp7_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[1]")], skins::mp7_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation1[2]")], skins::mp7_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[0]")], skins::mp7_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[1]")], skins::mp7_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation2[2]")], skins::mp7_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[0]")], skins::mp7_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[1]")], skins::mp7_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation3[2]")], skins::mp7_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[0]")], skins::mp7_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[1]")], skins::mp7_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mp7_wpn_skin_modulation4[2]")], skins::mp7_wpn_skin_modulation4[2]);
+
 			//mp9
 			read_value(json[xs("skins")][xs("wear_mp9")], skins::wear_mp9);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mp9")], skins::vector_paint_kit_mp9);
 			read_value(json[xs("skins")][xs("paint_kit_index_mp9")], skins::paint_kit_index_mp9);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_custom_clr")], skins::mp9_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[0]")], skins::mp9_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[1]")], skins::mp9_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation1[2]")], skins::mp9_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[0]")], skins::mp9_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[1]")], skins::mp9_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation2[2]")], skins::mp9_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[0]")], skins::mp9_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[1]")], skins::mp9_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation3[2]")], skins::mp9_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[0]")], skins::mp9_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[1]")], skins::mp9_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mp9_wpn_skin_modulation4[2]")], skins::mp9_wpn_skin_modulation4[2]);
+
 			//mac10
 			read_value(json[xs("skins")][xs("wear_mac10")], skins::wear_mac10);
 			read_value(json[xs("skins")][xs("vector_paint_kit_mac10")], skins::vector_paint_kit_mac10);
 			read_value(json[xs("skins")][xs("paint_kit_index_mac10")], skins::paint_kit_index_mac10);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_custom_clr")], skins::mac10_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[0]")], skins::mac10_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[1]")], skins::mac10_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation1[2]")], skins::mac10_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[0]")], skins::mac10_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[1]")], skins::mac10_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation2[2]")], skins::mac10_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[0]")], skins::mac10_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[1]")], skins::mac10_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation3[2]")], skins::mac10_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[0]")], skins::mac10_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[1]")], skins::mac10_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("mac10_wpn_skin_modulation4[2]")], skins::mac10_wpn_skin_modulation4[2]);
+
 			//p90
 			read_value(json[xs("skins")][xs("wear_p90")], skins::wear_p90);
 			read_value(json[xs("skins")][xs("vector_paint_kit_p90")], skins::vector_paint_kit_p90);
 			read_value(json[xs("skins")][xs("paint_kit_index_p90")], skins::paint_kit_index_p90);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_custom_clr")], skins::p90_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[0]")], skins::p90_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[1]")], skins::p90_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation1[2]")], skins::p90_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[0]")], skins::p90_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[1]")], skins::p90_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation2[2]")], skins::p90_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[0]")], skins::p90_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[1]")], skins::p90_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation3[2]")], skins::p90_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[0]")], skins::p90_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[1]")], skins::p90_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("p90_wpn_skin_modulation4[2]")], skins::p90_wpn_skin_modulation4[2]);
+
 			//ump45
 			read_value(json[xs("skins")][xs("wear_ump45")], skins::wear_ump45);
 			read_value(json[xs("skins")][xs("vector_paint_kit_ump45")], skins::vector_paint_kit_ump45);
 			read_value(json[xs("skins")][xs("paint_kit_index_ump45")], skins::paint_kit_index_ump45);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_custom_clr")], skins::ump45_wpn_skin_custom_clr);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[0]")], skins::ump45_wpn_skin_modulation1[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[1]")], skins::ump45_wpn_skin_modulation1[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation1[2]")], skins::ump45_wpn_skin_modulation1[2]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[0]")], skins::ump45_wpn_skin_modulation2[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[1]")], skins::ump45_wpn_skin_modulation2[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation2[2]")], skins::ump45_wpn_skin_modulation2[2]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[0]")], skins::ump45_wpn_skin_modulation3[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[1]")], skins::ump45_wpn_skin_modulation3[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation3[2]")], skins::ump45_wpn_skin_modulation3[2]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[0]")], skins::ump45_wpn_skin_modulation4[0]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[1]")], skins::ump45_wpn_skin_modulation4[1]);
+			read_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[2]")], skins::ump45_wpn_skin_modulation4[2]);
 
 		}
 

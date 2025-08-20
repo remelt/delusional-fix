@@ -4,14 +4,14 @@
 + Stability (crashes)
     - prevented crashes when changing teams
     - prevented crashes when turning kz stats on
+    - fixed crashes when trying to load if config wasnt selected
+    - fixed injection problem because of installed fonts (s/o [@flowars](https://github.com/flowars))
 + Aimbot
     - extended backtrack now can be lower than 200 ms
 + Skins
     - model changer now applies ur default agent after disabling it
 + Misc
     - fixed hitlog chatprint
-+ Config
-    - fixed crashes when trying to load if config wasnt selected
 
 # Added :
 + Aimbot
@@ -27,6 +27,8 @@
     - added misshop for inui gaming (s/o [@flowars](https://github.com/flowars))
 + Misc
     - added only local spectatorlist option
++ Skins
+    - added skinchager for weapons
 + Config
     - load only (aimbot/visuals/movement/skins/misc)
 

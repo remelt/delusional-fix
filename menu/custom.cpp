@@ -35,17 +35,45 @@ void menu::render_tab(const char* szTabBar, const ctab* arrTabs, const std::size
     ImGui::PopStyleColor(2);
 }
 
+// CHECKING FONTS SAFELY ( s/o flowars )
+
 std::vector<std::string> menu::get_installed_fonts() {
     std::vector<std::string> fonts;
     fonts.push_back("default");
-    for (const auto& entry : std::filesystem::directory_iterator("C:\\Windows\\Fonts")) {
-        std::string fontName = entry.path().filename().string();
-        if (fontName.find(".ttf") != std::string::npos) {
-            fonts.push_back(fontName);
+
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator("C:\\Windows\\Fonts")) {
+            try {
+                std::string fontName = entry.path().filename().string();
+                if (fontName.find(".ttf") != std::string::npos) {
+                    fonts.push_back(fontName);
+                }
+            }
+            catch (const std::exception& e) {
+
+                continue;
+            }
         }
     }
+    catch (const std::exception& e) {
+
+    }
+
     return fonts;
 }
+
+//std::vector<std::string> menu::get_installed_fonts() {
+//    std::vector<std::string> fonts;
+//    fonts.emplace_back("default");
+//    for (const auto& entry : std::filesystem::directory_iterator("C:\\Windows\\Fonts\\")) {
+//        auto ext = entry.path().extension().string();
+//        if (ext == ".ttf" || ext == ".otf")
+//        {
+//            fonts.emplace_back(entry.path().filename().string());
+//        }
+//    }
+//    return fonts;
+//}
 
 void menu::load_font_index() {
     fonts::selected_font_index_main_indi = c::fonts::indi_font;
