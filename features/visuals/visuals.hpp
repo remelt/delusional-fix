@@ -90,6 +90,7 @@ namespace features::visuals {
 
 namespace features::weather {
 	static bool last_state = false;
+	static bool last_state_type = false;
 	static bool created_rain = false;
 
 	static precipitation_t* rain_entity = nullptr;

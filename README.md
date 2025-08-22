@@ -8,6 +8,8 @@
     - fixed injection problem because of installed fonts (s/o [@flowars](https://github.com/flowars))
 + Aimbot
     - extended backtrack now can be lower than 200 ms
++ Visuals
+    - fixed precipitation (kinda)
 + Skins
     - model changer now applies ur default agent after disabling it
 + Misc
@@ -34,7 +36,6 @@
 
 # TODO :
 + Fix chatprintf in jumpstats
-+ Fix precipitation
 + Fix unload
 + Add edgebug, ps and bounce assist from lobotomy
 
