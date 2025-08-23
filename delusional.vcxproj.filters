@@ -369,6 +369,9 @@
     <ClCompile Include="features\aimbot\backtrack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="features\movement\lobotomy_eb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\xor.hpp">
@@ -1155,6 +1158,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\model\model.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="features\movement\lobotomy_eb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

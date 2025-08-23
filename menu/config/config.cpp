@@ -759,6 +759,19 @@ namespace c {
 		write_value(json[xs("movement")][xs("edge_bug")], movement::edge_bug);
 		write_value(json[xs("movement")][xs("visualize_edge_bug")], movement::visualize_edge_bug);
 		write_value(json[xs("movement")][xs("edge_bug_advanced_search")], movement::edge_bug_advanced_search);
+
+		//lb
+		write_value(json[xs("movement")][xs("edgebug_type")], movement::edgebug_type);
+		write_value(json[xs("movement")][xs("AutoStrafeEdgeBug")], movement::AutoStrafeEdgeBug);
+		write_value(json[xs("movement")][xs("EdgeBugAdvanceSearch")], movement::EdgeBugAdvanceSearch);
+		write_value(json[xs("movement")][xs("SiletEdgeBug")], movement::SiletEdgeBug);
+		write_value(json[xs("movement")][xs("MegaEdgeBug")], movement::MegaEdgeBug);
+		write_value(json[xs("movement")][xs("EdgeBugCircle")], movement::EdgeBugCircle);
+		write_value(json[xs("movement")][xs("deltascaler")], movement::deltascaler);
+		write_value(json[xs("movement")][xs("DeltaType")], movement::DeltaType);
+		write_value(json[xs("movement")][xs("EdgeBugTicks")], movement::EdgeBugTicks);
+		write_value(json[xs("movement")][xs("EdgeBugMouseLock")], movement::EdgeBugMouseLock);
+
 		write_value(json[xs("movement")][xs("auto_duck")], movement::auto_duck);
 		write_value(json[xs("movement")][xs("auto_duck_key")], movement::auto_duck_key);
 		write_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);
@@ -1046,7 +1059,7 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("backtrack")], backtrack::backtrack);
 		write_value(json[xs("aimbot")][xs("time")], backtrack::time);
 		write_value(json[xs("aimbot")][xs("fake")], backtrack::fake);
-		write_value(json[xs("aimbot")][xs("fake_latency")], backtrack::fake_latency);\
+		write_value(json[xs("aimbot")][xs("fake_latency")], backtrack::fake_latency);
 		write_value(json[xs("aimbot")][xs("selected_tick")], backtrack::selected_tick);
 		write_value(json[xs("movement")][xs("auto_align")], movement::auto_align);
 		write_value(json[xs("aimbot")][xs("aimbot")], aimbot::aim_at_bt);
@@ -2109,6 +2122,19 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug_ticks")], movement::edge_bug_ticks);
 			read_value(json[xs("movement")][xs("edge_bug_rape")], movement::edge_bug_rape);
 			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
+
+			//lb
+			read_value(json[xs("movement")][xs("edgebug_type")], movement::edgebug_type);
+			read_value(json[xs("movement")][xs("AutoStrafeEdgeBug")], movement::AutoStrafeEdgeBug);
+			read_value(json[xs("movement")][xs("EdgeBugAdvanceSearch")], movement::EdgeBugAdvanceSearch);
+			read_value(json[xs("movement")][xs("SiletEdgeBug")], movement::SiletEdgeBug);
+			read_value(json[xs("movement")][xs("MegaEdgeBug")], movement::MegaEdgeBug);
+			read_value(json[xs("movement")][xs("EdgeBugCircle")], movement::EdgeBugCircle);
+			read_value(json[xs("movement")][xs("deltascaler")], movement::deltascaler);
+			read_value(json[xs("movement")][xs("DeltaType")], movement::DeltaType);
+			read_value(json[xs("movement")][xs("EdgeBugTicks")], movement::EdgeBugTicks);
+			read_value(json[xs("movement")][xs("EdgeBugMouseLock")], movement::EdgeBugMouseLock);
+
 			read_value(json[xs("movement")][xs("delay_hop")], movement::delay_hop);
 			read_value(json[xs("movement")][xs("delay_hop_key")], movement::delay_hop_key);
 			read_value(json[xs("movement")][xs("stamina_hop_ticks")], movement::dh_tick);
@@ -2925,6 +2951,19 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug")], movement::edge_bug);
 			read_value(json[xs("movement")][xs("visualize_edge_bug")], movement::visualize_edge_bug);
 			read_value(json[xs("movement")][xs("edge_bug_advanced_search")], movement::edge_bug_advanced_search);
+
+			//lb
+			read_value(json[xs("movement")][xs("edgebug_type")], movement::edgebug_type);
+			read_value(json[xs("movement")][xs("AutoStrafeEdgeBug")], movement::AutoStrafeEdgeBug);
+			read_value(json[xs("movement")][xs("EdgeBugAdvanceSearch")], movement::EdgeBugAdvanceSearch);
+			read_value(json[xs("movement")][xs("SiletEdgeBug")], movement::SiletEdgeBug);
+			read_value(json[xs("movement")][xs("MegaEdgeBug")], movement::MegaEdgeBug);
+			read_value(json[xs("movement")][xs("EdgeBugCircle")], movement::EdgeBugCircle);
+			read_value(json[xs("movement")][xs("deltascaler")], movement::deltascaler);
+			read_value(json[xs("movement")][xs("DeltaType")], movement::DeltaType);
+			read_value(json[xs("movement")][xs("EdgeBugTicks")], movement::EdgeBugTicks);
+			read_value(json[xs("movement")][xs("EdgeBugMouseLock")], movement::EdgeBugMouseLock);
+
 			read_value(json[xs("movement")][xs("auto_duck")], movement::auto_duck);
 			read_value(json[xs("movement")][xs("auto_duck_key")], movement::auto_duck_key);
 			read_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);

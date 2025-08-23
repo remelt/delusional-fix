@@ -37,6 +37,7 @@ void features::weather::update_weather() {
                 interfaces::console->get_convar("r_rainwidth")->set_value("0.6");
                 interfaces::console->get_convar("r_RainSideVel")->set_value("130");
                 interfaces::console->get_convar("r_rainalpha")->set_value("0.8");
+                interfaces::console->get_convar("r_rainradius")->set_value("1500.f");
             }
             else if (c::visuals::weather_type == 1) {
                 interfaces::console->get_convar("r_rainlength")->set_value("0.03");
@@ -44,6 +45,7 @@ void features::weather::update_weather() {
                 interfaces::console->get_convar("r_rainwidth")->set_value("2");
                 interfaces::console->get_convar("r_RainSideVel")->set_value("20");
                 interfaces::console->get_convar("r_rainalpha")->set_value("1");
+                interfaces::console->get_convar("r_rainradius")->set_value("1000.f");
             }
 
             rain_entity = reinterpret_cast<precipitation_t*>(interfaces::ent_list->get_client_entity(MAX_EDICTS - 1));

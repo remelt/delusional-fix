@@ -19,7 +19,8 @@ static const char* indicators[8] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "
 const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
 const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark" };
 static const char* hitboxes[] = { "head","neck","chest","pelvis" };
-static const char* WeatherTypes[] = { "Rain","Snow","Ash","SnowFall","4","5","6","7"};
+static const char* WeatherTypes[] = { "rain","snow" };
+static const char* EdgebugTypes[] = { "delusional (og)","lobotomy" };
 static const char* removals[5] = { "r_3dsky", "mat_postprocess", "cl_shadows", "mat_disable_bloom", "panorama_disable_blur" };
 static const char* materials[] = { "regular", "flat", "crystal", "pearlescent", "reverse pearlescent", "fog", "damascus", "model" };
 static const char* chams_overlay_types[] = { "glow", "outline", "metallic", "snow" };
@@ -2335,20 +2336,45 @@ void miscellaneous() {
             }
             ImGui::Checkbox(("auto edgebug"), &c::movement::edge_bug);
             if (c::movement::edge_bug) {
-                ImGui::Keybind(("edgebug key"), &c::movement::edge_bug_key, &c::movement::edge_bug_key_s);
-                ImGui::Checkbox(("advanced detection"), &c::movement::edge_bug_strafe);
-                if (c::movement::edge_bug_strafe) {
-                    //ImGui::Text(("angle limit"));
-                    //ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
-                    ImGui::Text(("search amount"));
-                    ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 45);
+                ImGui::Text("edgebug type");
+                ImGui::Combo(("##edgebug type combo"), &c::movement::edgebug_type, EdgebugTypes, IM_ARRAYSIZE(EdgebugTypes));
+                switch (c::movement::edgebug_type) {
+                    case 0:
+                        ImGui::Keybind(("edgebug key"), &c::movement::edge_bug_key, &c::movement::edge_bug_key_s);
+                        ImGui::Checkbox(("advanced detection"), &c::movement::edge_bug_strafe);
+                        if (c::movement::edge_bug_strafe) {
+                            //ImGui::Text(("angle limit"));
+                            //ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
+                            ImGui::Text(("search amount"));
+                            ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 45);
+                        }
+                        ImGui::Text(("edge bug ticks"));
+                        ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 512);
+                        ImGui::Text(("mouse lock factor"));
+                        ImGui::SliderFloat(("##mouse lock percentage"), &c::movement::edge_bug_lock_amount, 0.f, 100.f, ("%.2f%%"));
+                        break;
+                    case 1:
+                        ImGui::Keybind(("edgebug key"), &c::movement::edge_bug_key, &c::movement::edge_bug_key_s);
+                        ImGui::Checkbox("advanced search", &c::movement::EdgeBugAdvanceSearch);
+                        ImGui::Checkbox("silent", &c::movement::SiletEdgeBug);
+                        if (c::movement::EdgeBugAdvanceSearch) {
+                            ImGui::Text("edge bug circle");
+                            ImGui::SliderInt(("##ebcircle"), &c::movement::EdgeBugCircle, 2, 20);
+                            ImGui::Checkbox("extra advanced", &c::movement::MegaEdgeBug);
+                            ImGui::Checkbox("autostrafe to edge", &c::movement::AutoStrafeEdgeBug);
+                            if (!c::movement::AutoStrafeEdgeBug)
+                            {
+                                ImGui::Text("strafe angle");
+                                ImGui::SliderFloat(("##dStrafeClamp"), &c::movement::deltascaler, 1.f, 179.f);
+                                ImGui::Combo("delta scale", &c::movement::DeltaType, "full\0two-fifths\0half\0quarter\0");
+                            }
+                        }
+                        ImGui::Text("edge bug ticks");
+                        ImGui::SliderInt(("##Ticks"), &c::movement::EdgeBugTicks, 1, 128);
+                        ImGui::Text("mouse lock factor");
+                        ImGui::SliderFloat(("##MouseLock"), &c::movement::EdgeBugMouseLock, 0.0f, 100.0f, "%.2f%%");
                 }
-                ImGui::Text(("edge bug ticks"));
-                ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 512);
-                ImGui::Text(("mouse lock factor"));
-                ImGui::SliderFloat(("##mouse lock percentage"), &c::movement::edge_bug_lock_amount, 0.f, 100.f, ("%.2f%%"));
             }
-
             ImGui::Checkbox(("auto ladderbug"), &c::movement::ladder_bug);
             if (c::movement::ladder_bug) {
                 ImGui::Keybind(("ladderglide key"), &c::movement::ladder_bug_key, &c::movement::ladder_bug_key_s);
@@ -2472,7 +2498,7 @@ void miscellaneous() {
 
                 ImGui::Checkbox(("eb print chat"), &c::movement::edge_bug_detection_printf);
                 ImGui::Text(("eb sound"));
-                ImGui::Combo(("##ebsound"), &c::movement::edge_bug_detection_sound, "none\0money collect\0switch press\0");
+                ImGui::Combo(("##ebsound"), &c::movement::edge_bug_detection_sound, "none\0arena_switch_press_02\0button22\0money_collect_01\0beep07\0");
                 ImGui::Checkbox(("jb print chat"), &c::movement::jump_bug_detection_printf);
                 ImGui::Checkbox(("ps print chat"), &c::movement::pixel_surf_detection_printf);
                 //ImGui::Checkbox(("lb print chat"), &c::movement::ladder_bug_detection_printf);
@@ -2595,10 +2621,10 @@ void miscellaneous() {
                 if (ImGui::BeginPopup(("config save popup"))) {
                     ImGui::Text(("are you sure you want to save selected config? "));
 
-                    static const char* choices[]{ "  yes", "  no" };
+                    static const char* choices1[]{ "  yes", "  no" };
 
-                    for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
-                        if (ImGui::Selectable(choices[i]))
+                    for (auto i = 0; i < IM_ARRAYSIZE(choices1); i++)
+                        if (ImGui::Selectable(choices1[i]))
                             if (i == 0) {
                                 if (config_index == -1) {
                                     if (interfaces::engine->is_in_game()) {
@@ -2646,10 +2672,10 @@ void miscellaneous() {
                 if (ImGui::BeginPopup(("load only popup"))) {
                     ImGui::Text(("what settings do u want to load? "));
 
-                    static const char* choices[]{ "  aimbot", "  visuals", "  movement", "  skins", "  misc" };
+                    static const char* choices2[] = { "  aimbot", "  visuals", "  movement", "  skins", "  misc" };
 
-                    for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
-                        if (ImGui::Selectable(choices[i]))
+                    for (auto i = 0; i < IM_ARRAYSIZE(choices2); i++)
+                        if (ImGui::Selectable(choices2[i]))
                             // we check if config is chosen
                             if (config_index == -1) {
                                 if (interfaces::engine->is_in_game()) {
@@ -3628,7 +3654,7 @@ void menu::render() {
             ctab{ "mr", &rec },
         };
 
-        render_tab("main_tabs", tabs, 7U, &main_tab, style.Colors[ImGuiCol_TabHovered]);
+        render_tab("main_tabs", tabs, 6U, &main_tab, style.Colors[ImGuiCol_TabHovered]);
 
         ImGui::End();
 

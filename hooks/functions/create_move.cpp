@@ -8,6 +8,7 @@
 #include "../../sdk/math/math.hpp"
 #include "../../sdk/sdk.hpp"
 #include "../hooks.hpp"
+#include "../../features/movement/lobotomy_eb.h"
 
 bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime, c_usercmd* cmd ) {
 	bool ret = sdk::hooks::create_move::ofunc(ecx, edx, sampletime, cmd);
@@ -43,10 +44,13 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	prediction::backup_originals(cmd);
 
+	lobotomy_eb::PrePredictionEdgeBug(cmd);
+
 	prediction::begin(cmd); {
 
 		features::movement::null_strafing(cmd);
 		aimbot::run(cmd);
+		lobotomy_eb::edgebug_detect(cmd);
 		triggerbot::run(cmd);
 		backtrack.on_move(cmd);
 
@@ -71,6 +75,8 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::pixel_surf_lock(cmd);
 
 	features::movement::edge_bug(cmd);
+
+	lobotomy_eb::EdgeBugPostPredict(cmd);
 
 	if (interfaces::prediction->split->commands_predicted > 1)
 				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);

@@ -466,6 +466,7 @@
     <ClCompile Include="includes\minhook\hde\hde64.c" />
     <ClCompile Include="includes\minhook\hook.c" />
     <ClCompile Include="includes\minhook\trampoline.c" />
+    <ClCompile Include="features\movement\lobotomy_eb.cpp" />
     <ClCompile Include="menu\config\config.cpp" />
     <ClCompile Include="menu\custom.cpp" />
     <ClCompile Include="menu\menu.cpp" />
@@ -675,6 +676,7 @@
     <ClInclude Include="includes\nlohmann\ordered_map.hpp" />
     <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="features\movement\lobotomy_eb.h" />
     <ClInclude Include="menu\config\config.hpp" />
     <ClInclude Include="menu\fonts\icon.h" />
     <ClInclude Include="menu\fonts\menu_font.hpp" />

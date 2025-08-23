@@ -6,8 +6,11 @@
 #include "../../features/misc/misc.hpp"
 #include "../../features/movement/movement.hpp"
 #include "../../features/movement/prediction/prediction.hpp"
+#include "../../features/movement/lobotomy_eb.h"
 
 void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
+
+	lobotomy_eb::frame_stage(stage);
 
 	if (stage == frame_render_start) {
 		features::misc::force_crosshair();

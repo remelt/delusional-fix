@@ -156,6 +156,16 @@ namespace c {
 		inline int edge_bug_priority = 0;
 		inline int edge_bug_key = 0;
 		inline int edge_bug_key_s = 1;
+		inline int edgebug_type = 0;
+		inline bool AutoStrafeEdgeBug = false;
+		inline bool EdgeBugAdvanceSearch = false;
+		inline bool SiletEdgeBug = false;
+		inline bool MegaEdgeBug = false;
+		inline int EdgeBugCircle = 2;
+		inline float deltascaler = 1.f;
+		inline int DeltaType = 0;
+		inline int EdgeBugTicks = 0;
+		inline float EdgeBugMouseLock = 0.f;
 		inline int edge_bug_ticks = 32;
 		inline int edge_bug_rape = 5;
 		inline float edge_bug_angle_limit = 0.0f;

@@ -3,6 +3,7 @@
 #include "../../menu/menu.hpp"
 #include "../../menu/config/config.hpp"
 #include "../movement/prediction/prediction.hpp"
+#include "lobotomy_eb.h"
 
 void features::movement::bhop(c_usercmd* cmd) {
 	if (!g::local || !g::local->is_alive()) {
@@ -595,7 +596,7 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 }
 
 void features::movement::edge_bug(c_usercmd* cmd) {
-	if (!c::movement::edge_bug || !menu::checkkey(c::movement::edge_bug_key, c::movement::edge_bug_key_s) || !g::local) {
+	if (!c::movement::edge_bug || !menu::checkkey(c::movement::edge_bug_key, c::movement::edge_bug_key_s) || !g::local || c::movement::edgebug_type == 1) {
 		detect_data.detecttick = 0;
 		detect_data.edgebugtick = 0;
 		detect_data.ticks_left = 0;
@@ -739,6 +740,13 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		if (detect_data.ticks_left == 1) {
 			if (c::movement::edge_bug_detection_printf) {
 				interfaces::chat_element->chatprintf("#delusional#_print_edgebugged");
+			}
+			switch (c::movement::edge_bug_detection_sound) {
+			case 0: break;
+			case 1: interfaces::surface->play_sound("buttons\\arena_switch_press_02.wav"); break;
+			case 2: interfaces::surface->play_sound("buttons\\button22.wav"); break;
+			case 3: interfaces::surface->play_sound("survival\\money_collect_01.wav"); break;
+			case 4: interfaces::surface->play_sound("Ui\\beep07.wav"); break;
 			}
 			detected_normal_edge_bug = true;
 		}
@@ -1288,9 +1296,14 @@ void features::movement::indicators() {
 	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, as_alpha = 0;
 	int position = 0;
 
-	if (c::movement::indicators_show[0])
-		render_indicator(c::movement::edge_bug_key, c::movement::edge_bug_key_s, eb_alpha, eb_clr, "eb", false, should_edge_bug, c::movement::detection_clr_for[0], position);
-	
+	if (c::movement::indicators_show[0]) {
+		if (c::movement::edgebug_type == 0) {
+			render_indicator(c::movement::edge_bug_key, c::movement::edge_bug_key_s, eb_alpha, eb_clr, "eb", false, should_edge_bug, c::movement::detection_clr_for[0], position);
+		}
+		else {
+			render_indicator(c::movement::edge_bug_key, c::movement::edge_bug_key_s, eb_alpha, eb_clr, "eb", false, lobotomy_eb::EdgeBug_Founded, c::movement::detection_clr_for[0], position);
+		}
+	}
 	if (c::movement::indicators_show[2])
 		render_indicator(c::movement::long_jump_key, c::movement::long_jump_key_s, lj_alpha, lj_clr, "lj", true, should_lj, c::movement::detection_clr_for[2], position, saved_tick_lj);
 
@@ -1543,7 +1556,7 @@ void features::movement::visualize_eb() {
 		return;
 	}
 
-	if (c::movement::visualize_edge_bug && detect_data.ticks_left) {
+	if (c::movement::visualize_edge_bug && detect_data.ticks_left && c::movement::edgebug_type == 0) {
 
 		for (int i = 0; i < ebpos.size() - 1; i++) {
 			vec3_t cur;
@@ -1558,6 +1571,27 @@ void features::movement::visualize_eb() {
 			interfaces::debug_overlay->world_to_screen(vec3_t{ ebpos.at(ebpos.size() - 1).x - 16.f, ebpos.at(ebpos.size() - 1).y + 16.f, ebpos.at(ebpos.size() - 1).z }, endpoints[1]) &&
 			interfaces::debug_overlay->world_to_screen(vec3_t{ ebpos.at(ebpos.size() - 1).x + 16.f, ebpos.at(ebpos.size() - 1).y - 16.f, ebpos.at(ebpos.size() - 1).z }, endpoints[2]) &&
 			interfaces::debug_overlay->world_to_screen(vec3_t{ ebpos.at(ebpos.size() - 1).x + 16.f, ebpos.at(ebpos.size() - 1).y + 16.f, ebpos.at(ebpos.size() - 1).z }, endpoints[3]))
+		{
+			im_render.drawline(endpoints[0].x, endpoints[0].y, endpoints[1].x, endpoints[1].y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));
+			im_render.drawline(endpoints[1].x, endpoints[1].y, endpoints[3].x, endpoints[3].y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));
+			im_render.drawline(endpoints[3].x, endpoints[3].y, endpoints[2].x, endpoints[2].y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));
+			im_render.drawline(endpoints[2].x, endpoints[2].y, endpoints[0].x, endpoints[0].y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));
+		}
+	}
+	else if (c::movement::visualize_edge_bug && lobotomy_eb::EdgeBug_Founded && c::movement::edgebug_type == 1) {
+		for (int i = 0; i < lobotomy_eb::lbebpos.size() - 1; i++) {
+			vec3_t cur;
+			vec3_t next;
+			if (interfaces::debug_overlay->world_to_screen(lobotomy_eb::lbebpos.at(i), cur) && interfaces::debug_overlay->world_to_screen(lobotomy_eb::lbebpos.at(i + 1), next)) {
+				im_render.drawline(cur.x, cur.y, next.x, next.y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));
+			}
+		}
+
+		vec3_t endpoints[4];
+		if (interfaces::debug_overlay->world_to_screen(vec3_t{ lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).x - 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).y - 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).z }, endpoints[0]) &&
+			interfaces::debug_overlay->world_to_screen(vec3_t{ lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).x - 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).y + 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).z }, endpoints[1]) &&
+			interfaces::debug_overlay->world_to_screen(vec3_t{ lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).x + 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).y - 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).z }, endpoints[2]) &&
+			interfaces::debug_overlay->world_to_screen(vec3_t{ lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).x + 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).y + 16.f, lobotomy_eb::lbebpos.at(lobotomy_eb::lbebpos.size() - 1).z }, endpoints[3]))
 		{
 			im_render.drawline(endpoints[0].x, endpoints[0].y, endpoints[1].x, endpoints[1].y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));
 			im_render.drawline(endpoints[1].x, endpoints[1].y, endpoints[3].x, endpoints[3].y, color_t(c::movement::visualize_edge_bug_clr[0], c::movement::visualize_edge_bug_clr[1], c::movement::visualize_edge_bug_clr[2]));

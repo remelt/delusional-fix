@@ -1,9 +1,10 @@
 #include "../hooks.hpp"
 #include "../../menu/config/config.hpp"
 #include "../../features/movement/movement.hpp"
+#include "../../features/movement/lobotomy_eb.h"
 
 void __fastcall sdk::hooks::override_mouse_input::override_mouse_input( void* this_, int edx, float* x, float* y ) {
-
+	lobotomy_eb::edgebug_lock(*x, *y);
 	if (features::movement::detect_data.ticks_left) {
 		switch (c::movement::edge_bug_lock_type) {
 		case 0: //static
