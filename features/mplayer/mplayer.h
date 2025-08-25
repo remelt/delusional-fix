@@ -18,6 +18,7 @@
 #include <d3d9.h>
 #include <d3dx9tex.h>
 #include <sdkddkver.h>
+#include "optimization.h"
 #pragma comment( lib, "d3d9.lib" )
 #pragma comment( lib, "d3dx9.lib" )
 
@@ -31,21 +32,22 @@ using namespace winrt::Windows::Media::Control;
 class mPlayer
 {
 private:
+	StringPool pool_;
 
+	char* SourceAppUserModeId{ nullptr };
+	char* AlbumArtist{ nullptr };
+	char* AlbumTitle{ nullptr };
+	char* Thumbnail_type{ nullptr };
 
 public:
 	std::optional< GlobalSystemMediaTransportControlsSessionManager > sessionManager;
 	std::optional< IRandomAccessStreamWithContentType > thumbnail;
 	std::optional< GlobalSystemMediaTransportControlsSession > session;
 	bool HasMedia = false;
-	char* SourceAppUserModeId;
 	std::string Title;
 	std::string Artist;
-	char* AlbumArtist;
-	char* AlbumTitle;
 	int TrackNumber;
 	int AlbumTrackCount;
-	char* Thumbnail_type;
 	void* Thumbnail_buffer;
 	int Thumbnail_size;
 	bool hasthumnnail = false;
@@ -55,7 +57,6 @@ public:
 
 	LPDIRECT3DTEXTURE9 thumb;
 
-	void Initialize();
 	concurrency::task< void > Update(LPDIRECT3DDEVICE9 g_pd3dDevice);
 };
 

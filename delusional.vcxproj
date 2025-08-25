@@ -685,6 +685,7 @@
     <ClInclude Include="menu\fonts\icon.h" />
     <ClInclude Include="menu\fonts\menu_font.hpp" />
     <ClInclude Include="menu\menu.hpp" />
+    <ClInclude Include="features\mplayer\optimization.h" />
     <ClInclude Include="sdk\classes\animstate.hpp" />
     <ClInclude Include="sdk\classes\collideable.hpp" />
     <ClInclude Include="sdk\classes\convar.hpp" />

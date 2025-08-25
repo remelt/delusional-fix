@@ -119,6 +119,8 @@ void GetNowPlayingInfoAndSaveAlbumArt(void* instance)
         strartist = mplayer.Artist;
         Sleep(1);
         strtitle = mplayer.Title;
+        Sleep(1);
+        albumArtTexture = mplayer.thumb;
         Sleep(1000);
     }
 }

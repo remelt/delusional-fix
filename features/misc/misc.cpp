@@ -219,7 +219,10 @@ void features::misc::spectators_list() {
 				if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0)
 					y = 45;
 				else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1)
-					y = 65;
+					if (c::misc::progressbar_enable)
+						y = 77;
+					else
+						y = 68;
 				else
 					y = 30;
 			}
@@ -227,7 +230,10 @@ void features::misc::spectators_list() {
 				y = 20;
 			}
 			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1) {
-				y = 40;
+				if (c::misc::progressbar_enable)
+					y = 52;
+				else
+					y = 43;
 			}
 
 			ImColor spec_clr = ImColor(c::misc::spectators_list_color_2[0], c::misc::spectators_list_color_2[1], c::misc::spectators_list_color_2[2]);

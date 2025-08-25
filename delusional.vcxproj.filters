@@ -1169,6 +1169,9 @@
     <ClInclude Include="features\mplayer\mplayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="features\mplayer\optimization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="includes\imgui\LICENSE.txt" />

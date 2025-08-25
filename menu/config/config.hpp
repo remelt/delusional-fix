@@ -287,6 +287,7 @@ namespace c {
 		inline bool sniper_crosshair = false;
 		inline bool watermark = true;
 		inline bool show_spotify_currently_playing = false;
+		inline bool spotify_fps_boost = false;
 		inline bool progressbar_enable = false;
 		inline int player_type = 0;
 		inline bool spectators_list = true;
