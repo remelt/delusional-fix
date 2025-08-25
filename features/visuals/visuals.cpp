@@ -1,6 +1,7 @@
 #include "../visuals/visuals.hpp"
 #include "../../menu/config/config.hpp"
 #include "../../menu/menu.hpp"
+#include "../mplayer/mplayer.h"
 //#include "../visuals/display/display.hpp"
 
 void draw_screen_effect(i_material* material) {
@@ -306,18 +307,131 @@ void features::visuals::watermark() {
 	ImGui::GetBackgroundDrawList()->AddText( fonts::watermark_font, 12.f, ImVec2(w - text_size.x - padding.x - margin.x, padding.y + margin.y), ImColor(255, 255, 255), main.c_str());
 }
 
+static std::chrono::steady_clock::time_point progressStartTime = std::chrono::steady_clock::now();
+static double calculatedPositionMs = 0.0;
+static std::string lastTitle = "";
+
+void UpdateCalculatedTrackPosition(mPlayer& mplayer)
+{
+	if (lastTitle != mplayer.Title) {
+		calculatedPositionMs = 0.0;
+		progressStartTime = std::chrono::steady_clock::now();
+		lastTitle = mplayer.Title;
+	}
+
+	if (mplayer.isPlaying) {
+		auto now = std::chrono::steady_clock::now();
+		auto deltaMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - progressStartTime).count();
+		calculatedPositionMs += deltaMs;
+		progressStartTime = now;
+	}
+}
+
+void features::visuals::RenderMediaPlayer()
+{
+	if (!c::misc::show_spotify_currently_playing || c::misc::player_type == 0)
+		return;
+
+	UpdateCalculatedTrackPosition(mplayer);
+
+	float progress = 0.0f;
+	if (mplayer.TotalTime > 0) {
+		progress = static_cast<float>(calculatedPositionMs) / static_cast<float>(mplayer.TotalTime);
+		if (progress > 1.0f)
+			progress = 1.0f;
+	}
+
+	static float smoothProgress = 0.0f;
+	if (progress < smoothProgress)
+		smoothProgress = progress;
+	smoothProgress += (progress - smoothProgress) * 0.1f;
+
+	static ImVec2 sz{ };
+	int x, y;
+	interfaces::engine->get_screen_size(x, y);
+	float m = c::misc::watermark ? 25: 0;
+	ImGui::SetNextWindowPos({ x - sz.x + 2, 4.5f + m });
+
+	ImGui::Begin("Media Player", nullptr,
+		ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+	float padding = 10.0f;
+	float imageWidth = 30.0f;
+	float imageHeight = 30.0f;
+
+
+	auto sizex1 = ImGui::CalcTextSize(strartist.c_str()).x;
+	auto sizex2 = ImGui::CalcTextSize(strtitle.c_str()).x;
+
+	float sizey1 = y * 1.5f / 720.f;
+	float sizey2 = y * 1.5f / 720.f;
+
+	auto text_size1 = im_render.measure_text(strartist.c_str(), fonts::lb_player_font, 12.f);
+	auto text_size2 = im_render.measure_text(strtitle.c_str(), fonts::lb_player_font, 12.f);
+
+	float windowWidth = ImGui::GetWindowSize().x;
+
+	ImGui::PushFont(fonts::lb_player_font);
+
+	//TODO: ALIGN TEXT TO IMAGE CENTER PROPERLY
+
+	if (albumArtTexture) {
+		ImGui::SetCursorPos(ImVec2(windowWidth - imageWidth - padding, 3));
+		ImGui::Image(albumArtTexture, ImVec2(imageWidth, imageWidth));
+	}
+	if (albumArtTexture)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size1.x - padding + 2, imageHeight / 2 - (text_size1.y) / 2 + 9 + 1 });
+	else
+		ImGui::SetCursorPos({ windowWidth - padding - text_size1.x - padding + 2, imageHeight / 2 - (text_size1.y) / 2 + 9 + 1 });
+
+	ImGui::TextColored(ImVec4(0.f, 0.f, 0.f, 1.f), strartist.c_str());
+	if (albumArtTexture)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size1.x - padding + 1 + 2, imageHeight / 2 - (text_size1.y) / 2 + 9 });
+	else
+		ImGui::SetCursorPos({ windowWidth - padding - text_size1.x - padding + 1 + 2, imageHeight / 2 - (text_size1.y) / 2 + 9 });
+	ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.f), strartist.c_str());
+	if (albumArtTexture)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size2.x - padding + 2, imageHeight / 2 - (text_size2.y) / 2 - 3 + 1 });
+	else
+		ImGui::SetCursorPos({ windowWidth - padding - text_size2.x - padding + 2, imageHeight / 2 - (text_size2.y) / 2 - 3 + 1 });
+
+	ImGui::TextColored(ImVec4(0.f, 0.f, 0.f, 1.f), strtitle.c_str());
+	if (albumArtTexture)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size2.x - padding + 1 + 2, imageHeight / 2 - (text_size2.y) / 2 - 3 });
+	else
+		ImGui::SetCursorPos({ windowWidth - padding - text_size2.x - padding + 1 + 2, imageHeight / 2 - (text_size2.y) / 2 - 3 });
+	ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), strtitle.c_str());
+
+	if (albumArtTexture && c::misc::progressbar_enable) {
+		ImGui::PushItemWidth(158);
+		ImGui::SetCursorPos({ sz.x - imageWidth - padding - 128, 40 });
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
+		ImGui::ProgressBar(smoothProgress, ImVec2(0.0f, 2.0f));
+		ImGui::PopStyleColor();
+		ImGui::PopItemWidth();
+	}
+	ImGui::Spacing();
+
+	ImGui::SetWindowSize({ 400, 100 });
+	sz = ImGui::GetWindowSize();
+
+	ImGui::PopFont();
+
+	ImGui::End();
+}
+
 void features::visuals::display_spotify() {
-	if (!c::misc::show_spotify_currently_playing)
+	if (!c::misc::show_spotify_currently_playing || c::misc::player_type == 1)
 		return;
 
 	int w, h;
 	interfaces::engine->get_screen_size(w, h);
 	h = c::misc::watermark ? 30 : 5;
 
-	auto text_size = im_render.get_text_size(current_spotify_song.c_str(), fonts::main_spec_font, 0.f, 12.f);
+	auto text_size = im_render.get_text_size(strtitle.c_str(), fonts::main_spec_font, 0.f, 12.f);
 
-	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), current_spotify_song.c_str());
-	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), current_spotify_song.c_str());
+	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), strtitle.c_str());
+	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), strtitle.c_str());
 }
 
 

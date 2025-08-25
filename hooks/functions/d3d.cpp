@@ -38,6 +38,7 @@ long __stdcall sdk::hooks::present::present(IDirect3DDevice9* device, RECT* sour
 		features::visuals::fullbright();
 		features::misc::draw();
 		features::misc::spectators_list();
+		features::visuals::RenderMediaPlayer();
 		features::visuals::display_spotify();
 		features::visuals::watermark();
 		menu::render();

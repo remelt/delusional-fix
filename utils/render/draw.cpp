@@ -131,6 +131,11 @@ void imgui_render::setup(IDirect3DDevice9* device) {
 	menu::switch_font_cfg(watermark_flag, c::fonts::watermark_font_flag);
 	fonts::watermark_font = io.Fonts->AddFontFromFileTTF(fonts::font_directory_watermark.c_str(), 12, &watermark_flag, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
+	//lb player
+	ImFontConfig lb_player_flag;
+	menu::switch_font_cfg(lb_player_flag, c::fonts::lb_player_font_flag);
+	fonts::lb_player_font = io.Fonts->AddFontFromFileTTF(fonts::font_directory_lb_player_font.c_str(), 12, &lb_player_flag, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
+
 	//sub spec
 	ImFontConfig specfont_flag;
 	menu::switch_font_cfg(specfont_flag, c::fonts::spec_font_flag);
@@ -342,6 +347,7 @@ void imgui_render::unload() {
 void fonts::reset_fonts( ) {
 	// reset font variables to default values
 	font_directory_watermark = "C:/windows/fonts/tahoma.ttf";
+	font_directory_lb_player_font = "C:/windows/fonts/tahoma.ttf";
 	font_directory_menu_main = "C:/windows/fonts/tahomabd.ttf";
 	font_directory_indicator = "C:/windows/fonts/verdanab.ttf";
 	font_directory_sub_indicator = "C:/windows/fonts/verdanab.ttf";
@@ -365,6 +371,7 @@ void fonts::reset_fonts( ) {
 	c::fonts::esp_wpn_font = 0;
 	c::fonts::esp_dropped_wpn_font = 0;
 	c::fonts::watermark_font = 0;
+	c::fonts::lb_player_font = 0;
 
 	//reset size
 	c::fonts::indi_size = 28;

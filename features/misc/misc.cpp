@@ -216,13 +216,18 @@ void features::misc::spectators_list() {
 			int y = 5;
 
 			if (c::misc::watermark) {
-				if (c::misc::show_spotify_currently_playing)
+				if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0)
 					y = 45;
+				else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1)
+					y = 65;
 				else
 					y = 30;
 			}
-			else if (c::misc::show_spotify_currently_playing) {
+			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0) {
 				y = 20;
+			}
+			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1) {
+				y = 40;
 			}
 
 			ImColor spec_clr = ImColor(c::misc::spectators_list_color_2[0], c::misc::spectators_list_color_2[1], c::misc::spectators_list_color_2[2]);
@@ -745,7 +750,7 @@ void features::misc::vote_revealer(i_game_event* event) {
 }
 
 void features::misc::handle_spotify() {
-	static HWND spotify_hwnd = nullptr;
+	/*static HWND spotify_hwnd = nullptr;
 	static float last_hwnd_time = 0.f;
 	if ((!spotify_hwnd || spotify_hwnd == INVALID_HANDLE_VALUE) && last_hwnd_time < interfaces::globals->realtime + 2.f) {
 		for (HWND hwnd = GetTopWindow(0); hwnd; hwnd = GetWindow(hwnd, GW_HWNDNEXT)) {
@@ -809,6 +814,6 @@ void features::misc::handle_spotify() {
 		}
 
 		old_song = features::visuals::current_spotify_song;
-	}
+	}*/
 }
 

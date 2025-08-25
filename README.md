@@ -27,8 +27,10 @@
     - autoshoot
 + Movement
     - added misshop for inui gaming (s/o [@flowars](https://github.com/flowars))
+    - pasted and fixed eb from lobotomy
 + Misc
     - added only local spectatorlist option
+    - fixed default music player and added new look
 + Skins
     - added skinchager for weapons
 + Config
@@ -37,7 +39,7 @@
 # TODO :
 + Fix chatprintf in jumpstats
 + Fix unload
-+ Add edgebug, ps and bounce assist from lobotomy
++ Add scaleform, ps and bounce assist from lobotomy
 
 # s/o
 [delusional leaked source](https://github.com/clearlyst/delusional/tree/main)

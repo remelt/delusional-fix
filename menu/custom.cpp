@@ -174,6 +174,16 @@ void menu::load_font_index() {
         }
         c::fonts::watermark_font = fonts::selected_font_index_watermark;
     }
+    fonts::selected_font_index_lb_player_font = c::fonts::lb_player_font;
+    if (fonts::selected_font_index_lb_player_font >= 0) {
+        if (menu::fonts[fonts::selected_font_index_lb_player_font] == "default") {
+            fonts::font_directory_lb_player_font = "C:/windows/fonts/tahoma.ttf";
+        }
+        else {
+            fonts::font_directory_lb_player_font = "C:/windows/fonts/" + menu::fonts[fonts::selected_font_index_lb_player_font];
+        }
+        c::fonts::lb_player_font = fonts::selected_font_index_lb_player_font;
+    }
 }
 
 

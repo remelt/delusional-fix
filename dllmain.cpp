@@ -14,6 +14,8 @@
 #include "features/skins/skins.hpp"
 #include "features/movement/movement.hpp"
 #include "includes/discord/discord_rpc.h"
+#include "features/mplayer/mplayer.h"
+#include "features/visuals/visuals.hpp"
 
 #ifdef _DEBUG
 bool unload( HMODULE module ) {
@@ -62,6 +64,10 @@ DWORD WINAPI on_attach(void* instance) {
         cvar::init();
         route = std::make_unique<savingroute>("records");
 
+        mplayer.sessionManager.reset();
+        mplayer.session.reset();
+        mplayer.thumbnail.reset();
+
         interfaces::engine->execute_cmd("clear");
         interfaces::console->console_color_printf({ 255, 0, 0, 255 }, ("[delusional] "));
         interfaces::console->console_printf(std::string("successfully injected").append(" \n").c_str());
@@ -93,12 +99,37 @@ DWORD WINAPI on_attach(void* instance) {
 	return 0;
 }
 
+//MUSIC PLAYER FROM LB
+
+void GetNowPlayingInfoAndSaveAlbumArt(void* instance)
+{
+    while (true) {
+
+        if (!c::misc::show_spotify_currently_playing) {
+            Sleep(10000);
+            continue;
+        }
+        mplayer.Update(interfaces::device);
+        if (oldtitle != strtitle || oldartist != strartist || !albumArtTexture) {
+            albumArtTexture = mplayer.thumb;
+            oldtitle = strtitle;
+            oldartist = strartist;
+        }
+        Sleep(1);
+        strartist = mplayer.Artist;
+        Sleep(1);
+        strtitle = mplayer.Title;
+        Sleep(1000);
+    }
+}
+
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD  call_reason, LPVOID reserved) 
 {
     if (call_reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(instance);
 
         const HANDLE thread = CreateThread(nullptr, 0, on_attach, instance, 0, nullptr);
+        CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)GetNowPlayingInfoAndSaveAlbumArt, instance, 0, nullptr);
         if (thread) {
 
             CloseHandle(thread);

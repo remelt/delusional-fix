@@ -17,7 +17,7 @@ static const char* fb_angles[] = { "right", "backwards", "left" };
 static const char* tabs[] = { "indicators","positions" };
 static const char* indicators[8] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "as" };
 const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
-const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark" };
+const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "lobotomy music player font"};
 static const char* hitboxes[] = { "head","neck","chest","pelvis" };
 static const char* WeatherTypes[] = { "rain","snow" };
 static const char* EdgebugTypes[] = { "delusional (og)","lobotomy" };
@@ -2846,7 +2846,14 @@ void miscellaneous() {
             ImGui::Separator();
 
             ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
-            ImGui::Checkbox(("spotify music display"), &c::misc::show_spotify_currently_playing);
+            ImGui::Checkbox(("music display"), &c::misc::show_spotify_currently_playing);
+            if (c::misc::show_spotify_currently_playing) {
+                ImGui::Text(("music player look type"));
+                ImGui::Combo(("##player_type"), &c::misc::player_type, "delusional (og)\0lobotomy");
+                if (c::misc::player_type == 1) {
+                    ImGui::Checkbox(("enable progressbar"), &c::misc::progressbar_enable);
+                }
+            }
             ImGui::Checkbox(("engine radar"), &c::visuals::radar);
             ImGui::Checkbox(("spectator list"), &c::misc::spectators_list);
             ImGui::SameLine( );
@@ -3243,6 +3250,39 @@ void font() {
                 ImGui::Text("font flags");
                 ImGui::MultiCombo(("##flags-for-watermark"), font_flags, c::fonts::sc_logs_flag, 11);
             }
+            else if (menu::font_tab == 9) {
+                //player
+                ImGui::ListBoxHeader("##fntlist_sc_logs4", ImVec2(-1, 190)); {
+                    for (int i = 0; i < menu::fonts.size(); i++) {
+
+                        std::string fonts = menu::fonts[i];
+
+                        if (filter.PassFilter(fonts.c_str())) {
+                            if (ImGui::Selectable(menu::fonts[i].c_str(), i == fonts::selected_font_index_lb_player_font)) {
+                                fonts::selected_font_index_lb_player_font = i;
+                            }
+                        }
+                    }
+                    ImGui::ListBoxFooter();
+                }
+
+                if (fonts::selected_font_index_lb_player_font >= 0) {
+                    if (menu::fonts[fonts::selected_font_index_lb_player_font] == "default") {
+                        fonts::font_directory_lb_player_font = "C:/windows/fonts/tahoma.ttf";
+                    }
+                    else {
+                        fonts::font_directory_lb_player_font = "C:/windows/fonts/" + menu::fonts[fonts::selected_font_index_lb_player_font];
+                    }
+                    c::fonts::lb_player_font = fonts::selected_font_index_lb_player_font;
+                }
+
+                ImGui::Text(("search font"));
+                filter.Draw("##filter_font");
+                ImGui::Text("font size");
+                ImGui::SliderInt(("##player_size"), &c::fonts::lb_player_size, 1, 50);
+                ImGui::Text("font flags");
+                ImGui::MultiCombo(("##flags-for-player"), font_flags, c::fonts::lb_player_font_flag, 11);
+                }
 
             if (ImGui::Button("reset fonts"))
                 fonts::reset_fonts();

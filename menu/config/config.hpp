@@ -287,6 +287,8 @@ namespace c {
 		inline bool sniper_crosshair = false;
 		inline bool watermark = true;
 		inline bool show_spotify_currently_playing = false;
+		inline bool progressbar_enable = false;
+		inline int player_type = 0;
 		inline bool spectators_list = true;
 		inline float spectators_list_color_1[3]{ 1.f, 1.f, 1.f };
 		inline float spectators_list_color_2[3]{ 1.f, 1.f, 1.f };
@@ -929,6 +931,10 @@ namespace c {
 		inline int watermark_font = 0;
 		inline int watermark_size = 12;
 		inline bool watermark_font_flag[9] = { false, false, false, true, false, false, true, false, false };
+
+		inline int lb_player_font = 0;
+		inline int lb_player_size = 12;
+		inline bool lb_player_font_flag[9] = { false, false, false, true, false, false, true, false, false };
 
 		inline int sub_spec_font = 0;
 		inline bool sub_spec_font_flag[9] = { false, false, false, true, false, false, true, false, false };

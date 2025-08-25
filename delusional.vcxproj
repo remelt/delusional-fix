@@ -255,7 +255,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <UseStandardPreprocessor>
       </UseStandardPreprocessor>
-      <AdditionalOptions>/std:c++latest  /EHsc %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/std:c++latest /EHsc %(AdditionalOptions)</AdditionalOptions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -266,6 +266,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <CreateHotpatchableImage>false</CreateHotpatchableImage>
       <LanguageStandard_C>Default</LanguageStandard_C>
+      <AdditionalIncludeDirectories>D:\atomc3\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -275,6 +276,7 @@
       <EnableUAC>false</EnableUAC>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>D:\atomc3\Lib\x86\d3dx9.lib;D:\atomc3\Lib\x86\d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -371,6 +373,7 @@
     <ClCompile Include="features\movement\calculator.cpp" />
     <ClCompile Include="features\movement\movement.cpp" />
     <ClCompile Include="features\movement\recorder.cpp" />
+    <ClCompile Include="features\mplayer\mplayer.cpp" />
     <ClCompile Include="features\panorama\scaleform.cpp" />
     <ClCompile Include="features\movement\prediction\prediction.cpp" />
     <ClCompile Include="features\skins\knife_proxy.cpp" />
@@ -486,6 +489,7 @@
     <ClInclude Include="features\misc\misc.hpp" />
     <ClInclude Include="features\model\model.hpp" />
     <ClInclude Include="features\movement\movement.hpp" />
+    <ClInclude Include="features\mplayer\mplayer.h" />
     <ClInclude Include="features\panorama\icons.hpp" />
     <ClInclude Include="features\panorama\scaleform.hpp" />
     <ClInclude Include="features\movement\prediction\prediction.hpp" />

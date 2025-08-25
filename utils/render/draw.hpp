@@ -66,6 +66,7 @@ namespace fonts {
 	inline ImFont* main_spec_font;
 	inline ImFont* logs_font_flag;
 	inline ImFont* watermark_font;
+	inline ImFont* lb_player_font;
 	inline ImFont* icon_font;
 	inline ImFont* esp_name_font;
 	inline ImFont* esp_hp_font;
@@ -78,6 +79,7 @@ namespace fonts {
 	inline ImFont* iwebz_specs;
 
 	inline std::string font_directory_watermark = "C:/windows/fonts/tahoma.ttf";
+	inline std::string font_directory_lb_player_font = "C:/windows/fonts/tahoma.ttf";
 	inline std::string font_directory_menu_main = "C:/windows/fonts/tahomabd.ttf";
 	inline std::string font_directory_indicator = "C:/windows/fonts/verdanab.ttf";
 	inline std::string font_directory_sub_indicator = "C:/windows/fonts/verdanab.ttf";
@@ -100,6 +102,7 @@ namespace fonts {
 	inline int selected_font_index_wpn = -1;
 	inline int selected_font_index_dropped_wpn = -1;
 	inline int selected_font_index_watermark = -1;
+	inline int selected_font_index_lb_player_font = -1;
 }
 
 using ImTextureID = void*;

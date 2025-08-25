@@ -20,13 +20,28 @@ struct bbox_t {
 	}
 };
 
+struct IDirect3DTexture9;
+inline std::string oldtitle;
+inline std::string oldartist;
+inline IDirect3DTexture9* albumArtTexture = nullptr;
+inline std::string strartist;
+inline std::string strtitle;
+
 namespace features::visuals {
 	inline bool console_vis = false;
 	inline int tick;
 	inline int igonre_ticks = 0;
 	inline int velocity_old = 0;
 	inline vec3_t origin_old(0, 0, 0);
-	inline std::string current_spotify_song;
+
+	inline std::wstring artist, title;
+	inline bool pause = false;
+	inline bool next = false;
+	inline bool pervious = false;
+	inline std::string albumArtPath;
+	inline int64_t trackPosition;
+	inline int64_t trackDuration = 0;
+	inline std::string m_custom_sky_box{ };
 
 	bool get_playerbox(player_t* entity, bbox_t& in);
 	namespace player {
@@ -49,6 +64,7 @@ namespace features::visuals {
 	}
 
 	void watermark();
+	void RenderMediaPlayer();
 	void display_spotify();
 	void jump_trail();
 	void removals();

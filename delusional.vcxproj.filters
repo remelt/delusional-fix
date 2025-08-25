@@ -372,6 +372,9 @@
     <ClCompile Include="features\movement\lobotomy_eb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="features\mplayer\mplayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\xor.hpp">
@@ -1161,6 +1164,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\movement\lobotomy_eb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="features\mplayer\mplayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
