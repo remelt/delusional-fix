@@ -1312,16 +1312,17 @@ void ImGui::ProgressBar(float fraction, const ImVec2& size_arg, const char* over
     ImVec2 pos = window->DC.CursorPos;
     ImVec2 size = CalcItemSize(size_arg, CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f);
     ImRect bb(pos, pos + size);
+    ImRect bb2(ImVec2(pos.x - 0.5f, pos.y), ImVec2(pos.x + size.x + 0.5f, pos.y + size.y));
     ItemSize(size, style.FramePadding.y);
     if (!ItemAdd(bb, 0))
         return;
 
     // Render
     fraction = ImSaturate(fraction);
-    RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_FrameBg), true, style.FrameRounding);
+    RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_MPlayer_ProgressbarBg), true, style.FrameRounding);
     bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
-    const ImVec2 fill_br = ImVec2(ImLerp(bb.Min.x, bb.Max.x, fraction), bb.Max.y);
-    RenderRectFilledRangeH(window->DrawList, bb, GetColorU32(ImGuiCol_PlotHistogram), 0.0f, fraction, style.FrameRounding);
+    const ImVec2 fill_br = ImVec2(ImLerp(bb2.Min.x, bb2.Max.x, fraction), bb.Max.y);
+    RenderRectFilledRangeH(window->DrawList, bb2, GetColorU32(ImGuiCol_MPlayer_Progressbar), 0.0f, fraction, style.FrameRounding);
 
     // Default displaying the fraction as percentage string, but user can override it
     char overlay_buf[32];

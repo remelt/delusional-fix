@@ -410,9 +410,10 @@ void features::visuals::RenderMediaPlayer()
 	ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), strtitle.c_str());
 
 	if (albumArtTexture && c::misc::progressbar_enable) {
-		ImGui::PushItemWidth(158);
-		ImGui::SetCursorPos({ sz.x - imageWidth - padding - 128, 40 });
-		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
+		ImGui::PushItemWidth(108);
+		ImGui::SetCursorPos({ sz.x - imageWidth - padding - 78, 40 });
+		ImGui::PushStyleColor(ImGuiCol_MPlayer_ProgressbarBg, ImVec4(0.05f, 0.05f, 0.05f, 0.03f));
+		ImGui::PushStyleColor(ImGuiCol_MPlayer_Progressbar, ImVec4(1.f, 1.f, 1.f, 0.7f));
 		ImGui::ProgressBar(smoothProgress, ImVec2(0.0f, 2.0f));
 		ImGui::PopStyleColor();
 		ImGui::PopItemWidth();
@@ -436,9 +437,16 @@ void features::visuals::display_spotify() {
 	h = c::misc::watermark ? 30 : 5;
 
 	auto text_size = im_render.get_text_size(strtitle.c_str(), fonts::main_spec_font, 0.f, 12.f);
+	auto paused_size = im_render.get_text_size("stopped / paused", fonts::main_spec_font, 0.f, 12.f);
 
-	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), strtitle.c_str());
-	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), strtitle.c_str());
+	if (mplayer.isPlaying) {
+		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), strtitle.c_str());
+		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), strtitle.c_str());
+	}
+	else {
+		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - paused_size + 1, h + 1), ImColor(0, 0, 0, 255), "stopped / paused");
+		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - paused_size, h), ImColor(255, 255, 255, 255), "stopped / paused");
+	}
 }
 
 

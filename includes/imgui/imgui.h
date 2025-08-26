@@ -1443,6 +1443,8 @@ enum ImGuiCol_
     ImGuiCol_Border,
     ImGuiCol_BorderShadow,
     ImGuiCol_FrameBg,               // Background of checkbox, radio button, plot, slider, text input
+    ImGuiCol_MPlayer_ProgressbarBg, // Progressbar background color
+    ImGuiCol_MPlayer_Progressbar,   // Progressbar progress color
     ImGuiCol_FrameBgHovered,
     ImGuiCol_FrameBgActive,
     ImGuiCol_TitleBg,
