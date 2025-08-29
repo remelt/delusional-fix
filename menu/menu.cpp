@@ -2343,10 +2343,13 @@ void miscellaneous() {
                         ImGui::Keybind(("edgebug key"), &c::movement::edge_bug_key, &c::movement::edge_bug_key_s);
                         ImGui::Checkbox(("advanced detection"), &c::movement::edge_bug_strafe);
                         if (c::movement::edge_bug_strafe) {
-                            //ImGui::Text(("angle limit"));
-                            //ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
-                            ImGui::Text(("search amount"));
-                            ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 45);
+                            ImGui::Text(("angle limit"));
+                            ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
+                            if (c::movement::edge_bug_angle_limit > 0) {
+                                ImGui::Text(("search amount"));
+                                ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 45);
+                                ImGui::Checkbox(("silent edgebug"), &c::movement::silent_eb_hacked);
+                            }
                         }
                         ImGui::Text(("edge bug ticks"));
                         ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 512);

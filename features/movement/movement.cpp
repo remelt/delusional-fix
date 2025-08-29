@@ -595,6 +595,43 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 	return false;
 }
 
+vec3_t originalAngle1;
+float originalForwardMove1, originalSideMove1;
+
+void start_movement_fix1(c_usercmd* cmd)
+{
+	originalAngle1 = cmd->view_angles;
+	originalForwardMove1 = cmd->forward_move;
+	originalSideMove1 = cmd->side_move;
+}
+
+void end_movement_fix1(c_usercmd* cmd)
+{
+	float deltaViewAngles;
+	float f1;
+	float f2;
+
+	if (originalAngle1.y < 0.f)
+		f1 = 360.0f + originalAngle1.y;
+	else
+		f1 = originalAngle1.y;
+
+	if (cmd->view_angles.y < 0.0f)
+		f2 = 360.0f + cmd->view_angles.y;
+	else
+		f2 = cmd->view_angles.y;
+
+	if (f2 < f1)
+		deltaViewAngles = abs(f2 - f1);
+	else
+		deltaViewAngles = 360.0f - abs(f1 - f2);
+
+	deltaViewAngles = 360.0f - deltaViewAngles;
+
+	cmd->forward_move = cos(math::deg2rad(deltaViewAngles)) * originalForwardMove1 + cos(math::deg2rad(deltaViewAngles + 90.f)) * originalSideMove1;
+	cmd->side_move = sin(math::deg2rad(deltaViewAngles)) * originalForwardMove1 + sin(math::deg2rad(deltaViewAngles + 90.f)) * originalSideMove1;
+}
+
 void features::movement::edge_bug(c_usercmd* cmd) {
 	if (!c::movement::edge_bug || !menu::checkkey(c::movement::edge_bug_key, c::movement::edge_bug_key_s) || !g::local || c::movement::edgebug_type == 1) {
 		detect_data.detecttick = 0;
@@ -611,6 +648,11 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		return;
 	}
 
+	int BackupButtons = cmd->buttons;
+	float BackupForwardMove = cmd->forward_move;
+	float BackupSideMove = cmd->side_move;
+	vec3_t angViewPointBackup = cmd->view_angles;
+
 	if (!detect_data.ticks_left) {
 		convar* get_yaw = interfaces::console->get_convar("m_yaw");
 		convar* get_sens = interfaces::console->get_convar("sensitivity");
@@ -623,6 +665,7 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		float originalsmove = cmd->side_move;
 		vec3_t originalangles = cmd->view_angles;
 		detect_data.startingyaw = originalangles.y;
+		detect_data.origv = cmd->view_angles;
 
 		ebpos.clear();
 		ebpos.push_back(g::local->origin());
@@ -654,6 +697,9 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 					for (int t = 1; t <= ticklimit; ++t) {
 						if (round > 1)
 							predictcmd.view_angles.y = math::normalize_yaw(originalangles.y + (yawdelta * t));
+
+						if (c::movement::edge_bug_rape == 0 || c::movement::edge_bug_angle_limit == 0)
+							break;
 
 						if (abs(predictcmd.view_angles.y - detect_data.startingyaw) > c::movement::edge_bug_angle_limit)
 							break;
@@ -762,6 +808,11 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 			cmd->forward_move = detect_data.forwardmove;
 			cmd->side_move = detect_data.sidemove;
 			cmd->view_angles.y = math::normalize_yaw(detect_data.startingyaw + (detect_data.yawdelta * (detect_data.eblength - (detect_data.ticks_left - 1))));
+			if (c::movement::silent_eb_hacked) {
+				start_movement_fix1(cmd);
+				cmd->view_angles = angViewPointBackup;
+				end_movement_fix1(cmd);
+			}
 		}
 		else {
 			cmd->forward_move = 0.f;

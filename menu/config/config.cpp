@@ -777,6 +777,8 @@ namespace c {
 		write_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);
 		write_value(json[xs("movement")][xs("edge_bug_ticks")], movement::edge_bug_ticks);
 		write_value(json[xs("movement")][xs("edge_bug_rape")], movement::edge_bug_rape);
+		write_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
+		write_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
 		write_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
 		write_value(json[xs("movement")][xs("delay_hop")], movement::delay_hop);
 		write_value(json[xs("movement")][xs("delay_hop_key")], movement::delay_hop_key);
@@ -2137,6 +2139,8 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);
 			read_value(json[xs("movement")][xs("edge_bug_ticks")], movement::edge_bug_ticks);
 			read_value(json[xs("movement")][xs("edge_bug_rape")], movement::edge_bug_rape);
+			read_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
+			read_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
 			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
 
 			//lb
@@ -3001,6 +3005,8 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);
 			read_value(json[xs("movement")][xs("edge_bug_ticks")], movement::edge_bug_ticks);
 			read_value(json[xs("movement")][xs("edge_bug_rape")], movement::edge_bug_rape);
+			read_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
+			read_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
 			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
 			read_value(json[xs("movement")][xs("delay_hop")], movement::delay_hop);
 			read_value(json[xs("movement")][xs("delay_hop_key")], movement::delay_hop_key);

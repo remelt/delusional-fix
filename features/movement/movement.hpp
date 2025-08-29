@@ -86,6 +86,7 @@ namespace features::movement {
 		bool crouched;
 		int detecttick;
 		int edgebugtick;
+		vec3_t origv;
 		bool strafing;
 		float yawdelta;
 		float forwardmove, sidemove;

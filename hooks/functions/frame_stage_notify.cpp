@@ -44,7 +44,11 @@ void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
 			float addedyaw = math::normalize_yaw(features::movement::detect_data.yawdelta * (features::movement::detect_data.eblength * (from_detect_time / to_eb_time))); 
 			edgebugva.y += addedyaw;
 
-			interfaces::engine->set_view_angles(edgebugva);
+			//CHILLWARE EXPLOIT
+			//SOLD FOR 10k
+			if (!c::movement::silent_eb_hacked) {
+				interfaces::engine->set_view_angles(edgebugva);
+			}
 		}
 		features::weather::update_weather();
 	}

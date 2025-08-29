@@ -168,6 +168,7 @@ namespace c {
 		inline float EdgeBugMouseLock = 0.f;
 		inline int edge_bug_ticks = 32;
 		inline int edge_bug_rape = 5;
+		inline bool silent_eb_hacked = false;
 		inline float edge_bug_angle_limit = 0.0f;
 		inline float edge_bug_lock_amount = 0.01f;
 		inline int edge_bug_lock_type = 0;
