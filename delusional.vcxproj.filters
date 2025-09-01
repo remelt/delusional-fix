@@ -1172,6 +1172,228 @@
     <ClInclude Include="features\mplayer\optimization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="includes\june2010\Include\audiodefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\comdecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D2D1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D2D1Helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D2DBaseTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D2Derr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3d9.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3d9caps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3d9types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D10_1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D10_1shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D10effect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3d10misc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3d10sdklayers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D10shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D11SDKLayers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3D11Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3Dcommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3Dcompiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DCSX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9anim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9effect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9tex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx9xof.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\d3dx10async.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX10core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX10math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX10mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX10tex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX11async.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX11core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\D3DX11tex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\Dcommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dinput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dinputd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dsconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dsetup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dsound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\DWrite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dxdiag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\DxErr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dxfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\DXGI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\DXGIFormat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\DXGIType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\dxsdkver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\gameux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\PIXPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\rmxfguid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\rmxftmpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\rpcsal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\X3DAudio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\xact3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\xact3d3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\xact3wb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XAPO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XAPOBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XAPOFX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XAudio2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XAudio2fx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XDSP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\XInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\xma2defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\june2010\Include\xnamath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="includes\imgui\LICENSE.txt" />
@@ -1179,9 +1401,32 @@
   <ItemGroup>
     <None Include="includes\imgui\misc\freetype\README.md" />
     <None Include="features\skins\skins.hpp" />
+    <None Include="includes\june2010\Include\D3DX_DXGIFormatConvert.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="includes\june2010\Include\d3dx9math.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="includes\june2010\Include\D3DX10math.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="includes\june2010\Include\xnamathconvert.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="includes\june2010\Include\xnamathmatrix.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="includes\june2010\Include\xnamathmisc.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="includes\june2010\Include\xnamathvector.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="includes\imgui\freetype\lib\freetype.lib" />
     <Library Include="includes\lua\lib\lua.lib" />
+    <Library Include="includes\june2010\lib\d3dx9.lib" />
+    <Library Include="includes\june2010\lib\d3d9.lib" />
   </ItemGroup>
 </Project>

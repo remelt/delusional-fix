@@ -15,6 +15,7 @@ namespace c {
 	void load_visuals(const std::size_t index);
 	void load_skins(const std::size_t index);
 	void load_misc(const std::size_t index);
+	void load_indicators(const std::size_t index);
 	inline std::string directory_path_lua;
 	inline std::string directory_path_fonts;
 	inline std::string directory_path;
@@ -166,10 +167,10 @@ namespace c {
 		inline int DeltaType = 0;
 		inline int EdgeBugTicks = 0;
 		inline float EdgeBugMouseLock = 0.f;
-		inline int edge_bug_ticks = 32;
+		inline int edge_bug_ticks = 64;
 		inline int edge_bug_rape = 5;
 		inline bool silent_eb_hacked = false;
-		inline float edge_bug_angle_limit = 0.0f;
+		inline float edge_bug_angle_limit = 50.0f;
 		inline float edge_bug_lock_amount = 0.01f;
 		inline int edge_bug_lock_type = 0;
 		inline int edge_bug_type = 0;

@@ -71,6 +71,10 @@ DWORD WINAPI on_attach(void* instance) {
         interfaces::engine->execute_cmd("clear");
         interfaces::console->console_color_printf({ 255, 0, 0, 255 }, ("[delusional] "));
         interfaces::console->console_printf(std::string("successfully injected").append(" \n").c_str());
+
+        if (interfaces::engine->is_in_game()) {
+            interfaces::chat_element->chatprintf("#delusional#_print_injected");
+        }
 	}();
 
     while (!GetAsyncKeyState(VK_F1) || !GetAsyncKeyState(VK_F2))

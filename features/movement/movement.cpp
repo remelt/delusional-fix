@@ -562,7 +562,10 @@ std::vector<vec3_t> ebpos;
 bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 	if (!g::local)
 		return false;
-
+	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
+		brk = true;
+		return false;
+	}
 	vec3_t unpredicted_velocity = prediction_backup::velocity;
 	vec3_t predicted_velocity = g::local->velocity();
 	int predicted_flags = g::local->flags();
@@ -595,6 +598,7 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 	return false;
 }
 
+//govnocode
 vec3_t originalAngle1;
 float originalForwardMove1, originalSideMove1;
 
@@ -1301,7 +1305,7 @@ void render_indicator(int key, int key_s, int& alpha, color_t& clr, const char* 
 	else
 		clr = default_clr;
 
-	float fading_speed = (c::movement::indicators_fading_speed*4.f)/100.f;
+	float fading_speed = (c::movement::indicators_fading_speed*8.f)/100.f;
 
 	if (menu::checkkey(key, key_s)) {
 		alpha = std::clamp(alpha + fading_speed, 0.f, 255.f);

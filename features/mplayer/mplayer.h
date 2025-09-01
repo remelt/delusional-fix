@@ -16,7 +16,7 @@
 #include <ppltasks.h>
 
 #include <d3d9.h>
-#include <d3dx9tex.h>
+#include <../includes/june2010/Include/d3dx9tex.h>
 #include <sdkddkver.h>
 #include "optimization.h"
 #pragma comment( lib, "d3d9.lib" )

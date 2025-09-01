@@ -412,8 +412,12 @@ void features::visuals::RenderMediaPlayer()
 	if (albumArtTexture && c::misc::progressbar_enable) {
 		ImGui::PushItemWidth(108);
 		ImGui::SetCursorPos({ sz.x - imageWidth - padding - 78, 40 });
+
+		//should be here but idc
+		//u can fix that if u want ig
 		ImGui::PushStyleColor(ImGuiCol_MPlayer_ProgressbarBg, ImVec4(0.05f, 0.05f, 0.05f, 0.03f));
-		ImGui::PushStyleColor(ImGuiCol_MPlayer_Progressbar, ImVec4(1.f, 1.f, 1.f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_MPlayer_Progressbar, ImVec4(1.f, 1.f, 1.f, 0.85f));
+
 		ImGui::ProgressBar(smoothProgress, ImVec2(0.0f, 2.0f));
 		ImGui::PopStyleColor();
 		ImGui::PopItemWidth();

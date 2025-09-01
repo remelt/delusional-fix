@@ -2347,12 +2347,12 @@ void miscellaneous() {
                             ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
                             if (c::movement::edge_bug_angle_limit > 0) {
                                 ImGui::Text(("search amount"));
-                                ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 45);
+                                ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 20);
                                 ImGui::Checkbox(("silent edgebug"), &c::movement::silent_eb_hacked);
                             }
                         }
                         ImGui::Text(("edge bug ticks"));
-                        ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 512);
+                        ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 128);
                         ImGui::Text(("mouse lock factor"));
                         ImGui::SliderFloat(("##mouse lock percentage"), &c::movement::edge_bug_lock_amount, 0.f, 100.f, ("%.2f%%"));
                         break;
@@ -2675,7 +2675,7 @@ void miscellaneous() {
                 if (ImGui::BeginPopup(("load only popup"))) {
                     ImGui::Text(("what settings do u want to load? "));
 
-                    static const char* choices2[] = { "  aimbot", "  visuals", "  movement", "  skins", "  misc" };
+                    static const char* choices2[] = { "  aimbot", "  visuals", "  movement", "  indicators", "  skins", "  misc" };
 
                     for (auto i = 0; i < IM_ARRAYSIZE(choices2); i++)
                         if (ImGui::Selectable(choices2[i]))
@@ -2710,6 +2710,13 @@ void miscellaneous() {
                                 }
                             }
                             else if (i == 3) {
+                                c::load_indicators(config_index);
+
+                                if (interfaces::engine->is_in_game()) {
+                                    interfaces::chat_element->chatprintf("#delusional#_print_loaded_indicators");
+                                }
+                            }
+                            else if (i == 4) {
                                 c::load_skins(config_index);
                                 getskins();
                                 if (interfaces::engine->is_in_game()) {
@@ -2717,7 +2724,7 @@ void miscellaneous() {
                                     features::skins::forcing_update = true;
                                 }
                             }
-                            else if (i == 4) {
+                            else if (i == 5) {
                                 c::load_misc(config_index);
 
                                 if (interfaces::engine->is_in_game()) {
@@ -2729,9 +2736,6 @@ void miscellaneous() {
                 }
                 if (ImGui::Button("refresh", ImVec2(-1, 15))) {
                     c::update_configs();
-
-                    //std::stringstream ss;
-                    //ss << "\x08" << " \x08"  << "%c" << "delusional" << "\x08" << "\x08 | refreshed config list";
 
                     if (interfaces::engine->is_in_game()) {
                         interfaces::chat_element->chatprintf("#delusional#_print_refreshed");
@@ -3646,7 +3650,6 @@ void rec() {
     }
     ImGui::Columns(1);
 }
-
 
 void menu::render() {
     if (!menu::open) 

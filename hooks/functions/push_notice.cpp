@@ -42,6 +42,9 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 	case FNV1A::HashConst(("#delusional#_print_created")):
 		return print_text(ecx, edx, xs("created config"));
 		break;
+	case FNV1A::HashConst(("#delusional#_print_injected")):
+		return print_text(ecx, edx, xs("successfully injected"));
+		break;
 	case FNV1A::HashConst(("#delusional#_print_saved")):
 		return print_text(ecx, edx, xs("saved config"));
 		break;
@@ -59,6 +62,9 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 		break;
 	case FNV1A::HashConst(("#delusional#_print_loaded_misc")):
 		return print_text(ecx, edx, xs("loaded misc settings"));
+		break;
+	case FNV1A::HashConst(("#delusional#_print_loaded_indicators")):
+		return print_text(ecx, edx, xs("loaded indicators settings"));
 		break;
 	case FNV1A::HashConst(("#delusional#_print_loaded_skins")):
 		return print_text(ecx, edx, xs("loaded skins & models"));
