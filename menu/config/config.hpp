@@ -35,6 +35,42 @@ namespace c {
 		inline int triggerbot_key_s = 1;
 	}
 
+	namespace assist
+	{
+		inline bool assist = false;
+		inline bool pixelsurf_assist = false;
+		inline bool bounce_assist = false;
+
+		inline bool assist_broke_hop = false;
+		inline float assist_stamina_value = 100.0f;
+		inline bool assist_render = false;
+		inline bool bounce_assist_render = false;
+
+		inline bool assist_bounce_broke_hop = false;
+
+		inline int pixelsurf_assist_ticks = 12;
+
+		inline int pixelsurf_max_points = 2;
+
+		inline int pixelsurf_assist_type = 0;
+
+		inline int pixelsurf_assist_key;
+		inline int pixelsurf_assist_key_s = 1;
+
+		inline int pixelsurf_line_key;
+		inline int pixelsurf_line_key_s = 1;
+
+		inline int pixelsurf_point_key;
+		inline int pixelsurf_point_key_s = 1;
+
+		inline int bounce_assist_key;
+		inline int bounce_assist_key_s = 1;
+
+		inline int bounce_point_key;
+		inline int bounce_point_key_s = 1;
+
+	}
+
 	namespace aimbot {
 		inline bool aimbot;
 		inline bool aimbot_panic;
@@ -165,7 +201,7 @@ namespace c {
 		inline int EdgeBugCircle = 2;
 		inline float deltascaler = 1.f;
 		inline int DeltaType = 0;
-		inline int EdgeBugTicks = 0;
+		inline int EdgeBugTicks = 64;
 		inline float EdgeBugMouseLock = 0.f;
 		inline int edge_bug_ticks = 64;
 		inline int edge_bug_rape = 5;
@@ -207,6 +243,7 @@ namespace c {
 		inline int jump_bug_key_s = 1;
 		inline bool fastduck = false;
 		inline bool auto_align = false;
+		inline int align_selection = 0;
 		inline bool freelook_surf = true;
 		inline bool auto_duck = false;
 		inline int  auto_duck_key = 0;
@@ -215,7 +252,7 @@ namespace c {
 		inline bool pixel_surf = false;
 		inline int  pixel_surf_key = 0;
 		inline int  pixel_surf_key_s = 1;
-		inline int pixel_surf_ticks = 7;
+		inline int pixel_surf_ticks = 16;
 		inline bool fakebackwards = false;
 		inline int  fakebackwardskey = 0;
 		inline int  fakebackwardskey_s = 1;
@@ -242,10 +279,10 @@ namespace c {
 		inline float velocity_indicator_custom_clr2[4]{ 1.f, 1.f, 1.f };
 		inline float velocity_indicator_fade_clr3[4]{ 1.f, 1.f, 1.f, 0.f };
 		inline float indicator_detect_clr[3]{ 0.195f, 0.750f, 0.269f };
-		inline bool indicators_show[8] = { false, false, false, false, false, false, false, false };
+		inline bool indicators_show[10] = { false, false, false, false, false, false, false, false, false, false };
 		inline bool allow_detection_clr = false;
 		inline int detection_saved_tick = 15;
-		inline bool detection_clr_for[9] = { false, false, false, false, false, false, false, false, false };
+		inline bool detection_clr_for[10] = { false, false, false, false, false, false, false, false, false, false };
 		inline bool stamina_indicator = false;
 		inline bool stamina_indicator_fade = false;
 		inline bool stamina_indicator_show_pre = false;
@@ -934,6 +971,10 @@ namespace c {
 		inline int watermark_font = 0;
 		inline int watermark_size = 12;
 		inline bool watermark_font_flag[9] = { false, false, false, true, false, false, true, false, false };
+
+		inline int assist_font = 0;
+		inline int assist_size = 12;
+		inline bool assist_font_flag[9] = { false, false, false, true, false, false, true, false, false };
 
 		inline int lb_player_font = 0;
 		inline int lb_player_size = 12;

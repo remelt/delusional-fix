@@ -70,7 +70,7 @@ void vec3_t::normalize() {
 	z = 0.0f;
 }
 
-float vec3_t::normalize_movement()  {
+float vec3_t::normalize_movement() {
 	vec3_t res = *this;
 	float l = res.length_r();
 	if (l != 0.0f)
@@ -154,7 +154,7 @@ float vec3_t::length_r(void) {
 float vec3_t::length_sqr(void) {
 	auto sqr = [](float n) {
 		return static_cast<float>(n * n);
-	};
+		};
 
 	return (sqr(x) + sqr(y) + sqr(z));
 }
@@ -162,4 +162,3 @@ float vec3_t::length_sqr(void) {
 float vec3_t::length_2d_sqr(void) const {
 	return (x * x + y * y);
 }
-

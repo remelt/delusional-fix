@@ -16,6 +16,7 @@ some images for some fucking newgens whov never played w og delusional should be
     - fixed precipitation (kinda)
 + Movement
     - "unlocked" nn fixed og delusional eb
+    - fixed auto-align and ps to work for all ticks
 + Indicators
     - fixed fading time not saving into cfg and not working properly
 + Skins
@@ -36,6 +37,9 @@ some images for some fucking newgens whov never played w og delusional should be
     - added misshop for inui gaming (s/o [@flowars](https://github.com/flowars))
     - added silent option for delusional eb
     - pasted and fixed eb from lobotomy
+    - added auto-align from lobotomy
+    - now u can choose ticks for pixelsurf
+    - pasted and fixed ps and bounce assists from lobotomy (works a lot better imo) (ofc fixed for all ticks) (big s/o [@flowars](https://github.com/flowars))
 + Misc
     - added only local spectatorlist option
     - fixed default music player and added new look
@@ -45,17 +49,16 @@ some images for some fucking newgens whov never played w og delusional should be
     - added load only option (only... aimbot/visuals/movement/indicators/skins/misc)
 
 # TODO :
-+ Fix unload
-+ Add and fix scaleform, ps and bounce assist from lobotomy
++ Add and fix scaleform
 
 # KNOWN ISSUES :
-+ Lb eb is crashing while being used w px (will be fixed 100%)
 + Media player some times doesnt update if the track is on repeat
 + Aimbot sometimes misses (idk y mb u need some kind of bones fix like in hw)
 + Awall only if lethal is kinda ass for some damn reason
 + Rare animations for knives arent working properly
 + Precipitation is ass but idk y (nn i dont have any motivation to fix that shit coz it will take forever)
 + Chatprintf in jumpstats (ig the best option is to recode it :p)
++ Unload doesnt rly work
 
 # s/o
 [clearlyst for delusional leaked source](https://github.com/clearlyst/delusional/tree/main)

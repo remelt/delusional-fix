@@ -13,6 +13,15 @@ void features::movement::bhop(c_usercmd* cmd) {
 	if (!c::movement::bhop) {
 		return;
 	}
+	//i will think bout it after fixing align ig
+
+	//if (c::assist::bounce_assist) {
+	//	if (menu::checkkey(c::assist::bounce_point_key, c::assist::bounce_point_key_s))
+	//	return;
+	//}
+	//if (HITGODA2) {
+	//	return;
+	//}
 	if (c::movement::bhopmiss) {
 		static int perfect_hops = 0;
 		static bool force_miss_next = false;
@@ -530,9 +539,9 @@ void features::movement::jump_bug(c_usercmd* cmd) {
 		return;
 	}
 
-	if (c::movement::jump_bug ) {
+	if (c::movement::jump_bug || assistJb::AlertJB || assistJb::AlertJB2) {
 
-		if (!menu::checkkey(c::movement::jump_bug_key, c::movement::jump_bug_key_s))
+		if (!menu::checkkey(c::movement::jump_bug_key, c::movement::jump_bug_key_s) && !assistJb::AlertJB && !assistJb::AlertJB2)
 			return;
 
 		if (!(prediction_backup::flags & (fl_onground)) && g::local->flags() & (fl_onground)) {
@@ -602,14 +611,14 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 vec3_t originalAngle1;
 float originalForwardMove1, originalSideMove1;
 
-void start_movement_fix1(c_usercmd* cmd)
+void features::movement::start_movement_fix(c_usercmd* cmd)
 {
 	originalAngle1 = cmd->view_angles;
 	originalForwardMove1 = cmd->forward_move;
 	originalSideMove1 = cmd->side_move;
 }
 
-void end_movement_fix1(c_usercmd* cmd)
+void features::movement::end_movement_fix(c_usercmd* cmd)
 {
 	float deltaViewAngles;
 	float f1;
@@ -813,9 +822,9 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 			cmd->side_move = detect_data.sidemove;
 			cmd->view_angles.y = math::normalize_yaw(detect_data.startingyaw + (detect_data.yawdelta * (detect_data.eblength - (detect_data.ticks_left - 1))));
 			if (c::movement::silent_eb_hacked) {
-				start_movement_fix1(cmd);
+				features::movement::start_movement_fix(cmd);
 				cmd->view_angles = angViewPointBackup;
-				end_movement_fix1(cmd);
+				features::movement::end_movement_fix(cmd);
 			}
 		}
 		else {
@@ -835,6 +844,10 @@ void features::movement::auto_align(c_usercmd* cmd) {
 		return;
 	}
 
+	if (c::movement::align_selection == 1) {
+		return;
+	}
+
 	if (!g::local || !g::local->is_alive() || g::local->flags() & fl_onground) {
 		return;
 	}
@@ -849,6 +862,11 @@ void features::movement::auto_align(c_usercmd* cmd) {
 	const auto mins = g::local->collideable()->mins();
 	const auto maxs = g::local->collideable()->maxs();
 	trace_world_only fil;
+
+	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+	float fTickInterval = interfaces::globals->interval_per_tick;
+	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 
 	for (float a = 0.f; a < max_radias; a += step) {
 		vec3_t end_pos;
@@ -984,7 +1002,7 @@ void features::movement::auto_align(c_usercmd* cmd) {
 					prediction::end();
 
 					float zvelo = g::local->velocity().z;
-					if (zvelo == -6.25f) {
+					if (zvelo == targetZvelo) {
 						prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 						cmd->forward_move = forwardmove;
 						cmd->side_move = sidemove;
@@ -998,6 +1016,292 @@ void features::movement::auto_align(c_usercmd* cmd) {
 	}
 }
 
+
+float difference(float a, float b)
+{
+	return std::max(abs(a), abs(b)) - std::min(abs(a), abs(b));
+}
+bool should_ps_standing{ };
+bool wall_detected = false;
+
+//works better imo and has freelook
+void features::movement::auto_align_lb(c_usercmd* cmd)
+{
+	if (!c::movement::auto_align) {
+		return;
+	}
+
+	if (c::movement::align_selection == 0) {
+		return;
+	}
+
+	if (!g::local || !g::local->is_alive() || g::local->flags() & fl_onground) {
+		return;
+	}
+
+	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
+		return;
+	}
+
+	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
+		should_ps_standing = false;
+		return;
+	}
+	float max_radias = m_pi * 2.f;
+	float step = max_radias / 16.f;
+	vec3_t start_pos = g::local->abs_origin();
+	const auto mins = g::local->collideable()->mins();
+	const auto maxs = g::local->collideable()->maxs();
+	trace_world_only fil;
+
+	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+	float fTickInterval = interfaces::globals->interval_per_tick;
+	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
+
+	/*if (g_input.check_input(&GET_VARIABLE(g_variables.m_ladder_bug_key, key_bind_t)))
+		return;*/
+	static float start_circle = 0.f;
+	wall_detected = false;
+	trace_t trace;
+	vec3_t save_start_pos = { };
+	vec3_t save_end_pos = { };
+	float saved_cos = 0.f;
+	float saved_sin = 0.f;
+	for (float a = start_circle; a < max_radias; a += step) {
+		vec3_t end_pos;
+		end_pos.x = cos(a) + start_pos.x;
+		end_pos.y = sin(a) + start_pos.y;
+		end_pos.z = start_pos.z;
+		saved_cos = cos(a) * 64.f;
+		saved_sin = sin(a) * 64.f;
+		ray_t ray;
+		ray.initialize(start_pos, end_pos, mins, maxs);
+
+		// traceraying the whole circle around us trying to find a wall
+		interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &fil, &trace);
+		if (trace.flFraction != 1.f && trace.plane.normal.z == 0.f) {
+			wall_detected = true;
+			start_circle = a;
+			save_start_pos = start_pos;
+			save_end_pos = end_pos;
+			break;
+		}
+	}
+	if (!wall_detected) {
+		start_circle = 0.f;
+		return;
+	}
+	vec3_t normal_plane = vec3_t(trace.plane.normal.x * -0.005f, trace.plane.normal.y * -0.005f, 0.f);
+
+	const vec3_t end_pos2 = vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z) + vec3_t(saved_cos, saved_sin, 0.f);
+	vec3_t wall_angle = normal_plane.to_angle();
+	wall_angle.normalize();
+
+	float rotation = deg2rad(wall_angle.y - cmd->view_angles.y);
+	float cos_rot = cos(rotation);
+	float sin_rot = sin(rotation);
+	bool detect = false;
+	trace_t trace_2;
+	ray_t ray_2;
+	ray_2.initialize(vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z), end_pos2);
+	interfaces::trace_ray->trace_ray(ray_2, MASK_PLAYERSOLID, &fil, &trace_2);
+
+	float backup_forward_move = cmd->forward_move;
+	float backup_side_move = cmd->side_move;
+	constexpr static float distance_till_adjust = 0.03125f;
+	constexpr auto has_to_align = [](const vec3_t& origin) -> bool {
+		constexpr static float distance_to_stop = 0.00750f;
+
+		const vec2_t remainder1 = vec2_t(1.f - (origin.x - floor(origin.x)), 1.f - (origin.y - floor(origin.y)));
+		const vec2_t remainder2 = vec2_t((origin.x - floor(origin.x)), (origin.y - floor(origin.y)));
+
+		return ((remainder1.x >= distance_to_stop && remainder1.x <= distance_till_adjust) ||
+			(remainder1.y >= distance_to_stop && remainder1.y <= distance_till_adjust)) ||
+			((remainder2.x >= distance_to_stop && remainder2.x <= distance_till_adjust) ||
+				(remainder2.y >= distance_to_stop && remainder2.y <= distance_till_adjust));
+		};
+	for (float multiplayer = 0.f; multiplayer < 100.f; multiplayer += 10.f) {
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+
+		float forwardmove = cos_rot * multiplayer;
+		float sidemove = -sin_rot * multiplayer;
+		cmd->forward_move = forwardmove;
+		cmd->side_move = sidemove;
+		float backup_zspeed = g::local->get_velocity().z;
+
+		prediction::begin(cmd);
+		prediction::end();
+		float new_zspeed = g::local->get_velocity().z;
+		if (new_zspeed == targetZvelo) {
+			cmd->forward_move = forwardmove;
+			cmd->side_move = sidemove;
+			detect = true;
+			break;
+		}
+	}
+	if (!detect) {
+		float forwardmove = cos_rot * 10.f;
+		float sidemove = -sin_rot * 10.f;
+		cmd->forward_move = forwardmove;
+		cmd->side_move = sidemove;
+	}
+
+	float if_not_slide_fw = cmd->forward_move;
+	float if_not_slide_sw = cmd->side_move;
+	if (!has_to_align(prediction_backup::origin) && prediction_backup::velocity.z != targetZvelo) {
+		if ((cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) ||
+			(cmd->buttons & in_moveright)) {
+			cmd->forward_move = backup_forward_move;
+			cmd->side_move = backup_side_move;
+		}
+	}
+	if (prediction_backup::velocity.z == targetZvelo) {
+		vec3_t wishdir;
+
+		bool done = false;
+
+		if ((cmd->buttons & in_forward) && !(cmd->buttons & in_back) && !(cmd->buttons & in_moveleft) &&
+			!(cmd->buttons & in_moveright)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y)) * 128.f, std::sin(deg2rad(cmd->view_angles.y)) * 128.f, 0.f };
+			done = true;
+		}
+		if ((cmd->buttons & in_back) && !(cmd->buttons & in_forward) && !(cmd->buttons & in_moveleft) &&
+			!(cmd->buttons & in_moveright)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y + 180.f)) * 128.f, std::sin(deg2rad(cmd->view_angles.y + 180.f)) * 128.f,
+						0.f };
+			done = true;
+		}
+		if ((cmd->buttons & in_moveleft) && !(cmd->buttons & in_back) && !(cmd->buttons & in_forward) &&
+			!(cmd->buttons & in_moveright)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y + 90.f)) * 128.f, std::sin(deg2rad(cmd->view_angles.y + 90.f)) * 128.f,
+						0.f };
+			done = true;
+		}
+		if ((cmd->buttons & in_moveright) && !(cmd->buttons & in_back) && !(cmd->buttons & in_moveleft) &&
+			!(cmd->buttons & in_forward)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y - 90.f)) * 128.f, std::sin(deg2rad(cmd->view_angles.y - 90.f)) * 128.f,
+						0.f };
+			done = true;
+		}
+		if (done) {
+			trace_t trace_4;
+			vec3_t st = vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z);
+			ray_t ray_4;
+			ray_4.initialize(st, st + wishdir);
+			interfaces::trace_ray->trace_ray(ray_4, MASK_PLAYERSOLID, &fil, &trace_4);
+			if (trace_4.flFraction < 1.f) {
+				int buttons_2 = cmd->buttons;
+				float forwardmove_2 = cmd->forward_move;
+				float sidemove_2 = cmd->side_move;
+				int i_backup_velo = g::local->get_velocity().length_2d();
+				bool do_surf_detected = false;
+				for (int i = 0; i < 450; i += 45) {
+					prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+					if (buttons_2 & in_forward)
+						cmd->forward_move = i;
+					if (buttons_2 & in_back)
+						cmd->forward_move = -i;
+					if (buttons_2 & in_moveleft)
+						cmd->side_move = -i;
+					if (buttons_2 & in_moveright)
+						cmd->side_move = i;
+
+					prediction::begin(cmd);
+					prediction::end();
+					float zvelo = g::local->get_velocity().z;
+					if (zvelo == targetZvelo) {
+						forwardmove_2 = cmd->forward_move;
+						sidemove_2 = cmd->side_move;
+					}
+				}
+
+				int i_preed_velo = g::local->get_velocity().length_2d();
+
+				cmd->forward_move = forwardmove_2;
+				cmd->side_move = sidemove_2;
+
+				if (prediction_backup::velocity.length_2d() > 250.f) {
+					std::vector< vec2_t > direction{ };
+					std::vector< float > max_speed{ };
+					if (difference(i_backup_velo, i_preed_velo) < 5) {
+						for (float angle = 15.f; angle < 30.f; angle += 5.f) {
+							prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+							float mVel = hypotf(prediction_backup::velocity.x, prediction_backup::velocity.y);
+							float ideal = math::rad2deg(atanf(angle / mVel));
+							vec3_t dvelo = g::local->get_velocity();
+							dvelo.z = 0.f;
+							vec3_t velo_angle = dvelo.to_angle();
+							vec3_t delta =
+								velo_angle - vec3_t(trace.plane.normal.x * -1.f, trace.plane.normal.y * -1.f, 0.f).to_angle();
+							delta.normalize();
+							if (delta.y >= 0.f)
+								wall_angle.y += ideal;
+							else
+								wall_angle.y -= ideal;
+							float rotation2 = deg2rad(wall_angle.y - cmd->view_angles.y);
+							float cos_rot2 = cos(rotation2);
+							float sin_rot2 = sin(rotation2);
+							float forwardmove2 = cos_rot2 * 450.f;
+							float sidemove2 = -sin_rot2 * 450.f;
+							cmd->forward_move = forwardmove2;
+							cmd->side_move = sidemove2;
+							vec3_t b_velo = g::local->get_velocity();
+							prediction::begin(cmd);
+							prediction::end();
+							vec3_t p_velo = g::local->get_velocity();
+							if (b_velo.z == targetZvelo && p_velo.z == targetZvelo) {
+								if (p_velo.length_2d() > b_velo.length_2d()) {
+									direction.emplace_back(vec2_t(forwardmove2, sidemove2));
+									max_speed.emplace_back(p_velo.length_2d() - b_velo.length_2d());
+								}
+							}
+						}
+					}
+					cmd->forward_move = forwardmove_2;
+					cmd->side_move = sidemove_2;
+					float mxsp = 0;
+					int index_max_speed = -1;
+					for (int k = 0; k < max_speed.size(); k++) {
+						if (max_speed.at(k) > mxsp) {
+							index_max_speed = k;
+							mxsp = max_speed.at(k);
+						}
+					}
+					//g_console.print(std::format("Velocity gained: {}", mxsp).c_str());
+					if (index_max_speed != -1) {
+						cmd->forward_move = direction.at(index_max_speed).x;
+						cmd->side_move = direction.at(index_max_speed).y;
+					}
+				}
+				if (difference(trace_4.end.x, trace_2.end.x) > 1.f && difference(trace_4.end.y, trace_2.end.y) > 1.f) {
+					if (cmd->forward_move < 0.f && cmd->buttons & in_forward)
+						cmd->forward_move = 450.f;
+					if (cmd->forward_move > 0.f && cmd->buttons & in_back)
+						cmd->forward_move = -450.f;
+					if (cmd->side_move < 0.f && cmd->buttons & in_moveright)
+						cmd->side_move = 450.f;
+					if (cmd->side_move > 0.f && cmd->buttons & in_moveleft)
+						cmd->side_move = -450.f;
+				}
+
+			}
+			else {
+				if (cmd->forward_move < 0.f && cmd->buttons & in_forward)
+					cmd->forward_move = 450.f;
+				if (cmd->forward_move > 0.f && cmd->buttons & in_back)
+					cmd->forward_move = -450.f;
+				if (cmd->side_move < 0.f && cmd->buttons & in_moveright)
+					cmd->side_move = 450.f;
+				if (cmd->side_move > 0.f && cmd->buttons & in_moveleft)
+					cmd->side_move = -450.f;
+			}
+		}
+	}
+}
+
+
+
 void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 	if (!c::movement::pixel_surf || !menu::checkkey(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s))
 		return;
@@ -1009,6 +1313,11 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
 		return;
 	}
+
+	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+	float fTickInterval = interfaces::globals->interval_per_tick;
+	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 
 	if (ps_data.pixelsurfing) {
 
@@ -1040,7 +1349,7 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 		else
 			cmd->buttons &= ~in_duck;
 
-		if (ps_data.predicted_ps && !(g::local->velocity().z == -6.25)) {
+		if (ps_data.predicted_ps && !(g::local->velocity().z == targetZvelo)) {
 			should_ps = false;
 			ps_data.pixelsurfing = false;
 			ps_data.predicted_ps = false;
@@ -1065,6 +1374,11 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	if (ps_data.pixelsurfing)
 		return;
 
+	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+	float fTickInterval = interfaces::globals->interval_per_tick;
+	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
+
 	for (int s = 0; s < 2; s++) {
 		if (ps_data.pixelsurfing)
 			break;
@@ -1074,12 +1388,12 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 		int flags = g::local->flags();
 		vec3_t velocity = g::local->velocity();
 
-		for (int i = 0; i < 16; i++) { 
+		for (int i = 0; i < c::movement::pixel_surf_ticks; i++) {
 			c_usercmd* predictcmd = new c_usercmd(*cmd);
 
 			if (s == 0)
 				predictcmd->buttons |= in_duck;
-			else 
+			else
 				predictcmd->buttons &= ~in_duck;
 
 			prediction::begin(predictcmd);
@@ -1087,7 +1401,7 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 			if (flags & fl_onground)
 				break;
 
-			if (g::local->velocity().z == -6.25f && velocity.z == -6.25f) {
+			if (g::local->velocity().z == targetZvelo && velocity.z == targetZvelo) {
 				ps_data.pixeltick = cmd->tick_count + i;
 				ps_data.pixelsurf_cmd = predictcmd;
 				ps_data.pixelducking = (s == 0);
@@ -1100,8 +1414,86 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 			velocity = g::local->velocity();
 		}
 		prediction::end();
-	}	
+	}
 }
+
+//ps from lb
+//mb useful idk
+
+//void features::movement::pixel_surf(c_usercmd* cmd) {
+//	if (!c::movement::pixel_surf || !menu::checkkey(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s))
+//		return;
+//
+//	static int ticks = 0;
+//	if (!g::local || !g::local->is_alive() || g::local->flags() & fl_onground) {
+//		ticks = 0;
+//		return;
+//	}
+//
+//	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
+//		return;
+//	}
+//
+//	if (ps_data.pixelsurfing)
+//		return;
+//
+//	if (!wall_detected)
+//		return;
+//
+//	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+//	float fTickInterval = interfaces::globals->interval_per_tick;
+//	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+//	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
+//
+//	if (!ps_data.pixelsurfing) {
+//		int BackupButtons = cmd->buttons;
+//		for (int i = 0; i < 2; i++) {
+//			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+//
+//			//c_usercmd* predictcmd = new c_usercmd(*cmd);
+//
+//			if (i == 0)
+//				cmd->buttons &= ~in_duck;
+//			else
+//				cmd->buttons |= in_duck;
+//			for (int z = 0; z < 8; z++) {
+//				float un_pred_velo = g::local->velocity().z;
+//				prediction::begin(cmd);
+//				prediction::end();
+//				if (g::local->flags() & 1) {
+//					break;
+//				}
+//				float zVelo = g::local->velocity().z;
+//				ps_data.pixelsurfing = zVelo == targetZvelo;
+//				if (ps_data.pixelsurfing && i == 0) {
+//					ps_data.pixelsurfing = false;
+//					cmd->buttons = BackupButtons;
+//					ps_data.pixeltick = cmd->tick_count + i;
+//					ps_data.pixelsurf_cmd = cmd;
+//					ps_data.pixelducking = (i == 0);
+//					ps_data.pixelsurfing = true;
+//					should_ps = true;
+//					return;
+//				}
+//				if (ps_data.pixelsurfing) {
+//					ticks = cmd->tick_count + z + 16;
+//					BackupButtons = cmd->buttons;
+//					break;
+//				}
+//			}
+//		}
+//		cmd->buttons = BackupButtons;
+//		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+//	}
+//	else {
+//		cmd->buttons |= in_duck;
+//		if (cmd->tick_count > ticks) {
+//			if (prediction_backup::velocity.z != targetZvelo) {
+//				ps_data.pixelsurfing = false;
+//			}
+//		}
+//	}
+//}
 
 void features::movement::pixel_surf_fix(c_usercmd* cmd) {
 	if (!c::movement::pixel_surf_fix) {
@@ -1347,8 +1739,8 @@ void features::movement::indicators() {
 	if (should_mj)
 		saved_tick_mj = interfaces::globals->tick_count;
 
-	color_t ps_clr, al_clr, sh_clr, eb_clr, jb_clr, ej_clr, lj_clr, mj_clr, lg_clr, as_clr;
-	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, as_alpha = 0;
+	color_t ps_clr, al_clr, sh_clr, eb_clr, jb_clr, ej_clr, lj_clr, mj_clr, lg_clr, ast_clr, bast_clr, as_clr;
+	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, ast_alpha, bast_alpha, as_alpha = 0;
 	int position = 0;
 
 	if (c::movement::indicators_show[0]) {
@@ -1376,6 +1768,12 @@ void features::movement::indicators() {
 	
 	if (c::movement::indicators_show[6])
 		render_indicator(c::movement::ladder_bug_key, c::movement::ladder_bug_key_s, lb_alpha, lg_clr, "lb", false, should_lb, c::movement::detection_clr_for[6], position);
+
+	if (c::movement::indicators_show[8])
+		render_indicator(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s, ast_alpha, ast_clr, "ast", false, HITGODA, c::movement::detection_clr_for[8], position);
+
+	if (c::movement::indicators_show[9])
+		render_indicator(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s, bast_alpha, bast_clr, "bast", false, HITGODA2, c::movement::detection_clr_for[9], position);
 
 	if (c::movement::indicators_show[7])
 		render_indicator(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s, as_alpha, as_clr, "autostrafing", false, false, c::movement::detection_clr_for[7], position);

@@ -3,6 +3,7 @@
 
 namespace aimbot {
 	void run(c_usercmd* cmd);
+	void rng_factor(c_usercmd* cmd);
 	void StopMovement(c_usercmd* cmd);
 }
 

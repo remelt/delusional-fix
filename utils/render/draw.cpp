@@ -124,12 +124,17 @@ void imgui_render::setup(IDirect3DDevice9* device) {
 	std::string spec_font_directory = "C:/windows/fonts/tahoma.ttf";
 
 	//menu
-	fonts::menu_font_thin = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 12, &cfg_menu, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
+	fonts::assist_font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 12, &cfg_menu, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
 	//watermark
 	ImFontConfig watermark_flag;
 	menu::switch_font_cfg(watermark_flag, c::fonts::watermark_font_flag);
 	fonts::watermark_font = io.Fonts->AddFontFromFileTTF(fonts::font_directory_watermark.c_str(), 12, &watermark_flag, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
+
+	//lb assist
+	ImFontConfig assist_flag;
+	menu::switch_font_cfg(assist_flag, c::fonts::assist_font_flag);
+	fonts::assist_font = io.Fonts->AddFontFromFileTTF(fonts::font_directory_assist_font.c_str(), 12, &assist_flag, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
 	//lb player
 	ImFontConfig lb_player_flag;
@@ -231,6 +236,10 @@ void imgui_render::drawcornerbox(const float x, const float y, const float w, co
 	im_render.drawline(x, y + h, x, y + h - (h / c::visuals::corner_lenght), color_t(colour));
 	im_render.drawline(x + w, y + h, x + w - (w / c::visuals::corner_lenght), y + h, color_t(colour));
 	im_render.drawline(x + w, y + h, x + w, y + h - (h / c::visuals::corner_lenght), color_t(colour));
+}
+
+void imgui_render::drawcirclefilled(const float x, const float y, const float radius, const int points, const color_t& color) {
+	m_draw_data.emplace_back(std::make_unique<drawing::CircleFilled>(ImVec2{ x, y }, radius, points, color_t::U32(color)));
 }
 
 void imgui_render::drawcircle(const float x, const float y, const float radius, const int points, const color_t& color, const float thickness) {
@@ -371,6 +380,7 @@ void fonts::reset_fonts( ) {
 	c::fonts::esp_wpn_font = 0;
 	c::fonts::esp_dropped_wpn_font = 0;
 	c::fonts::watermark_font = 0;
+	c::fonts::assist_font = 0;
 	c::fonts::lb_player_font = 0;
 
 	//reset size

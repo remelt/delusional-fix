@@ -1,6 +1,15 @@
 #pragma once
 #include "../../sdk/sdk.hpp"
 
+namespace rng_factor
+{
+	inline bool near_enemy = false;
+	inline bool players_iskilled = false;
+	inline bool player_ishurt = false;
+	inline float percent_rng_factor = 0.f;
+
+}
+
 namespace features::misc {
 	inline int spec_p = 0;
 	struct notify_t {
@@ -68,4 +77,5 @@ namespace features::misc {
 		void resetjumpstats();
 		void gotjump();
 	}
+
 }

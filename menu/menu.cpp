@@ -15,9 +15,9 @@ static const char* ljnulling[4] = { "-w", "-s", "-a", "-d" };
 static const char* ad_key[3] = { "ej", "mj", "lj" };
 static const char* fb_angles[] = { "right", "backwards", "left" };
 static const char* tabs[] = { "indicators","positions" };
-static const char* indicators[8] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "as" };
+static const char* indicators[10] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "as", "ast", "bast" };
 const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
-const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "lobotomy music player font"};
+const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "music player font", "assist font"};
 static const char* hitboxes[] = { "head","neck","chest","pelvis" };
 static const char* WeatherTypes[] = { "rain","snow" };
 static const char* EdgebugTypes[] = { "delusional (og)","lobotomy" };
@@ -2383,15 +2383,61 @@ void miscellaneous() {
                 ImGui::Keybind(("ladderglide key"), &c::movement::ladder_bug_key, &c::movement::ladder_bug_key_s);
             }
 
+            ImGui::Checkbox(("auto align"), &c::movement::auto_align);
+            ImGui::Text("auto align type");
+            ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
+            switch (c::movement::align_selection) {
+            case 0:
+                ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
+                break;
+            case 1:
+                //we alr have freelook in auto-align
+                break;
+            }
             ImGui::Checkbox(("auto pixelsurf"), &c::movement::pixel_surf);
             if (c::movement::pixel_surf) {
                 ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
-                ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
-                //ImGui::Text(("ps ticks"));
-                //ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 62);
+                ImGui::Text(("ps ticks"));
+                ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 128);
             }
 
-            ImGui::Checkbox(("auto align"), &c::movement::auto_align);
+            ImGui::Checkbox(("enable surf and bounce assist"), &c::assist::assist);
+            if (c::assist::assist)
+            {
+                ImGui::Text(("check line"));
+                ImGui::Keybind(("check line key"), &c::assist::pixelsurf_line_key, &c::assist::pixelsurf_line_key_s);
+                ImGui::Checkbox(("pixelsurf assist"), &c::assist::pixelsurf_assist);
+                if (c::assist::pixelsurf_assist)
+                {
+                    ImGui::Keybind(("pixelsurf assist key"), &c::assist::pixelsurf_assist_key, &c::assist::pixelsurf_assist_key_s);
+                    ImGui::Text(("set px points key"));
+                    ImGui::Keybind(("set px points key"), &c::assist::pixelsurf_point_key, &c::assist::pixelsurf_point_key_s);
+                    ImGui::Checkbox(("pixel surf assist stamina hops"), &c::assist::assist_broke_hop);
+                    if (c::assist::assist_broke_hop) {
+                        ImGui::Text(("maximum allowed stamina amount"));
+                        ImGui::SliderFloat(("##staminamax"), &c::assist::assist_stamina_value, 0.f, 100.f, ("%.1f%"));
+                    }
+                    ImGui::Checkbox(("pixel surf assist render"), &c::assist::assist_render);
+
+                    ImGui::Text(("pixel surf assist ticks"));
+                    ImGui::SliderInt(("##pxticks"), &c::assist::pixelsurf_assist_ticks, 0, 128);
+
+                    ImGui::Text(("max amount of points to predict"));
+                    ImGui::SliderInt(("##maxpoints"), &c::assist::pixelsurf_max_points, 1, 6);
+
+                    ImGui::Text(("pixel surf assist type"));
+                    ImGui::Combo("##pxtyppee", &c::assist::pixelsurf_assist_type, "standart\0delta strafe\0");
+                }
+                ImGui::Checkbox(("bounce assist"), &c::assist::bounce_assist);
+                if (c::assist::bounce_assist)
+                {
+                    ImGui::Keybind(("bounce assist key"), &c::assist::bounce_assist_key, &c::assist::bounce_assist_key_s);
+                    ImGui::Text(("set bounce points key"));
+                    ImGui::Keybind(("set bounce points key"), &c::assist::bounce_point_key, &c::assist::bounce_point_key_s);
+                    ImGui::Checkbox(("bounce assist stamina hops"), &c::assist::assist_bounce_broke_hop);
+                    ImGui::Checkbox(("bounce assist render"), &c::assist::bounce_assist_render);
+                }
+            }
 
             ImGui::Checkbox(("delay hop"), &c::movement::delay_hop);
             if (c::movement::delay_hop) {
@@ -2483,7 +2529,7 @@ void miscellaneous() {
                 ImGui::SameLine();
                 ImGui::ColorEdit4(("##indicator def clr"), c::movement::velocity_indicator_custom_clr2, no_alpha);
 
-                ImGui::MultiCombo(("##indicators"), indicators, c::movement::indicators_show, 8);
+                ImGui::MultiCombo(("##indicators"), indicators, c::movement::indicators_show, IM_ARRAYSIZE(indicators));
                 ImGui::Checkbox(("allow fading animation"), &c::movement::indicators_allow_animation);
                 if (c::movement::indicators_allow_animation) {
                     ImGui::Text(("fading time"));
@@ -2496,7 +2542,7 @@ void miscellaneous() {
                     ImGui::Text(("saved tick amount"));
                     ImGui::SliderInt(("##saved tick amount"), &c::movement::detection_saved_tick, 1, 15);
                     ImGui::Text(("while"));
-                    ImGui::MultiCombo(("##detectionfor"), indicators, c::movement::detection_clr_for, 7);
+                    ImGui::MultiCombo(("##detectionfor"), indicators, c::movement::detection_clr_for, IM_ARRAYSIZE(indicators));
                 }
 
                 ImGui::Checkbox(("eb print chat"), &c::movement::edge_bug_detection_printf);
@@ -2764,7 +2810,8 @@ void miscellaneous() {
             //ImGui::ColorEdit4(("##s_theme"), menu::menu_accent2, no_alpha);
             ImGui::Text("menu key");
             ImGui::Keybind(("##menu key"), &c::misc::menu_key);
-
+            ImGui::TextColored(ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f), "// fixed by opportun1ty & flowars");
+            ImGui::PopStyleColor(ImGuiCol_Text);
             ImGui::PopStyleVar();
             ImGui::EndChild();
         }
@@ -3286,10 +3333,43 @@ void font() {
                 ImGui::Text(("search font"));
                 filter.Draw("##filter_font");
                 ImGui::Text("font size");
-                ImGui::SliderInt(("##player_size"), &c::fonts::lb_player_size, 1, 50);
+                ImGui::SliderInt(("##player_size"), &c::fonts::assist_size, 1, 50);
                 ImGui::Text("font flags");
-                ImGui::MultiCombo(("##flags-for-player"), font_flags, c::fonts::lb_player_font_flag, 11);
-                }
+                ImGui::MultiCombo(("##flags-for-player"), font_flags, c::fonts::assist_font_flag, 11);
+            }
+            else if (menu::font_tab == 10) {
+                    //player
+                    ImGui::ListBoxHeader("##fntlist_sc_logs4", ImVec2(-1, 190)); {
+                        for (int i = 0; i < menu::fonts.size(); i++) {
+
+                            std::string fonts = menu::fonts[i];
+
+                            if (filter.PassFilter(fonts.c_str())) {
+                                if (ImGui::Selectable(menu::fonts[i].c_str(), i == fonts::selected_font_index_assist_font)) {
+                                    fonts::selected_font_index_assist_font = i;
+                                }
+                            }
+                        }
+                        ImGui::ListBoxFooter();
+                    }
+
+                    if (fonts::selected_font_index_assist_font >= 0) {
+                        if (menu::fonts[fonts::selected_font_index_assist_font] == "default") {
+                            fonts::font_directory_assist_font = "C:/windows/fonts/tahoma.ttf";
+                        }
+                        else {
+                            fonts::font_directory_assist_font = "C:/windows/fonts/" + menu::fonts[fonts::selected_font_index_assist_font];
+                        }
+                        c::fonts::assist_font = fonts::selected_font_index_assist_font;
+                    }
+
+                    ImGui::Text(("search font"));
+                    filter.Draw("##filter_font");
+                    ImGui::Text("font size");
+                    ImGui::SliderInt(("##player_size"), &c::fonts::assist_size, 1, 50);
+                    ImGui::Text("font flags");
+                    ImGui::MultiCombo(("##flags-for-player"), font_flags, c::fonts::assist_font_flag, 11);
+            }
 
             if (ImGui::Button("reset fonts"))
                 fonts::reset_fonts();

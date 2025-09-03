@@ -549,6 +549,8 @@ void features::misc::hitmarker::event(i_game_event* event) {
 		if (attacker == g::local) {
 			hitmarker_time = 255;
 
+			rng_factor::player_ishurt = true;
+
 			if (c::misc::misc_hitmarker_sound) {
 
 				switch (c::misc::misc_hitmarker_sound_type) {
@@ -690,6 +692,8 @@ void features::misc::kill_say(i_game_event* event) {
 	case fnv::hash("player_death"):
 		if (attacker == g::local && entity != g::local) {
 
+			rng_factor::players_iskilled = true;
+
 			if (c::misc::misc_kill_msg)
 				interfaces::engine->execute_cmd((std::string("say ").append(c::misc::misc_kill_message)).c_str());
 
@@ -822,4 +826,5 @@ void features::misc::handle_spotify() {
 		old_song = features::visuals::current_spotify_song;
 	}*/
 }
+
 

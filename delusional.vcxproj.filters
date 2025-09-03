@@ -375,6 +375,9 @@
     <ClCompile Include="features\mplayer\mplayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="features\movement\assist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\xor.hpp">

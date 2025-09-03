@@ -1,7 +1,6 @@
 #pragma once
 #include "movement.hpp"
 
-
 namespace lobotomy_eb {
 
     inline bool EdgeBug_Founded;

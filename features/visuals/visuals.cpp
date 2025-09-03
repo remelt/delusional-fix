@@ -2,6 +2,7 @@
 #include "../../menu/config/config.hpp"
 #include "../../menu/menu.hpp"
 #include "../mplayer/mplayer.h"
+#include "../misc/misc.hpp"
 //#include "../visuals/display/display.hpp"
 
 void draw_screen_effect(i_material* material) {
@@ -417,7 +418,6 @@ void features::visuals::RenderMediaPlayer()
 		//u can fix that if u want ig
 		ImGui::PushStyleColor(ImGuiCol_MPlayer_ProgressbarBg, ImVec4(0.05f, 0.05f, 0.05f, 0.03f));
 		ImGui::PushStyleColor(ImGuiCol_MPlayer_Progressbar, ImVec4(1.f, 1.f, 1.f, 0.85f));
-
 		ImGui::ProgressBar(smoothProgress, ImVec2(0.0f, 2.0f));
 		ImGui::PopStyleColor();
 		ImGui::PopItemWidth();
@@ -851,4 +851,18 @@ void features::visuals::console() {
 			material[num]->alpha_modulate(c::misc::custom_console_clr[3]);
 		}
 	}
+}
+
+void features::visuals::rng_factor()
+{
+	if (!g::local || !g::local->is_alive() || !interfaces::engine->is_connected() || !interfaces::engine->is_in_game())
+		return;
+
+	int width, height;
+	interfaces::engine->get_screen_size(width, height);
+	std::string rng_perec;
+	rng_perec = "rng factor is: " + std::to_string(rng_factor::percent_rng_factor);
+
+	im_render.text(width / 2, height / 2, 12, fonts::assist_font, rng_perec, true, color_t(1.f, 1.f, 1.f));
+
 }

@@ -84,7 +84,6 @@ struct NewCmd3 {
 	vec3_t origin;
 };
 NewCmd3 NewCmd[128];
-static bool DuckEd = false;
 
 void CorrectMovement(c_usercmd* cmd, vec3_t wish_angle, vec3_t old_angles)
 {
@@ -154,42 +153,6 @@ void CorrectMovement(c_usercmd* cmd, vec3_t wish_angle, vec3_t old_angles)
 	}
 }
 
-vec3_t originalAngle;
-float originalForwardMove, originalSideMove;
-
-void start_movement_fix(c_usercmd* cmd)
-{
-	originalAngle = cmd->view_angles;
-	originalForwardMove = cmd->forward_move;
-	originalSideMove = cmd->side_move;
-}
-
-void end_movement_fix(c_usercmd* cmd)
-{
-	float deltaViewAngles;
-	float f1;
-	float f2;
-
-	if (originalAngle.y < 0.f)
-		f1 = 360.0f + originalAngle.y;
-	else
-		f1 = originalAngle.y;
-
-	if (cmd->view_angles.y < 0.0f)
-		f2 = 360.0f + cmd->view_angles.y;
-	else
-		f2 = cmd->view_angles.y;
-
-	if (f2 < f1)
-		deltaViewAngles = abs(f2 - f1);
-	else
-		deltaViewAngles = 360.0f - abs(f1 - f2);
-
-	deltaViewAngles = 360.0f - deltaViewAngles;
-
-	cmd->forward_move = cos(math::deg2rad(deltaViewAngles)) * originalForwardMove + cos(math::deg2rad(deltaViewAngles + 90.f)) * originalSideMove;
-	cmd->side_move = sin(math::deg2rad(deltaViewAngles)) * originalForwardMove + sin(math::deg2rad(deltaViewAngles + 90.f)) * originalSideMove;
-}
 int sec_LastType = 0;
 vec3_t aim{ };
 
@@ -303,9 +266,9 @@ void lobotomy_eb::EdgeBugPostPredict(c_usercmd* cmd)
 								currentAngle = (currentAngle + DeltaAngle).normalized().clamped();
 							cmd->view_angles = currentAngle;
 							if (c::movement::SiletEdgeBug) {
-								start_movement_fix(cmd);
+								features::movement::start_movement_fix(cmd);
 								cmd->view_angles = angViewPointBackup;
-								end_movement_fix(cmd);
+								features::movement::end_movement_fix(cmd);
 							}
 						}
 					}
@@ -319,9 +282,9 @@ void lobotomy_eb::EdgeBugPostPredict(c_usercmd* cmd)
 								currentAngle = (currentAngle + DeltaAngle).normalized().clamped();
 							cmd->view_angles = currentAngle;
 							if (c::movement::SiletEdgeBug) {
-								start_movement_fix(cmd);
+								features::movement::start_movement_fix(cmd);
 								cmd->view_angles = angViewPointBackup;
-								end_movement_fix(cmd);
+								features::movement::end_movement_fix(cmd);
 							}
 						}
 					}
@@ -503,9 +466,9 @@ void lobotomy_eb::EdgeBugPostPredict(c_usercmd* cmd)
 								currentAngle = (currentAngle + DeltaAngle).normalized().clamped();
 							cmd->view_angles = currentAngle;
 							if (c::movement::SiletEdgeBug) {
-								start_movement_fix(cmd);
+								features::movement::start_movement_fix(cmd);
 								cmd->view_angles = angViewPointBackup;
-								end_movement_fix(cmd);
+								features::movement::end_movement_fix(cmd);
 							}
 						}
 					}
@@ -569,9 +532,9 @@ void lobotomy_eb::EdgeBugPostPredict(c_usercmd* cmd)
 								currentAngle = (currentAngle + DeltaAngle).normalized().clamped();
 							cmd->view_angles = currentAngle;
 							if (c::movement::SiletEdgeBug) {
-								start_movement_fix(cmd);
+								features::movement::start_movement_fix(cmd);
 								cmd->view_angles = angViewPointBackup;
-								end_movement_fix(cmd);
+								features::movement::end_movement_fix(cmd);
 							}
 						}
 					}
@@ -640,9 +603,9 @@ void lobotomy_eb::EdgeBugPostPredict(c_usercmd* cmd)
 		cmd->side_move = NewCmd[Hits].sideMove;
 		cmd->view_angles = NewCmd[Hits].viewangle;
 		if (c::movement::SiletEdgeBug) {
-			start_movement_fix(cmd);
+			features::movement::start_movement_fix(cmd);
 			cmd->view_angles = angViewPointBackup;
-			end_movement_fix(cmd);
+			features::movement::end_movement_fix(cmd);
 		}
 		aim = cmd->view_angles;
 		Hits += 1;
@@ -688,7 +651,6 @@ void lobotomy_eb::edgebug_detect(c_usercmd* cmd)
 		case 4: interfaces::surface->play_sound("Ui\\beep07.wav"); break;
 		}
 	}
-
 }
 
 void  lobotomy_eb::edgebug_lock(float& x, float& y)
@@ -723,9 +685,8 @@ void lobotomy_eb::frame_stage(int stage)
 		if (EdgeBug_Founded) {
 			if (!c::movement::SiletEdgeBug && sec_LastType > 1 && !c::movement::AutoStrafeEdgeBug) {
 				const float smoothingFactor = 0.1f;
-				const float maxDeltaAngle = 10.f; // ћаксимальное изменение угла за кадр
+				const float maxDeltaAngle = 10.f;
 
-				// ‘ункци€ дл€ нормализации разницы углов в диапазоне [-180, 180]
 				auto normalizeDelta = [](float delta) -> float {
 					while (delta > 180.f)
 						delta -= 360.f;
@@ -734,19 +695,16 @@ void lobotomy_eb::frame_stage(int stage)
 					return delta;
 					};
 
-				// »нтерпол€ци€ дл€ pitch
 				float deltaPitch = normalizeDelta(aim.x - aim_to.x);
 				if (fabs(deltaPitch) > maxDeltaAngle)
 					deltaPitch = (deltaPitch > 0 ? maxDeltaAngle : -maxDeltaAngle);
 				aim_to.x += deltaPitch * smoothingFactor;
 
-				// »нтерпол€ци€ дл€ yaw
 				float deltaYaw = normalizeDelta(aim.y - aim_to.y);
 				if (fabs(deltaYaw) > maxDeltaAngle)
 					deltaYaw = (deltaYaw > 0 ? maxDeltaAngle : -maxDeltaAngle);
 				aim_to.y += deltaYaw * smoothingFactor;
 
-				// »нтерпол€ци€ дл€ roll (если используетс€)
 				float deltaRoll = normalizeDelta(aim.z - aim_to.z);
 				if (fabs(deltaRoll) > maxDeltaAngle)
 					deltaRoll = (deltaRoll > 0 ? maxDeltaAngle : -maxDeltaAngle);

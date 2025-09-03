@@ -17,6 +17,7 @@ public:
 
 namespace menu {
 	inline bool open = true;
+	inline float delta_time = 0;
 	inline int main_tab = 0;
 	inline bool initialized = false;
 	inline bool unhook = true;

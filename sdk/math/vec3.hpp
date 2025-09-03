@@ -6,6 +6,9 @@
 #include <cmath>
 #include <numbers>
 
+constexpr float deg2rad(float degrees) {
+	return degrees * (3.14159265358979323846f / 180.0f);
+}
 
 class vec3_t {
 public:
@@ -43,7 +46,7 @@ public:
 		return res;
 	}
 
-	auto length2() const  {
+	auto length2() const {
 		return std::sqrt(x * x + y * y + z * z);
 	}
 
@@ -55,6 +58,11 @@ public:
 			movss root, xmm0
 		}
 		return root;
+	}
+
+	[[nodiscard]] float dist_to_2d(const vec3_t& vector) const
+	{
+		return (*this - vector).length_2d();
 	}
 
 	[[nodiscard]] vec3_t to_angle() const {
@@ -86,6 +94,17 @@ public:
 		float dy = y - other.y;
 		float dz = z - other.z;
 		return sqrt(dx * dx + dy * dy + dz * dz);
+	}
+
+	[[nodiscard]] float dist_to(const vec3_t& vector) const
+	{
+		return (*this - vector).length();
+	}
+
+	static vec3_t fromAngle(const vec3_t& angle) noexcept {
+		float radX = deg2rad(angle.x);
+		float radY = deg2rad(angle.y);
+		return vec3_t(std::cos(radX) * std::cos(radY), std::cos(radX) * std::sin(radY), -std::sin(radX));
 	}
 
 	float dot(const vec3_t other) {
@@ -202,6 +221,10 @@ public:
 	float operator[](int i) const {
 		return ((float*)this)[i];
 	}
+
+	bool operator==(const vec3_t& other) const noexcept {
+		return x == other.x && y == other.y && z == other.z;
+	}
 };
 
 inline vec3_t operator*(float lhs, const vec3_t& rhs) {
@@ -228,7 +251,7 @@ public:
 //
 
 struct matrix_t {
-	matrix_t() { }
+	matrix_t() {}
 	matrix_t(
 		const float m00, const float m01, const float m02, const float m03,
 		const float m10, const float m11, const float m12, const float m13,

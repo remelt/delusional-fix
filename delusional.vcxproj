@@ -370,6 +370,7 @@
     <ClCompile Include="features\events\events.cpp" />
     <ClCompile Include="features\misc\jumpstats.cpp" />
     <ClCompile Include="features\misc\misc.cpp" />
+    <ClCompile Include="features\movement\assist.cpp" />
     <ClCompile Include="features\movement\calculator.cpp" />
     <ClCompile Include="features\movement\movement.cpp" />
     <ClCompile Include="features\movement\recorder.cpp" />

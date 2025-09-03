@@ -25,6 +25,7 @@ public:
 	void drawrect(const float x, const float y, const float w, const float h, const color_t& color, const ImDrawFlags flags = 0, const float thickness = 1.0f);
 	void drawcornerbox(const float x, const float y, const float w, const float h, const color_t& color);
 	void drawcircle(const float x, const float y, const float radius, const int points, const color_t& color, const float thickness = 1.0f);
+	void drawcirclefilled(const float x, const float y, const float radius, const int points, const color_t& color);
 	void drawtrianglefilled(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const color_t& color);
 	void drawpolygon(const std::vector<ImVec2>& verts, const color_t& color);
 	void drawpolyline(const std::vector<ImVec2>& verts, const color_t& color, const ImDrawFlags flags = ImDrawListFlags_AntiAliasedFill, const float thickness = 1.0f);
@@ -66,6 +67,7 @@ namespace fonts {
 	inline ImFont* main_spec_font;
 	inline ImFont* logs_font_flag;
 	inline ImFont* watermark_font;
+	inline ImFont* assist_font;
 	inline ImFont* lb_player_font;
 	inline ImFont* icon_font;
 	inline ImFont* esp_name_font;
@@ -79,6 +81,7 @@ namespace fonts {
 	inline ImFont* iwebz_specs;
 
 	inline std::string font_directory_watermark = "C:/windows/fonts/tahoma.ttf";
+	inline std::string font_directory_assist_font = "C:/windows/fonts/tahoma.ttf";
 	inline std::string font_directory_lb_player_font = "C:/windows/fonts/tahoma.ttf";
 	inline std::string font_directory_menu_main = "C:/windows/fonts/tahomabd.ttf";
 	inline std::string font_directory_indicator = "C:/windows/fonts/verdanab.ttf";
@@ -102,6 +105,7 @@ namespace fonts {
 	inline int selected_font_index_wpn = -1;
 	inline int selected_font_index_dropped_wpn = -1;
 	inline int selected_font_index_watermark = -1;
+	inline int selected_font_index_assist_font = -1;
 	inline int selected_font_index_lb_player_font = -1;
 }
 

@@ -2499,6 +2499,22 @@ struct ImDrawList
     IMGUI_API void  _PathArcToN(const ImVec2& center, float radius, float a_min, float a_max, int num_segments);
 };
 
+inline void RenderFadedGradientLine(ImDrawList* draw_list, const ImVec2& position, const ImVec2& size, const ImColor& color)
+{
+    draw_list->AddRectFilledMultiColor(ImVec2(position.x, position.y), ImVec2(position.x + size.x / 2, position.y + size.y),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w * 0.f),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w * 0.f));
+
+    draw_list->AddRectFilledMultiColor(ImVec2(position.x + size.x / 2, position.y),
+        ImVec2((position.x + size.x / 2) + size.x / 2, position.y + size.y),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w * 0.f),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w * 0.f),
+        ImColor(color.Value.x, color.Value.y, color.Value.z, color.Value.w));
+}
+
 // All draw data to render a Dear ImGui frame
 // (NB: the style and the naming convention here is a little inconsistent, we currently preserve them for backward compatibility purpose,
 // as this is one of the oldest structure exposed by the library! Basically, ImDrawList == CmdList)

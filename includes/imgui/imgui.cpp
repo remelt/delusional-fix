@@ -8620,7 +8620,7 @@ bool ImGui::Keybind(const char* str_id, int* current_key, int* key_style) {
     else if (g.ActiveId == id)
         strcpy_s(buf_display, "[...]");
 
-    PushFont(fonts::menu_font_thin);
+    PushFont(fonts::assist_font);
     window->DrawList->AddText(frame_bb.Min, g.ActiveId == id ? ImColor(90 / 255.f, 90 / 255.f, 90 / 255.f, g.Style.Alpha) : ImColor(90 / 255.f, 90 / 255.f, 90 / 255.f, g.Style.Alpha), buf_display);
     PopFont();
 

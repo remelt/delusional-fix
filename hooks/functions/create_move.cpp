@@ -30,10 +30,14 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::misc::reveal_server_ranks(cmd);
 	panorama::scaleform_tick(g::local);
 
+	if ((c::movement::auto_align) && !(prediction_backup::flags & 1))
+		features::movement::auto_align_lb(cmd);
+	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 	features::movement::auto_align(cmd);
 	features::movement::pixel_surf_fix(cmd);
 
 	features::movement::bhop(cmd);
+
 	features::movement::delay_hop(cmd);
 	features::movement::gather_vel_graph_data();
 	features::movement::gather_stam_graph_data();
@@ -45,6 +49,9 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	prediction::backup_originals(cmd);
 
 	lobotomy_eb::PrePredictionEdgeBug(cmd);
+	features::movement::check_ps(cmd);
+	features::movement::assist_createmove(cmd);
+	//aimbot::rng_factor(cmd);
 
 	prediction::begin(cmd); {
 
@@ -67,7 +74,9 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::jump_bug(cmd);
 	features::movement::auto_strafe(cmd, features::movement::first_viewangles);
 	features::movement::strafe_optimizer(cmd);
+
 	features::misc::kz_practice_logic(cmd);
+
 
 	features::movement::fix_movement(cmd, features::movement::first_viewangles); 
 

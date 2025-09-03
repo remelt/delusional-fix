@@ -4,7 +4,20 @@
 #include <cstddef>
 #include <cstdio>
 
+static bool DuckEd = false;
+
+namespace assistJb
+{
+	inline bool AlertJB = false;
+	inline bool AlertJB2 = false;
+}
+
+
+
 namespace features::movement {
+	inline bool m_opened = false;
+	inline bool HITGODA = false;
+	inline bool HITGODA2 = false;
 	inline bool should_edge_bug;
 	inline bool detected_ladder_glide;
 	inline bool detected_normal_jump_bug = false;
@@ -36,7 +49,6 @@ namespace features::movement {
 	inline float hiteffect_alpha;
 	inline float last_tick_y;
 	inline vec3_t first_viewangles;
-
 	void bhop(c_usercmd* cmd);//
 	void delay_hop(c_usercmd* cmd);
 	void edge_bug(c_usercmd* cmd);
@@ -55,6 +67,8 @@ namespace features::movement {
 	void fake_backwards(c_usercmd* cmd);
 	void auto_strafe(c_usercmd* cmd, vec3_t& current_angle);
 	void fix_movement(c_usercmd* cmd, vec3_t& angle);
+	void start_movement_fix(c_usercmd* cmd);
+	void end_movement_fix(c_usercmd* cmd);
 	void blockbot(c_usercmd* cmd);
 	void strafe_optimizer(c_usercmd* user_cmd);
 	void mouse_strafe_limiter(float* x, float* y);
@@ -62,11 +76,20 @@ namespace features::movement {
 	void stamina_indicator();
 	void indicators();
 	void auto_align(c_usercmd* cmd);
+	void auto_align_lb(c_usercmd* cmd);
 	void gather_vel_graph_data( );
 	void velocity_graph_draw( );
 	void gather_stam_graph_data( );
 	void stamina_graph_draw( );
 	void visualize_eb();
+	void check_ps(c_usercmd* cmd);
+	void pixelsurf_assist(c_usercmd* cmd);
+	void bounce_assist(c_usercmd* cmd);
+	void assist_render();
+	void RenderPoints();
+	void assist_createmove(c_usercmd* cmd);
+	void assist_endscene();
+
 
 	struct ps_data_t {
 		bool predicted_ps = false;
@@ -120,6 +143,31 @@ namespace features::movement {
 	};
 
 	inline std::deque<tick_info> move_info;
+
+	struct points_check_t {
+		vec3_t pos;
+		std::string map;
+		float currentScale = 0.f;
+		bool open_settings = false;
+		bool jump = true;
+		bool minijump = true;
+		bool longjump = true;
+		bool jumpbug = true;
+		bool crouch_hop = true;
+		bool mini_crouch_hop = true;
+		bool c_jump = true;
+		bool c_minijump = true;
+		bool c_longjump = true;
+		bool c_jumpbug = true;
+		bool c_crouch_hop = true;
+		bool c_mini_crouch_hop = true;
+		bool active = true;
+		float radius = 300.f;
+		float delta_strafe = 0.5f;
+		points_check_t(const vec3_t& Pos = { }, const std::string& Map = "") : pos(Pos), map(Map) {}
+	};
+	inline std::vector< points_check_t > m_bounce_points_check{ };
+	inline std::vector< points_check_t > m_pixelsurf_points_check{ };
 }
 
 namespace features::calculator {
