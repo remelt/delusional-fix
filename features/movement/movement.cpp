@@ -1025,6 +1025,7 @@ bool should_ps_standing{ };
 bool wall_detected = false;
 
 //works better imo and has freelook
+//TODO: UNDERSTAND WHY U STOP ON SOME SURFS ON 128 TICK
 void features::movement::auto_align_lb(c_usercmd* cmd)
 {
 	if (!c::movement::auto_align) {
@@ -1035,11 +1036,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 		return;
 	}
 
-	if (!g::local || !g::local->is_alive() || g::local->flags() & fl_onground) {
-		return;
-	}
-
-	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
+	if (!g::local || !g::local->is_alive()) {
 		return;
 	}
 
@@ -1047,6 +1044,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 		should_ps_standing = false;
 		return;
 	}
+
 	float max_radias = m_pi * 2.f;
 	float step = max_radias / 16.f;
 	vec3_t start_pos = g::local->abs_origin();
@@ -1296,11 +1294,12 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 				if (cmd->side_move > 0.f && cmd->buttons & in_moveleft)
 					cmd->side_move = -450.f;
 			}
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 		}
 	}
 }
 
-
+//TODO: UNDERSTAND WHY IT STILL CAN UNDUCK ON 128 TICK
 
 void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 	if (!c::movement::pixel_surf || !menu::checkkey(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s))
@@ -1322,6 +1321,7 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 	if (ps_data.pixelsurfing) {
 
 		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		vec3_t velocity = g::local->velocity();
 
 		if (!ps_data.predicted_ps) {
 			if (ps_data.pixeltick < cmd->tick_count) {
@@ -1337,11 +1337,25 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 				detected_normal_pixel_surf = false;
 			}
 
+			//doing that always
 			cmd->buttons = ps_data.pixelsurf_cmd->buttons;
-			cmd->view_angles = ps_data.pixelsurf_cmd->view_angles;
+
+			//adjust viewangles
+			if (c::movement::adjust_view) {
+				cmd->view_angles = ps_data.pixelsurf_cmd->view_angles;
+			}
+
+			//move!
 			cmd->side_move = ps_data.pixelsurf_cmd->side_move;
 			cmd->forward_move = ps_data.pixelsurf_cmd->forward_move;
 			cmd->up_move = ps_data.pixelsurf_cmd->up_move;
+		}
+
+		//sometimes the second one doesnt work
+		//mostly useless tbh
+		if (prediction_backup::velocity.z == targetZvelo) {
+			if (cmd->buttons & in_duck)
+				cmd->buttons |= in_duck;
 		}
 
 		if (ps_data.pixelducking)
@@ -1355,6 +1369,14 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 			ps_data.predicted_ps = false;
 			return;
 		}
+		//if (cmd->tick_count > ps_data.pixeltick) {
+		//	if (prediction_backup::velocity.z != targetZvelo) {
+		//		should_ps = false;
+		//		ps_data.pixelsurfing = false;
+		//		ps_data.predicted_ps = false;
+		//		return;
+		//	}
+		//}
 		return;
 	}
 }
@@ -1379,42 +1401,52 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
 	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 
-	for (int s = 0; s < 2; s++) {
-		if (ps_data.pixelsurfing)
-			break;
-
-		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-
-		int flags = g::local->flags();
-		vec3_t velocity = g::local->velocity();
-
-		for (int i = 0; i < c::movement::pixel_surf_ticks; i++) {
-			c_usercmd* predictcmd = new c_usercmd(*cmd);
-
-			if (s == 0)
-				predictcmd->buttons |= in_duck;
-			else
-				predictcmd->buttons &= ~in_duck;
-
-			prediction::begin(predictcmd);
-
-			if (flags & fl_onground)
+	//if (!should_ps) {
+		for (int s = 0; s < 2; s++) {
+			if (ps_data.pixelsurfing)
 				break;
 
-			if (g::local->velocity().z == targetZvelo && velocity.z == targetZvelo) {
-				ps_data.pixeltick = cmd->tick_count + i;
-				ps_data.pixelsurf_cmd = predictcmd;
-				ps_data.pixelducking = (s == 0);
-				ps_data.pixelsurfing = true;
-				should_ps = true;
-				break;
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+
+			int flags = g::local->flags();
+			vec3_t velocity = g::local->velocity();
+
+			for (int i = 0; i < c::movement::pixel_surf_ticks; i++) {
+				c_usercmd* predictcmd = new c_usercmd(*cmd);
+
+				if (s == 0)
+					predictcmd->buttons |= in_duck;
+				else
+					predictcmd->buttons &= ~in_duck;
+
+				prediction::begin(predictcmd);
+
+				if (flags & fl_onground)
+					break;
+
+				if (g::local->velocity().z == targetZvelo && velocity.z == targetZvelo) {
+					ps_data.pixeltick = cmd->tick_count + i;
+					ps_data.pixelsurf_cmd = predictcmd;
+					ps_data.pixelducking = (s == 0);
+					ps_data.pixelsurfing = true;
+					should_ps = true;
+					break;
+				}
+
+				flags = g::local->flags();
+				velocity = g::local->velocity();
 			}
-
-			flags = g::local->flags();
-			velocity = g::local->velocity();
+			prediction::end();
 		}
-		prediction::end();
-	}
+	//}
+	//else {
+	//	cmd->buttons |= in_duck;
+	//	if (cmd->tick_count > ps_data.pixeltick) {
+	//		if (prediction_backup::velocity.z != targetZvelo) {
+	//			should_ps = false;
+	//		}
+	//	}
+	//}
 }
 
 //ps from lb

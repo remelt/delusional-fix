@@ -1111,6 +1111,8 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 					if (cmd->tick_count > ticks && prediction_backup::flags & 1 && g::local->stamina() != 0.f)
 						return;
 				}
+
+				//TODO: MAKE IT WORK PROPERLY (IT MAKES A LITTLE MORE THAN ZERO SENSE TO DO IT LIKE THIS)
 				if (c::assist::assist_broke_hop) {
 					if (cmd->tick_count > ticks && prediction_backup::flags & 1 && g::local->stamina() > c::assist::assist_stamina_value)
 						return;
@@ -1630,6 +1632,7 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 			if (HITGODA || HitJump || HitMiniJump || HitLongJump || HitCHop || HitJumpBug || HitMiniChop) {
 				break;
 			}
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 		}
 	}
 }
@@ -2064,7 +2067,8 @@ void features::movement::bounce_assist(c_usercmd* cmd)
 			cmd->buttons = BackupButtons;
 			cmd->forward_move = ForwaMove;
 			cmd->side_move = SideMove;
-		prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
+		//restoring twice? why?
+		//prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
 		prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
 			static int TicksOut = 0;
 
@@ -2278,6 +2282,7 @@ void features::movement::bounce_assist(c_usercmd* cmd)
 			else {
 				HITGODA2 = false;
 			}
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 		}
 	}
 }
@@ -2696,11 +2701,11 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 
 	if (g::local && g::local->is_alive()) {
 
-		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 		features::movement::pixelsurf_assist(cmd);
-		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 		features::movement::bounce_assist(cmd);
-		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 		float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
 		float fTickInterval = interfaces::globals->interval_per_tick;
 		float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;

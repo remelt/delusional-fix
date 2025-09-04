@@ -2397,8 +2397,9 @@ void miscellaneous() {
             ImGui::Checkbox(("auto pixelsurf"), &c::movement::pixel_surf);
             if (c::movement::pixel_surf) {
                 ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
+                ImGui::Checkbox(("adjust viewangles"), &c::movement::adjust_view);
                 ImGui::Text(("ps ticks"));
-                ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 128);
+                ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 64);
             }
 
             ImGui::Checkbox(("enable surf and bounce assist"), &c::assist::assist);

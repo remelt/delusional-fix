@@ -250,6 +250,7 @@ namespace c {
 		inline int  auto_duck_key_s = 1;
 		inline bool pixel_surf_fix = false;
 		inline bool pixel_surf = false;
+		inline bool adjust_view = false;
 		inline int  pixel_surf_key = 0;
 		inline int  pixel_surf_key_s = 1;
 		inline int pixel_surf_ticks = 16;

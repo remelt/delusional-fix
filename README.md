@@ -52,6 +52,7 @@ some images for some fucking newgens whov never played w og delusional should be
 + Add and fix scaleform
 
 # KNOWN ISSUES :
++ Pixel surf doesnt crouch some times on 128 tick
 + Media player some times doesnt update if the track is on repeat
 + Aimbot sometimes misses (idk y mb u need some kind of bones fix like in hw)
 + Awall only if lethal is kinda ass for some damn reason
