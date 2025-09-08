@@ -1275,6 +1275,13 @@ namespace c {
 		write_value(json[xs("visuals")][xs("removals[0]")], visuals::removals[0]);
 		write_value(json[xs("visuals")][xs("removals[1]")], visuals::removals[1]);
 		write_value(json[xs("visuals")][xs("removals[2]")], visuals::removals[2]);
+
+		write_value(json[xs("movement")][xs("air_stuck")], movement::air_stuck);
+		write_value(json[xs("movement")][xs("air_stuck_key")], movement::air_stuck_key);
+		write_value(json[xs("movement")][xs("air_stuck_key_s")], movement::air_stuck_key_s);
+		write_value(json[xs("movement")][xs("px_selection")], movement::px_selection);
+		write_value(json[xs("movement")][xs("bhopfix")], movement::bhopfix);
+
 		write_value(json[xs("movement")][xs("pixel_surf")], movement::pixel_surf);
 		write_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
 		write_value(json[xs("movement")][xs("adjust_view")], movement::adjust_view);
@@ -2741,6 +2748,13 @@ namespace c {
 			read_value(json[xs("visuals")][xs("removals[0]")], visuals::removals[0]);
 			read_value(json[xs("visuals")][xs("removals[1]")], visuals::removals[1]);
 			read_value(json[xs("visuals")][xs("removals[2]")], visuals::removals[2]);
+
+			read_value(json[xs("movement")][xs("air_stuck")], movement::air_stuck);
+			read_value(json[xs("movement")][xs("air_stuck_key")], movement::air_stuck_key);
+			read_value(json[xs("movement")][xs("air_stuck_key_s")], movement::air_stuck_key_s);
+			read_value(json[xs("movement")][xs("px_selection")], movement::px_selection);
+			read_value(json[xs("movement")][xs("bhopfix")], movement::bhopfix);
+
 			read_value(json[xs("movement")][xs("pixel_surf")], movement::pixel_surf);
 			read_value(json[xs("movement")][xs("pixel_surf_fix")], movement::pixel_surf_fix);
 			read_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
@@ -3203,6 +3217,12 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug_detection_sound")], movement::edge_bug_detection_sound);
 			read_value(json[xs("movement")][xs("edge_bug_health_boost_effect")], movement::edge_bug_health_boost_effect);
 
+			read_value(json[xs("movement")][xs("air_stuck")], movement::air_stuck);
+			read_value(json[xs("movement")][xs("air_stuck_key")], movement::air_stuck_key);
+			read_value(json[xs("movement")][xs("air_stuck_key_s")], movement::air_stuck_key_s);
+			read_value(json[xs("movement")][xs("px_selection")], movement::px_selection);
+			read_value(json[xs("movement")][xs("bhopfix")], movement::bhopfix);
+
 			read_value(json[xs("movement")][xs("auto_align")], movement::auto_align);
 			read_value(json[xs("movement")][xs("pixel_surf")], movement::pixel_surf);
 			read_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
@@ -3249,6 +3269,69 @@ namespace c {
 			read_value(json[xs("movement")][xs("lj_null[2]")], movement::lj_null[2]);
 			read_value(json[xs("movement")][xs("lj_null[3]")], movement::lj_null[3]);
 
+			if (json.contains("assist") && json["assist"].contains("pixelsurf_points")) {
+				features::movement::m_pixelsurf_points_check.clear();
+				for (const auto& point_json : json["assist"]["pixelsurf_points"]) {
+					features::movement::points_check_t point;
+					if (point_json.contains("pos")) {
+						point.pos.x = point_json["pos"]["x"].get<float>();
+						point.pos.y = point_json["pos"]["y"].get<float>();
+						point.pos.z = point_json["pos"]["z"].get<float>();
+					}
+					point.map = point_json.value("map", std::string(""));
+					point.jump = point_json.value("jump", true);
+					point.minijump = point_json.value("minijump", true);
+					point.longjump = point_json.value("longjump", true);
+					point.jumpbug = point_json.value("jumpbug", true);
+					point.crouch_hop = point_json.value("crouch_hop", true);
+					point.mini_crouch_hop = point_json.value("mini_crouch_hop", true);
+					point.c_jump = point_json.value("c_jump", true);
+					point.c_minijump = point_json.value("c_minijump", true);
+					point.c_longjump = point_json.value("c_longjump", true);
+					point.c_jumpbug = point_json.value("c_jumpbug", true);
+					point.c_crouch_hop = point_json.value("c_crouch_hop", true);
+					point.c_mini_crouch_hop = point_json.value("c_mini_crouch_hop", true);
+					point.active = point_json.value("active", true);
+					point.radius = point_json.value("radius", 300.0f);
+					point.delta_strafe = point_json.value("delta_strafe", 0.5f);
+					point.currentScale = 0.0f;
+					point.open_settings = false;
+
+					features::movement::m_pixelsurf_points_check.push_back(point);
+				}
+			}
+
+			if (json.contains("assist") && json["assist"].contains("bounce_points")) {
+				features::movement::m_bounce_points_check.clear();
+				for (const auto& point_json : json["assist"]["bounce_points"]) {
+					features::movement::points_check_t point;
+					if (point_json.contains("pos")) {
+						point.pos.x = point_json["pos"]["x"].get<float>();
+						point.pos.y = point_json["pos"]["y"].get<float>();
+						point.pos.z = point_json["pos"]["z"].get<float>();
+					}
+					point.map = point_json.value("map", std::string(""));
+					point.jump = point_json.value("jump", true);
+					point.minijump = point_json.value("minijump", true);
+					point.longjump = point_json.value("longjump", true);
+					point.jumpbug = point_json.value("jumpbug", true);
+					point.crouch_hop = point_json.value("crouch_hop", true);
+					point.mini_crouch_hop = point_json.value("mini_crouch_hop", true);
+					point.c_jump = point_json.value("c_jump", true);
+					point.c_minijump = point_json.value("c_minijump", true);
+					point.c_longjump = point_json.value("c_longjump", true);
+					point.c_jumpbug = point_json.value("c_jumpbug", true);
+					point.c_crouch_hop = point_json.value("c_crouch_hop", true);
+					point.c_mini_crouch_hop = point_json.value("c_mini_crouch_hop", true);
+					point.active = point_json.value("active", true);
+					point.radius = point_json.value("radius", 300.0f);
+					point.delta_strafe = point_json.value("delta_strafe", 0.5f);
+					point.currentScale = 0.0f;
+					point.open_settings = false;
+
+					features::movement::m_bounce_points_check.push_back(point);
+				}
+			}
 		}
 
 		path.erase(path.size() - configs.at(index).size() - 5);
@@ -4439,69 +4522,6 @@ namespace c {
 			read_value(json[xs("movement")][xs("indicators_position")], movement::indicators_position);
 			read_value(json[xs("movement")][xs("indicators_gap")], movement::indicators_gap);
 
-			if (json.contains("assist") && json["assist"].contains("pixelsurf_points")) {
-				features::movement::m_pixelsurf_points_check.clear();
-				for (const auto& point_json : json["assist"]["pixelsurf_points"]) {
-					features::movement::points_check_t point;
-					if (point_json.contains("pos")) {
-						point.pos.x = point_json["pos"]["x"].get<float>();
-						point.pos.y = point_json["pos"]["y"].get<float>();
-						point.pos.z = point_json["pos"]["z"].get<float>();
-					}
-					point.map = point_json.value("map", std::string(""));
-					point.jump = point_json.value("jump", true);
-					point.minijump = point_json.value("minijump", true);
-					point.longjump = point_json.value("longjump", true);
-					point.jumpbug = point_json.value("jumpbug", true);
-					point.crouch_hop = point_json.value("crouch_hop", true);
-					point.mini_crouch_hop = point_json.value("mini_crouch_hop", true);
-					point.c_jump = point_json.value("c_jump", true);
-					point.c_minijump = point_json.value("c_minijump", true);
-					point.c_longjump = point_json.value("c_longjump", true);
-					point.c_jumpbug = point_json.value("c_jumpbug", true);
-					point.c_crouch_hop = point_json.value("c_crouch_hop", true);
-					point.c_mini_crouch_hop = point_json.value("c_mini_crouch_hop", true);
-					point.active = point_json.value("active", true);
-					point.radius = point_json.value("radius", 300.0f);
-					point.delta_strafe = point_json.value("delta_strafe", 0.5f);
-					point.currentScale = 0.0f;
-					point.open_settings = false;
-
-					features::movement::m_pixelsurf_points_check.push_back(point);
-				}
-			}
-
-			if (json.contains("assist") && json["assist"].contains("bounce_points")) {
-				features::movement::m_bounce_points_check.clear();
-				for (const auto& point_json : json["assist"]["bounce_points"]) {
-					features::movement::points_check_t point;
-					if (point_json.contains("pos")) {
-						point.pos.x = point_json["pos"]["x"].get<float>();
-						point.pos.y = point_json["pos"]["y"].get<float>();
-						point.pos.z = point_json["pos"]["z"].get<float>();
-					}
-					point.map = point_json.value("map", std::string(""));
-					point.jump = point_json.value("jump", true);
-					point.minijump = point_json.value("minijump", true);
-					point.longjump = point_json.value("longjump", true);
-					point.jumpbug = point_json.value("jumpbug", true);
-					point.crouch_hop = point_json.value("crouch_hop", true);
-					point.mini_crouch_hop = point_json.value("mini_crouch_hop", true);
-					point.c_jump = point_json.value("c_jump", true);
-					point.c_minijump = point_json.value("c_minijump", true);
-					point.c_longjump = point_json.value("c_longjump", true);
-					point.c_jumpbug = point_json.value("c_jumpbug", true);
-					point.c_crouch_hop = point_json.value("c_crouch_hop", true);
-					point.c_mini_crouch_hop = point_json.value("c_mini_crouch_hop", true);
-					point.active = point_json.value("active", true);
-					point.radius = point_json.value("radius", 300.0f);
-					point.delta_strafe = point_json.value("delta_strafe", 0.5f);
-					point.currentScale = 0.0f;
-					point.open_settings = false;
-
-					features::movement::m_bounce_points_check.push_back(point);
-				}
-			}
 		}
 
 		path.erase(path.size() - configs.at(index).size() - 5);

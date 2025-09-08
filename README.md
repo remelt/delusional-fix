@@ -38,6 +38,7 @@ some images for some fucking newgens whov never played w og delusional should be
     - added silent option for delusional eb
     - pasted and fixed eb from lobotomy
     - added auto-align from lobotomy
+    - added px from lobotomy
     - now u can choose ticks for pixelsurf
     - pasted and fixed ps and bounce assists from lobotomy (works a lot better imo) (ofc fixed for all ticks) (big s/o [@flowars](https://github.com/flowars))
 + Misc
@@ -52,7 +53,7 @@ some images for some fucking newgens whov never played w og delusional should be
 + Add and fix scaleform
 
 # KNOWN ISSUES :
-+ Pixel surf doesnt crouch some times on 128 tick
++ Delusional pixel surf doesnt crouch some times on 128 tick
 + Media player some times doesnt update if the track is on repeat
 + Aimbot sometimes misses (idk y mb u need some kind of bones fix like in hw)
 + Awall only if lethal is kinda ass for some damn reason

@@ -2308,7 +2308,7 @@ void miscellaneous() {
                     ImGui::Text(("perfect hops"));
                     ImGui::SliderInt("##perfecthops", &c::movement::whathopmiss, 0, 6);
                 }
-
+                ImGui::Checkbox(("enable if bhop isnt working properly (128t only)"), &c::movement::bhopfix);
             }
 
             ImGui::Checkbox(("edgejump"), &c::movement::edge_jump);
@@ -2384,8 +2384,10 @@ void miscellaneous() {
             }
 
             ImGui::Checkbox(("auto align"), &c::movement::auto_align);
-            ImGui::Text("auto align type");
-            ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
+            if (c::movement::auto_align) {
+                ImGui::Text("auto align type");
+                ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
+            }
             switch (c::movement::align_selection) {
             case 0:
                 ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
@@ -2396,10 +2398,25 @@ void miscellaneous() {
             }
             ImGui::Checkbox(("auto pixelsurf"), &c::movement::pixel_surf);
             if (c::movement::pixel_surf) {
-                ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
-                ImGui::Checkbox(("adjust viewangles"), &c::movement::adjust_view);
-                ImGui::Text(("ps ticks"));
-                ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 64);
+                ImGui::Text("pixel surf type");
+                ImGui::Combo("##pstype", &c::movement::px_selection, "delusional (og)\0lobotomy\0");
+                switch (c::movement::px_selection) {
+                case 0:
+                    ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
+                    //ImGui::Checkbox(("crouch fix for 128 tick (wip)"), &c::movement::crouch_fix);
+                    ImGui::Checkbox(("adjust viewangles"), &c::movement::adjust_view);
+                    //if (c::movement::adjust_view) {
+                    //    ImGui::Checkbox(("always adjust viewangles"), &c::movement::adjust_view_always);
+                    //}
+                    ImGui::Text(("ps ticks"));
+                    ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 64);
+                    break;
+                case 1:
+                    ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
+                    ImGui::Text(("ps ticks"));
+                    ImGui::SliderInt(("##ps ticks2"), &c::movement::lb_pixel_surf_ticks, 1, 64);
+                    break;
+                }
             }
 
             ImGui::Checkbox(("enable surf and bounce assist"), &c::assist::assist);
@@ -2440,6 +2457,10 @@ void miscellaneous() {
                 }
             }
 
+            ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
+            if (c::movement::air_stuck) {
+                ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
+            }
             ImGui::Checkbox(("delay hop"), &c::movement::delay_hop);
             if (c::movement::delay_hop) {
                 ImGui::Keybind(("delay hop key"), &c::movement::delay_hop_key, &c::movement::delay_hop_key_s);

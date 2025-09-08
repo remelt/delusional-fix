@@ -997,6 +997,8 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 		return;
 	if (!g::local->is_alive())
 		return;
+	if (m_pixelsurf_data.should_pixel_surf)
+		return;
 
 	float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
 	float fTickInterval = interfaces::globals->interval_per_tick;
@@ -1632,7 +1634,9 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 			if (HITGODA || HitJump || HitMiniJump || HitLongJump || HitCHop || HitJumpBug || HitMiniChop) {
 				break;
 			}
-			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			if (!c::movement::bhopfix) {
+				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			}
 		}
 	}
 }
@@ -2282,7 +2286,9 @@ void features::movement::bounce_assist(c_usercmd* cmd)
 			else {
 				HITGODA2 = false;
 			}
-			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			if (!c::movement::bhopfix) {
+				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			}
 		}
 	}
 }
@@ -2698,80 +2704,88 @@ void features::movement::RenderPoints()
 
 void features::movement::assist_createmove(c_usercmd* cmd)
 {
-
 	if (g::local && g::local->is_alive()) {
-
-		//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-		features::movement::pixelsurf_assist(cmd);
-		//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-		features::movement::bounce_assist(cmd);
-		//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-		float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
-		float fTickInterval = interfaces::globals->interval_per_tick;
-		float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-		float veloZoftick = (((sv_gravity2 / 2) / fTickRate) * -1.f);
-		static bool disable_pxs = false;
-		if (menu::checkkey(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s)) {
-			if (alert_mini_crouch_hop) {
-				if (disable_pxs) {
-					if (prediction_backup::velocity.z == veloZoftick) {
-						disable_pxs = false;
-						alert_mini_crouch_hop = false;
+		if (c::assist::assist) {
+			//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			features::movement::pixelsurf_assist(cmd);
+			//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			features::movement::bounce_assist(cmd);
+			//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
+			float fTickInterval = interfaces::globals->interval_per_tick;
+			float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+			float veloZoftick = (((sv_gravity2 / 2) / fTickRate) * -1.f);
+			static bool disable_pxs = false;
+			if (menu::checkkey(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s)) {
+				if (alert_mini_crouch_hop) {
+					if (disable_pxs) {
+						if (prediction_backup::velocity.z == veloZoftick) {
+							disable_pxs = false;
+							alert_mini_crouch_hop = false;
+						}
+						if (g::local->flags() & fl_onground) {
+							disable_pxs = false;
+							alert_mini_crouch_hop = false;
+						}
 					}
 					if (g::local->flags() & fl_onground) {
-						disable_pxs = false;
-						alert_mini_crouch_hop = false;
+						cmd->buttons &= ~in_duck;
+						cmd->buttons |= in_jump;
+						disable_pxs = true;
+					}
+					else {
+						cmd->buttons |= in_duck;
 					}
 				}
-				if (g::local->flags() & fl_onground) {
-					cmd->buttons &= ~in_duck;
-					cmd->buttons |= in_jump;
-					disable_pxs = true;
-				}
-				else {
-					cmd->buttons |= in_duck;
-				}
-			}
 
-		}
-		else {
-			alert_mini_crouch_hop = false;
-			disable_pxs = false;
-		}
-		static bool disable_bounce = false;
-		if (menu::checkkey(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s)) {
-			if (bounce_alert_mini_crouch_hop) {
-				if (disable_bounce) {
-					if (prediction_backup::velocity.z == veloZoftick) {
-						disable_bounce = false;
-						bounce_alert_mini_crouch_hop = false;
+			}
+			else {
+				alert_mini_crouch_hop = false;
+				disable_pxs = false;
+			}
+			static bool disable_bounce = false;
+			if (menu::checkkey(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s)) {
+				if (bounce_alert_mini_crouch_hop) {
+					if (disable_bounce) {
+						if (prediction_backup::velocity.z == veloZoftick) {
+							disable_bounce = false;
+							bounce_alert_mini_crouch_hop = false;
+						}
+						if (g::local->flags() & fl_onground) {
+							disable_bounce = false;
+							bounce_alert_mini_crouch_hop = false;
+						}
 					}
 					if (g::local->flags() & fl_onground) {
-						disable_bounce = false;
-						bounce_alert_mini_crouch_hop = false;
+						cmd->buttons &= ~in_duck;
+						cmd->buttons |= in_jump;
+						disable_bounce = true;
+					}
+					else {
+						cmd->buttons |= in_duck;
 					}
 				}
-				if (g::local->flags() & fl_onground) {
-					cmd->buttons &= ~in_duck;
-					cmd->buttons |= in_jump;
-					disable_bounce = true;
-				}
-				else {
-					cmd->buttons |= in_duck;
-				}
 			}
-		}
-		else {
-			bounce_alert_mini_crouch_hop = false;
-			disable_bounce = false;
-		}
+			else {
+				bounce_alert_mini_crouch_hop = false;
+				disable_bounce = false;
+			}
 
-		if (assistJb::AlertJB || assistJb::AlertJB2)
-		{
-			cmd->buttons |= in_jump;
-		}
-		m_assist_t.set_point = false;
+			if (assistJb::AlertJB || assistJb::AlertJB2)
+			{
+				cmd->buttons |= in_jump;
+			}
 
+			m_assist_t.set_point = false;
+		}
+		
+		//...
+		if (c::movement::px_selection == 1 && c::movement::pixel_surf) {
+			if (m_pixelsurf_data.should_pixel_surf)
+				cmd->buttons |= in_duck;
+			if (g::local->flags() & fl_onground)
+				m_pixelsurf_data.should_pixel_surf = false;
+		}
 	}
 }
 

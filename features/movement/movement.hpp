@@ -54,7 +54,11 @@ namespace features::movement {
 	void edge_bug(c_usercmd* cmd);
 	void pixel_surf(c_usercmd* cmd);
 	void pixel_surf_lock(c_usercmd* cmd);
+	void on_create_move_post(c_usercmd* cmd);
+	void air_stuck(c_usercmd* cmd);
 	void pixel_surf_fix(c_usercmd* cmd);
+	void pixel_surf_fix_del(c_usercmd* cmd);
+	void pixel_surf_del(c_usercmd* cmd);
 	void jump_bug(c_usercmd* cmd);
 	void edge_jump(c_usercmd* cmd);
 	void crouch_bug(c_usercmd* cmd);
@@ -104,6 +108,12 @@ namespace features::movement {
 		float side_move = 0.f;
 	};
 	inline ps_data_t ps_data;
+
+	//lb ps
+	struct pixelsurf_data_t {
+		bool m_predicted_succesful = false, m_in_pixel_surf = false, m_should_duck = false;
+		bool should_pixel_surf = false;
+	}; inline pixelsurf_data_t m_pixelsurf_data;
 
 	struct edge_bug_detection {
 		bool crouched;

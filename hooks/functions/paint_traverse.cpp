@@ -9,7 +9,7 @@ void __stdcall sdk::hooks::paint_traverse::paint_traverse(unsigned int panel, bo
 	switch (panel_to_draw) {
 	case fnv::hash("MatSystemTopPanel"):
 
-		features::misc::handle_spotify();
+		//features::misc::handle_spotify();
 		features::misc::hitmarker::draw();
 		features::misc::spectators_list_iwebz();
 
@@ -33,9 +33,11 @@ void __stdcall sdk::hooks::paint_traverse::paint_traverse(unsigned int panel, bo
 			features::movement::stamina_indicator();
 			features::movement::visualize_eb();
 			features::movement::indicators();
-			features::movement::check_ps(nullptr);
-			features::movement::assist_render();
-			features::movement::RenderPoints();
+			if (c::assist::assist) {
+				features::movement::check_ps(nullptr);
+				features::movement::assist_render();
+				features::movement::RenderPoints();
+			}
 			recorder->drawroute();
 			//features::visuals::rng_factor();
 		});

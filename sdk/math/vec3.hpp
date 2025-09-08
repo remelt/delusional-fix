@@ -72,6 +72,13 @@ public:
 			0.0f
 		};
 	}
+	[[nodiscard]] vec3_t to_angle2() const
+	{
+		double M_PI2 = 3.14159265358979323846;
+
+		float M_PI_F2 = static_cast<float>(M_PI2);
+		return vec3_t(std::atan2(-z, std::hypot(x, y)) * (180.0f / M_PI_F2), std::atan2(y, x) * (180.0f / M_PI_F2), 0.0f);
+	}
 
 	constexpr auto dot_product(const vec3_t& v) const {
 		return x * v.x + y * v.y + z * v.z;
