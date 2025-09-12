@@ -183,6 +183,9 @@ namespace c {
 		inline bool air_stuck = false;
 		inline int air_stuck_key = 0;
 		inline int air_stuck_key_s = 1;
+		inline bool fireman = false;
+		inline int fireman_key = 0;
+		inline int fireman_key_s = 1;
 		inline bool delay_hop = false;
 		inline int  delay_hop_key = 0;
 		inline int  delay_hop_key_s = 1;

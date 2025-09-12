@@ -2457,9 +2457,13 @@ void miscellaneous() {
                 }
             }
 
-            ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
-            if (c::movement::air_stuck) {
-                ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
+            //ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
+            //if (c::movement::air_stuck) {
+            //    ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
+            //}
+            ImGui::Checkbox(("fireman"), &c::movement::fireman);
+            if (c::movement::fireman) {
+                ImGui::Keybind(("fireman key"), &c::movement::fireman_key, &c::movement::fireman_key_s);
             }
             ImGui::Checkbox(("delay hop"), &c::movement::delay_hop);
             if (c::movement::delay_hop) {

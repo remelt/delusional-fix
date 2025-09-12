@@ -55,6 +55,7 @@ namespace features::movement {
 	void pixel_surf(c_usercmd* cmd);
 	void pixel_surf_lock(c_usercmd* cmd);
 	void on_create_move_post(c_usercmd* cmd);
+	void fire_man(c_usercmd* cmd);
 	void air_stuck(c_usercmd* cmd);
 	void pixel_surf_fix(c_usercmd* cmd);
 	void pixel_surf_fix_del(c_usercmd* cmd);
@@ -113,6 +114,9 @@ namespace features::movement {
 	struct pixelsurf_data_t {
 		bool m_predicted_succesful = false, m_in_pixel_surf = false, m_should_duck = false;
 		bool should_pixel_surf = false;
+		bool predicted_ps = false;
+		int px_tick;
+		bool ps_detect = false;
 	}; inline pixelsurf_data_t m_pixelsurf_data;
 
 	struct edge_bug_detection {

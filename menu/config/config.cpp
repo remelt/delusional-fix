@@ -1286,6 +1286,7 @@ namespace c {
 		write_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
 		write_value(json[xs("movement")][xs("adjust_view")], movement::adjust_view);
 		write_value(json[xs("movement")][xs("pixel_surf_ticks")], movement::pixel_surf_ticks);
+		write_value(json[xs("movement")][xs("lb_pixel_surf_ticks")], movement::lb_pixel_surf_ticks);
 		write_value(json[xs("movement")][xs("align_selection")], movement::align_selection);
 		write_value(json[xs("movement")][xs("pixel_surf_key")], movement::pixel_surf_key);
 		write_value(json[xs("movement")][xs("pixel_surf_key_s")], movement::pixel_surf_key_s);
@@ -2760,6 +2761,7 @@ namespace c {
 			read_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
 			read_value(json[xs("movement")][xs("adjust_view")], movement::adjust_view);
 			read_value(json[xs("movement")][xs("pixel_surf_ticks")], movement::pixel_surf_ticks);
+			read_value(json[xs("movement")][xs("lb_pixel_surf_ticks")], movement::lb_pixel_surf_ticks);
 			read_value(json[xs("movement")][xs("align_selection")], movement::align_selection);
 			read_value(json[xs("movement")][xs("pixel_surf_key")], movement::pixel_surf_key);
 			read_value(json[xs("movement")][xs("pixel_surf_key_s")], movement::pixel_surf_key_s);
@@ -3228,6 +3230,7 @@ namespace c {
 			read_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
 			read_value(json[xs("movement")][xs("adjust_view")], movement::adjust_view);
 			read_value(json[xs("movement")][xs("pixel_surf_ticks")], movement::pixel_surf_ticks);
+			read_value(json[xs("movement")][xs("lb_pixel_surf_ticks")], movement::lb_pixel_surf_ticks);
 			read_value(json[xs("movement")][xs("align_selection")], movement::align_selection);
 			read_value(json[xs("movement")][xs("pixel_surf_key")], movement::pixel_surf_key);
 			read_value(json[xs("movement")][xs("pixel_surf_key_s")], movement::pixel_surf_key_s);

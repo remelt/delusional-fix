@@ -32,7 +32,7 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	features::movement::auto_align(cmd);
 	if (c::movement::px_selection == 0) {
-		features::movement::pixel_surf_fix(cmd);
+		features::movement::pixel_surf_fix_del(cmd);
 	}
 	features::movement::bhop(cmd);
 
@@ -57,6 +57,7 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	if ((c::movement::auto_align) && (c::movement::align_selection == 1) && !(prediction_backup::flags & 1))
 		features::movement::auto_align_lb(cmd);
 	//aimbot::rng_factor(cmd);
+	features::movement::air_stuck(cmd);
 
 	prediction::begin(cmd); {
 
@@ -76,23 +77,23 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::mini_jump(cmd);
 	features::movement::ladder_jump(cmd);
 	features::movement::ladder_bug(cmd);
-
-	//lb pixelsurf
-	if (c::movement::px_selection == 1) {
-		features::movement::on_create_move_post(cmd);
-	}
-	features::movement::air_stuck(cmd);
 	features::movement::jump_bug(cmd);
 	features::movement::auto_strafe(cmd, features::movement::first_viewangles);
 	features::movement::strafe_optimizer(cmd);
 
 	features::misc::kz_practice_logic(cmd);
 
+	//lb pixelsurf
+	if (c::movement::px_selection == 1) {
+		features::movement::on_create_move_post(cmd);
+	}
+
+	features::movement::fire_man(cmd);
 
 	features::movement::fix_movement(cmd, features::movement::first_viewangles); 
 
 	if (c::movement::px_selection == 0) {
-		features::movement::pixel_surf(cmd);
+		features::movement::pixel_surf_del(cmd);
 		features::movement::pixel_surf_lock(cmd);
 	}
 

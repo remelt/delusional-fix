@@ -839,6 +839,7 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		detected_normal_edge_bug = false;
 	}
 }
+bool should_align;
 
 void features::movement::auto_align(c_usercmd* cmd) {
 	if (!c::movement::auto_align) {
@@ -1332,6 +1333,196 @@ void features::movement::air_stuck(c_usercmd* cmd)
 //	}
 //}
 
+//fye maaaan
+struct fireman_data_t {
+	bool is_ladder = false;
+	bool fr_hit_1 = false;
+	bool fr_hit = false;
+	bool awall = false;
+}; inline fireman_data_t m_fireman_data;
+
+void features::movement::fire_man(c_usercmd* cmd)
+{
+	m_fireman_data.is_ladder = false;
+
+	// ѕредварительные проверки.
+	if (!g::local || !g::local->is_alive()) {
+		return;
+	}
+
+	if (!g::local->move_type()) {
+		return;
+	}
+	if (!c::movement::fireman) {
+		m_fireman_data.fr_hit = false;
+		m_fireman_data.fr_hit_1 = false;
+		return;
+	}
+
+	if (!menu::checkkey(c::movement::fireman_key, c::movement::fireman_key_s)) {
+		m_fireman_data.fr_hit = false;
+		m_fireman_data.fr_hit_1 = false;
+		return;
+	}
+
+	if (m_fireman_data.fr_hit_1) {
+		if (prediction_backup::movetype == movetype_ladder) {
+			cmd->buttons |= in_jump;
+			cmd->forward_move = 0.f;
+			cmd->forward_move = 0.f;
+		}
+	}
+
+	auto colidable = g::local->collideable();
+	if (!colidable)
+		return;
+
+	// ¬осстановление предыдущего состо€ни€.
+	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+	m_fireman_data.awall = false;
+	trace_t trace;
+	float step = std::numbers::pi_v< float > *2.0f / 16.f;
+	static float start_circle = 0.f;
+
+	if (g::local->get_velocity().z != -6.25f && prediction_backup::velocity.z != -6.25f)
+		start_circle = 0.f;
+
+	// --- Ётап поиска стены: только поиск, без выполнени€ основной логики ---
+	bool foundWall = false;
+	float foundAngle = 0.f;
+	vec3_t wall_position;
+
+	for (float a = start_circle; a < std::numbers::pi_v< float > *2.0f; a += step) {
+		vec3_t wishdir(cosf(a), sinf(a), 0.f);
+		auto start_pos = g::local->abs_origin();
+		auto end_pos = start_pos + wishdir;
+		trace_filter flt(g::local);
+		ray_t ray;
+		ray.initialize(start_pos, end_pos, colidable->mins(), colidable->maxs());
+
+		interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &flt, &trace);
+
+		if (trace.flFraction < 1.f && trace.plane.normal.z < 0.4f) {
+			wall_position = trace.end;
+			foundWall = true;
+			foundAngle = a;
+			break; // ¬ыходим из цикла сразу после нахождени€ подход€щей стены.
+		}
+	}
+
+	// --- ≈сли стена найдена, выполн€ем основную логику (ladder, предсказание, перемещение) ---
+	if (foundWall) {
+		m_fireman_data.awall = true;
+		int commands_predicted = interfaces::prediction->split->commands_predicted;
+
+		// ¬ычисление направлени€ стены.
+		vec3_t normal_plane(trace.plane.normal.x * -1.f, trace.plane.normal.y * -1.f, 0.f);
+		vec3_t wall_angle = normal_plane.to_angle();
+		vec3_t d_velo = g::local->get_velocity();
+		d_velo.z = 0.f;
+		vec3_t velo_angle = d_velo.to_angle();
+		vec3_t delta = velo_angle - wall_angle;
+		delta.normalize();
+		float rotation = deg2rad(wall_angle.y - cmd->view_angles.y);
+		float cos_rot = cos(rotation);
+		float sin_rot = sin(rotation);
+		float multiplayer = 450.f;
+		float backup_forward_move = cmd->forward_move;
+		float backup_side_move = cmd->forward_move;
+		float forward_move = cos_rot * multiplayer;
+		float side_move = -sin_rot * multiplayer;
+		int backup_buttons = cmd->buttons;
+
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		cmd->forward_move = forward_move;
+		cmd->forward_move = side_move;
+		cmd->buttons &= ~in_jump;
+
+		prediction::begin(cmd);
+		prediction::end();
+
+		// ѕроверка на ladder.
+		if (!m_fireman_data.is_ladder) {
+			if ((prediction_backup::movetype != movetype_ladder && g::local->move_type() == movetype_ladder) ||
+				prediction_backup::movetype == movetype_ladder) {
+				m_fireman_data.is_ladder = true;
+				start_circle = foundAngle;
+			}
+			else {
+				cmd->buttons = backup_buttons;
+				cmd->forward_move = backup_forward_move;
+				cmd->forward_move = backup_side_move;
+			}
+		}
+
+		if (m_fireman_data.is_ladder) {
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			int old_flags = g::local->flags();
+			int old_move_type = g::local->move_type();
+			cmd->forward_move = 0.f;
+			cmd->forward_move = 0.f;
+
+			if (!m_fireman_data.fr_hit && !m_fireman_data.fr_hit_1) {
+				for (int i = 0; i < 12; i++) {
+					prediction::begin(cmd);
+					prediction::end();
+					if (!(old_flags & 1) && (g::local->flags() & 1)) {
+						if (i < 10) {
+							m_fireman_data.fr_hit_1 = true;
+							break;
+						}
+						m_fireman_data.fr_hit = true;
+					}
+				}
+			}
+			if (!m_fireman_data.fr_hit_1) {
+				if (!m_fireman_data.fr_hit) {
+					cmd->buttons &= ~in_jump;
+					cmd->forward_move = 0.f;
+					cmd->forward_move = 0.f;
+				}
+				else {
+					if (prediction_backup::movetype != movetype_ladder) {
+						cmd->forward_move = forward_move;
+						cmd->forward_move = side_move;
+						cmd->buttons |= in_jump;
+					}
+					else {
+						cmd->forward_move = 0.f;
+						cmd->forward_move = 0.f;
+						cmd->buttons |= in_jump;
+					}
+				}
+			}
+			else {
+				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+				int oldflags = g::local->flags();
+				int oldMoveType = g::local->move_type();
+				cmd->forward_move = 0.f;
+				cmd->forward_move = 0.f;
+
+				prediction::begin(cmd);
+				prediction::end();
+
+				if (!(oldflags & 1) && (g::local->flags() & 1)) {
+					cmd->forward_move = forward_move;
+					cmd->forward_move = side_move;
+					cmd->buttons &= ~in_jump;
+				}
+				else {
+					cmd->buttons |= in_jump;
+					cmd->forward_move = 0.f;
+					cmd->forward_move = 0.f;
+				}
+			}
+		}
+		else {
+			m_fireman_data.fr_hit = false;
+			m_fireman_data.fr_hit_1 = false;
+		}
+	}
+}
+
 //i dont want this shit to be in createmove hook
 void features::movement::on_create_move_post(c_usercmd* cmd) {
 	if (!g::local || !g::local->is_alive()) {
@@ -1354,6 +1545,31 @@ void features::movement::on_create_move_post(c_usercmd* cmd) {
 		move_type != movetype_fly && move_type != movetype_observer) {
 		features::movement::pixel_surf_fix(cmd);
 		features::movement::pixel_surf(cmd);
+
+		//lb ps detect
+		
+		//checking for eb & ps ticks
+		if (m_pixelsurf_data.px_tick < cmd->tick_count && !should_edge_bug && !lobotomy_eb::EdgeBug_Founded) {
+			//checking velo (idk using prepred velo is better imo, u can change it if u want to) and if ps predicted or nah
+			if (prediction_backup::velocity.z == targetZvelo && m_pixelsurf_data.m_predicted_succesful) {
+				//variable js to make its work 1 time for 1 ps
+				if (!m_pixelsurf_data.predicted_ps) {
+					if (c::movement::pixel_surf_detection_printf) {
+						interfaces::chat_element->chatprintf("#delusional#_print_pixelsurfed");
+					}
+					m_pixelsurf_data.predicted_ps = true;
+				}
+				m_pixelsurf_data.ps_detect = true;
+			}
+			else {
+				m_pixelsurf_data.predicted_ps = false;
+				m_pixelsurf_data.ps_detect = false;
+			}
+		}
+		else {
+			m_pixelsurf_data.predicted_ps = false;
+			m_pixelsurf_data.ps_detect = false;
+		}
 	}
 }
 
@@ -1397,13 +1613,16 @@ void features::movement::pixel_surf_fix(c_usercmd* cmd)
 
 //08.09 yes it is really usefull
 //a least its working now
+
 void features::movement::pixel_surf(c_usercmd* cmd) {
 	if (!c::movement::pixel_surf || !menu::checkkey(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s))
 		return;
 
 	static int ticks = 0;
+	static int ps_tick = 0;
 	if (!g::local || !g::local->is_alive()) {
 		ticks = 0;
+		ps_tick = 0;
 		return;
 	}
 
@@ -1414,7 +1633,11 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	if (g::local->flags() & fl_onground)
 		return;
 
-	if (!wall_detected)
+	if (!wall_detected && c::movement::px_selection == 1)
+		return;
+
+	//for delusional auto-align
+	if (!should_align && c::movement::px_selection == 0)
 		return;
 
 	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
@@ -1444,13 +1667,20 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 				m_pixelsurf_data.should_pixel_surf = zVelo == targetZvelo;
 				if (m_pixelsurf_data.should_pixel_surf && i == 0) {
 					m_pixelsurf_data.should_pixel_surf = false;
+					m_pixelsurf_data.m_predicted_succesful = true;
+					ps_tick = cmd->tick_count + z;
 					cmd->buttons = BackupButtons;
 					return;
 				}
 				if (m_pixelsurf_data.should_pixel_surf) {
+					m_pixelsurf_data.m_predicted_succesful = true;
 					ticks = cmd->tick_count + z + 16;
+					ps_tick = cmd->tick_count + z;
 					BackupButtons = cmd->buttons;
 					break;
+				}
+				if (!m_pixelsurf_data.should_pixel_surf) {
+					m_pixelsurf_data.m_predicted_succesful = false;
 				}
 			}
 		}
@@ -1462,13 +1692,14 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 		if (cmd->tick_count > ticks) {
 			if (prediction_backup::velocity.z != targetZvelo) {
 				m_pixelsurf_data.should_pixel_surf = false;
+				m_pixelsurf_data.m_predicted_succesful = false;
 			}
 		}
 	}
+	m_pixelsurf_data.px_tick = ps_tick;
 }
 
 //works better imo and has freelook
-//TODO: UNDERSTAND WHY U STOP ON SOME SURFS ON 128 TICK
 void features::movement::auto_align_lb(c_usercmd* cmd)
 {
 	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
@@ -2150,9 +2381,14 @@ void features::movement::indicators() {
 	if (c::movement::indicators_show[3])
 		render_indicator(c::movement::mini_jump_key, c::movement::mini_jump_key_s, mj_alpha, mj_clr, "mj", true, should_mj, c::movement::detection_clr_for[3], position, saved_tick_mj);
 
-	if (c::movement::indicators_show[4])
-		render_indicator(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s, p_alpha, ps_clr, "ps", false, should_ps, c::movement::detection_clr_for[4], position);
-	
+	if (c::movement::indicators_show[4]) {
+		if (c::movement::px_selection == 0) {
+			render_indicator(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s, p_alpha, ps_clr, "ps", false, should_ps, c::movement::detection_clr_for[4], position);
+		}
+		else {
+			render_indicator(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s, p_alpha, ps_clr, "ps", false, m_pixelsurf_data.ps_detect, c::movement::detection_clr_for[4], position);
+		}
+	}
 	if (c::movement::indicators_show[1])
 		render_indicator(c::movement::jump_bug_key, c::movement::jump_bug_key_s, jb_alpha, jb_clr, "jb", true, detected_normal_jump_bug, c::movement::detection_clr_for[1], position, saved_tick_jb);
 	

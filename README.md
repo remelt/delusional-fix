@@ -3,6 +3,25 @@
 # SS (for now js imagine fukin delusional menu)
 some images for some fucking newgens whov never played w og delusional should be added here
 
+✅ Not working autopixelsurf
+✅ Not working auto align
+✅ Pasted pixelsurf assist
+✅ Pasted bounce assist
+✅ Detected by inui AC
+✅ Can't inject without -insecure flag
+✅ Obscure tracklist 
+✅ Insane Anime player
+✅ 0% rng factor
+✅ Force body aim
+✅ Real Route calculator
+✅ Jump bug don't work at low fps
+✅ Edge bug don't work at low fps
+✅ Bhop don't work at low fps
+✅ Workable lua sustem
+✅ Hyoko experience
+
+👑 Ｄｅｌｕｓｉｏｎａｌ ｆｉｘ ｂｙ ｏｐｅｒｔｕｎｉｔｙ ａｎｄ ｆｌｏｗｅｒｓ 👑
+
 # Fixed :
 + Stability (crashes)
     - prevented crashes when changing teams
@@ -56,7 +75,7 @@ some images for some fucking newgens whov never played w og delusional should be
 + Delusional pixel surf doesnt crouch some times on 128 tick
 + Media player some times doesnt update if the track is on repeat
 + Aimbot sometimes misses (idk y mb u need some kind of bones fix like in hw)
-+ Awall only if lethal is kinda ass for some damn reason
++ Awall only if lethal is kinda ass for some reason
 + Rare animations for knives arent working properly
 + Precipitation is ass but idk y (nn i dont have any motivation to fix that shit coz it will take forever)
 + Chatprintf in jumpstats (ig the best option is to recode it :p)
