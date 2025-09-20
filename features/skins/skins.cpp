@@ -286,10 +286,11 @@ void features::skins::knife_changer( ) {
 	//model knifes
 	const char* model_ct = "models/weapons/v_knife_default_ct.mdl";
 	const char* model_t = "models/weapons/v_knife_default_t.mdl";
+	const char* model_gold = "models/weapons/v_knife_gg.mdl";
 	const char* model_bayonet = "models/weapons/v_knife_bayonet.mdl";
 	const char* model_m9 = "models/weapons/v_knife_m9_bay.mdl";
 	const char* model_karambit = "models/weapons/v_knife_karam.mdl";
-	const char* model_bowie = "models/weapons/v_knife_survival_bowie.mdl";
+	const char* model_bowie = "models/weapons/	.mdl";
 	const char* model_butterfly = "models/weapons/v_knife_butterfly.mdl";
 	const char* model_falchion = "models/weapons/v_knife_falchion_advanced.mdl";
 	const char* model_flip = "models/weapons/v_knife_flip.mdl";
@@ -301,11 +302,16 @@ void features::skins::knife_changer( ) {
 	const char* model_talon = "models/weapons/v_knife_widowmaker.mdl";
 	const char* model_ursus = "models/weapons/v_knife_ursus.mdl";
 	const char* model_skeleton = "models/weapons/v_knife_skeleton.mdl";
+	const char* model_css = "models/weapons/v_knife_css.mdl";
+	const char* model_outdoor = "models/weapons/v_knife_outdoor.mdl";
+	const char* model_canis = "models/weapons/v_knife_canis.mdl";
+	const char* model_cord = "models/weapons/v_knife_cord.mdl";
 
 
 	//indes knifes
 	int index_ct = interfaces::model_info->get_model_index("models/weapons/v_knife_default_ct.mdl");
 	int index_t = interfaces::model_info->get_model_index("models/weapons/v_knife_default_t.mdl");
+	int index_gold = interfaces::model_info->get_model_index("models/weapons/v_knife_gg.mdl");
 	int index_bayonet = interfaces::model_info->get_model_index("models/weapons/v_knife_bayonet.mdl");
 	int index_m9 = interfaces::model_info->get_model_index("models/weapons/v_knife_m9_bay.mdl");
 	int index_karambit = interfaces::model_info->get_model_index("models/weapons/v_knife_karam.mdl");
@@ -321,6 +327,10 @@ void features::skins::knife_changer( ) {
 	int index_talon = interfaces::model_info->get_model_index("models/weapons/v_knife_widowmaker.mdl");
 	int index_ursus = interfaces::model_info->get_model_index("models/weapons/v_knife_ursus.mdl");
 	int index_skeleton = interfaces::model_info->get_model_index("models/weapons/v_knife_skeleton.mdl");
+	int index_css = interfaces::model_info->get_model_index("models/weapons/v_knife_css.mdl");
+	int index_outdoor = interfaces::model_info->get_model_index("models/weapons/v_knife_outdoor.mdl");
+	int index_canis = interfaces::model_info->get_model_index("models/weapons/v_knife_canis.mdl");
+	int index_cord = interfaces::model_info->get_model_index("models/weapons/v_knife_cord.mdl");
 
 
 	auto active_weapon = local_player->active_weapon();
@@ -398,6 +408,21 @@ void features::skins::knife_changer( ) {
 					apply_knife_model(weapon, model_t);
 					break;
 				case 17:
+					apply_knife_model(weapon, model_gold);
+					break;
+				case 18:
+					apply_knife_model(weapon, model_css);
+					break;
+				case 19:
+					apply_knife_model(weapon, model_outdoor);
+					break;
+				case 20:
+					apply_knife_model(weapon, model_canis);
+					break;
+				case 21:
+					apply_knife_model(weapon, model_cord);
+					break;
+				case 22:
 					apply_knife_model(weapon, model_skeleton);
 					break;
 				}
@@ -456,7 +481,22 @@ void features::skins::knife_changer( ) {
 					apply_knife_skin(weapon, WEAPON_KNIFE_T, c::skins::knife_changer_paint_kit, index_t, 3, wear);
 					break;
 				case 17:
-					apply_knife_skin(weapon, 525, c::skins::knife_changer_paint_kit, index_skeleton, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFEGG, c::skins::knife_changer_paint_kit, index_gold, 3, wear);
+					break;
+				case 18:
+					apply_knife_skin(weapon, WEAPON_KNIFE_CSS, c::skins::knife_changer_paint_kit, index_css, 3, wear);
+					break;
+				case 19:
+					apply_knife_skin(weapon, WEAPON_KNIFE_OUTDOOR, c::skins::knife_changer_paint_kit, index_outdoor, 3, wear);
+					break;
+				case 20:
+					apply_knife_skin(weapon, WEAPON_KNIFE_CANIS, c::skins::knife_changer_paint_kit, index_canis, 3, wear);
+					break;
+				case 21:
+					apply_knife_skin(weapon, WEAPON_KNIFE_CORD, c::skins::knife_changer_paint_kit, index_cord, 3, wear);
+					break;
+				case 22:
+					apply_knife_skin(weapon, WEAPON_KNIFE_SKELETON, c::skins::knife_changer_paint_kit, index_skeleton, 3, wear);
 					break;
 				}
 			}

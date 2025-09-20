@@ -306,9 +306,6 @@
     <ClCompile Include="utils\render\draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="features\movement\calculator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sdk\structs\color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

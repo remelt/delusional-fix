@@ -159,6 +159,10 @@ public:
 	float length_2d_sqr(void) const;
 	float length_r();
 
+	vec3_t operator-() const noexcept {
+		return vec3_t{ -x, -y, -z };
+	}
+
 	vec3_t& operator+=(const vec3_t& v) {
 		x += v.x; y += v.y; z += v.z; return *this;
 	}

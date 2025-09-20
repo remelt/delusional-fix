@@ -1,6 +1,8 @@
 #pragma once
 #include "../../../sdk/sdk.hpp"
 
+using md5_pseudo_random_fn = uint32_t(__thiscall*)(uint32_t);
+
 namespace prediction_backup{
 	inline player_move_data data{};
 	inline vec3_t		origin{};
@@ -23,6 +25,9 @@ namespace prediction_backup{
 
 namespace prediction {
 	inline void backup_originals(c_usercmd* cmd) {
+		if (!g::local || !g::local->is_alive())
+			return;
+
 		//player						   
 		prediction_backup::flags = g::local->flags();
 		prediction_backup::velocity = g::local->velocity();
@@ -41,11 +46,14 @@ namespace prediction {
 	void restore_ent_to_predicted_frame(int i);
 	void repredict();
 	void post_think();
+	void updatepacket();
 
 	inline player_move_data data{};
 	inline c_usercmd* last_command;
 	inline int* prediction_random_seed;
+	inline md5_pseudo_random_fn md5_pseudo_random;
 	inline int* prediction_player;
+	inline player_t** prediction_player_real;
 	inline int correct_tickbase;
 	inline bool in_first;
 	inline bool in_pred;

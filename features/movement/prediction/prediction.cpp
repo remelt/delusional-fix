@@ -1,6 +1,24 @@
 #include "../prediction/prediction.hpp"
 #include "../movement.hpp"
 
+//s/o https://github.com/clearlyst/bhop-cheat/commit/fde106fd39897615a38c14ecbc73294d5c8f690c#diff-61a95352f3c16c2b0e0f8ca73b99cdd82d83885d06d222715808f7fce3d2477e
+void prediction::updatepacket()
+{
+	if (!g::local)
+	{
+		return;
+	}
+
+	if (interfaces::client_state->delta_tick > 0)
+	{
+		interfaces::prediction->update(
+			interfaces::client_state->delta_tick,
+			interfaces::client_state->delta_tick > 0,
+			interfaces::client_state->last_command_ack,
+			interfaces::client_state->last_outgoing_command + interfaces::client_state->choked_commands);
+	}
+}
+
 void prediction::begin(c_usercmd* cmd) {
 	if (!g::local || !cmd)
 		return;
@@ -8,10 +26,22 @@ void prediction::begin(c_usercmd* cmd) {
 	*g::local->current_command() = cmd;
 	g::local->last_command() = *cmd;
 
-	if (!prediction_random_seed)
-		prediction_random_seed = *reinterpret_cast<int**>(find_pattern("client.dll", "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04") + 2);
+	if (!prediction_player_real)
+	{
+		prediction_player_real = *reinterpret_cast<player_t***>(find_pattern("client.dll", "89 35 ? ? ? ? F3 0F 10 48") + 0x2);
+	}
 
-	*prediction_random_seed = cmd->random_seed & 0x7FFFFFFF;
+	if (!prediction_random_seed)
+	{
+		prediction_random_seed = *reinterpret_cast<int**>(find_pattern("client.dll", "A3 ? ? ? ? 66 0F 6E 86") + 0x1);
+	}
+
+	if (!md5_pseudo_random)
+	{
+		md5_pseudo_random = reinterpret_cast<md5_pseudo_random_fn>(find_pattern("client.dll", "55 8B EC 83 E4 F8 83 EC 70 6A"));
+	}
+
+	*prediction_random_seed = md5_pseudo_random(cmd->command_number) & 0x7FFFFFFF;
 
 	origin = g::local->origin();
 	velocity = g::local->velocity();
@@ -41,54 +71,11 @@ void prediction::begin(c_usercmd* cmd) {
 	if (g::local->physics_run_think(0))
 		g::local->pre_think();
 
-	static int last_team = -1;
-	static bool team_changing = false;
-	static int team_change_delay = 0;
-	static int stable_frames = 0;
-	int current_team = g::local->team();
-
-	const auto next_think_tick = static_cast<int>(*reinterpret_cast<std::uint32_t*>(uintptr_t(g::local) + 0xFC));
-
-	if (g::local->is_alive() && g::local->flags()) {
-
-		//team change fix
-		if (last_team != -1 && current_team != last_team) {
-			team_changing = true;
-			team_change_delay = 0;
-			stable_frames = 0;
-			last_team = current_team;
-			return;
-		}
-
-		if (last_team == -1) {
-			last_team = current_team;
-		}
-
-		if (team_changing) {
-			team_change_delay++;
-
-			if (current_team == last_team) {
-				stable_frames++;
-			}
-			else {
-				stable_frames = 0;
-				last_team = current_team;
-			}
-
-			if (stable_frames > 10 && team_change_delay > 5) {
-				team_changing = false;
-				team_change_delay = 0;
-				stable_frames = 0;
-			}
-
-			return;
-		}
-
-		if (next_think_tick > 0 && next_think_tick <= static_cast<int>(*reinterpret_cast<std::uint32_t*>(uintptr_t(g::local) + 0x3440))) {
-
-			*reinterpret_cast<std::uint32_t*>(uintptr_t(g::local) + 0xFC) = -1;
-			(*(void(__thiscall**)(player_t*))(*reinterpret_cast<std::uint32_t*>(uintptr_t(g::local) + 556)))(g::local);
-		}
+	// fixed + hacked
+	if (g::local->next_think_tick() != -1 && g::local->next_think_tick() > 0 && g::local->next_think_tick() <= g::local->get_tick_base())
+	{
+		g::local->next_think_tick() = -1;
+		g::local->think();
 	}
 
 	interfaces::prediction->setup_move(g::local, cmd, interfaces::move_helper, &data);
@@ -138,20 +125,24 @@ void prediction::end() {
 		return;
 
 	interfaces::game_movement->finish_track_prediction_errors(g::local);
-	interfaces::prediction->in_prediction = false;
-
 	interfaces::move_helper->set_host(nullptr);
+	interfaces::prediction->in_prediction = false;
 
 	in_prediction = false;
 
 	interfaces::globals->cur_time = old_cur_time;
 	interfaces::globals->frame_time = old_frame_time;
+	interfaces::globals->tick_count = old_tick_count;
 
 	*g::local->current_command() = NULL;
 
 	*prediction_random_seed = -1;
+	*prediction_player_real = nullptr;
+	*prediction_random_seed = -1;
 
 	interfaces::game_movement->reset();
+
+	*reinterpret_cast<c_usercmd**>(uint32_t(g::local) + 0x3348) = NULL;
 
 	if (!interfaces::prediction->engine_paused && interfaces::globals->frame_time > 0.f) {
 		++g::local->get_tick_base();

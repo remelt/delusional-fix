@@ -2299,6 +2299,9 @@ void miscellaneous() {
 
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
          
+            ImGui::Checkbox(("disable movement fix"), &c::movement::nigg1);
+            ImGui::Separator();
+
             ImGui::Checkbox(("auto bunnyhop"), &c::movement::bhop);
             if (c::movement::bhop)
             {
@@ -2387,14 +2390,14 @@ void miscellaneous() {
             if (c::movement::auto_align) {
                 ImGui::Text("auto align type");
                 ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
-            }
-            switch (c::movement::align_selection) {
-            case 0:
-                ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
-                break;
-            case 1:
-                //we alr have freelook in auto-align
-                break;
+                switch (c::movement::align_selection) {
+                case 0:
+                    ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
+                    break;
+                case 1:
+                    //we alr have freelook in auto-align
+                    break;
+                }
             }
             ImGui::Checkbox(("auto pixelsurf"), &c::movement::pixel_surf);
             if (c::movement::pixel_surf) {
@@ -2457,10 +2460,12 @@ void miscellaneous() {
                 }
             }
 
-            //ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
-            //if (c::movement::air_stuck) {
-            //    ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
-            //}
+            ImGui::Checkbox(("auto duck"), &c::movement::auto_duck);
+            if (c::movement::auto_duck) {
+                ImGui::Keybind(("auto duck key"), &c::movement::auto_duck_key, &c::movement::auto_duck_key_s);
+                ImGui::Text(("auto duck ticks"));
+                ImGui::SliderInt(("##auto duck tickss"), &c::movement::auto_duck_ticks, 2, 12);
+            }
             ImGui::Checkbox(("fireman"), &c::movement::fireman);
             if (c::movement::fireman) {
                 ImGui::Keybind(("fireman key"), &c::movement::fireman_key, &c::movement::fireman_key_s);
@@ -2472,11 +2477,6 @@ void miscellaneous() {
                 ImGui::SliderInt(("##ticks to wait"), &c::movement::dh_tick, 1, 8);
             }
 
-            //ImGui::Checkbox("fake backwards", &c::movement::fakebackwards);
-            //if (c::movement::fakebackwards) {
-                //ImGui::Keybind(("fake backwards key"), &c::movement::fakebackwardskey, &c::movement::fakebackwardskey_s);
-                //ImGui::Combo(("##fake backwards angle"), &c::movement::fakebackwards_angle, "right\0backwards\0left\0");
-            //}
 
             ImGui::Checkbox(("crouchbug"), &c::movement::crouch_bug);
             if (c::movement::crouch_bug) {
@@ -2925,7 +2925,8 @@ void miscellaneous() {
 
             ImGui::Separator();
 
-            ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
+            // it makes no sense to fix that
+            //ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
             ImGui::Checkbox(("music display"), &c::misc::show_spotify_currently_playing);
             if (c::misc::show_spotify_currently_playing) {
                 ImGui::Text(("music player look type"));
@@ -2948,24 +2949,6 @@ void miscellaneous() {
                     ImGui::Checkbox(("spectating local player only"), &c::misc::spectator_local);
                 }
             }
-            /*
-            ImGui::PushFont(fonts::menu_font_bold);
-            ImGui::Text(("calculator"));
-            ImGui::PopFont();
-            ImGui::Checkbox("pixelsurf calculator", &c::calculator::ps_calcualtor);
-            if (c::calculator::ps_calcualtor) {
-
-                ImGui::Text(("wireframe"));
-                ImGui::Keybind(("wireframe key"), &c::calculator::toggle_wireframe_key, &c::calculator::toggle_wireframe_key_s);
-                ImGui::Text(("clip brushes"));
-                ImGui::Keybind(("clip brushes key"), &c::calculator::toggle_clipbrushe_key, &c::calculator::toggle_clipbrushe_key_s);
-                ImGui::Text(("set point"));
-                ImGui::Keybind(("set point key"), &c::calculator::set_point_key, &c::calculator::set_point_key_s);
-                ImGui::Text(("calculate"));
-                ImGui::Keybind(("calculate key"), &c::calculator::calculate_point_key, &c::calculator::calculate_point_key_s);
-
-            }
-            */
 
             ImGui::Separator();
 
@@ -2973,7 +2956,7 @@ void miscellaneous() {
             ImGui::Checkbox(("mouse fix"), &c::misc::mouse_fix);
             ImGui::Checkbox(("pixelsurf fix"), &c::movement::pixel_surf_fix);
 
-            //ImGui::Checkbox(("discord status"), &c::misc::discord_rpc);
+            ImGui::Checkbox(("discord status"), &c::misc::discord_rpc);
             ImGui::Checkbox(("custom console"), &c::misc::custom_console);
             ImGui::SameLine();
             ImGui::ColorEdit4(("##custom console"), c::misc::custom_console_clr, w_alpha);
@@ -3453,7 +3436,7 @@ void skins() {
             switch (menu::skin_selection) {
             case 0:
                 ImGui::Checkbox(("enabled##knife"), &c::skins::knife_changer_enable);
-                ImGui::Combo(("##knifemodel"), &c::skins::knife_changer_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow-daggers\0navaja\0stiletto\0talon\0ursus\0default ct\0default t\0skeleton\0");
+                ImGui::Combo(("##knifemodel"), &c::skins::knife_changer_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow-daggers\0navaja\0stiletto\0talon\0ursus\0default ct\0default t\0gold knife\0css\0outdoor\0canis\0paracord\0skeleton\0");
                 break;
 
             case 1:

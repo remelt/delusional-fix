@@ -6,7 +6,7 @@ void c_discord::initialize() {
     DiscordEventHandlers Handle;
     memset(&Handle, 0, sizeof(Handle));
 
-    Discord_Initialize("885283795044016130", &Handle, 1, NULL);
+    Discord_Initialize("1418951638756098050", &Handle, 1, NULL);
 }
 
 void c_discord::update() {
@@ -29,7 +29,7 @@ void c_discord::update() {
 
     discordPresence.largeImageText = "777";
     discordPresence.state = current_status.c_str();
-    discordPresence.largeImageKey = "https://raw.githubusercontent.com/ANANAIN3666/JPELIROJOXD/main/Jpelirrojo-396x595.jpg";
+    //discordPresence.largeImageKey = "";
     discordPresence.startTimestamp = elapsed;
     Discord_UpdatePresence(&discordPresence);
     } else {

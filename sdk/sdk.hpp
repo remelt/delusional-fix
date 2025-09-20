@@ -319,6 +319,7 @@ enum item_definition_indexes {
 	WEAPON_SNOWBALL,
 	WEAPON_BUMPMINE,
 	WEAPON_BAYONET = 500,
+	WEAPON_KNIFE_CSS = 503,
 	WEAPON_KNIFE_FLIP = 505,
 	WEAPON_KNIFE_GUT,
 	WEAPON_KNIFE_KARAMBIT,
@@ -328,10 +329,15 @@ enum item_definition_indexes {
 	WEAPON_KNIFE_SURVIVAL_BOWIE = 514,
 	WEAPON_KNIFE_BUTTERFLY,
 	WEAPON_KNIFE_PUSH,
+	WEAPON_KNIFE_CORD = 517,
+	WEAPON_KNIFE_CANIS = 518,
 	WEAPON_KNIFE_URSUS = 519,
 	WEAPON_KNIFE_GYPSY_JACKKNIFE,
 	WEAPON_KNIFE_STILETTO = 522,
 	WEAPON_KNIFE_WIDOWMAKER,
+	WEAPON_KNIFE_TALON,
+	WEAPON_KNIFE_OUTDOOR = 521,
+	WEAPON_KNIFE_SKELETON = 525,
 	GLOVE_STUDDED_BLOODHOUND = 5027,
 	GLOVE_T_SIDE = 5028,
 	GLOVE_CT_SIDE = 5029,
@@ -1205,6 +1211,16 @@ public:
 	void think() {
 		using original_fn = void(__thiscall*)(void*);
 		(*(original_fn**)this)[139](this);
+	}
+
+	int ButtonDisabled()
+	{
+		return *(int*)((std::uintptr_t)this + 0x3330);
+	}
+
+	int ButtonForced()
+	{
+		return *(int*)((std::uintptr_t)this + 0x3334);
 	}
 
 	c_usercmd** current_command() {

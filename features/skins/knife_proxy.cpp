@@ -128,6 +128,8 @@ const static std::unordered_map<std::string, int( * )( int )> animation_fix_map
 		{
 		case SEQUENCE_DEFAULT_LOOKAT01:
 			return random_sequence( 12, 13 );
+		case SEQUENCE_DEFAULT_HEAVY_BACKSTAB:
+			return sequence - 1;
 		}
 	} },
 	{ "models/weapons/v_knife_widowmaker.mdl", [ ] ( int sequence ) -> int
@@ -155,7 +157,7 @@ const static std::unordered_map<std::string, int( * )( int )> animation_fix_map
 	switch (sequence)
 	{
 	case SEQUENCE_DEFAULT_DRAW:
-		return random_sequence( SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2 );
+		return random_sequence(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
 	case SEQUENCE_DEFAULT_LOOKAT01:
 		return random_sequence( SEQUENCE_BUTTERFLY_LOOKAT01, 14 );
 	default:
@@ -167,7 +169,7 @@ const static std::unordered_map<std::string, int( * )( int )> animation_fix_map
 	switch (sequence)
 	{
 	case SEQUENCE_DEFAULT_DRAW:
-		return random_sequence( SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2 );
+		return random_sequence( SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
 	case SEQUENCE_DEFAULT_LOOKAT01:
 		return random_sequence( SEQUENCE_BUTTERFLY_LOOKAT01, 14 );
 	default:

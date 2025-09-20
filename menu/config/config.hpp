@@ -50,7 +50,7 @@ namespace c {
 
 		inline int pixelsurf_assist_ticks = 12;
 
-		inline int pixelsurf_max_points = 2;
+		inline int pixelsurf_max_points = 1;
 
 		inline int pixelsurf_assist_type = 0;
 
@@ -172,6 +172,7 @@ namespace c {
 		inline bool auto_strafe = false;
 		inline int  auto_strafe_key = 0;
 		inline int  auto_strafe_key_s = 1;
+		inline bool nigg1 = false;
 		inline bool bhop = false;
 		inline bool bhopmiss = false;
 		inline bool bhopfix = false;
@@ -256,6 +257,7 @@ namespace c {
 		inline bool auto_duck = false;
 		inline int  auto_duck_key = 0;
 		inline int  auto_duck_key_s = 1;
+		inline int  auto_duck_ticks = 6;
 		inline bool pixel_surf_fix = false;
 		inline bool pixel_surf = false;
 		inline bool adjust_view = true;

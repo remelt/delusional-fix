@@ -2710,6 +2710,7 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 			features::movement::pixelsurf_assist(cmd);
 			//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 			features::movement::bounce_assist(cmd);
+
 			//prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 			float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
 			float fTickInterval = interfaces::globals->interval_per_tick;

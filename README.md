@@ -59,17 +59,20 @@ some images for some fucking newgens whov never played w og delusional should be
     - added auto-align from lobotomy
     - added px from lobotomy
     - now u can choose ticks for pixelsurf
+    - added auto duck
     - pasted and fixed ps and bounce assists from lobotomy (works a lot better imo) (ofc fixed for all ticks) (big s/o [@flowars](https://github.com/flowars))
 + Misc
     - added only local spectatorlist option
     - fixed default music player and added new look
+    - fixed discord rpc
 + Skins
+    - added some missing knives
     - added skinchager for weapons
 + Config
     - added load only option (only... aimbot/visuals/movement/indicators/skins/misc)
 
 # TODO :
-+ Add and fix scaleform
++ Fix some stuff
 
 # KNOWN ISSUES :
 + Delusional pixel surf doesnt crouch some times on 128 tick
@@ -79,6 +82,7 @@ some images for some fucking newgens whov never played w og delusional should be
 + Rare animations for knives arent working properly
 + Precipitation is ass but idk y (nn i dont have any motivation to fix that shit coz it will take forever)
 + Chatprintf in jumpstats (ig the best option is to recode it :p)
++ Idc bout scaleform anymo u can paste it if u want to
 + Unload doesnt rly work
 
 # s/o

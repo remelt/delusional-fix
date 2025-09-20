@@ -781,8 +781,16 @@ namespace c {
 		write_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
 		write_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
 		write_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
+		write_value(json[xs("movement")][xs("auto_duck")], movement::auto_duck);
+		write_value(json[xs("movement")][xs("auto_duck_key")], movement::auto_duck_key);
+		write_value(json[xs("movement")][xs("auto_duck_key_s")], movement::auto_duck_key_s);
+		write_value(json[xs("movement")][xs("auto_duck_ticks")], movement::auto_duck_ticks);
+		write_value(json[xs("movement")][xs("fireman")], movement::fireman);
+		write_value(json[xs("movement")][xs("fireman_key")], movement::fireman_key);
+		write_value(json[xs("movement")][xs("fireman_key_s")], movement::fireman_key_s);
 		write_value(json[xs("movement")][xs("delay_hop")], movement::delay_hop);
 		write_value(json[xs("movement")][xs("delay_hop_key")], movement::delay_hop_key);
+		write_value(json[xs("movement")][xs("delay_hop_key_s")], movement::delay_hop_key_s);
 		write_value(json[xs("movement")][xs("stamina_hop_ticks")], movement::dh_tick);
 		write_value(json[xs("movement")][xs("fastduck")], movement::fastduck);
 		write_value(json[xs("movement")][xs("edge_bug_lock_amount")], movement::edge_bug_lock_amount);
@@ -934,6 +942,7 @@ namespace c {
 		write_value(json[xs("misc")][xs("misc_hitmarker_sound_type")], misc::misc_hitmarker_sound_type);
 		write_value(json[xs("misc")][xs("freecam")], misc::freecam);
 		write_value(json[xs("misc")][xs("freecam_key")], misc::freecam_key);
+		write_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 		write_value(json[xs("visuals")][xs("skeletonesp_clr[0]")], visuals::skeletonesp_clr[0]);
 		write_value(json[xs("visuals")][xs("skeletonesp_clr[1]")], visuals::skeletonesp_clr[1]);
 		write_value(json[xs("visuals")][xs("skeletonesp_clr[2]")], visuals::skeletonesp_clr[2]);
@@ -1311,6 +1320,7 @@ namespace c {
 		write_value(json[xs("movement")][xs("bounce_assist_key_s")], c::assist::bounce_assist_key_s);
 		write_value(json[xs("movement")][xs("bounce_point_key")], c::assist::bounce_point_key);
 		write_value(json[xs("movement")][xs("bounce_point_key_s")], c::assist::bounce_point_key_s);
+		write_value(json[xs("movement")][xs("pixelsurf_max_points")], c::assist::pixelsurf_max_points);
 		write_value(json[xs("movement")][xs("jump_bug_key_s")], movement::jump_bug_key_s);
 		write_value(json[xs("movement")][xs("edge_bug_key_s")], movement::edge_bug_key_s);
 		write_value(json[xs("movement")][xs("mini_jump_key_s")], movement::mini_jump_key_s);
@@ -2258,8 +2268,16 @@ namespace c {
 			read_value(json[xs("movement")][xs("EdgeBugTicks")], movement::EdgeBugTicks);
 			read_value(json[xs("movement")][xs("EdgeBugMouseLock")], movement::EdgeBugMouseLock);
 
+			read_value(json[xs("movement")][xs("auto_duck")], movement::auto_duck);
+			read_value(json[xs("movement")][xs("auto_duck_key")], movement::auto_duck_key);
+			read_value(json[xs("movement")][xs("auto_duck_key_s")], movement::auto_duck_key_s);
+			read_value(json[xs("movement")][xs("auto_duck_ticks")], movement::auto_duck_ticks);
+			read_value(json[xs("movement")][xs("fireman")], movement::fireman);
+			read_value(json[xs("movement")][xs("fireman_key")], movement::fireman_key);
+			read_value(json[xs("movement")][xs("fireman_key_s")], movement::fireman_key_s);
 			read_value(json[xs("movement")][xs("delay_hop")], movement::delay_hop);
 			read_value(json[xs("movement")][xs("delay_hop_key")], movement::delay_hop_key);
+			read_value(json[xs("movement")][xs("delay_hop_key_s")], movement::delay_hop_key_s);
 			read_value(json[xs("movement")][xs("stamina_hop_ticks")], movement::dh_tick);
 			read_value(json[xs("movement")][xs("auto_duck")], movement::auto_duck);
 			read_value(json[xs("movement")][xs("auto_duck_key")], movement::auto_duck_key);
@@ -2417,6 +2435,7 @@ namespace c {
 			read_value(json[xs("misc")][xs("misc_hitmarker_sound_type")], misc::misc_hitmarker_sound_type);
 			read_value(json[xs("misc")][xs("freecam")], misc::freecam);
 			read_value(json[xs("misc")][xs("freecam_key")], misc::freecam_key);
+			read_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 			read_value(json[xs("visuals")][xs("skeletonesp_clr[0]")], visuals::skeletonesp_clr[0]);
 			read_value(json[xs("visuals")][xs("skeletonesp_clr[1]")], visuals::skeletonesp_clr[1]);
 			read_value(json[xs("visuals")][xs("skeletonesp_clr[2]")], visuals::skeletonesp_clr[2]);
@@ -2785,6 +2804,7 @@ namespace c {
 			read_value(json[xs("movement")][xs("bounce_assist_key_s")], c::assist::bounce_assist_key_s);
 			read_value(json[xs("movement")][xs("bounce_point_key")], c::assist::bounce_point_key);
 			read_value(json[xs("movement")][xs("bounce_point_key_s")], c::assist::bounce_point_key_s);
+			read_value(json[xs("movement")][xs("pixelsurf_max_points")], c::assist::pixelsurf_max_points);
 			read_value(json[xs("movement")][xs("jump_bug_key_s")], movement::jump_bug_key_s);
 			read_value(json[xs("movement")][xs("edge_bug_key_s")], movement::edge_bug_key_s);
 			read_value(json[xs("movement")][xs("mini_jump_key_s")], movement::mini_jump_key_s);
@@ -3186,6 +3206,12 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug")], movement::edge_bug);
 			read_value(json[xs("movement")][xs("visualize_edge_bug")], movement::visualize_edge_bug);
 			read_value(json[xs("movement")][xs("edge_bug_advanced_search")], movement::edge_bug_advanced_search);
+			read_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);
+			read_value(json[xs("movement")][xs("edge_bug_ticks")], movement::edge_bug_ticks);
+			read_value(json[xs("movement")][xs("edge_bug_rape")], movement::edge_bug_rape);
+			read_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
+			read_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
+			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
 
 			//lb
 			read_value(json[xs("movement")][xs("edgebug_type")], movement::edgebug_type);
@@ -3201,14 +3227,14 @@ namespace c {
 
 			read_value(json[xs("movement")][xs("auto_duck")], movement::auto_duck);
 			read_value(json[xs("movement")][xs("auto_duck_key")], movement::auto_duck_key);
-			read_value(json[xs("movement")][xs("edge_bug_key")], movement::edge_bug_key);
-			read_value(json[xs("movement")][xs("edge_bug_ticks")], movement::edge_bug_ticks);
-			read_value(json[xs("movement")][xs("edge_bug_rape")], movement::edge_bug_rape);
-			read_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
-			read_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
-			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
+			read_value(json[xs("movement")][xs("auto_duck_key_s")], movement::auto_duck_key_s);
+			read_value(json[xs("movement")][xs("auto_duck_ticks")], movement::auto_duck_ticks);
+			read_value(json[xs("movement")][xs("fireman")], movement::fireman);
+			read_value(json[xs("movement")][xs("fireman_key")], movement::fireman_key);
+			read_value(json[xs("movement")][xs("fireman_key_s")], movement::fireman_key_s);
 			read_value(json[xs("movement")][xs("delay_hop")], movement::delay_hop);
 			read_value(json[xs("movement")][xs("delay_hop_key")], movement::delay_hop_key);
+			read_value(json[xs("movement")][xs("delay_hop_key_s")], movement::delay_hop_key_s);
 			read_value(json[xs("movement")][xs("stamina_hop_ticks")], movement::dh_tick);
 			read_value(json[xs("movement")][xs("fastduck")], movement::fastduck);
 			read_value(json[xs("movement")][xs("edge_bug_lock_amount")], movement::edge_bug_lock_amount);
@@ -3256,6 +3282,7 @@ namespace c {
 			read_value(json[xs("movement")][xs("bounce_assist_key_s")], c::assist::bounce_assist_key_s);
 			read_value(json[xs("movement")][xs("bounce_point_key")], c::assist::bounce_point_key);
 			read_value(json[xs("movement")][xs("bounce_point_key_s")], c::assist::bounce_point_key_s);
+			read_value(json[xs("movement")][xs("pixelsurf_max_points")], c::assist::pixelsurf_max_points);
 
 			read_value(json[xs("movement")][xs("jump_bug_key_s")], movement::jump_bug_key_s);
 			read_value(json[xs("movement")][xs("edge_bug_key_s")], movement::edge_bug_key_s);
@@ -4406,6 +4433,7 @@ namespace c {
 			read_value(json[xs("misc")][xs("misc_hitmarker_sound_type")], misc::misc_hitmarker_sound_type);
 			read_value(json[xs("misc")][xs("freecam")], misc::freecam);
 			read_value(json[xs("misc")][xs("freecam_key")], misc::freecam_key);
+			read_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 			read_value(json[xs("misc")][xs("swayscale")], misc::swayscale);
 			read_value(json[xs("misc")][xs("swayscale_value")], misc::swayscale_value);
 			read_value(json[xs("misc")][xs("force_crosshair")], misc::force_crosshair);

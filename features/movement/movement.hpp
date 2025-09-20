@@ -56,7 +56,6 @@ namespace features::movement {
 	void pixel_surf_lock(c_usercmd* cmd);
 	void on_create_move_post(c_usercmd* cmd);
 	void fire_man(c_usercmd* cmd);
-	void air_stuck(c_usercmd* cmd);
 	void pixel_surf_fix(c_usercmd* cmd);
 	void pixel_surf_fix_del(c_usercmd* cmd);
 	void pixel_surf_del(c_usercmd* cmd);
@@ -72,6 +71,7 @@ namespace features::movement {
 	void fake_backwards(c_usercmd* cmd);
 	void auto_strafe(c_usercmd* cmd, vec3_t& current_angle);
 	void fix_movement(c_usercmd* cmd, vec3_t& angle);
+	void fix_movement_lb(c_usercmd* cmd, vec3_t& angle);
 	void start_movement_fix(c_usercmd* cmd);
 	void end_movement_fix(c_usercmd* cmd);
 	void blockbot(c_usercmd* cmd);
@@ -109,6 +109,16 @@ namespace features::movement {
 		float side_move = 0.f;
 	};
 	inline ps_data_t ps_data;
+
+	//auto-duck hw
+	struct autoduck_data_t {
+		bool m_did_land_ducking = false;
+		bool m_did_land_standing = false;
+
+		float m_ducking_vert = 0.f;
+		float m_standing_vert = 0.f;
+
+	}; inline autoduck_data_t m_autoduck_data;
 
 	//lb ps
 	struct pixelsurf_data_t {
