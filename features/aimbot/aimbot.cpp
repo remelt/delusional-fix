@@ -426,8 +426,9 @@ player_t* get_best_target(c_usercmd* cmd) {
 }
 
 void aimbot::run(c_usercmd* cmd) {
-	if (!c::aimbot::aimbot || !g::local->is_alive())
+	if (!c::aimbot::aimbot || !g::local->is_alive() || !interfaces::engine->is_connected())
 		return;
+
 	if (c::aimbot::aimbot_panic && menu::checkkey(c::aimbot::aimbot_panic_key, c::aimbot::aimbot_panic_key_s)) {
 		if (katai) {
 			features::misc::notify(("aimbot is off"), color(255, 255, 255, 255));
@@ -560,78 +561,3 @@ void aimbot::run(c_usercmd* cmd) {
 		}
 	}
 }
-
-float getRandomFloat(float min, float max) {
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dist(min, max);
-	return dist(gen);
-}
-
-void aimbot::rng_factor(c_usercmd* cmd)
-{
-	if (!g::local || !g::local->is_alive() || !interfaces::engine->is_connected() || !interfaces::engine->is_in_game())
-		return;
-
-	auto weapon = g::local->active_weapon();
-
-	if (is_knife(weapon))			//рнг на ножике...
-		return;
-
-	for (int i = 1; i <= interfaces::globals->max_clients; i++) {
-		auto entity = reinterpret_cast<player_t*>(interfaces::ent_list->get_client_entity(i));
-
-		if (!entity || entity == g::local)
-			continue;
-
-		if (!entity || entity == g::local || !entity->is_alive() || entity->dormant())
-			continue;
-
-		if (entity->team() == g::local->team())
-			continue;
-
-		rng_factor::near_enemy = true;
-
-	}
-
-	if ((cmd->buttons & in_attack) && weapon->clip1_count() > 0 && rng_factor::near_enemy)
-	{
-		if (rng_factor::players_iskilled)				//Убили негра
-		{
-			if (g::local->flags() & fl_onground && !(cmd->buttons & in_duck) && (g::local->get_velocity().length_2d() >= 50 || g::local->get_velocity().length_2d() <= -50))	//на земле, и типа в движении, якобы рнг
-				rng_factor::percent_rng_factor += getRandomFloat(11.2f, 23.1f);
-			else if (!(g::local->flags() & fl_onground))							//в воздухе попали
-				rng_factor::percent_rng_factor += getRandomFloat(126.6f, 221.6f);
-			else if (g::local->flags() & fl_onground && (cmd->buttons & in_duck))	//сидим как пидор
-				rng_factor::percent_rng_factor -= getRandomFloat(41.0f, 89.2f);
-
-			rng_factor::players_iskilled = false;
-			rng_factor::player_ishurt = false;
-			rng_factor::near_enemy = false;
-			return;			//Выходим чтоб не прибавлялось от player_ishurt
-		}
-		else if (rng_factor::player_ishurt)		//Ранили негра
-		{
-			if (g::local->flags() & fl_onground && !(cmd->buttons & in_duck) && (g::local->get_velocity().length_2d() >= 50 || g::local->get_velocity().length_2d() <= -50))
-				rng_factor::percent_rng_factor += getRandomFloat(11.2f, 23.1f);
-			else if (!(g::local->flags() & fl_onground))
-				rng_factor::percent_rng_factor += getRandomFloat(16.6f, 36.6f);
-			else if (g::local->flags() & fl_onground && (cmd->buttons & in_duck))
-				rng_factor::percent_rng_factor -= getRandomFloat(3.0f, 19.2f);
-
-			rng_factor::player_ishurt = false;
-			rng_factor::near_enemy = false;
-		}
-		else if (g::local->flags() & fl_onground && (g::local->get_velocity().length_2d() == 0)) {		//если чисто просто стоимчиллим, и стреляемыыы
-			//rng_factor::percent_rng_factor = 0.f;
-		}
-		else if (!rng_factor::players_iskilled && !rng_factor::player_ishurt && !(g::local->flags() & fl_onground) && can_fire(weapon, cmd))
-		{
-			rng_factor::percent_rng_factor -= getRandomFloat(16.6f, 76.6f);
-		}
-		rng_factor::near_enemy = false;
-	}
-	rng_factor::near_enemy = false;
-}
-
-

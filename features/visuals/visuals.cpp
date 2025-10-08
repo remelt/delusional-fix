@@ -437,15 +437,25 @@ void features::visuals::display_spotify() {
 		return;
 
 	int w, h;
+	std::string name;
 	interfaces::engine->get_screen_size(w, h);
 	h = c::misc::watermark ? 30 : 5;
 
-	auto text_size = im_render.get_text_size(strtitle.c_str(), fonts::main_spec_font, 0.f, 12.f);
+	//simple check for " - " in the track name
+	//cuz its usually used when artist name is in the track title
+	if (strtitle.find(" - ") == std::string::npos && !strartist.empty()) {
+		name = strartist + " - " + strtitle;
+	}
+	else {
+		name = strtitle;
+	}
+
+	auto text_size = im_render.get_text_size(name.c_str(), fonts::main_spec_font, 0.f, 12.f);
 	auto paused_size = im_render.get_text_size("stopped / paused", fonts::main_spec_font, 0.f, 12.f);
 
 	if (mplayer.isPlaying) {
-		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), strtitle.c_str());
-		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), strtitle.c_str());
+		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), name.c_str());
+		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), name.c_str());
 	}
 	else {
 		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - paused_size + 1, h + 1), ImColor(0, 0, 0, 255), "stopped / paused");

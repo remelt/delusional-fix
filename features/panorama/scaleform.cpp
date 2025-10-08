@@ -15,12 +15,12 @@ else{ return false; }
 
 var contextPanel = $.GetContextPanel();
 
-var weaponmodule = "https://media.discordapp.net/attachments/1051902264530444389/1069512699106570290/ammo.png" //weaponpanel
-var moneyBgImg = "https://media.discordapp.net/attachments/1051902127880032270/1051953939379146823/moneybg.png" //moneyhud
-var buycartBgImg = "https://media.discordapp.net/attachments/1051902127880032270/1051978172792569856/buyzone.png" //buycart
-var dashboardLabelImg = "https://cdn.discordapp.com/attachments/1051902202282770442/1069503555158949888/location_corner.png" //radar 
-var hudTeamCountBgT = "https://cdn.discordapp.com/attachments/1051950009286938705/1051959040411959387/t.png"; //team icon T
-var hudTeamCountBgCT = "https://cdn.discordapp.com/attachments/1051950009286938705/1051959067247132732/ct.png"; //team icon CT
+var weaponmodule = "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/weapon.png" //weaponpanel
+var moneyBgImg = "https://images2.imgbox.com/97/88/5iUDI6LI_o.png" //moneyhud
+var buycartBgImg = "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/icons/ui/buyzone.png" //buycart
+var dashboardLabelImg = "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/location_corner.png" //radar 
+var hudTeamCountBgT = "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/teamcounter/teamcounter_alivebgT.png"; //team icon T
+var hudTeamCountBgCT = "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/teamcounter/teamcounter_alivebgCT.png"; //team icon CT
 
 
 //weaponmodule
@@ -202,12 +202,12 @@ winsCT.style.fontFamily = 'Stratum2 Bold Monodigit';
 winsCT.style.fontSize = '22px';
 
 var timerbg = hudTeamCounter.FindChildTraverse('Timer');
-timerbg.style.width = '80px';
-timerbg.style.marginLeft = '2.5px';
+timerbg.style.width = '83.5px';
+timerbg.style.marginLeft = '0.5px';
 timerbg.style.height = '50px';
 timerbg.style.backgroundColor = '#00000000';
-timerbg.style.backgroundImgOpacity = '0.85';
-timerbg.style.backgroundImage = 'url("https://cdn.discordapp.com/attachments/1069914411025842218/1070602812716757013/5.svg")';
+timerbg.style.backgroundImgOpacity = '0.60';
+timerbg.style.backgroundImage = 'url("https://images2.imgbox.com/27/4d/GnLWDcAf_o.png")';
 
 var timer = hudTeamCounter.FindChildTraverse('TimerText');
 timer.style.fontFamily = 'Stratum2 Bold';
@@ -290,7 +290,7 @@ buyzoneicon1.style.height = '${buyZone}';
 buyzoneicon1.style.S2MixBlendMode = 'SRGBadditive'
 
 if(exist('buyzoneicon2')){
-$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('money-text-bg')[0], 'buyzoneicon2', {src: "https://media.discordapp.net/attachments/1051902127880032270/1051978172792569856/buyzone.png", style: "height: '${buyZone}'; width: 32px; wash-color-fast: #ceff78; horizontal-align: left; y: -1px; x: 10px; -s2-mix-blend-mode: SRGBadditive; opacity: 0.8;"});
+$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('money-text-bg')[0], 'buyzoneicon2', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/icons/ui/buyzone.png", style: "height: '${buyZone}'; width: 32px; wash-color-fast: #ceff78; horizontal-align: left; y: -1px; x: 10px; -s2-mix-blend-mode: SRGBadditive; opacity: 0.8;"});
 }
 
 $.GetContextPanel().FindChildTraverse('buyzoneicon2').AddClass('money-text-buy-icon')
@@ -402,7 +402,7 @@ for(var hudHaBg of hudHa.FindChildrenWithClassTraverse('hud-HA-bg'))
 
 for(var hudHaBgH of hudHa.FindChildrenWithClassTraverse('hud-HA-bg-h'))
 {
-    hudHaBgH.style.backgroundImage = 'url("https://media.discordapp.net/attachments/1051901947545931857/1051959622539411586/hp.png")'; // HP.png
+    hudHaBgH.style.backgroundImage = 'url("https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/hp.png")'; // HP.png
     hudHaBgH.style.backgroundSize = '107% 100%';
     hudHaBgH.style.backgroundImgOpacity = '0.0';
     hudHaBgH.style.width = '200px';
@@ -412,7 +412,7 @@ for(var hudHaBgH of hudHa.FindChildrenWithClassTraverse('hud-HA-bg-h'))
     
 for(var hudHaBgA of hudHa.FindChildrenWithClassTraverse('hud-HA-bg-a'))
 {
-    hudHaBgA.style.backgroundImage = 'url("https://cdn.discordapp.com/attachments/1051901947545931857/1069503155039109170/armor.png")'; // Armor.png
+    hudHaBgA.style.backgroundImage = 'url("https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/armor.png")'; // Armor.png
     hudHaBgA.style.backgroundSize = '100% 100%';
     hudHaBgA.style.backgroundImgOpacity = '0.0';
     hudHaBgA.style.width =  ${isShort} ? '210px' : '55px';
@@ -425,7 +425,7 @@ for(var hudHaBgA of hudHa.FindChildrenWithClassTraverse('hud-HA-bg-a'))
     var healthbgh = $.GetContextPanel().FindChildTraverse('HudHealthArmorBG')
     healthbgh.style.width =  ${isShort} ? '550px' : '310px';
     healthbgh.style.height = '54px'
-    healthbgh.style.backgroundImage = 'url(\'https://media.discordapp.net/attachments/1051901947545931857/1051964964065251459/hudhabg.png\')'
+    healthbgh.style.backgroundImage = 'url(\'https://images2.imgbox.com/ae/58/LJJizTxL_o.png\')'
     healthbgh.style.backgroundSize = '100% 100%'
     healthbgh.style.horizontalAlign = 'left'
     healthbgh.style.x = '-1px'
@@ -443,23 +443,23 @@ for(var oncrit of hudHa.FindChildrenWithClassTraverse('hud-HA--critical'))
 {
     for(var hudHaBg of oncrit.FindChildTraverse('HudHealthArmor').FindChildrenWithClassTraverse('hud-HA-bg-h'))
     {
-        hudHaBg.style.backgroundImage = 'url("https://media.discordapp.net/attachments/1051901947545931857/1051912791935684678/hpred.png")';
+        hudHaBg.style.backgroundImage = 'url("https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/hpred.png")';
         hudHaBg.style.backgroundImgOpacity = '0.92';
     }
 }
 
 
 if(exist('hud-HA-icon-Healthsf')){
-$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Healthsf', {src: "https://cdn.discordapp.com/attachments/1051901947545931857/1051902079750393866/hp.png", style: "height: 20px; width: 20px; y: 21px; x: 16px; -s2-mix-blend-mode: Additive; z-index: 31;"});
+$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Healthsf', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/healtharmor/hp.png", style: "height: 20px; width: 20px; y: 21px; x: 16px; -s2-mix-blend-mode: Additive; z-index: 31;"});
 }
 
 
 if(exist('hud-HA-icon-Armorsf')){
-$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Armorsf', {src: "https://cdn.discordapp.com/attachments/1051901947545931857/1051902078957654139/armor.png", style: "height: 20px; width: 20px; y: 21px; x: 226px; -s2-mix-blend-mode: Additive; z-index: 31;"});
+$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Armorsf', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/healtharmor/armor.png", style: "height: 20px; width: 20px; y: 21px; x: 226px; -s2-mix-blend-mode: Additive; z-index: 31;"});
 }
 
 if(exist('hud-HA-icon-Helmetsf')){
-$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Helmetsf', {src: "https://cdn.discordapp.com/attachments/1051901947545931857/1051902079368708096/helmet.png", style: "height: 20px; width: 20px; y: 21px; x: 226px; -s2-mix-blend-mode: Additive; z-index: 31;"});
+$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Helmetsf', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/healtharmor/helmet.png", style: "height: 20px; width: 20px; y: 21px; x: 226px; -s2-mix-blend-mode: Additive; z-index: 31;"});
 }
 
 	if(exist('hudhabarborder')){
@@ -559,7 +559,7 @@ for (var dnBackground of contextPanel.FindChildrenWithClassTraverse('DeathNotice
 }
 
 for (var dnBackgroundg of contextPanel.FindChildrenWithClassTraverse('DeathNoticeBG')) {
-	dnBackgroundg.style.backgroundImage = 'url("https://cdn.discordapp.com/attachments/1069914411025842218/1072083072390004766/132.svg")';
+	dnBackgroundg.style.backgroundImage = 'url("https://images2.imgbox.com/e4/eb/FdasPVKZ_o.png")';
 	dnBackgroundg.style.backgroundSize = '100% 100%';
 	dnBackgroundg.style.backgroundColor = '#00000000';
 }
@@ -608,8 +608,8 @@ for (var deathnotice of contextPanel.FindChildrenWithClassTraverse('DeathNotice'
     deathnotice.FindChildTraverse('Domination').style.visibility = 'collapse';
     deathnotice.FindChildTraverse('Suicide').style.backgroundColor = '#00000000'
 	deathnotice.FindChildTraverse('Suicide').style.boxShadow = 'inset #e1000000 0px 0px 0px;';
-	deathnotice.FindChildTraverse('HeadShot').SetImage('https://cdn.discordapp.com/attachments/1045407846692569120/1073355651083948094/icon-headshot.png')
-	deathnotice.FindChildTraverse('Penetrate').SetImage('https://cdn.discordapp.com/attachments/1045407846692569120/1073355652208017471/icon-penetrate.png')
+	deathnotice.FindChildTraverse('HeadShot').SetImage('https://raw.githubusercontent.com/abandonedpools/scaleform/3e4c1f244351844a6236d952356ea087f59ad29e/p_scaleform/materials/panorama/images/hud/deathnotice/icon_headshot.svg')
+	deathnotice.FindChildTraverse('Penetrate').SetImage('https://raw.githubusercontent.com/abandonedpools/scaleform/3e4c1f244351844a6236d952356ea087f59ad29e/p_scaleform/materials/panorama/images/hud/deathnotice/penetrate.svg')
 	deathnotice.FindChildTraverse('Suicide').SetImage('https://cdn.discordapp.com/attachments/1045407846692569120/1073355652535169106/icon-suicide.png')
     deathnotice.style.margin = '0px'
     deathnotice.style.height = '35px'
@@ -620,7 +620,7 @@ for (var deathnotice of contextPanel.FindChildrenWithClassTraverse('DeathNotice'
 		{
 			for(var content of killer.FindChildrenWithClassTraverse('DeathNoticeBG'))
 			{
-				content.style.backgroundImage = 'url("https://cdn.discordapp.com/attachments/1042913359093317713/1120987150503116840/1280px-HD_transparent_picture.png")';
+				content.style.backgroundImage = 'url("https://upload.wikimedia.org/wikipedia/commons/8/89/HD_transparent_picture.png")';
 				content.style.border = '2px solid #821717';
 				content.style.borderRadius = '4px';
 				content.style.backgroundColor = '#000000E1';
@@ -634,7 +634,7 @@ for (var deathnotice of contextPanel.FindChildrenWithClassTraverse('DeathNotice'
 		{
 		    for(var content of victim.FindChildrenWithClassTraverse('DeathNoticeBG'))
             {
-				content.style.backgroundImage = 'url("https://cdn.discordapp.com/attachments/1069914411025842218/1072083072390004766/132.svg")';
+				content.style.backgroundImage = 'url("https://images2.imgbox.com/e4/eb/FdasPVKZ_o.png")';
 				content.style.backgroundSize = '100% 100%';
 				content.style.backgroundColor = '#00000000';
 
@@ -659,7 +659,7 @@ var weaponRowBG = $.GetContextPanel().FindChildrenWithClassTraverse('weapon-row-
 	weaponRowBG[i].style.height = '80px'
 	weaponRowBG[i].style.horizontalAlign = 'right'
 	
-	$.CreatePanel('Image', weaponRowBG[i], 'weaponrowoutline-Center', {src: "https://media.discordapp.net/attachments/1051902334466269244/1074170854147104778/weapon.png", style: "height: 80px; width: 280px; horizontal-align: right; vertical-align: center; x: 0px; opacity: 0.6;"});				
+	$.CreatePanel('Image', weaponRowBG[i], 'weaponrowoutline-Center', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/weapon.png", style: "height: 80px; width: 280px; horizontal-align: right; vertical-align: center; x: 0px; opacity: 0.6;"});				
 	var weaponrowcenter = $.GetContextPanel().FindChildTraverse('weaponrowoutline-Center')
 				}
 			}
@@ -917,8 +917,8 @@ $.Schedule(0.3, runner);
 
 JAVASCRIPT alerts = R"alert(
 var contextPanel = $.GetContextPanel();
-var joinPanelCTBG = "https://cdn.discordapp.com/attachments/808866622701830186/977922886042026015/Group_69.png";
-var joinPanelTBG = "https://cdn.discordapp.com/attachments/808866622701830186/977919617194418195/Group_66.png";
+var joinPanelCTBG = "https://images2.imgbox.com/3c/af/3j6BFAy9_o.png";
+var joinPanelTBG = "https://images2.imgbox.com/3c/af/3j6BFAy9_o.png";
 var joinPanelBotBG = "https://images2.imgbox.com/3c/af/3j6BFAy9_o.png";
 
 for(var hudHint of $.GetContextPanel().FindChildrenWithClassTraverse('hud-hint'))
@@ -954,7 +954,7 @@ for(var hint of $.GetContextPanel().FindChildrenWithClassTraverse('hud-hint__ico
 
 
 if(exist('hud-hint__icon2')){
-$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-hint')[0], 'hud-hint__icon2', {src: "https://cdn.discordapp.com/attachments/1051907195106775170/1051907256368767078/alert.png", style: "height: 110px; width: 110px; y: -4px; x: -40px; z-index: 21;"});
+$.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-hint')[0], 'hud-hint__icon2', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/icons/ui/alert.png", style: "height: 110px; width: 110px; y: -4px; x: -40px; z-index: 21;"});
 }
 
 for(var hudHintText of $.GetContextPanel().FindChildrenWithClassTraverse('hud-hint__text'))
@@ -1131,8 +1131,8 @@ var contextPanel = $.GetContextPanel();
 var textColor = ${isCt} ? '#B4BBBE' : '#D6C8B5';
 var winPanelFg = contextPanel.FindChildrenWithClassTraverse('WinPanelTeam')[0].FindChildrenWithClassTraverse('TeamFG')[0];
 winPanelFg.backgroundColor = '#ffffff00';
-var mvpStar = 'https://cdn.discordapp.com/attachments/954389817536421908/957676079642980392/star.svg';
-var winpanelBackground = ${isCt} ? 'https://media.discordapp.net/attachments/1051950009286938705/1074128363159031828/winpanel_ct.png' : ${isT} ? 'https://media.discordapp.net/attachments/1049553002723282964/1074126653007069295/winpanel_t.png' : 'https://media.discordapp.net/attachments/1051950009286938705/1074128363159031828/winpanel_ct.png';
+var mvpStar = 'https://raw.githubusercontent.com/abandonedpools/scaleform/3e4c1f244351844a6236d952356ea087f59ad29e/p_scaleform/materials/panorama/images/hud/star.svg';
+var winpanelBackground = ${isCt} ? 'https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/mvp.png' : ${isT} ? 'https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/mvp2.png' : 'https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/mvp.png';
 
 
 for (var mvp of contextPanel.FindChildTraverse('HudWinPanel').FindChildrenWithClassTraverse('MVP'))
@@ -1367,7 +1367,7 @@ dashboardbg.style.width = '350px'
 dashboardbg.style.height = '46px'
 dashboardbg.style.verticalAlign = 'top';
 dashboardbg.style.horizontalAlign = 'left';
-dashboardbg.style.backgroundImage = 'url(\'https://media.discordapp.net/attachments/1051902202282770442/1069503555158949888/location_corner.png\')'//radar
+dashboardbg.style.backgroundImage = 'url(\'https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/location_corner.png\')'//radar
 dashboardbg.style.backgroundSize = '100% 100%'
 dashboardbg.style.transform = 'translateX(-1px)'
 
@@ -1740,6 +1740,8 @@ void panorama::scaleform_on_event(i_game_event* event) {
 
 }
 
+static int saved_tick_count;
+bool shavaut;
 void panorama::scaleform_after_event(const char* name) {
     if (!sfui.inited)
         return;
@@ -1751,8 +1753,15 @@ void panorama::scaleform_after_event(const char* name) {
     }
     else if (!strcmp(name, "spec_target_updated") || !strcmp(name, "spec_mode_updated") || !strcmp(name, "item_equip"))
         scaleform_spec();
-    //else if (!strcmp(name, "player_death") || !strcmp(name, "weapon_fire"))
-        //scaleform_death();
+    else if (!strcmp(name, "player_death")) {
+        saved_tick_count = interfaces::globals->tick_count;
+        shavaut = true;
+    }
+
+    if (shavaut && interfaces::globals->tick_count - saved_tick_count > 1) {
+        scaleform_death();
+        shavaut = false;
+    }
 }
 
 constexpr static uint64_t hash_data(const char* data, size_t len) {

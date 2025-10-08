@@ -58,6 +58,8 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 		features::movement::auto_align_lb(cmd);
 	}
 	//aimbot::rng_factor(cmd);
+	features::movement::fast_ladder(cmd);
+	features::movement::air_stuck(cmd);
 
 	prediction::begin(cmd); {
 
@@ -89,10 +91,21 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	features::movement::fire_man(cmd);
 	features::movement::auto_duck(cmd);
+	features::movement::avoid_collision(cmd);
 
-	if (!c::movement::nigg1) {
-		//features::movement::fix_movement(cmd, features::movement::first_viewangles);
-		features::movement::fix_movement_lb(cmd, features::movement::first_viewangles);
+	if (!c::movement::movement_fix) {
+		//fixing as
+		if (!menu::checkkey(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s)) {
+			switch (c::movement::fix_type) {
+			case(0):
+				features::movement::fix_movement(cmd, features::movement::first_viewangles);
+			case(1):
+				features::movement::fix_movement_lb(cmd, features::movement::first_viewangles);
+			}
+		}
+		else {
+			features::movement::fix_movement(cmd, features::movement::first_viewangles);
+		}
 	}
 
 	if (c::movement::px_selection == 0) {

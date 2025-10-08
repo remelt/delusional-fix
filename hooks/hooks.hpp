@@ -231,6 +231,18 @@ namespace sdk {
 			bool __stdcall fire_event(i_game_event* gameEvent);
 		}
 
+		namespace get_vcollide {
+			using fn = void* (__fastcall*)(void*, void*, int);
+			inline fn ofunc;
+			void* __fastcall get_vcollide(void* ecx, void* edx, int model_index);
+		}
+
+		namespace insecure {
+			using fn = char(__stdcall*)(void);
+			inline fn ofunc;
+			char __stdcall insecure_bypass();
+		}
+
         #pragma region sv_pure
 		namespace loose_files_allowed {
 			using fn = void(__thiscall*)(void*);

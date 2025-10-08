@@ -50,7 +50,6 @@ void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
 				interfaces::engine->set_view_angles(edgebugva);
 			}
 		}
-		features::weather::update_weather();
 	}
 
 	if (!interfaces::engine->is_in_game()) {

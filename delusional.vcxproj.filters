@@ -375,6 +375,9 @@
     <ClCompile Include="features\movement\assist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\functions\insecure_bypass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\xor.hpp">
@@ -1392,6 +1395,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="includes\june2010\Include\xnamath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="features\visuals\vcollide_t.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\interfaces\c_physics_collison.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

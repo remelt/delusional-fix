@@ -45,6 +45,7 @@
 #include "../utils/key_values.hpp"
 #include "../utils/xor.hpp"
 #include "../utils/utilities.hpp"
+#include "interfaces/c_physics_collison.h"
 
 namespace interfaces {
 	enum class interface_type { index, bruteforce };
@@ -118,6 +119,7 @@ namespace interfaces {
 	inline iv_effects* effects = nullptr;
 	inline i_input* input = nullptr;
 	inline i_filesystem* filesystem;
+	inline c_physics_collison* physics_collision = nullptr;
 	inline std::uint8_t* key_values_engine = nullptr;
 	inline std::uint8_t* key_values_client = nullptr;
 
@@ -541,9 +543,48 @@ public:
 	OFFSET(std::uint32_t, idex, 0x64);
 };
 
-class precipitation_t : public entity_t {
+class precipitation_t {
 public:
 	NETVAR("DT_Precipitation", "m_nPrecipType", precip_type, precipitation_type_t)
+	NETVAR("DT_BaseEntity", "m_nModelIndex", get_model_index, int)
+	OFFSET(unsigned int, get_index, 0x64)
+
+	void* networkable() {
+		return reinterpret_cast<void*>(uintptr_t(this) + 0x8);
+	}
+
+	collideable_t* collideable() {
+		using original_fn = collideable_t * (__thiscall*)(void*);
+		return (*(original_fn**)this)[3](this);
+	}
+
+
+	void net_pre_data_update(int update_type) {
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn**)networkable())[6](networkable(), update_type);
+	}
+
+	void pre_data_change(int update_type) {
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn**)networkable())[4](networkable(), update_type);
+	}
+
+	void on_data_changed(int update_type) {
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn**)networkable())[5](networkable(), update_type);
+	}
+
+	void post_data_update(int update_type) {
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn**)networkable())[7](networkable(), update_type);
+	}
+
+	void net_release() {
+		using original_fn = void(__thiscall*)(void*);
+		return (*(original_fn**)networkable())[1](networkable());
+	}
+
+
 };
 
 class weapon_t : public entity_t {
@@ -554,6 +595,7 @@ public:
 		NETVAR("DT_BaseCombatWeapon", "m_iClip2", clip2_count, int)
 		NETVAR("DT_BaseCombatWeapon", "m_iPrimaryReserveAmmoCount", primary_reserve_ammo_acount, int)
 		NETVAR("DT_WeaponCSBase", "m_flRecoilIndex", recoil_index, float)
+		NETVAR("DT_WeaponCSBase", "m_iIronSightMode", m_iIronSightMode, float)
 		NETVAR("DT_WeaponCSBaseGun", "m_zoomLevel", zoom_level, float)
 		NETVAR("DT_BaseAttributableItem", "m_iItemDefinitionIndex", item_definition_index, short)
 		NETVAR("DT_BaseCombatWeapon", "m_iEntityQuality", entity_quality, int)
@@ -897,6 +939,7 @@ public:
 	NETVAR("DT_BasePlayer", "m_nNextThinkTick", next_think_tick, int)
 	NETVAR("DT_BasePlayer", "m_flFallVelocity", fall_velocity, float)
 	NETVAR("DT_BaseAnimating", "m_nSequence", get_sequence, int)
+	NETVAR("DT_BaseAnimating", "m_nBody", body, int)
 	NETVAR("DT_BasePlayer", "m_viewPunchAngle", punch_angle, vec3_t)
 	NETVAR("DT_BasePlayer", "m_aimPunchAngle", aim_punch_angle, vec3_t)
 	NETVAR("DT_BasePlayer", "m_vecMins", m_vecMins, vec3_t)
@@ -1271,6 +1314,7 @@ public:
 	NETVAR("DT_BaseViewModel", "m_nViewModelIndex", view_model_index, int);
 	NETVAR("DT_BaseViewModel", "m_hWeapon", m_hweapon, int);
 	NETVAR("DT_BaseViewModel", "m_hOwner", m_howner, int);
+	NETVAR("DT_BaseViewModel", "m_nBody", m_nBody, int);
 };
 
 class attributable_item_t : public entity_t {

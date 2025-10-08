@@ -37,6 +37,7 @@ namespace menu {
 	inline auto color_p = red;
 	inline static int m_tabs = 0;
 	inline static int font_tab = 0;
+	inline ImVec2 current_size = ImVec2(0, 0);
 
 	inline ImVec2 menu_pos = ImVec2();
 	inline ImVec2 menu_size = ImVec2();

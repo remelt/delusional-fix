@@ -187,6 +187,14 @@ const static std::unordered_map<std::string, int( * )( int )> animation_fix_map
 	default:
 		return sequence + 1;
 	}
+	} },
+	{ "models/weapons/v_knife_gg.mdl", [](int sequence) -> int
+	{
+	switch (sequence)
+	{
+	case SEQUENCE_DEFAULT_LOOKAT01:
+		return SEQUENCE_DEFAULT_IDLE1;
+	}
 	} }
 };
 

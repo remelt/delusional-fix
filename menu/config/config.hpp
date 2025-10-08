@@ -172,7 +172,8 @@ namespace c {
 		inline bool auto_strafe = false;
 		inline int  auto_strafe_key = 0;
 		inline int  auto_strafe_key_s = 1;
-		inline bool nigg1 = false;
+		inline bool movement_fix = false;
+		inline int fix_type = 1;
 		inline bool bhop = false;
 		inline bool bhopmiss = false;
 		inline bool bhopfix = false;
@@ -254,7 +255,14 @@ namespace c {
 		inline int align_selection = 1;
 		inline int px_selection = 1;
 		inline bool freelook_surf = true;
+		inline bool fast_ladder = false;
+		inline int fast_ladder_key = 0;
+		inline int fast_ladder_key_s = 1;
 		inline bool auto_duck = false;
+		inline bool auto_duck_collision = false;
+		inline int auto_duck_collision_key = 0;
+		inline int auto_duck_collision_key_s = 1;
+		inline int auto_duck_collision_ticks = 6;
 		inline int  auto_duck_key = 0;
 		inline int  auto_duck_key_s = 1;
 		inline int  auto_duck_ticks = 6;
@@ -293,10 +301,10 @@ namespace c {
 		inline float velocity_indicator_custom_clr2[4]{ 1.f, 1.f, 1.f };
 		inline float velocity_indicator_fade_clr3[4]{ 1.f, 1.f, 1.f, 0.f };
 		inline float indicator_detect_clr[3]{ 0.195f, 0.750f, 0.269f };
-		inline bool indicators_show[10] = { false, false, false, false, false, false, false, false, false, false };
+		inline bool indicators_show[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool allow_detection_clr = false;
 		inline int detection_saved_tick = 15;
-		inline bool detection_clr_for[10] = { false, false, false, false, false, false, false, false, false, false };
+		inline bool detection_clr_for[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool stamina_indicator = false;
 		inline bool stamina_indicator_fade = false;
 		inline bool stamina_indicator_show_pre = false;
@@ -328,6 +336,7 @@ namespace c {
 	namespace misc {
 		inline bool headshot_spoofer = false;
 		inline bool anti_untrusted = true;
+		inline bool insecure_bypass = true;
 		inline bool unlock_inventory = false;
 		inline bool custom_region = false;
 		inline int custom_region_selection = 0;

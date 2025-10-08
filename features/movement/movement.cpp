@@ -6,6 +6,77 @@
 #include "../movement/prediction/prediction.hpp"
 #include "lobotomy_eb.h"
 
+struct air_stuck_datas
+{
+	bool detected = false;
+	bool touching_wall = false;
+	vec3_t wall_angle;
+	float FoundedForwardMove, FoundedSideMove, FoundedViewAngle, FoundedUpMove = 0.f;
+
+	air_stuck_datas find_walldata()
+	{
+		air_stuck_datas airstuck_data;
+		const auto mins = g::local->collideable()->mins();
+		const auto maxs = g::local->collideable()->maxs();
+		vec3_t best_wall_normal;
+		float max_radias = m_pi * 2.f;
+		float step = max_radias / 16.f;
+		for (float angle = 0.f; angle < max_radias; angle += step)
+		{
+			vec3_t wishdir = vec3_t(cosf(angle), sinf(angle), 0.f);
+			const auto startPos = g::local->abs_origin();
+			const auto endPos = startPos + wishdir;
+			trace_t trace;
+			trace_filter filter(g::local);
+			ray_t ray;
+
+			ray.initialize(startPos, endPos, mins, maxs);
+
+			interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &filter, &trace);
+
+			vec3_t hit = trace.did_hit() ? trace.end : endPos;
+			if (trace.did_hit()) {
+				airstuck_data.touching_wall = true;
+				best_wall_normal = trace.plane.normal;
+				vec3_t facing_dir = { -best_wall_normal.x, -best_wall_normal.y, 0.0f };
+				float wall_yaw = math::rad2deg(atan2f(facing_dir.y, facing_dir.x));
+				airstuck_data.wall_angle = best_wall_normal.to_angle();
+				//interfaces::debug_overlay->add_box_overlay(hit, mins, maxs, { 0.f, 0.f, 0.f }, 0, 255, 0, 200, 0.05f);	//green box if hit wall
+			}
+			else
+			{
+				//interfaces::debug_overlay->add_box_overlay(hit, mins, maxs, { 0.f, 0.f, 0.f }, 255, 0, 0, 200, 0.05f);	//red box if no
+			}
+
+			static vec3_t prev{ };
+			if (angle > 0.f) {
+				//interfaces::debug_overlay->add_line_overlay(prev, hit, 0, 255, 0, true, 0.05f);	//just lines
+			}
+			prev = hit;
+		}
+		return airstuck_data;
+	}
+
+	void set_detected() {
+		this->detected = true;
+	}
+	void set_undetected() {
+		this->detected = false;
+		this->FoundedForwardMove = 0.f;
+		this->FoundedSideMove = 0.f;
+		this->FoundedViewAngle = 0.f;
+		this->FoundedUpMove = 0.f;
+	}
+	void save_movementkeys(float forward, float side, float upmove, float viewangle)
+	{
+		this->FoundedForwardMove = forward;
+		this->FoundedSideMove = side;
+		this->FoundedViewAngle = viewangle;
+		this->FoundedUpMove = upmove;
+	}
+
+}	airstuck_data;
+
 void features::movement::bhop(c_usercmd* cmd) {
 	if (!g::local || !g::local->is_alive()) {
 		return;
@@ -452,6 +523,10 @@ void features::movement::fix_movement(c_usercmd* cmd, vec3_t& angle) {
 }
 
 void features::movement::fix_movement_lb(c_usercmd* cmd, vec3_t& old_view_point) {
+	if (!g::local || !g::local->is_alive()) {
+		return;
+	}
+
 	vec3_t forward, right, up;
 	math::angle_vectors(old_view_point, &forward, &right, &up);
 
@@ -741,6 +816,10 @@ void features::movement::end_movement_fix(c_usercmd* cmd)
 }
 
 void features::movement::edge_bug(c_usercmd* cmd) {
+	if (!g::local || !g::local->is_alive()) {
+		return;
+	}
+
 	if (!c::movement::edge_bug || !menu::checkkey(c::movement::edge_bug_key, c::movement::edge_bug_key_s) || !g::local || c::movement::edgebug_type == 1) {
 		detect_data.detecttick = 0;
 		detect_data.edgebugtick = 0;
@@ -939,6 +1018,10 @@ void features::movement::auto_align(c_usercmd* cmd) {
 		return;
 	}
 
+	if (c::movement::air_stuck && menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
+		return;
+	}
+
 	if (!g::local || !g::local->is_alive() || g::local->flags() & fl_onground) {
 		return;
 	}
@@ -1112,202 +1195,283 @@ float difference(float a, float b)
 	return std::max(abs(a), abs(b)) - std::min(abs(a), abs(b));
 }
 
+bool Awall = false;
 bool should_ps_standing{ };
 bool wall_detected = false;
 
-
 //fye maaaan
-enum class EFiremanState {
-	Idle,
-	Preparing,
-	Gliding,
-	Aligning,
-	Jumping
-};
+struct fireman_data_t {
+	bool is_ladder = false;
+	bool fr_hit_1 = false;
+	bool fr_hit = false;
+	bool awall = false;
+}; inline fireman_data_t m_fireman_data;
 
-struct FiremanData {
-	EFiremanState state = EFiremanState::Idle;
-	int ticksTotal = 0;
-	int ticksNeeded = 0;
-	int tickCount = 0;
-	float ladderYaw = 0.f;
-	vec3_t ladderNormal{};
+void features::movement::fire_man(c_usercmd* cmd)
+{
+	m_fireman_data.is_ladder = false;
 
-	void Reset() {
-		state = EFiremanState::Idle;
-		ticksTotal = ticksNeeded = tickCount = 0;
-		ladderYaw = 0.f;
-		ladderNormal = {};
+	if (!g::local || !g::local->is_alive()) {
+		return;
 	}
-} g_fireman;
 
-static bool FindLadderDirection(vec3_t& outNormal, float& outYaw) {
-	auto* pl = g::local;
-	if (!pl) return false;
+	if (!g::local->move_type()) {
+		return;
+	}
 
-	const auto mins = pl->collideable()->mins();
-	const auto maxs = pl->collideable()->maxs();
-	trace_world_only wonly;
-	vec3_t start = pl->abs_origin();
+	if (c::movement::air_stuck && menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
+		return;
+	}
 
-	const float step = 2.0f * M_PI / 16.0f;
-	for (float a = 0; a < 2.0f * M_PI; a += step) {
-		vec3_t dir{ std::cos(a), std::sin(a), 0.0f };
-		vec3_t end = start + dir * 32.0f;
+	if (!c::movement::fireman) {
+		m_fireman_data.fr_hit = false;
+		m_fireman_data.fr_hit_1 = false;
+		return;
+	}
 
+	if (!menu::checkkey(c::movement::fireman_key, c::movement::fireman_key_s)) {
+		m_fireman_data.fr_hit = false;
+		m_fireman_data.fr_hit_1 = false;
+		return;
+	}
+
+	if (m_fireman_data.fr_hit_1) {
+		if (prediction_backup::movetype == movetype_ladder) {
+			cmd->buttons |= in_jump;
+			cmd->forward_move = 0.f;
+			cmd->side_move = 0.f;
+		}
+	}
+
+	auto colidable = g::local->collideable();
+	if (!colidable)
+		return;
+
+	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+	m_fireman_data.awall = false;
+	trace_t trace;
+	float step = std::numbers::pi_v< float > *2.0f / 16.f;
+	static float start_circle = 0.f;
+
+	if (g::local->get_velocity().z != -6.25f && prediction_backup::velocity.z != -6.25f)
+		start_circle = 0.f;
+
+	bool foundWall = false;
+	float foundAngle = 0.f;
+	vec3_t wall_position;
+
+	for (float a = start_circle; a < std::numbers::pi_v< float > *2.0f; a += step) {
+		vec3_t wishdir(cosf(a), sinf(a), 0.f);
+		auto start_pos = g::local->abs_origin();
+		auto end_pos = start_pos + wishdir;
+		trace_filter flt(g::local);
 		ray_t ray;
-		trace_t tr;
-		ray.initialize(start, end, mins, maxs);
+		ray.initialize(start_pos, end_pos, colidable->mins(), colidable->maxs());
 
-		interfaces::trace_ray->trace_ray(ray, CONTENTS_LADDER, &wonly, &tr);
-		if (tr.flFraction < 1.0f) {
-			float zDot = std::abs(tr.plane.normal.z);
-			if (zDot < std::cos(math::deg2rad(30.0f))) {
-				outNormal = tr.plane.normal;
-				vec3_t toLadder = vec3_t(-outNormal.x, -outNormal.y, 0.0f).normalize2();
-				outYaw = toLadder.to_angle2().y;
-				return true;
-			}
+		interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &flt, &trace);
+
+		if (trace.flFraction < 1.f && trace.plane.normal.z < 0.4f) {
+			wall_position = trace.end;
+			foundWall = true;
+			foundAngle = a;
+			break;
 		}
 	}
-	return false;
-}
 
-static bool DetectFiremanWindow(c_usercmd* cmd) {
-	auto* pl = g::local;
-	if (!pl) return false;
+	if (foundWall) {
+		m_fireman_data.awall = true;
+		int commands_predicted = interfaces::prediction->split->commands_predicted;
 
-	float interval = interfaces::globals->interval_per_tick;
-	int maxTicks = (int)std::ceil(0.2f / interval);
-	g_fireman.ticksTotal = maxTicks;
+		vec3_t normal_plane(trace.plane.normal.x * -1.f, trace.plane.normal.y * -1.f, 0.f);
+		vec3_t wall_angle = normal_plane.to_angle();
+		vec3_t d_velo = g::local->get_velocity();
+		d_velo.z = 0.f;
+		vec3_t velo_angle = d_velo.to_angle();
+		vec3_t delta = velo_angle - wall_angle;
+		delta.normalize();
+		float rotation = deg2rad(wall_angle.y - cmd->view_angles.y);
+		float cos_rot = cos(rotation);
+		float sin_rot = sin(rotation);
+		float multiplayer = 450.f;
+		float backup_forward_move = cmd->forward_move;
+		float backup_side_move = cmd->forward_move;
+		float forward_move = cos_rot * multiplayer;
+		float side_move = -sin_rot * multiplayer;
+		int backup_buttons = cmd->buttons;
 
-	vec3_t normal; float yaw;
-	if (!FindLadderDirection(normal, yaw)) return false;
-
-	c_usercmd sim = *cmd;
-	for (int t = 1; t <= maxTicks; ++t) {
-		sim.forward_move = 450.f;
-		sim.side_move = 0.f;
-		sim.buttons |= in_jump;
-		sim.view_angles.y = yaw;
-
-		prediction::begin(&sim);
-		prediction::end();
-
-		if (pl->move_type() != movetype_ladder) break;
-		if (pl->get_velocity().z >= 0.f && (pl->flags() & fl_onground)) {
-			g_fireman.ticksNeeded = t;
-			g_fireman.ladderYaw = yaw;
-			g_fireman.ladderNormal = normal;
-			return true;
-		}
-	}
-	return false;
-}
-
-void features::movement::fire_man(c_usercmd* cmd) {
-	auto* pl = g::local;
-	if (!pl || !pl->is_alive()) return;
-	static bool wasBhopEnabled = false;
-	static bool blockedBhop = false;
-	if (g_fireman.state == EFiremanState::Idle) {
-		if (!c::movement::fireman || !menu::checkkey(c::movement::fireman_key, c::movement::fireman_key_s))
-			return;
-		if (pl->move_type() != movetype_walk) return;
-		if (pl->get_velocity().z >= 0.f) return;
-
-		trace_filter tf(pl); trace_t tr; ray_t r;
-		vec3_t o = pl->abs_origin();
-		r.initialize(o, o + vec3_t(0, 0, -64.f));
-		interfaces::trace_ray->trace_ray(r, MASK_PLAYERSOLID, &tf, &tr);
-		if ((o - tr.end).length() > 48.f) return;
-
-		if (!DetectFiremanWindow(cmd)) return;
-		g_fireman.state = EFiremanState::Preparing;
-		g_fireman.tickCount = 0;
-	}
-
-
-	switch (g_fireman.state) {
-	case EFiremanState::Preparing: {
-		cmd->view_angles.x = 0.f;
-		cmd->view_angles.y = g_fireman.ladderYaw;
-
-		vec3_t n = g_fireman.ladderNormal.normalize2();
-		vec3_t forward = vec3_t(-n.x, -n.y, 0.f).normalize2();
-		vec3_t right = vec3_t(n.y, -n.x, 0.f).normalize2();
-
-		float vz = g::local->get_velocity().z;
-		vec3_t wish = (vz < 0.f ? -forward : forward);
-
-		cmd->forward_move = wish.dot(forward) * 450.f;
-		cmd->side_move = wish.dot(right) * 450.f;
-		cmd->buttons |= in_jump;
-
-		if (g::local->move_type() == movetype_ladder) {
-			g_fireman.state = EFiremanState::Gliding;
-			g_fireman.tickCount = 0;
-		}
-		break;
-	}
-	case EFiremanState::Gliding: {
-		cmd->view_angles.x = 0.f;
-		cmd->view_angles.y = g_fireman.ladderYaw;
-
-		vec3_t n = g_fireman.ladderNormal.normalize2();
-		vec3_t forward = vec3_t(-n.x, -n.y, 0.f).normalize2();
-		vec3_t right = vec3_t(n.y, -n.x, 0.f).normalize2();
-
-		float vz = g::local->get_velocity().z;
-		vec3_t wish = (vz < 0.f ? -forward : forward);
-
-		cmd->forward_move = wish.dot(forward) * 450.f;
-		cmd->side_move = wish.dot(right) * 450.f;
-		cmd->buttons |= in_jump;
-
-		if (++g_fireman.tickCount >= g_fireman.ticksNeeded ||
-			(g::local->flags() & fl_onground)) {
-			g_fireman.state = EFiremanState::Aligning;
-			g_fireman.tickCount = 0;
-		}
-		break;
-	}
-	case EFiremanState::Aligning: {
-		cmd->view_angles.x = 0.f;
-		cmd->view_angles.y = g_fireman.ladderYaw;
-
-		vec3_t n = g_fireman.ladderNormal.normalize2();
-		vec3_t forward = vec3_t(-n.x, -n.y, 0.f).normalize2();
-		vec3_t right = vec3_t(n.y, -n.x, 0.f).normalize2();
-
-
-		vec3_t wish = -forward;
-		cmd->forward_move = wish.dot(forward) * 450.f;
-		cmd->side_move = wish.dot(right) * 450.f;
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		cmd->forward_move = forward_move;
+		cmd->side_move = side_move;
 		cmd->buttons &= ~in_jump;
 
-		// Касание пола
-		trace_filter tf(g::local); trace_t tr;
-		vec3_t o = g::local->abs_origin();
-		ray_t r; r.initialize(o, o + vec3_t(0, 0, -12.f));
-		interfaces::trace_ray->trace_ray(r, MASK_PLAYERSOLID, &tf, &tr);
-		if ((o - tr.end).length() < 2.f || ++g_fireman.tickCount >= 1) {
-			g_fireman.state = EFiremanState::Jumping;
+		prediction::begin(cmd);
+		prediction::end();
+
+		if (!m_fireman_data.is_ladder) {
+			if ((prediction_backup::movetype != movetype_ladder && g::local->move_type() == movetype_ladder) ||
+				prediction_backup::movetype == movetype_ladder) {
+				m_fireman_data.is_ladder = true;
+				start_circle = foundAngle;
+			}
+			else {
+				cmd->buttons = backup_buttons;
+				cmd->forward_move = backup_forward_move;
+				cmd->side_move = backup_side_move;
+			}
 		}
-		break;
+
+		if (m_fireman_data.is_ladder) {
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			int old_flags = g::local->flags();
+			int old_move_type = g::local->move_type();
+			cmd->forward_move = 0.f;
+			cmd->side_move = 0.f;
+
+			if (!m_fireman_data.fr_hit && !m_fireman_data.fr_hit_1) {
+				for (int i = 0; i < 12; i++) {
+					prediction::begin(cmd);
+					prediction::end();
+					if (!(old_flags & 1) && (g::local->flags() & 1)) {
+						if (i < 10) {
+							m_fireman_data.fr_hit_1 = true;
+							break;
+						}
+						m_fireman_data.fr_hit = true;
+					}
+				}
+			}
+			if (!m_fireman_data.fr_hit_1) {
+				if (!m_fireman_data.fr_hit) {
+					cmd->buttons &= ~in_jump;
+					cmd->forward_move = 0.f;
+					cmd->side_move = 0.f;
+				}
+				else {
+					if (prediction_backup::movetype != movetype_ladder) {
+						cmd->forward_move = forward_move;
+						cmd->side_move = side_move;
+						cmd->buttons |= in_jump;
+					}
+					else {
+						cmd->forward_move = 0.f;
+						cmd->side_move = 0.f;
+						cmd->buttons |= in_jump;
+					}
+				}
+			}
+			else {
+				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+				int oldflags = g::local->flags();
+				int oldMoveType = g::local->move_type();
+				cmd->forward_move = 0.f;
+				cmd->side_move = 0.f;
+
+				prediction::begin(cmd);
+				prediction::end();
+
+				if (!(oldflags & 1) && (g::local->flags() & 1)) {
+					cmd->forward_move = forward_move;
+					cmd->side_move = side_move;
+					cmd->buttons &= ~in_jump;
+				}
+				else {
+					cmd->buttons |= in_jump;
+					cmd->forward_move = 0.f;
+					cmd->side_move = 0.f;
+				}
+			}
+		}
+		else {
+			m_fireman_data.fr_hit = false;
+			m_fireman_data.fr_hit_1 = false;
+		}
+	}
+}
+
+void features::movement::air_stuck(c_usercmd* cmd)
+{
+	if (m_fireman_data.is_ladder || !c::movement::air_stuck || !g::local || !g::local->is_alive() || g::local->move_type() != movetype_walk)
+		return;
+
+	if (!menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s))
+		return;
+
+	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+	float fTickInterval = interfaces::globals->interval_per_tick;
+	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
+	float FoundedForwardMove, FoundedSideMove;
+	vec3_t FoundedViewAngle;
+
+	if (g::local->velocity().z >= 0.f)
+	{
+		airstuck_data.set_undetected();
+		return;
 	}
 
+	if (!airstuck_data.detected)
+	{
+		const auto& wall_data = airstuck_data.find_walldata();
 
-	case EFiremanState::Jumping: {
-		cmd->forward_move = 0.f;
-		cmd->side_move = 0.f;
-		cmd->buttons |= in_jump;
-		g_fireman.state = EFiremanState::Idle;
-		break;
+		if (!wall_data.touching_wall)
+			return;
+
+		wall_data.wall_angle.normalize_const();
+
+		float rotation = deg2rad(wall_data.wall_angle.y - cmd->view_angles.y);
+		float cos_rot = cos(rotation);
+		float sin_rot = sin(rotation);
+
+		float max_radias = 180.f;
+		float step = max_radias / (max_radias * 2);			//0.5f
+
+		for (float angle = -180.f; angle <= 180.f; angle += step) {		//loop for detectiong specific viewangle yaw(in lobotomy case it is -180 - 180 which is bad!). Must recode, and use specifig range yaw received from the trace.normal
+			float forwardmove = cos_rot * 24.f;
+			float sidemove = -sin_rot * 24.f;
+			vec3_t oldvelocity = g::local->velocity();
+			c_usercmd fakecmd = *cmd;			//set our fake cmd to test air stuck without affect on our real cmd
+
+			fakecmd.forward_move = forwardmove;
+			fakecmd.side_move = sidemove;
+			fakecmd.view_angles.y = angle;
+
+			prediction::begin(&fakecmd);
+			prediction::end();
+
+			if (g::local->move_type() != movetype_walk)
+				continue;
+
+			if (g::local->flags() & fl_onground)
+				return;
+
+			if (g::local->velocity().z > oldvelocity.z)		//in next tick velo > our real velo()
+			{
+				airstuck_data.save_movementkeys(fakecmd.forward_move, fakecmd.side_move, fakecmd.up_move, fakecmd.view_angles.y);
+				airstuck_data.set_detected();
+				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+				break;
+			}
+			else if (g::local->velocity().z == targetZvelo)	//velocity in next tick == targetZvelo(64 tick == -6.25) so we airstucked
+			{
+				airstuck_data.save_movementkeys(fakecmd.forward_move, fakecmd.side_move, fakecmd.up_move, fakecmd.view_angles.y);
+				airstuck_data.set_detected();
+				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+				break;
+			}												//i think we maybe need find another way to detect air stuck				
+			else
+			{
+				airstuck_data.set_undetected();
+			}
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		}
+
 	}
-	default:
-		g_fireman.Reset();
-		break;
+	if (airstuck_data.detected)
+	{
+		cmd->forward_move = airstuck_data.FoundedForwardMove;
+		cmd->side_move = airstuck_data.FoundedSideMove;
+		cmd->up_move = airstuck_data.FoundedUpMove;
+		cmd->view_angles.y = airstuck_data.FoundedViewAngle;
 	}
 }
 
@@ -1507,6 +1671,14 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 	}
 
 	if (!g::local || !g::local->is_alive()) {
+		return;
+	}
+
+	if (m_fireman_data.is_ladder) {
+		return;
+	}
+
+	if (c::movement::air_stuck && menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
 		return;
 	}
 
@@ -2004,6 +2176,7 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 			m_autoduck_data.m_ducking_vert = g::local->origin().z;
 			break;
 		}
+
 		delete simulated_cmd;
 	}
 
@@ -2031,6 +2204,7 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 			m_autoduck_data.m_standing_vert = g::local->origin().z;
 			break;
 		}
+
 		delete simulated_cmd;
 	}
 
@@ -2046,6 +2220,125 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 	else if (m_autoduck_data.m_did_land_ducking && !m_autoduck_data.m_did_land_standing)
 		cmd->buttons |= in_duck;
 
+}
+
+void features::movement::avoid_collision(c_usercmd* cmd) {
+	if (!g::local || !g::local->is_alive()) {
+		m_avoid_collision.m_ducking_velo = 0.f;
+		m_avoid_collision.m_standing_velo = 0.f;
+		return;
+	}
+
+	const auto move_type = g::local->move_type();
+	if (move_type == movetype_ladder || move_type == movetype_noclip || move_type == movetype_fly || move_type == movetype_observer) {
+		m_avoid_collision.m_ducking_velo = 0.f;
+		m_avoid_collision.m_standing_velo = 0.f;
+		return;
+	}
+
+	if (!c::movement::auto_duck_collision || !menu::checkkey(c::movement::auto_duck_collision_key, c::movement::auto_duck_collision_key_s) || prediction_backup::flags & fl_onground ||
+		should_edge_bug || lobotomy_eb::EdgeBug_Founded || m_pixelsurf_data.m_in_pixel_surf ||
+		c::movement::edge_bug && menu::checkkey(c::movement::edge_bug_key, c::movement::edge_bug_key_s) ||
+		c::movement::delay_hop && menu::checkkey(c::movement::delay_hop_key, c::movement::delay_hop_key_s) || m_pixelsurf_data.should_pixel_surf || should_ps) {
+
+		m_avoid_collision.m_ducking_velo = 0.f;
+		m_avoid_collision.m_standing_velo = 0.f;
+		return;
+	}
+
+	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+
+	trace_filter tf(g::local);
+	trace_t tr;
+	vec3_t unpredicted_pos = g::local->abs_origin();
+	ray_t r;
+	//))))
+	r.initialize(unpredicted_pos, unpredicted_pos + vec3_t(0, 0, 77.f));
+	interfaces::trace_ray->trace_ray(r, MASK_PLAYERSOLID, &tf, &tr);
+
+	for (int i = 0; i < c::movement::auto_duck_collision_ticks; i++) {
+		if (g::local->flags() & fl_onground)
+			break;
+		for (int o = 0; o < 2; o++) {
+			c_usercmd* simulated_cmd = new c_usercmd(*cmd);
+
+			if (o == 0) {
+				simulated_cmd->buttons |= in_duck;
+				simulated_cmd->buttons |= in_bullrush;
+			}
+			else {
+				simulated_cmd->buttons &= ~in_duck;
+			}
+
+			prediction::begin(simulated_cmd);
+			prediction::end();
+
+			trace_filter tf(g::local);
+			trace_t tr;
+			vec3_t predicted_pos = g::local->abs_origin();
+			ray_t r;
+			//))))
+			r.initialize(predicted_pos, predicted_pos + vec3_t(0, 0, 77.f));
+			interfaces::trace_ray->trace_ray(r, MASK_PLAYERSOLID, &tf, &tr);
+
+			if (tr.flFraction < 1.0f) {
+				if (o == 0) {
+					m_avoid_collision.m_ducking_velo = g::local->velocity().z;
+				}
+				else {
+					m_avoid_collision.m_standing_velo = g::local->velocity().z;
+				}
+			}
+
+			delete simulated_cmd;
+		}
+	}
+
+	prediction::begin(cmd);
+	prediction::end();
+
+	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+
+	if (m_avoid_collision.m_ducking_velo > m_avoid_collision.m_standing_velo) {
+		cmd->buttons |= in_duck;
+	}
+	else if (tr.flFraction < 1.0f) {
+		cmd->buttons |= in_duck;
+	}
+}
+
+void features::movement::fast_ladder(c_usercmd* cmd)
+{
+	if (!c::movement::fast_ladder || !menu::checkkey(c::movement::fast_ladder_key, c::movement::fast_ladder_key_s))
+		return;
+
+	if (g::local->move_type() == movetype_ladder) {
+		if (cmd->side_move == 0) {
+			cmd->view_angles.y += 45.0f;
+		}
+
+		if (cmd->buttons & in_forward) {
+			if (cmd->side_move > 0)
+				cmd->view_angles.y -= 1.0f;
+
+			if (cmd->side_move < 0)
+				cmd->view_angles.y += 90.0f;
+
+			cmd->buttons &= ~in_moveleft;
+			cmd->buttons |= in_moveright;
+		}
+
+		if (cmd->buttons & in_back) {
+			if (cmd->side_move < 0)
+				cmd->view_angles.y -= 1.0f;
+
+			if (cmd->side_move > 0)
+				cmd->view_angles.y += 90.0f;
+
+			cmd->buttons &= ~in_moveright;
+			cmd->buttons |= in_moveleft;
+		}
+	}
 }
 
 void features::movement::fake_backwards(c_usercmd* cmd) {
@@ -2247,8 +2540,8 @@ void features::movement::indicators() {
 	if (should_mj)
 		saved_tick_mj = interfaces::globals->tick_count;
 
-	color_t ps_clr, al_clr, sh_clr, eb_clr, jb_clr, ej_clr, lj_clr, mj_clr, lg_clr, ast_clr, bast_clr, as_clr;
-	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, ast_alpha, bast_alpha, as_alpha = 0;
+	color_t ps_clr, al_clr, sh_clr, eb_clr, jb_clr, ej_clr, lj_clr, mj_clr, lg_clr, fm_clr, air_clr, ast_clr, bast_clr, as_clr;
+	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, fm_alpha, air_alpha, ast_alpha, bast_alpha, as_alpha = 0;
 	int position = 0;
 
 	if (c::movement::indicators_show[0]) {
@@ -2263,7 +2556,7 @@ void features::movement::indicators() {
 		render_indicator(c::movement::long_jump_key, c::movement::long_jump_key_s, lj_alpha, lj_clr, "lj", true, should_lj, c::movement::detection_clr_for[2], position, saved_tick_lj);
 
 	if (c::movement::indicators_show[5])
-		render_indicator(c::movement::edge_jump_key, c::movement::edge_jump_key_s, ej_alpha, ej_clr, "ej", true, should_ej, c::movement::detection_clr_for[6], position, saved_tick_ej);
+		render_indicator(c::movement::edge_jump_key, c::movement::edge_jump_key_s, ej_alpha, ej_clr, "ej", true, should_ej, c::movement::detection_clr_for[5], position, saved_tick_ej);
 
 	if (c::movement::indicators_show[3])
 		render_indicator(c::movement::mini_jump_key, c::movement::mini_jump_key_s, mj_alpha, mj_clr, "mj", true, should_mj, c::movement::detection_clr_for[3], position, saved_tick_mj);
@@ -2282,14 +2575,20 @@ void features::movement::indicators() {
 	if (c::movement::indicators_show[6])
 		render_indicator(c::movement::ladder_bug_key, c::movement::ladder_bug_key_s, lb_alpha, lg_clr, "lb", false, should_lb, c::movement::detection_clr_for[6], position);
 
+	if (c::movement::indicators_show[7])
+		render_indicator(c::movement::fireman_key, c::movement::fireman_key_s, fm_alpha, fm_clr, "fm", false, m_fireman_data.is_ladder, c::movement::detection_clr_for[7], position);
+
 	if (c::movement::indicators_show[8])
-		render_indicator(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s, ast_alpha, ast_clr, "ast", false, HITGODA, c::movement::detection_clr_for[8], position);
+		render_indicator(c::movement::air_stuck_key, c::movement::air_stuck_key_s, air_alpha, air_clr, "air", false, airstuck_data.detected, c::movement::detection_clr_for[7], position);
+
+	if (c::movement::indicators_show[10])
+		render_indicator(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s, ast_alpha, ast_clr, "ast", false, HITGODA, c::movement::detection_clr_for[10], position);
+
+	if (c::movement::indicators_show[11])
+		render_indicator(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s, bast_alpha, bast_clr, "bast", false, HITGODA2, c::movement::detection_clr_for[11], position);
 
 	if (c::movement::indicators_show[9])
-		render_indicator(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s, bast_alpha, bast_clr, "bast", false, HITGODA2, c::movement::detection_clr_for[9], position);
-
-	if (c::movement::indicators_show[7])
-		render_indicator(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s, as_alpha, as_clr, "autostrafing", false, false, c::movement::detection_clr_for[7], position);
+		render_indicator(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s, as_alpha, as_clr, "autostrafing", false, false, c::movement::detection_clr_for[9], position);
 }
 
 features::movement::velocity_data_t current_vel_data;

@@ -96,6 +96,14 @@ public:
 		return result;
 	}
 
+	vec3_t normalize_const() const {
+		vec3_t tmp = *this;
+		tmp.x = std::isfinite(tmp.x) ? std::remainderf(tmp.x, 360.0f) : 0.0f;
+		tmp.y = std::isfinite(tmp.y) ? std::remainderf(tmp.y, 360.0f) : 0.0f;
+		tmp.z = 0.0f;
+		return tmp;
+	}
+
 	float distance(const vec3_t& other) const {
 		float dx = x - other.x;
 		float dy = y - other.y;

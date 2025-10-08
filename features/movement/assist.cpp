@@ -2414,6 +2414,7 @@ void RenderPoints(std::vector< features::movement::points_check_t >& points, con
 			}
 			else {
 				point.open_settings = false;
+				features::movement::m_opened = false;
 			}
 
 			im_render.drawcirclefilled(screenPos.x, screenPos.y, effectiveRadius, 32, fillColor);
@@ -2579,6 +2580,7 @@ void RenderPoints(std::vector< features::movement::points_check_t >& points, con
 			}
 			else {
 				point.open_settings = false;
+				features::movement::m_opened = false;
 			}
 
 			float targetScale = isHovered ? 1.5f : 1.0f;
@@ -2778,6 +2780,10 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 			}
 
 			m_assist_t.set_point = false;
+		}
+
+		if (!c::assist::assist) {
+			features::movement::m_opened = false;
 		}
 		
 		//...

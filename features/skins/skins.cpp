@@ -65,6 +65,11 @@ bool apply_knife_model( attributable_item_t* weapon, const char* model ) {
 
 	viewmodel->model_index( ) = interfaces::model_info->get_model_index( model );
 
+	if (strstr(model, "knife_gg") != nullptr) {
+		auto team = local_player->team();
+		viewmodel->m_nBody() = (team == 2) ? 0 : 1;    //if we t == knife_body_t, if ct == knife_body_ct
+	}
+
 	return true;
 }
 
@@ -88,6 +93,7 @@ void features::skins::full_update() {
 	// update hud
 	using clear_hud_weapon_icon_fn = int(__thiscall*)(void*, int);
 	static auto o_clear_hud_weapon_icon = reinterpret_cast<clear_hud_weapon_icon_fn>(find_pattern("client.dll", "55 8B EC 51 53 56 8B 75 08 8B D9 57 6B")); // @xref: "WeaponIcon--itemcount"
+	assert(o_clear_hud_weapon_icon != nullptr);
 	assert(o_clear_hud_weapon_icon != nullptr);
 	if (const auto hud_weapons = find_hud_element("CCSGO_HudWeaponSelection") - 0x28; hud_weapons != nullptr) {
 		// go through all weapons
@@ -290,7 +296,7 @@ void features::skins::knife_changer( ) {
 	const char* model_bayonet = "models/weapons/v_knife_bayonet.mdl";
 	const char* model_m9 = "models/weapons/v_knife_m9_bay.mdl";
 	const char* model_karambit = "models/weapons/v_knife_karam.mdl";
-	const char* model_bowie = "models/weapons/	.mdl";
+	const char* model_bowie = "models/weapons/v_knife_survival_bowie.mdl";
 	const char* model_butterfly = "models/weapons/v_knife_butterfly.mdl";
 	const char* model_falchion = "models/weapons/v_knife_falchion_advanced.mdl";
 	const char* model_flip = "models/weapons/v_knife_flip.mdl";
@@ -306,7 +312,6 @@ void features::skins::knife_changer( ) {
 	const char* model_outdoor = "models/weapons/v_knife_outdoor.mdl";
 	const char* model_canis = "models/weapons/v_knife_canis.mdl";
 	const char* model_cord = "models/weapons/v_knife_cord.mdl";
-
 
 	//indes knifes
 	int index_ct = interfaces::model_info->get_model_index("models/weapons/v_knife_default_ct.mdl");
@@ -481,7 +486,6 @@ void features::skins::knife_changer( ) {
 					apply_knife_skin(weapon, WEAPON_KNIFE_T, c::skins::knife_changer_paint_kit, index_t, 3, wear);
 					break;
 				case 17:
-					apply_knife_skin(weapon, WEAPON_KNIFEGG, c::skins::knife_changer_paint_kit, index_gold, 3, wear);
 					break;
 				case 18:
 					apply_knife_skin(weapon, WEAPON_KNIFE_CSS, c::skins::knife_changer_paint_kit, index_css, 3, wear);
@@ -608,7 +612,9 @@ void features::skins::knife_changer( ) {
 					break;
 			}
 		}
-
+		//if (g::local->body() == 0) {
+		//	g::local->body() = 1;
+		//}
 		weapon->original_owner_xuid_low() = 0;
 		weapon->original_owner_xuid_high() = 0;
 		weapon->fallback_seed() = 661;

@@ -15,11 +15,11 @@ static const char* ljnulling[4] = { "-w", "-s", "-a", "-d" };
 static const char* ad_key[3] = { "ej", "mj", "lj" };
 static const char* fb_angles[] = { "right", "backwards", "left" };
 static const char* tabs[] = { "indicators","positions" };
-static const char* indicators[10] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "as", "ast", "bast" };
+static const char* indicators[12] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "fm", "air", "as", "ast", "bast" };
 const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
 const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "music player font", "assist font"};
 static const char* hitboxes[] = { "head","neck","chest","pelvis" };
-static const char* WeatherTypes[] = { "rain","snow" };
+static const char* WeatherTypes[] = { "rain","ash","heavy rain","snow"};
 static const char* EdgebugTypes[] = { "delusional (og)","lobotomy" };
 static const char* removals[5] = { "r_3dsky", "mat_postprocess", "cl_shadows", "mat_disable_bloom", "panorama_disable_blur" };
 static const char* materials[] = { "regular", "flat", "crystal", "pearlescent", "reverse pearlescent", "fog", "damascus", "model" };
@@ -2298,9 +2298,6 @@ void miscellaneous() {
             }
 
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
-         
-            ImGui::Checkbox(("disable movement fix"), &c::movement::nigg1);
-            ImGui::Separator();
 
             ImGui::Checkbox(("auto bunnyhop"), &c::movement::bhop);
             if (c::movement::bhop)
@@ -2459,16 +2456,29 @@ void miscellaneous() {
                     ImGui::Checkbox(("bounce assist render"), &c::assist::bounce_assist_render);
                 }
             }
-
+            ImGui::Checkbox(("fast ladder"), &c::movement::fast_ladder);
+            if (c::movement::fast_ladder) {
+                ImGui::Keybind(("fast_ladder key"), &c::movement::fast_ladder_key, &c::movement::fast_ladder_key_s);
+            }
             ImGui::Checkbox(("auto duck"), &c::movement::auto_duck);
             if (c::movement::auto_duck) {
                 ImGui::Keybind(("auto duck key"), &c::movement::auto_duck_key, &c::movement::auto_duck_key_s);
                 ImGui::Text(("auto duck ticks"));
                 ImGui::SliderInt(("##auto duck tickss"), &c::movement::auto_duck_ticks, 2, 12);
             }
+            ImGui::Checkbox(("avoid head collision"), &c::movement::auto_duck_collision);
+            if (c::movement::auto_duck_collision) {
+                ImGui::Keybind(("avoid head collision key"), &c::movement::auto_duck_collision_key, &c::movement::auto_duck_collision_key_s);
+                ImGui::Text(("avoid head collision ticks"));
+                ImGui::SliderInt(("##avoidheadcollisionticks"), &c::movement::auto_duck_collision_ticks, 2, 12);
+            }
             ImGui::Checkbox(("fireman"), &c::movement::fireman);
             if (c::movement::fireman) {
                 ImGui::Keybind(("fireman key"), &c::movement::fireman_key, &c::movement::fireman_key_s);
+            }
+            ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
+            if (c::movement::air_stuck) {
+                ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
             }
             ImGui::Checkbox(("delay hop"), &c::movement::delay_hop);
             if (c::movement::delay_hop) {
@@ -2926,7 +2936,7 @@ void miscellaneous() {
             ImGui::Separator();
 
             // it makes no sense to fix that
-            //ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
+            ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
             ImGui::Checkbox(("music display"), &c::misc::show_spotify_currently_playing);
             if (c::misc::show_spotify_currently_playing) {
                 ImGui::Text(("music player look type"));
@@ -2953,18 +2963,21 @@ void miscellaneous() {
             ImGui::Separator();
 
             ImGui::Checkbox(("anti untrusted"), &c::misc::anti_untrusted);
+            // s/o flowars
+            ImGui::Checkbox(("insecure bypass"), &c::misc::insecure_bypass);
             ImGui::Checkbox(("mouse fix"), &c::misc::mouse_fix);
+            ImGui::Checkbox(("disable movement fix"), &c::movement::movement_fix);
+            if (!c::movement::movement_fix) {
+                ImGui::Text(("movement fix type"));
+                ImGui::Combo("##fixtype", &c::movement::fix_type, "delusional (og)\0lobotomy\0");
+            }
             ImGui::Checkbox(("pixelsurf fix"), &c::movement::pixel_surf_fix);
 
             ImGui::Checkbox(("discord status"), &c::misc::discord_rpc);
             ImGui::Checkbox(("custom console"), &c::misc::custom_console);
             ImGui::SameLine();
             ImGui::ColorEdit4(("##custom console"), c::misc::custom_console_clr, w_alpha);
-            ImGui::Checkbox(("door spam"), &c::misc::door_spam);
             ImGui::Checkbox(("unlock inventory"), &c::misc::unlock_inventory);
-            if (c::misc::door_spam) {
-                ImGui::Keybind(("door spam key"), &c::misc::door_spam_key, &c::misc::door_spam_key_s);
-            }
             if (ImGui::Button("unlock hidden cvars")) {
                 static bool did_unlock = false;
                 if (!did_unlock) {
@@ -3740,14 +3753,42 @@ void rec() {
     ImGui::Columns(1);
 }
 
-void menu::render() {
-    if (!menu::open) 
-        return;
+bool prev_state;
+bool is_opening;
+bool is_closing;
+float progress = 0.f;
 
+void menu::render() {
     auto& style = ImGui::GetStyle();
     ImGuiIO& io = ImGui::GetIO();
+    float delta_time = io.DeltaTime;
+    ImVec2 target_size;
+
     auto flags = ImGuiWindowFlags_::ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_::ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_::ImGuiWindowFlags_NoScrollWithMouse;
     const ImVec2 s = io.DisplaySize;
+
+    //animation (ass tbh)
+    if (menu::open != prev_state) {
+        is_opening = menu::open;
+        is_closing = !menu::open;
+        prev_state = menu::open;
+    }
+    float target_progress = menu::open ? 1.0f : 0.0f;
+    ImVec2 target = menu::open ? ImVec2(550, 427) : ImVec2(0, 0);
+
+    float lerp_factor = 1.0f - std::exp(-15.f * delta_time);
+    progress += (target_progress - progress) * lerp_factor;
+
+    current_size.x += (target.x - current_size.x) * lerp_factor;
+    current_size.y += (target.y - current_size.y) * lerp_factor;
+
+    if (std::abs(progress - target_progress) < 0.01f) {
+        progress = target_progress;
+        is_opening = is_closing = false;
+    }
+
+    if (current_size.x < 35.f && current_size.y < 35.f && !menu::open)
+        return;
 
     ImGui::PushStyleColor(ImGuiCol_CheckMark, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
     ImGui::PushStyleColor(ImGuiCol_FrameBgActive, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
@@ -3766,7 +3807,8 @@ void menu::render() {
     ImGui::PushStyleColor(ImGuiCol_ScrollbarGrab, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
 
     ImGui::SetNextWindowPos(ImVec2(s.x * 0.5f, s.y * 0.5f), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(550, 427), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(current_size, ImGuiCond_Always);
+
     ImGui::Begin(("menu"), &menu::open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar); {
         menu_pos = ImGui::GetCursorScreenPos();
         const float width = ImGui::GetWindowWidth();
@@ -3792,17 +3834,6 @@ void menu::render() {
         render_tab("main_tabs", tabs, 6U, &main_tab, style.Colors[ImGuiCol_TabHovered]);
 
         ImGui::End();
-
-        //if (main_tab == 1) {
-            //ImGui::SetNextWindowPos(ImVec2(menu_pos.x + menu_size.x + style.FramePadding.x, menu_pos.y), ImGuiCond_Always);
-            //ImGui::SetNextWindowSize(ImVec2(menu_size.x / 2.2f, menu_pos.y), ImGuiCond_Always);
-           // ImGui::Begin("preview", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove); {
-               // auto draw = ImGui::GetWindowDrawList();
-
-               
-            //}
-            //ImGui::End();
-        //}
     }
     ImGui::PopStyleColor(15);
 }

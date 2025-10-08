@@ -29,7 +29,7 @@ void c_discord::update() {
 
     discordPresence.largeImageText = "777";
     discordPresence.state = current_status.c_str();
-    //discordPresence.largeImageKey = "";
+    discordPresence.largeImageKey = "https://github.com/remelt/delusional-fix/blob/main/includes/discord/discord_rpc_image.png?raw=true";
     discordPresence.startTimestamp = elapsed;
     Discord_UpdatePresence(&discordPresence);
     } else {

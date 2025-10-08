@@ -397,6 +397,7 @@
     <ClCompile Include="hooks\functions\frame_stage_notify.cpp" />
     <ClCompile Include="hooks\functions\get_color_modulation.cpp" />
     <ClCompile Include="hooks\functions\get_screen_aspect_ratio.cpp" />
+    <ClCompile Include="hooks\functions\insecure_bypass.cpp" />
     <ClCompile Include="hooks\functions\is_connected.cpp" />
     <ClCompile Include="hooks\functions\level_init_pre_entity.cpp" />
     <ClCompile Include="hooks\functions\list_leaves_in_box.cpp" />
@@ -494,6 +495,7 @@
     <ClInclude Include="features\panorama\scaleform.hpp" />
     <ClInclude Include="features\movement\prediction\prediction.hpp" />
     <ClInclude Include="features\skins\proxy_hook.hpp" />
+    <ClInclude Include="features\visuals\vcollide_t.h" />
     <ClInclude Include="features\visuals\visuals.hpp" />
     <ClInclude Include="hooks\hooks.hpp" />
     <ClInclude Include="includes\discord\discord_rpc.h" />
@@ -768,6 +770,7 @@
     <ClInclude Include="sdk\classes\view_setup_t.hpp" />
     <ClInclude Include="sdk\interfaces\cglobalvarsbase.hpp" />
     <ClInclude Include="sdk\interfaces\chudchat.hpp" />
+    <ClInclude Include="sdk\interfaces\c_physics_collison.h" />
     <ClInclude Include="sdk\interfaces\glow_manager.hpp" />
     <ClInclude Include="sdk\interfaces\iappsystem.hpp" />
     <ClInclude Include="sdk\interfaces\ibaseclientdll.hpp" />

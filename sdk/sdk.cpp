@@ -24,6 +24,7 @@ bool interfaces::initialize() {
 	panorama = get_interface<i_panoramaui_engine, interface_type::index>("panorama.dll", "PanoramaUIEngine001");
 	effects = get_interface<iv_effects, interface_type::index>("engine.dll", "VEngineEffects001");
 	filesystem = get_interface<i_filesystem, interface_type::index>("filesystem_stdio.dll", "VFileSystem017");
+	physics_collision = get_interface<c_physics_collison, interface_type::index>("vphysics.dll", "VPhysicsCollision007");
 
 	/*custom interfaces*/
 	input = *reinterpret_cast<i_input**>(find_pattern("client.dll", "B9 ? ? ? ? F3 0F 11 04 24 FF 50 10") + 1);

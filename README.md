@@ -32,7 +32,7 @@ some images for some fucking newgens whov never played w og delusional should be
     - extended backtrack now can be lower than 200 ms
     - silent aim can be applied separately for every gun type (wasnt actually a bug but ermmm ... who cares)
 + Visuals
-    - fixed precipitation (kinda)
+    - fixed precipitation
 + Movement
     - "unlocked" nn fixed og delusional eb
     - fixed auto-align and ps to work for all ticks
@@ -60,6 +60,9 @@ some images for some fucking newgens whov never played w og delusional should be
     - added px from lobotomy
     - now u can choose ticks for pixelsurf
     - added auto duck
+    - added avoid collision
+    - added fireman
+    - added airstuck
     - pasted and fixed ps and bounce assists from lobotomy (works a lot better imo) (ofc fixed for all ticks) (big s/o [@flowars](https://github.com/flowars))
 + Misc
     - added only local spectatorlist option
@@ -80,9 +83,7 @@ some images for some fucking newgens whov never played w og delusional should be
 + Aimbot sometimes misses (idk y mb u need some kind of bones fix like in hw)
 + Awall only if lethal is kinda ass for some reason
 + Rare animations for knives arent working properly
-+ Precipitation is ass but idk y (nn i dont have any motivation to fix that shit coz it will take forever)
 + Chatprintf in jumpstats (ig the best option is to recode it :p)
-+ Idc bout scaleform anymo u can paste it if u want to
 + Unload doesnt rly work
 
 # s/o

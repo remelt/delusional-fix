@@ -103,8 +103,13 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(find_pattern(("shaderapidx9.dll"), ("A1 ? ? ? ? A8 ? 75 ? 83 C8 ? B9 ? ? ? ? 68 ? ? ? ? A3")), &supports_full_depth::supports_full_depth, (void**)&supports_full_depth::ofunc))
 		printf(("supports full depth hook failed.\n"));
 
+	if (MH_CreateHook(find_pattern(("engine.dll"), ("56 8B 35 ? ? ? ? FF D6 68 ? ? ? ? 8B C8 8B 10 FF 52 2C 85 C0 75 2B FF D6 68 ? ? ? ? 8B C8 8B 10 FF 52 2C")), &insecure::insecure_bypass, (void**)&insecure::ofunc))
+		printf(("insecure hook failed.\n"));
+
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::event_manager, 9), &fire_event::fire_event, (void**)&fire_event::ofunc))
 		printf(("is connected hook failed.\n"));
+	if (MH_CreateHook(get_vfunc<void*>(interfaces::model_info, 6), &get_vcollide::get_vcollide, (void**)&get_vcollide::ofunc))
+		printf(("get_vcollide hook failed.\n"));
 
 	if (MH_EnableHook( MH_ALL_HOOKS ) != MH_OK)
 		printf(( "failed to initialize hooks.\n" ));

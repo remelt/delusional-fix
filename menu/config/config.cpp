@@ -935,6 +935,8 @@ namespace c {
 		write_value(json[xs("misc")][xs("undokey")], misc::undokey);
 		write_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 		write_value(json[xs("misc")][xs("mouse_fix")], misc::mouse_fix);
+		write_value(json[xs("movement")][xs("movement_fix")], movement::movement_fix);
+		write_value(json[xs("movement")][xs("fix_type")], movement::fix_type);
 		write_value(json[xs("misc")][xs("jumpstats")], misc::jumpstats);
 		write_value(json[xs("misc")][xs("jumpstats_show_clr_fail")], misc::jumpstats_show_clr_fail);
 		write_value(json[xs("misc")][xs("jumpstats_show_fail")], misc::jumpstats_show_fail);
@@ -2428,6 +2430,8 @@ namespace c {
 			read_value(json[xs("misc")][xs("undokey")], misc::undokey);
 			read_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 			read_value(json[xs("misc")][xs("mouse_fix")], misc::mouse_fix);
+			read_value(json[xs("movement")][xs("movement_fix")], movement::movement_fix);
+			read_value(json[xs("movement")][xs("fix_type")], movement::fix_type);
 			read_value(json[xs("misc")][xs("jumpstats")], misc::jumpstats);
 			read_value(json[xs("misc")][xs("jumpstats_show_clr_fail")], misc::jumpstats_show_clr_fail);
 			read_value(json[xs("misc")][xs("jumpstats_show_fail")], misc::jumpstats_show_fail);
@@ -3212,6 +3216,8 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug_angle_limit")], movement::edge_bug_angle_limit);
 			read_value(json[xs("movement")][xs("silent_eb_hacked")], movement::silent_eb_hacked);
 			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
+			read_value(json[xs("movement")][xs("movement_fix")], movement::movement_fix);
+			read_value(json[xs("movement")][xs("fix_type")], movement::fix_type);
 
 			//lb
 			read_value(json[xs("movement")][xs("edgebug_type")], movement::edgebug_type);
