@@ -23,7 +23,7 @@
 # UPDATE LIST (WHATS ALREADY DONE (EVERYTHING I REMEMBER DOIN)) :
 ## Fixed :
 + Cheat stability (crashes)
-    - prevented crashes when changing teams (prediction.cpp)
+    - prevented crashes when changing teams ([prediction.cpp](https://github.com/remelt/delusional-fix/blob/main/features/movement/prediction/prediction.cpp))
     - prevented crashes when turning jumpstats on
     - prevented crashes when trying to load if config wasnt selected
     - prevented other type of crashes i dont even remember
