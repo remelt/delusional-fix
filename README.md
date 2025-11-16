@@ -86,7 +86,7 @@
     - fixed accent color for cheat logs
 
 # KNOWN ISSUES RANKED IN ORDER OF IMPORTANCE (AKA TODO LIST) :
-+ **PART OF THE ADDED FUNCTIONS ARE PASTED AND NEED TO BE RECODED PROPERLY**
++ **PART OF THE ADDED FUNCTIONS ARE PASTED AND NEEDS TO BE RECODED PROPERLY**
 + Fix issues w createmove on low fps
 + Proper unload works only if cheat is injected using manual map
 + Make recorder work for all ticks
