@@ -1774,10 +1774,8 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 
 	static int ticks = 0;
 	static int ps_tick = 0;
-	m_pixelsurf_data.px_tick = 0;
 	if (!g::local || !g::local->is_alive()) {
 		ticks = 0;
-		m_pixelsurf_data.px_tick = 0;
 		ps_tick = 0;
 		return;
 	}

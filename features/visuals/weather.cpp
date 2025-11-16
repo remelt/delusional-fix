@@ -1,5 +1,6 @@
 #include "visuals.hpp"
 #include "vcollide_t.h"
+#include "../skins/skins.hpp"
 
 static vcollide_t precipitation_collideable{};
 int m_timer = -1;
@@ -8,6 +9,11 @@ void features::weather::reset_weather(const bool cleanup) {
     created_rain = false;
 
     if (rain_entity && cleanup) {
+        rain_entity = reinterpret_cast<precipitation_t*>(interfaces::ent_list->get_client_entity(MAX_EDICTS - 1));
+        if (!rain_entity) {
+            return;
+        }
+
         rain_entity->net_pre_data_update(0);
         rain_entity->pre_data_change(0);
 
@@ -35,6 +41,12 @@ void* features::weather::getv_collideble()
 }
 
 void features::weather::update_weather() {
+
+    //if (features::skins::forcing_update && created_rain) {
+    //    reset_weather();
+    //    return;
+    //}
+
     if (!precipitation) {
         for (auto client_class = interfaces::client->get_all_classes(); client_class && !precipitation;
             client_class = client_class->next_ptr) {
@@ -42,6 +54,7 @@ void features::weather::update_weather() {
                 precipitation = client_class;
         }
     }
+
     static int weather_type = 0;
     switch (c::visuals::weather_type) {
         case 0: {
@@ -67,6 +80,7 @@ void features::weather::update_weather() {
             reset_weather();
         }
     }
+
     if (!precipitation)
         return;
 
@@ -79,7 +93,7 @@ void features::weather::update_weather() {
 
     memset(&precipitation_collideable, 0, sizeof(precipitation_collideable));
 
-    if (!created_rain && c::visuals::enable_weather || c::visuals::enable_weather && !last_state) {
+    if (!created_rain && c::visuals::enable_weather || c::visuals::enable_weather && !last_state || !reinterpret_cast<precipitation_t*>(interfaces::ent_list->get_client_entity(MAX_EDICTS - 1)) && rain_entity && c::visuals::enable_weather) {
         if (created_rain && rain_entity)
             reset_weather();
 

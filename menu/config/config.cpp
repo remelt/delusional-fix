@@ -1029,6 +1029,9 @@ namespace c {
 		write_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 		write_value(json[xs("visuals")][xs("radar")], visuals::radar);
 
+		write_value(json[xs("visuals")][xs("enable_weather")], visuals::enable_weather);
+		write_value(json[xs("visuals")][xs("weather_type")], visuals::weather_type);
+
 		write_value(json[xs("visuals")][xs("shadows")], visuals::shadows);
 		write_value(json[xs("visuals")][xs("dynamic_shadows")], visuals::dynamic_shadows);
 		write_value(json[xs("visuals")][xs("shadow_rot_x")], visuals::shadow_rot_x);
@@ -2556,6 +2559,9 @@ namespace c {
 			read_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 			read_value(json[xs("visuals")][xs("radar")], visuals::radar);
 
+			read_value(json[xs("visuals")][xs("enable_weather")], visuals::enable_weather);
+			read_value(json[xs("visuals")][xs("weather_type")], visuals::weather_type);
+
 			read_value(json[xs("visuals")][xs("shadows")], visuals::shadows);
 			read_value(json[xs("visuals")][xs("dynamic_shadows")], visuals::dynamic_shadows);
 			read_value(json[xs("visuals")][xs("shadow_rot_x")], visuals::shadow_rot_x);
@@ -3510,6 +3516,9 @@ namespace c {
 			read_value(json[xs("visuals")][xs("oof_arrows_size")], visuals::oof_arrows_size);
 			read_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 			read_value(json[xs("visuals")][xs("radar")], visuals::radar);
+
+			read_value(json[xs("visuals")][xs("enable_weather")], visuals::enable_weather);
+			read_value(json[xs("visuals")][xs("weather_type")], visuals::weather_type);
 
 			read_value(json[xs("visuals")][xs("shadows")], visuals::shadows);
 			read_value(json[xs("visuals")][xs("dynamic_shadows")], visuals::dynamic_shadows);

@@ -1,6 +1,7 @@
 #include "skins.hpp"
 #include "../../sdk/sdk.hpp"
 #include "../../menu/config/config.hpp"
+#include "../visuals/visuals.hpp"
 
 static auto get_wearable_create_fn() -> create_client_class_fn {
 	auto client_class = interfaces::client->get_all_classes();
