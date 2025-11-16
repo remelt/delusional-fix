@@ -31,7 +31,7 @@
 + Aimbot
     - extended backtrack now can be lower than 200 ms
     - silent aim can be applied separately for every gun type (wasnt actually a bug but ermmm ... who cares)
-    - replaced the whole aimbot cuz old one sucks for sm reason :D (u can find the old one but fixed in aimbot_old.cpp. new one is mostly pasted from gl0ss)
+    - replaced the whole aimbot cuz old one sucks for sm reason :D (u can find the old one but fixed in [aimbot_old.cpp](https://github.com/remelt/delusional-fix/blob/main/features/aimbot/aimbot_old.cpp). new one is mostly pasted from gl0ss)
 + Visuals
     - fixed precipitation (s/o [@flowars](https://github.com/flowars))
 + Movement
