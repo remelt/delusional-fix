@@ -132,6 +132,7 @@ namespace features::visuals {
 	void bomb_esp(entity_t* entity);
 	void apply_zoom();
 	void fog();
+	void shadows();
 	void gravity_ragdoll();
 	void skybox_changer();
 	void fullbright();
@@ -142,7 +143,6 @@ namespace features::visuals {
 	void freecam(view_setup_t* setup);
 	void key_strokes();
 	void console();
-	void rng_factor();
 
 	struct motion_blur_history {
 		motion_blur_history() {

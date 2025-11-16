@@ -14,7 +14,6 @@ void __fastcall sdk::hooks::level_init_pre_entity::level_init_pre_entity(void* s
 void __fastcall sdk::hooks::level_shutdown::level_shutdown(void* self, void* edx) {
 	ofunc(self, edx);
 	return panorama::scaleform_init();
-    features::misc::jumpstats::resetjumpstats();
     features::weather::reset_weather(false);
 }
 

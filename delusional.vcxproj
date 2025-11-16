@@ -361,6 +361,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="features\aimbot\aimbot_old.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="features\aimbot\aimbot.cpp" />
     <ClCompile Include="features\aimbot\autowall.cpp" />
@@ -403,7 +404,6 @@
     <ClCompile Include="hooks\functions\list_leaves_in_box.cpp" />
     <ClCompile Include="hooks\functions\lock_cursor.cpp" />
     <ClCompile Include="hooks\functions\modify_eye_position.cpp" />
-    <ClCompile Include="hooks\functions\on_jump.cpp" />
     <ClCompile Include="hooks\functions\on_screen_size_changed.cpp" />
     <ClCompile Include="hooks\functions\override_mouse_input.cpp" />
     <ClCompile Include="hooks\functions\override_view.cpp" />
@@ -431,40 +431,6 @@
     <ClCompile Include="includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="includes\imgui\misc\freetype\imgui_freetype.cpp" />
     <ClCompile Include="includes\json\jsoncpp.cpp" />
-    <ClCompile Include="includes\lua\src\lapi.c" />
-    <ClCompile Include="includes\lua\src\lauxlib.c" />
-    <ClCompile Include="includes\lua\src\lbaselib.c" />
-    <ClCompile Include="includes\lua\src\lbitlib.c" />
-    <ClCompile Include="includes\lua\src\lcode.c" />
-    <ClCompile Include="includes\lua\src\lcorolib.c" />
-    <ClCompile Include="includes\lua\src\lctype.c" />
-    <ClCompile Include="includes\lua\src\ldblib.c" />
-    <ClCompile Include="includes\lua\src\ldebug.c" />
-    <ClCompile Include="includes\lua\src\ldo.c" />
-    <ClCompile Include="includes\lua\src\ldump.c" />
-    <ClCompile Include="includes\lua\src\lfunc.c" />
-    <ClCompile Include="includes\lua\src\lgc.c" />
-    <ClCompile Include="includes\lua\src\linit.c" />
-    <ClCompile Include="includes\lua\src\liolib.c" />
-    <ClCompile Include="includes\lua\src\llex.c" />
-    <ClCompile Include="includes\lua\src\lmathlib.c" />
-    <ClCompile Include="includes\lua\src\lmem.c" />
-    <ClCompile Include="includes\lua\src\loadlib.c" />
-    <ClCompile Include="includes\lua\src\lobject.c" />
-    <ClCompile Include="includes\lua\src\lopcodes.c" />
-    <ClCompile Include="includes\lua\src\loslib.c" />
-    <ClCompile Include="includes\lua\src\lparser.c" />
-    <ClCompile Include="includes\lua\src\lstate.c" />
-    <ClCompile Include="includes\lua\src\lstring.c" />
-    <ClCompile Include="includes\lua\src\lstrlib.c" />
-    <ClCompile Include="includes\lua\src\ltable.c" />
-    <ClCompile Include="includes\lua\src\ltablib.c" />
-    <ClCompile Include="includes\lua\src\ltm.c" />
-    <ClCompile Include="includes\lua\src\lua.c" />
-    <ClCompile Include="includes\lua\src\lundump.c" />
-    <ClCompile Include="includes\lua\src\lutf8lib.c" />
-    <ClCompile Include="includes\lua\src\lvm.c" />
-    <ClCompile Include="includes\lua\src\lzio.c" />
     <ClCompile Include="includes\minhook\buffer.c" />
     <ClCompile Include="includes\minhook\hde\hde32.c" />
     <ClCompile Include="includes\minhook\hde\hde64.c" />
@@ -484,6 +450,7 @@
     <ClCompile Include="utils\render\structures.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="features\aimbot\autowall.hpp" />
     <ClInclude Include="features\aimbot\aimbot.hpp" />
     <ClInclude Include="features\cache\cache.hpp" />
     <ClInclude Include="features\events\events.hpp" />
@@ -683,32 +650,6 @@
     <ClInclude Include="includes\june2010\Include\XInput.h" />
     <ClInclude Include="includes\june2010\Include\xma2defs.h" />
     <ClInclude Include="includes\june2010\Include\xnamath.h" />
-    <ClInclude Include="includes\lua\src\lapi.h" />
-    <ClInclude Include="includes\lua\src\lauxlib.h" />
-    <ClInclude Include="includes\lua\src\lcode.h" />
-    <ClInclude Include="includes\lua\src\lctype.h" />
-    <ClInclude Include="includes\lua\src\ldebug.h" />
-    <ClInclude Include="includes\lua\src\ldo.h" />
-    <ClInclude Include="includes\lua\src\lfunc.h" />
-    <ClInclude Include="includes\lua\src\lgc.h" />
-    <ClInclude Include="includes\lua\src\llex.h" />
-    <ClInclude Include="includes\lua\src\llimits.h" />
-    <ClInclude Include="includes\lua\src\lmem.h" />
-    <ClInclude Include="includes\lua\src\lobject.h" />
-    <ClInclude Include="includes\lua\src\lopcodes.h" />
-    <ClInclude Include="includes\lua\src\lparser.h" />
-    <ClInclude Include="includes\lua\src\lprefix.h" />
-    <ClInclude Include="includes\lua\src\lstate.h" />
-    <ClInclude Include="includes\lua\src\lstring.h" />
-    <ClInclude Include="includes\lua\src\ltable.h" />
-    <ClInclude Include="includes\lua\src\ltm.h" />
-    <ClInclude Include="includes\lua\src\lua.h" />
-    <ClInclude Include="includes\lua\src\lua.hpp" />
-    <ClInclude Include="includes\lua\src\luaconf.h" />
-    <ClInclude Include="includes\lua\src\lualib.h" />
-    <ClInclude Include="includes\lua\src\lundump.h" />
-    <ClInclude Include="includes\lua\src\lvm.h" />
-    <ClInclude Include="includes\lua\src\lzio.h" />
     <ClInclude Include="includes\minhook\buffer.h" />
     <ClInclude Include="includes\minhook\hde\hde32.h" />
     <ClInclude Include="includes\minhook\hde\hde64.h" />
@@ -757,6 +698,7 @@
     <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
     <ClInclude Include="features\movement\lobotomy_eb.h" />
+    <ClInclude Include="features\misc\jumpstats.hpp" />
     <ClInclude Include="menu\config\config.hpp" />
     <ClInclude Include="menu\fonts\icon.h" />
     <ClInclude Include="menu\fonts\menu_font.hpp" />
@@ -844,7 +786,6 @@
     <Library Include="includes\imgui\freetype\lib\freetype.lib" />
     <Library Include="includes\june2010\lib\d3d9.lib" />
     <Library Include="includes\june2010\lib\d3dx9.lib" />
-    <Library Include="includes\lua\lib\lua.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

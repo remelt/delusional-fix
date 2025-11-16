@@ -3,6 +3,7 @@
 #include "../../menu/menu.hpp"
 #include "../mplayer/mplayer.h"
 #include "../misc/misc.hpp"
+#include <imgui/imgui_internal.h>
 //#include "../visuals/display/display.hpp"
 
 void draw_screen_effect(i_material* material) {
@@ -208,6 +209,51 @@ void features::visuals::fog() {
 	static auto fog_color = interfaces::console->get_convar("fog_color");
 
 	fog_color->set_value(buffer_color);
+}
+
+void features::visuals::shadows() {
+	if (!interfaces::engine->is_in_game() || !g::local || !interfaces::engine->is_connected())
+		return;
+
+	static convar* cl_csm_shadows = interfaces::console->get_convar("cl_csm_shadows");
+	if (!cl_csm_shadows)
+		return;
+
+	static convar* cl_csm_rot_override = interfaces::console->get_convar("cl_csm_rot_override");
+	if (!cl_csm_rot_override)
+		return;
+
+	if (!c::visuals::shadows) {
+		cl_csm_shadows->set_value(1);
+		cl_csm_rot_override->set_value(0);
+		return;
+	}
+
+	cl_csm_shadows->set_value(1);
+	cl_csm_rot_override->set_value(1);
+
+	static convar* cl_csm_rot_x = interfaces::console->get_convar("cl_csm_rot_x");
+	static convar* cl_csm_rot_y = interfaces::console->get_convar("cl_csm_rot_y");
+
+	static float time = 0.0f;
+
+	if (GImGui == nullptr)
+		return;
+	time += ImGui::GetIO().DeltaTime;
+
+	float speed = c::visuals::shadow_rotation_speed;
+	float base_y = c::visuals::shadow_rot_y;
+
+	float dynamic_y = base_y;
+
+	if (speed > 0.0f && c::visuals::dynamic_shadows) {
+		c::visuals::shadow_rot_y = fmod(time * speed, 360.0f);
+	}
+
+	if (cl_csm_rot_x)
+		cl_csm_rot_x->set_value(c::visuals::shadow_rot_x);
+	if (cl_csm_rot_y)
+		cl_csm_rot_y->set_value(c::visuals::shadow_rot_y);
 }
 
 void features::visuals::gravity_ragdoll() {
@@ -861,18 +907,4 @@ void features::visuals::console() {
 			material[num]->alpha_modulate(c::misc::custom_console_clr[3]);
 		}
 	}
-}
-
-void features::visuals::rng_factor()
-{
-	if (!g::local || !g::local->is_alive() || !interfaces::engine->is_connected() || !interfaces::engine->is_in_game())
-		return;
-
-	int width, height;
-	interfaces::engine->get_screen_size(width, height);
-	std::string rng_perec;
-	rng_perec = "rng factor is: " + std::to_string(rng_factor::percent_rng_factor);
-
-	im_render.text(width / 2, height / 2, 12, fonts::assist_font, rng_perec, true, color_t(1.f, 1.f, 1.f));
-
 }

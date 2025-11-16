@@ -52,9 +52,6 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::client, 7), &level_shutdown::level_shutdown, (void**)&level_shutdown::ofunc))
 		printf(("level shutdown hook failed.\n"));
 
-	if (MH_CreateHook(get_vfunc<void*>(interfaces::game_movement, 32), &on_jump::on_jump, (void**)&on_jump::ofunc))
-		printf(("on jump hook failed.\n"));
-
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::client, 5), &level_init_pre_entity::level_init_pre_entity, (void**)&level_init_pre_entity::ofunc))
 		printf(("level init pre entity hook failed.\n"));
 

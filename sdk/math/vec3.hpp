@@ -126,6 +126,30 @@ public:
 		return (x * other.x + y * other.y + z * other.z);
 	}
 
+	void NormalizeInPlace()
+	{
+		*this = Normalized();
+	}
+	vec3_t Normalized() const
+	{
+		vec3_t res = *this;
+		float l = res.length();
+		if (l != 0.0f) {
+			res /= l;
+		}
+		else {
+			res.x = res.y = res.z = 0.0f;
+		}
+		return res;
+	}
+
+	bool wtf(void)
+	{
+		if (x == 0 && y == 0 && z == 0)
+			return true;
+		return false;
+	}
+
 	float dot(const float* other) {
 		return(x * other[0] + y * other[1] + z * other[2]);
 	}

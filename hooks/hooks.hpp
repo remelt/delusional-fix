@@ -183,12 +183,6 @@ namespace sdk {
 			void __fastcall level_shutdown(void* self, void* edx);
 		}
 
-		namespace on_jump {
-			using fn = void(__stdcall*)(float);
-			inline fn ofunc;
-			void __stdcall on_jump(float stamina);
-		}
-
 		namespace set_image_data_r8g8b8a8 {
 			using fn = bool(__fastcall*)(const uint8_t*, uint32_t, const char*, int, int, void*, int);
 			inline fn ofunc;

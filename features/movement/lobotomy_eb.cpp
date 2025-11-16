@@ -196,11 +196,10 @@ void lobotomy_eb::EdgeBugPostPredict(c_usercmd* cmd)
 	auto isLargeAngleDifference = [](float yaw1, float yaw2) -> bool {
 		float yawDifference = std::abs(yaw1 - yaw2);
 
-		// Приводим yawDifference в диапазон от -180 до 180
 		if (yawDifference > 180.0f)
 			yawDifference = 360.0f - yawDifference;
 
-		return yawDifference >= c::movement::deltascaler; // Проверяем, превышает ли разница 90 градусов
+		return yawDifference >= c::movement::deltascaler;
 		};
 	static int LastType = 0;
 

@@ -5,13 +5,54 @@
 #include "../../menu/config/config.hpp"
 #include "../../sdk/sdk.hpp"
 #include "../hooks.hpp"
+#include "../../features/misc/jumpstats.hpp"
+
+std::string getclr(const std::string& jumpinfo) {
+	std::string result;
+	result.reserve(jumpinfo.length() * 2);
+
+	static const std::unordered_map<char, std::string> colors = {
+		{'\x08', "#bebebe"}, //gray
+		{'\x0C', "#4b6af9"}, //blue
+		{'\x04', "#41fe3f"}, //green
+		{'\x02', "#fc0301"}, //red
+		{'\x09', "#e0ad37"}, //yellow
+		{'\x0D', "#d22ce4"}  //pink
+	};
+
+	//used for font tags
+	bool font = false;
+
+	for (size_t i = 0; i < jumpinfo.length(); ++i) {
+		char lol = jumpinfo[i];
+		auto it = colors.find(lol);
+
+		if (it != colors.end()) {
+			if (font) {
+				result += "</font>";
+			}
+			result += "<font color=\"" + it->second + "\">";
+			font = true;
+		}
+		else {
+			result += lol;
+		}
+	}
+
+	if (font) {
+		result += "</font>";
+	}
+
+	return result;
+}
+
 
 std::string rgb_to_hex(int r, int g, int b, bool with_hash) {
 	std::stringstream ss;
 	if (with_hash)
 		ss << "#";
 
-	ss << std::hex << (r << 16 | g << 8 | b);
+	ss << std::hex << std::setfill('0') << std::setw(6) << (r << 16 | g << 8 | b);
 	return ss.str();
 }
 
@@ -23,6 +64,19 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 		std::string this_str = std::vformat(
 			xs("<font color=\"{}\">delusional</font><font color=\"#7d7d7d\"> |</font><font color=\"{}\"> {}</font>"),
 			std::make_format_args(color1, color2, str));
+
+		return ofunc(m_ecx, m_edx, this_str.data(), strlen(this_str.data()), this_str.data());
+		};
+
+	//better recode this shit
+	auto print_text2 = [](int m_ecx, int m_edx, std::string str) {
+		auto color1 = rgb_to_hex(menu::menu_accent[0] * 255, menu::menu_accent[1] * 255, menu::menu_accent[2] * 255, true);
+
+		std::string parsedJumpInfo = getclr(str);
+
+		std::string this_str = std::vformat(
+			xs("<font color=\"{}\">{}</font><font color=\"#7d7d7d\"> |</font>{}"),
+			std::make_format_args(color1, "delusional", parsedJumpInfo));
 
 		return ofunc(m_ecx, m_edx, this_str.data(), strlen(this_str.data()), this_str.data());
 		};
@@ -122,6 +176,9 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 		break;
 	case FNV1A::HashConst(("#delusional#_spotify_switch")):
 		return spotify_text(ecx, edx, std::vformat(xs("now playing: {}"), std::make_format_args(strtitle)));
+		break;
+	case FNV1A::HashConst(("#delusional#_jumpstats")):
+		return print_text2(ecx, edx, xs(jumpstating::JumpInfo));
 		break;
 	}
 

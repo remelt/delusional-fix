@@ -22,11 +22,9 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::previous_tick = interfaces::globals->tick_count;
 	i_net_channel* net_channel = interfaces::client_state->net_channel;
 
-	features::misc::door_spam(cmd);
 	features::misc::fix_mouse_delta(cmd);
 	features::visuals::jump_trail();
 	features::misc::clantag_spammer();
-	features::misc::jumpstats::jumpstats(cmd);
 	features::misc::reveal_server_ranks(cmd);
 	panorama::scaleform_tick(g::local);
 
@@ -57,14 +55,14 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	if ((c::movement::auto_align) && (c::movement::align_selection == 1) && !(prediction_backup::flags & 1)) {
 		features::movement::auto_align_lb(cmd);
 	}
-	//aimbot::rng_factor(cmd);
 	features::movement::fast_ladder(cmd);
 	features::movement::air_stuck(cmd);
+	features::movement::jump_bug_crouch(cmd);
 
 	prediction::begin(cmd); {
 
 		features::movement::null_strafing(cmd);
-		aimbot::run(cmd);
+		g_Aimbot.run(cmd);
 		lobotomy_eb::edgebug_detect(cmd);
 		triggerbot::run(cmd);
 		backtrack.on_move(cmd);
@@ -76,9 +74,11 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::edge_jump(cmd);
 	features::movement::long_jump(cmd);
 	features::movement::mini_jump(cmd);
+	features::misc::jumpstats::jumpstats(cmd);
 	features::movement::ladder_jump(cmd);
 	features::movement::ladder_bug(cmd);
 	features::movement::jump_bug(cmd);
+
 	features::movement::auto_strafe(cmd, features::movement::first_viewangles);
 	features::movement::strafe_optimizer(cmd);
 
@@ -93,19 +93,8 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::auto_duck(cmd);
 	features::movement::avoid_collision(cmd);
 
-	if (!c::movement::movement_fix) {
-		//fixing as
-		if (!menu::checkkey(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s)) {
-			switch (c::movement::fix_type) {
-			case(0):
-				features::movement::fix_movement(cmd, features::movement::first_viewangles);
-			case(1):
-				features::movement::fix_movement_lb(cmd, features::movement::first_viewangles);
-			}
-		}
-		else {
-			features::movement::fix_movement(cmd, features::movement::first_viewangles);
-		}
+	if (!c::movement::movement_fix && !menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
+		features::movement::fix_movement(cmd, features::movement::first_viewangles);
 	}
 
 	if (c::movement::px_selection == 0) {

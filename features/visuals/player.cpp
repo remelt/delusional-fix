@@ -99,7 +99,7 @@ void features::visuals::player::run() {
 		backtrack_dot(entity);
 		backtrack_skeleton(entity);
 
-	    if (c::visuals::radar)
+		if (c::visuals::radar)
 			entity->spotted() = true;
 
 		if (c::visuals::oof_arrows)
@@ -139,8 +139,8 @@ void features::visuals::player::draw_name(player_t* entity, bbox_t bbox) {
 		ImVec2 size = im_render.measure_text(print, fonts::esp_name_font, c::fonts::esp_name_size);
 
 		im_render.text(bbox.x + (bbox.w / 2), bbox.y - static_cast<int>(size.y) - 2,
-			c::fonts::esp_name_size, fonts::esp_name_font, 
-			print, 
+			c::fonts::esp_name_size, fonts::esp_name_font,
+			print,
 			true,
 			color_t(c::visuals::playername_color[0], c::visuals::playername_color[1], c::visuals::playername_color[2]).get_color_edit_alpha_int(fade.at(entity->index())), c::fonts::esp_name_font_flag[9], c::fonts::esp_name_font_flag[10]);
 	}
@@ -189,10 +189,10 @@ void features::visuals::player::draw_health(player_t* entity, bbox_t bbox) {
 
 			if (c::visuals::override_bar && c::visuals::gradient_bar) {
 				im_render.drawrectfilledgradient(bbox.x - 5, bbox.y + (bbox.h - bbox.h * (prev_player_hp[entity->index()]) / 100.f), c::visuals::health_bar_width,
-					bbox.h * (prev_player_hp[entity->index()]) / 100.f - (entity->health() >= 100 ? 0 : -1), 
-					color_t(c::visuals::health_bar[0], c::visuals::health_bar[1], c::visuals::health_bar[2]).get_color_edit_alpha_int(fade.at(entity->index())), 
+					bbox.h * (prev_player_hp[entity->index()]) / 100.f - (entity->health() >= 100 ? 0 : -1),
 					color_t(c::visuals::health_bar[0], c::visuals::health_bar[1], c::visuals::health_bar[2]).get_color_edit_alpha_int(fade.at(entity->index())),
-					color_t(health_color2), 
+					color_t(c::visuals::health_bar[0], c::visuals::health_bar[1], c::visuals::health_bar[2]).get_color_edit_alpha_int(fade.at(entity->index())),
+					color_t(health_color2),
 					color_t(health_color2));
 			}
 			else {
@@ -202,29 +202,29 @@ void features::visuals::player::draw_health(player_t* entity, bbox_t bbox) {
 			}
 
 			if (entity->health() < 100)
-				im_render.text(bbox.x - 15, bbox.y - 1 + (bbox.h - bbox.h * (prev_player_hp[entity->index()]) / 100.f) - 3, 
+				im_render.text(bbox.x - 15, bbox.y - 1 + (bbox.h - bbox.h * (prev_player_hp[entity->index()]) / 100.f) - 3,
 					c::fonts::esp_hp_size,
-					fonts::esp_hp_font, 
-					std::to_string(static_cast<int>(prev_player_hp[entity->index()])), 
+					fonts::esp_hp_font,
+					std::to_string(static_cast<int>(prev_player_hp[entity->index()])),
 					true,
 					color_t(c::visuals::health_color[0], c::visuals::health_color[1], c::visuals::health_color[2]).get_color_edit_alpha_int(fade.at(entity->index())), c::fonts::esp_font_flag[9], c::fonts::esp_font_flag[10]);
 		}
 		else if (c::visuals::healthesp_s == 1) {
 			//text
-			im_render.text(bbox.x + (bbox.w / 2), bbox.y + bbox.h + (c::visuals::playerarmor ? 4 : 1), 
-				c::fonts::esp_hp_size, 
-				fonts::esp_hp_font, 
-				healtht, 
+			im_render.text(bbox.x + (bbox.w / 2), bbox.y + bbox.h + (c::visuals::playerarmor ? 4 : 1),
+				c::fonts::esp_hp_size,
+				fonts::esp_hp_font,
+				healtht,
 				true,
 				color_t(c::visuals::health_color[0], c::visuals::health_color[1], c::visuals::health_color[2]).get_color_edit_alpha_int(fade.at(entity->index())), c::fonts::esp_font_flag[9], c::fonts::esp_font_flag[10]);
 			offset += 13;
 		}
 		else if (c::visuals::healthesp_s == 2) {
 			//only text
-			im_render.text(bbox.x - 13, bbox.y - 1 + (bbox.h - bbox.h * (prev_player_hp[entity->index()]) / 100.f) - 3, 
+			im_render.text(bbox.x - 13, bbox.y - 1 + (bbox.h - bbox.h * (prev_player_hp[entity->index()]) / 100.f) - 3,
 				c::fonts::esp_hp_size,
-				fonts::esp_hp_font, 
-				std::to_string(static_cast<int>(prev_player_hp[entity->index()])), 
+				fonts::esp_hp_font,
+				std::to_string(static_cast<int>(prev_player_hp[entity->index()])),
 				true,
 				color_t(c::visuals::health_color[0], c::visuals::health_color[1], c::visuals::health_color[2]).get_color_edit_alpha_int(fade.at(entity->index())), c::fonts::esp_font_flag[9], c::fonts::esp_font_flag[10]);
 		}
@@ -404,8 +404,8 @@ void features::visuals::player::backtrack_dot(player_t* entity) {
 			im_render.drawrect(screen_pos.x, screen_pos.y, 2, 2, color_t(c::visuals::skeletonbt_clr[0], c::visuals::skeletonbt_clr[1], c::visuals::skeletonbt_clr[2]).get_color_edit_alpha_int(fade.at(entity->index())), 0.1f);
 
 			if (c::backtrack::selected_tick)
-				im_render.drawcircle(screen_pos.x, screen_pos.y, 4, 32, 
-					(i == backtrack.selected_tick && entity->index() == backtrack.sel_ent_index) ? color_t(c::visuals::selected_tick_clr[0], c::visuals::selected_tick_clr[1], c::visuals::selected_tick_clr[2], 1.f)  : color_t(0, 0, 0, 0));
+				im_render.drawcircle(screen_pos.x, screen_pos.y, 4, 32,
+					(i == backtrack.selected_tick && entity->index() == backtrack.sel_ent_index) ? color_t(c::visuals::selected_tick_clr[0], c::visuals::selected_tick_clr[1], c::visuals::selected_tick_clr[2], 1.f) : color_t(0, 0, 0, 0));
 
 		} previous_screenpos = screen_pos;
 	}

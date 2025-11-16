@@ -44,6 +44,7 @@ long __stdcall sdk::hooks::present::present(IDirect3DDevice9* device, RECT* sour
 		menu::render();
 		c_discord::get().update();
 		features::movement::assist_endscene();
+		recorder->endscene(im_draw);
 	}
 	ImGui::EndFrame();
 	ImGui::Render();

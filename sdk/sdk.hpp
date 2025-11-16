@@ -257,6 +257,15 @@ enum entity_flags {
 	fl_transragdoll = (1 << 29),
 	fl_unblockable_by_player = (1 << 30)
 };
+
+enum LifeState : unsigned char
+{
+	LIFE_ALIVE = 0,// alive
+	LIFE_DYING = 1, // playing death animation or still falling off of a ledge waiting to hit ground
+	LIFE_DEAD = 2, // dead. lying still.
+	MAX_LIFESTATE
+};
+
 enum item_definition_indexes {
 	WEAPON_NONE = 0,
 	WEAPON_DEAGLE,
@@ -431,6 +440,8 @@ public:
 		using original_fn = bool(__thiscall*)(void*, matrix_t*, int, int, float);
 		return (*(original_fn**)animating())[13](animating(), out, max_bones, mask, time);
 	}
+
+
 
 	vec3_t get_absolute_origin() {
 		__asm {
@@ -887,6 +898,12 @@ public:
 			return false;
 		}
 	}
+
+	bool is_knife()
+	{
+		if (this->item_definition_index() == WEAPON_TASER) return false;
+		return this->weapon_name_definition() == "knife";
+	}
 };
 
 class player_t : public entity_t {
@@ -1055,7 +1072,7 @@ public:
 					math::transform_vector(hitbox->mins, bone_matrix[hitbox->bone], min);
 					math::transform_vector(hitbox->maxs, bone_matrix[hitbox->bone], max);
 
-					return vec3_t((min.x + max.x) * 0.5f, (min.y + max.y) * 0.5f, (min.z + max.z) * 0.5f);
+					return (min + max) / 2.0f;
 				}
 			}
 		}

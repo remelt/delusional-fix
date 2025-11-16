@@ -1737,11 +1737,9 @@ void panorama::scaleform_on_event(i_game_event* event) {
         scaleform_weapon_selection();
     else if (!strcmp(event_name, "round_end"))
         scaleform_winpanel(event->get_int("winner"));
-
 }
 
-static int saved_tick_count;
-bool shavaut;
+//TODO: IMPLEMENT BETTER LOGIC FOR KILLFEED
 void panorama::scaleform_after_event(const char* name) {
     if (!sfui.inited)
         return;
@@ -1751,16 +1749,11 @@ void panorama::scaleform_after_event(const char* name) {
         scaleform_teamcount_avatar();
         scaleform_weapon_selection();
     }
-    else if (!strcmp(name, "spec_target_updated") || !strcmp(name, "spec_mode_updated") || !strcmp(name, "item_equip"))
+    else if (!strcmp(name, "spec_target_updated") || !strcmp(name, "spec_mode_updated") || !strcmp(name, "item_equip")) {
         scaleform_spec();
-    else if (!strcmp(name, "player_death")) {
-        saved_tick_count = interfaces::globals->tick_count;
-        shavaut = true;
     }
-
-    if (shavaut && interfaces::globals->tick_count - saved_tick_count > 1) {
-        scaleform_death();
-        shavaut = false;
+    else if (!strcmp(name, "player_death")) {
+        //scaleform_death();
     }
 }
 

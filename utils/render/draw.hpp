@@ -17,6 +17,7 @@ public:
 	void unload();
 
 	bool world_to_screen(const vec3_t& origin, ImVec2* screen);
+	bool world_to_screen_vec3(const vec3_t& in, vec3_t& out);
 
 	void drawline(const float x, const float y, const float x2, const float y2, const color_t& color, const float thickness = 1.0f);
 	void text(const float x, const float y, const float fontsize, ImFont* font, const std::string& text, const bool centered, const color_t& color, const bool dropshadow = true, const bool outline = false);
@@ -26,11 +27,15 @@ public:
 	void drawcornerbox(const float x, const float y, const float w, const float h, const color_t& color);
 	void drawcircle(const float x, const float y, const float radius, const int points, const color_t& color, const float thickness = 1.0f);
 	void drawcirclefilled(const float x, const float y, const float radius, const int points, const color_t& color);
+	void drawtriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const color_t& color, const float thickness = 1.0f);
 	void drawtrianglefilled(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const color_t& color);
 	void drawpolygon(const std::vector<ImVec2>& verts, const color_t& color);
 	void drawpolyline(const std::vector<ImVec2>& verts, const color_t& color, const ImDrawFlags flags = ImDrawListFlags_AntiAliasedFill, const float thickness = 1.0f);
 	int  get_text_size(std::string_view text, ImFont* font, float wrap_width = 0.0f, float font_size = -1.0f);
-	void circle_filled_3d(const vec3_t& origin, float radius, const color_t& color);
+	/*void circle_3d(const vec3_t& origin, float radius, const color_t& color, const float thickness = 1.0f);
+	void circle_filled_3d(const vec3_t& origin, float radius, const color_t& color);*/
+	void drawcircle_3d(const vec3_t& location, float radius, const color_t& color, const float thickness = 1.0f);
+	void drawcirclefilled_3d(const vec3_t& location, float radius, const color_t& color);
 	ImVec2 measure_text(std::string_view text, ImFont* font, float font_size = -1.0f);
 
 	// avatar
@@ -79,6 +84,7 @@ namespace fonts {
 	inline ImFont* key_strokes_font;
 	inline ImFont* iwebz_tittle;
 	inline ImFont* iwebz_specs;
+	inline ImFont* recorder_font;
 
 	inline std::string font_directory_watermark = "C:/windows/fonts/tahoma.ttf";
 	inline std::string font_directory_assist_font = "C:/windows/fonts/tahoma.ttf";
@@ -94,6 +100,7 @@ namespace fonts {
 	inline std::string font_directory_name = "C:/windows/fonts/tahoma.ttf";
 	inline std::string font_directory_wpn = "C:/windows/fonts/tahoma.ttf";
 	inline std::string font_directory_dropped_wpn = "C:/windows/fonts/tahoma.ttf";
+	inline std::string font_directory_recorder = "C:/windows/fonts/tahoma.ttf";
 
 	// i
 	inline int selected_font_index_main_indi = -1;
@@ -107,6 +114,7 @@ namespace fonts {
 	inline int selected_font_index_watermark = -1;
 	inline int selected_font_index_assist_font = -1;
 	inline int selected_font_index_lb_player_font = -1;
+	inline int selected_font_index_recorder = -1;
 }
 
 using ImTextureID = void*;

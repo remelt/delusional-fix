@@ -254,7 +254,7 @@ void features::movement::long_jump(c_usercmd* cmd) {
 		}
 		if (menu::checkkey(c::movement::long_jump_key, c::movement::long_jump_key_s)) {
 			if (do_long_jump && !(g::local->flags() & fl_onground)) {
-				if (c::movement::adaptive_key_cancelling && c::movement::adaptive_key_for[3]) {
+				if (c::movement::adaptive_key_cancelling && c::movement::adaptive_key_for[2]) {
 					if (c::movement::lj_null[0]) {
 						cmd->buttons &= ~in_forward;
 						interfaces::engine->execute_cmd(xs("-forward"));
@@ -679,6 +679,169 @@ void features::movement::mouse_strafe_limiter(float* x, float* y) {
 	}
 }
 
+struct jumpbug_crouch
+{
+	vec3_t position_ground;
+
+	bool detected = false;
+	bool should_uncrouch = false;
+	bool ground_found = false;
+	int jb_tick = 0;
+
+	//values from csgo scr
+	float JUMPBUG_MAX_HEIGHT = 16.f;
+	static constexpr float ducked_bbox_height = 54.f;
+	static constexpr float unducked_bbox_height = 72.f;
+	static constexpr float duck_pos_shift_amt = 0.5f * (unducked_bbox_height - ducked_bbox_height);
+
+	//traceray to find ground
+	bool find_ground(float end_trace_distance)
+	{
+		const auto mins = g::local->collideable()->mins();
+		const auto maxs = g::local->collideable()->maxs();
+
+		vec3_t start_pos = g::local->origin();
+		vec3_t end_pos = start_pos;
+		end_pos.z -= end_trace_distance;
+
+		trace_t trace;
+		ray_t ray;
+		trace_filter filter(g::local);
+
+		ray.initialize(start_pos, end_pos, mins, maxs);
+		interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &filter, &trace);
+
+		if (trace.did_hit())
+		{
+			this->position_ground = trace.end;
+			return true;
+		}
+		return false;
+	}
+
+	void set_detected()
+	{
+		this->detected = true;
+	}
+
+	void set_undetected()
+	{
+		this->detected = false;
+		this->ground_found = false;
+		this->jb_tick = 0;
+	}
+
+	//can jumpbug or nah
+	void check_condition(vec3_t& position_player, vec3_t& ground_position)
+	{
+
+		float uncrouch_position = position_player.z - duck_pos_shift_amt;
+
+		if (ground_position.z + JUMPBUG_MAX_HEIGHT < uncrouch_position)
+		{
+			set_undetected();
+			return;
+		}
+
+		//csgo src
+		float corrected_ground_postion = ground_position.z - 0.03125f;
+		float z_check = uncrouch_position - 2.f;
+		if (z_check < corrected_ground_postion)
+		{
+			set_detected();
+		}
+		else {
+			set_undetected();
+		}
+
+	}
+
+	//pred
+	bool can_we_jumpbug(c_usercmd* cmd, vec3_t& ground_position)
+	{
+		auto movetype = g::local->move_type();
+		vec3_t velocity = g::local->velocity();
+		if (movetype == movetype_ladder || movetype == movetype_noclip || velocity.z > 0.f)
+		{
+			set_undetected();
+			return false;
+		}
+
+		if (detected)
+			return true;
+
+		set_undetected();
+
+		//we dont need to predict more (so we dont need to have a cycle here)
+		c_usercmd fakecmd;
+		fakecmd = *cmd;
+
+		prediction::begin(&fakecmd);
+		prediction::end();
+
+		check_condition(g::local->origin(), ground_position);
+
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+
+		if (detected)
+			return true;
+
+
+		return false;
+	}
+
+} jumpbug_data;
+
+void features::movement::jump_bug_crouch(c_usercmd* cmd)
+{
+	if (!g::local || !g::local->is_alive()) {
+		return;
+	}
+	if (c::movement::jump_bug || assistJb::AlertJB || assistJb::AlertJB2) {
+
+		if (!menu::checkkey(c::movement::jump_bug_key, c::movement::jump_bug_key_s) && !assistJb::AlertJB && !assistJb::AlertJB2)
+		{
+			jumpbug_data.set_undetected();
+			return;
+		}
+
+		//is playa crouched
+		int duck_pressed = (cmd->buttons & in_duck);
+
+		//if ducked - we uncrouch
+		if (duck_pressed)
+		{
+			if (!jumpbug_data.detected)
+			{
+				if (!jumpbug_data.ground_found && !jumpbug_data.find_ground(16.f))
+				{
+					jumpbug_data.set_undetected();
+					return;
+				}
+
+				if (!jumpbug_data.detected)
+				{
+					jumpbug_data.can_we_jumpbug(cmd, jumpbug_data.position_ground);
+				}
+
+			}
+			if (jumpbug_data.detected)
+			{
+				cmd->buttons &= ~in_duck;
+			}
+			else
+			{
+				jumpbug_data.set_undetected();
+			}
+		}
+		else
+		{
+			jumpbug_data.set_undetected();
+			return;
+		}
+	}
+}
+
 void features::movement::jump_bug(c_usercmd* cmd) {
 	if (!g::local || !g::local->is_alive()) {
 		return;
@@ -687,21 +850,43 @@ void features::movement::jump_bug(c_usercmd* cmd) {
 	if (c::movement::jump_bug || assistJb::AlertJB || assistJb::AlertJB2) {
 
 		if (!menu::checkkey(c::movement::jump_bug_key, c::movement::jump_bug_key_s) && !assistJb::AlertJB && !assistJb::AlertJB2)
+		{
+			jumpbug_data.set_undetected();
 			return;
-
-		if (!(prediction_backup::flags & (fl_onground)) && g::local->flags() & (fl_onground)) {
-			cmd->buttons |= in_duck;
 		}
 
+		//is playa crouched
+		int duck_pressed = (cmd->buttons & in_duck);
+
+		//if ducked - we uncrouch
+		//if not - normal jb
+		if (!duck_pressed)
+		{
+			if (!(prediction_backup::flags & (fl_onground)) && g::local->flags() & (fl_onground)) {
+				cmd->buttons |= in_duck;
+			}
+
+		}
+		else
+		{
+			if (jumpbug_data.detected)
+				cmd->buttons &= ~in_duck;
+
+			jumpbug_data.set_undetected();
+		}
+
+		//jump on ground
 		if (g::local->flags() & fl_onground) {
 			cmd->buttons &= ~in_jump;
+			jumpbug_data.set_undetected();
 		}
 
+		//print shit (kinda works so havent changed anything)
 		detected_normal_jump_bug = (c::movement::jump_bug
 			&& !should_edge_bug
 			&& g::local->velocity().z > prediction_backup::velocity.z
-			&& !(prediction_backup::flags & fl_onground )
-			&& !( g::local->flags() & 1 )
+			&& !(prediction_backup::flags & fl_onground)
+			&& !(g::local->flags() & 1)
 			&& g::local->move_type() != movetype_ladder
 			&& g::local->move_type() != movetype_noclip
 			&& g::local->move_type() != movetype_observer) ? true : false;
@@ -735,7 +920,7 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 	float fTickInterval = interfaces::globals->interval_per_tick;
 	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
 	float gravityvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
-	
+
 	//calculating for all ticks
 	//k it doesnt work ...
 	//unpredicted_target = 5.62895 * gravityvelo / 6.25f;
@@ -751,9 +936,13 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 		brk = true;
 		return false;
 	}
-	//https://github.com/hotwheels-vip/csgo-internal
-	//we dont need to calc edgebugs which we cant hit by player origin :D (ig its better to use abs_origin, but we will get ~same result)
-	else if (unpredicted_velocity.z < 0.f && predicted_velocity.z > unpredicted_velocity.z && predicted_velocity.z < 0.f && unpredicted_origin.z >= predicted_origin.z) {
+	else if (unpredicted_velocity.z < 0.f && predicted_velocity.z > unpredicted_velocity.z && predicted_velocity.z < 0.f) {
+		//https://github.com/hotwheels-vip/csgo-internal
+		//we dont need to calc edgebugs which we cant hit by player origin :D (ig its better to use abs_origin, but we will get ~same result)
+		if (!c::movement::edgebug_pena && unpredicted_origin.z < predicted_origin.z) {
+			return false;
+		}
+
 		int z_vel = predicted_velocity.z;
 
 		prediction::begin(cmd);
@@ -771,7 +960,7 @@ bool check_edge_bug(c_usercmd* cmd, bool& brk) {
 		}
 	}
 	//https://yougame.biz/threads/327917/
-	else if (unpredicted_velocity.z < gravityvelo && round(g::local->velocity().z) == round(gravityvelo) && g::local->move_type() != movetype_ladder && unpredicted_origin.z >= predicted_origin.z) {
+	else if (unpredicted_velocity.z < gravityvelo && round(g::local->velocity().z) == round(gravityvelo) && g::local->move_type() != movetype_ladder) {
 		return true;
 	}
 	return false;
@@ -824,6 +1013,7 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		detect_data.detecttick = 0;
 		detect_data.edgebugtick = 0;
 		detect_data.ticks_left = 0;
+		should_edge_bug = false;
 		return;
 	}
 
@@ -832,6 +1022,7 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		detect_data.detecttick = 0;
 		detect_data.edgebugtick = 0;
 		detect_data.ticks_left = 0;
+		should_edge_bug = false;
 		return;
 	}
 
@@ -857,7 +1048,7 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		ebpos.clear();
 		ebpos.push_back(g::local->origin());
 
-		for (int round = 0; round < pred_rounds; ++round){
+		for (int round = 0; round < pred_rounds; ++round) {
 			if (round > 1) {
 				float max_delta = yawdelta;
 				for (yawdelta = max_delta / c::movement::edge_bug_rape; abs(yawdelta) <= abs(max_delta); yawdelta += max_delta / c::movement::edge_bug_rape) {
@@ -941,7 +1132,7 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 					prediction::begin(&predictcmd);
 					prediction::end();
 
-					if (g::local->velocity().z > 0.f || g::local->velocity().length_2d() == 0.f ||g::local->move_type() == movetype_ladder)
+					if (g::local->velocity().z > 0.f || g::local->velocity().length_2d() == 0.f || g::local->move_type() == movetype_ladder)
 						break;
 
 					ebpos.push_back(g::local->origin());
@@ -995,6 +1186,12 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 			cmd->forward_move = detect_data.forwardmove;
 			cmd->side_move = detect_data.sidemove;
 			cmd->view_angles.y = math::normalize_yaw(detect_data.startingyaw + (detect_data.yawdelta * (detect_data.eblength - (detect_data.ticks_left - 1))));
+			//we need to do that to avoid camera flicking (and its better)
+			if (c::movement::silent_eb_hacked) {
+				features::movement::start_movement_fix(cmd);
+				cmd->view_angles = angViewPointBackup;
+				features::movement::end_movement_fix(cmd);
+			}
 		}
 		else {
 			cmd->forward_move = 0.f;
@@ -1007,8 +1204,8 @@ void features::movement::edge_bug(c_usercmd* cmd) {
 		detected_normal_edge_bug = false;
 	}
 }
-bool should_align;
 
+bool should_align;
 void features::movement::auto_align(c_usercmd* cmd) {
 	if (!c::movement::auto_align) {
 		return;
@@ -1199,7 +1396,7 @@ bool Awall = false;
 bool should_ps_standing{ };
 bool wall_detected = false;
 
-//fye maaaan
+//fye maaaan (bad asl, pasted from lb, ofc needed to be recoded)
 struct fireman_data_t {
 	bool is_ladder = false;
 	bool fr_hit_1 = false;
@@ -1388,6 +1585,7 @@ void features::movement::fire_man(c_usercmd* cmd)
 	}
 }
 
+//airstuck by @flowars (1 tick tho, works bad tho, 100% isnt correct way to do it tho (idc))
 void features::movement::air_stuck(c_usercmd* cmd)
 {
 	if (m_fireman_data.is_ladder || !c::movement::air_stuck || !g::local || !g::local->is_alive() || g::local->move_type() != movetype_walk)
@@ -1483,6 +1681,7 @@ void features::movement::on_create_move_post(c_usercmd* cmd) {
 
 	//i know that using it every time like this is bad but idc
 	//u can recode that shit if u want to
+	//make a function to return this value or so
 	//at least its working
 	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
 	float fTickInterval = interfaces::globals->interval_per_tick;
@@ -1499,14 +1698,14 @@ void features::movement::on_create_move_post(c_usercmd* cmd) {
 		features::movement::pixel_surf(cmd);
 
 		//lb ps detect
-		
+
 		//checking for eb & ps ticks
 		if (m_pixelsurf_data.px_tick < cmd->tick_count && !should_edge_bug && !lobotomy_eb::EdgeBug_Founded) {
 			//checking velo (idk using prepred velo is better imo, u can change it if u want to) and if ps predicted or nah
 			if (prediction_backup::velocity.z == targetZvelo && m_pixelsurf_data.m_predicted_succesful) {
 				//variable js to make its work 1 time for 1 ps
 				if (!m_pixelsurf_data.predicted_ps) {
-					if (c::movement::pixel_surf_detection_printf) {
+					if (c::movement::pixel_surf_detection_printf && wall_detected) {
 						interfaces::chat_element->chatprintf("#delusional#_print_pixelsurfed");
 					}
 					m_pixelsurf_data.predicted_ps = true;
@@ -1564,7 +1763,7 @@ void features::movement::pixel_surf_fix(c_usercmd* cmd)
 //mb useful idk
 
 //08.09 yes it is really usefull
-//a least its working now
+//at least its working now
 
 void features::movement::pixel_surf(c_usercmd* cmd) {
 	if (!c::movement::pixel_surf || !menu::checkkey(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s))
@@ -1575,8 +1774,10 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 
 	static int ticks = 0;
 	static int ps_tick = 0;
+	m_pixelsurf_data.px_tick = 0;
 	if (!g::local || !g::local->is_alive()) {
 		ticks = 0;
+		m_pixelsurf_data.px_tick = 0;
 		ps_tick = 0;
 		return;
 	}
@@ -1585,7 +1786,7 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 		return;
 	}
 
-	if (g::local->flags() & fl_onground)	
+	if (g::local->flags() & fl_onground)
 		return;
 
 	if (!wall_detected && c::movement::align_selection == 1)
@@ -1604,13 +1805,13 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 		int BackupButtons = cmd->buttons;
 		for (int i = 0; i < 2; i++) {
 			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-
-			//c_usercmd* predictcmd = new c_usercmd(*cmd);
-
-			if (i == 0)
+			if (i == 0) {
 				cmd->buttons &= ~in_duck;
-			else
+			}
+			else {
 				cmd->buttons |= in_duck;
+			}
+
 			for (int z = 0; z < c::movement::lb_pixel_surf_ticks; z++) {
 				float un_pred_velo = g::local->velocity().z;
 				prediction::begin(cmd);
@@ -1654,7 +1855,8 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	m_pixelsurf_data.px_tick = ps_tick;
 }
 
-//works better imo and has freelook
+//works better imo
+bool test = false;
 void features::movement::auto_align_lb(c_usercmd* cmd)
 {
 	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
@@ -1694,8 +1896,6 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
 	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 
-	/*if (g_input.check_input(&GET_VARIABLE(g_variables.m_ladder_bug_key, key_bind_t)))
-		return;*/
 	static float start_circle = 0.f;
 	wall_detected = false;
 	trace_t trace;
@@ -1727,19 +1927,49 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 		start_circle = 0.f;
 		return;
 	}
-	vec3_t normal_plane = vec3_t(trace.plane.normal.x * -0.005f, trace.plane.normal.y * -0.005f, 0.f);
 
-	const vec3_t end_pos2 = vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z) + vec3_t(saved_cos, saved_sin, 0.f);
-	vec3_t wall_angle = normal_plane.to_angle();
+	//this part is only needed to avoid being "pushed" to the wall while not strafing to the wall
+	//better recode it to find "shape" of the wall
+	test = false;
+	vec3_t angles{ trace.plane.normal.x * -0.005f, trace.plane.normal.y * -0.005f, 0.f };
+	const vec3_t end_pos2 = start_pos + angles;
+	trace_t trace228;
+	ray_t ray228;
+	ray228.initialize(start_pos, end_pos2, mins, maxs);
+	interfaces::trace_ray->trace_ray(ray228, MASK_PLAYERSOLID, &fil, &trace228);
+
+	if (trace228.flFraction == 1.f) {
+		vec3_t to_wall = angles.to_angle();
+		to_wall.normalize();
+		vec3_t velo = g::local->velocity();
+		velo.z = 0.f;
+		if (velo.length_2d() > 0.f) {
+			vec3_t velo_ang = velo.to_angle();
+			vec3_t delta = velo_ang - to_wall;
+			delta.normalize();
+			// comparing our velocity with a vector towards the wall to see if we actually want to align
+			//u can do 90, but it will fail on some spots
+			if (fabsf(delta.y) > 92.5f) {
+				test = true;
+			}
+		}
+	}
+
+	if (test) {
+		return;
+	}
+
+	vec3_t wall_angle = angles.to_angle();
 	wall_angle.normalize();
 
+	const vec3_t end_pos2_lb = vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z) + vec3_t(saved_cos, saved_sin, 0.f);
 	float rotation = deg2rad(wall_angle.y - cmd->view_angles.y);
 	float cos_rot = cos(rotation);
 	float sin_rot = sin(rotation);
 	bool detect = false;
 	trace_t trace_2;
 	ray_t ray_2;
-	ray_2.initialize(vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z), end_pos2);
+	ray_2.initialize(vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z), end_pos2_lb);
 	interfaces::trace_ray->trace_ray(ray_2, MASK_PLAYERSOLID, &fil, &trace_2);
 
 	float backup_forward_move = cmd->forward_move;
@@ -1944,6 +2174,10 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 	if (!c::movement::pixel_surf || !menu::checkkey(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s))
 		return;
 
+	if (c::movement::px_selection != 0) {
+		return;
+	}
+
 	if (!g::local || !g::local->is_alive()) {
 		return;
 	}
@@ -2122,6 +2356,10 @@ void features::movement::pixel_surf_fix_del(c_usercmd* cmd) {
 	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 }
 
+//https://github.com/hotwheels-vip/csgo-internal
+//fixed and hacked
+//can do better but this1 works ok 4me
+bool auto_duck_founded;
 void features::movement::auto_duck(c_usercmd* cmd) {
 	if (!g::local || !g::local->is_alive()) {
 		m_autoduck_data.m_did_land_ducking = false;
@@ -2129,6 +2367,7 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 
 		m_autoduck_data.m_ducking_vert = 0.f;
 		m_autoduck_data.m_standing_vert = 0.f;
+		auto_duck_founded = false;
 		return;
 	}
 
@@ -2140,6 +2379,7 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 
 		m_autoduck_data.m_ducking_vert = 0.f;
 		m_autoduck_data.m_standing_vert = 0.f;
+		auto_duck_founded = false;
 		return;
 	}
 
@@ -2154,6 +2394,7 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 
 		m_autoduck_data.m_ducking_vert = 0.f;
 		m_autoduck_data.m_standing_vert = 0.f;
+		auto_duck_founded = false;
 		return;
 	}
 
@@ -2185,8 +2426,10 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 
 	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 
-	if (!m_autoduck_data.m_did_land_ducking)
+	if (!m_autoduck_data.m_did_land_ducking) {
+		auto_duck_founded = false;
 		return;
+	}
 
 	for (int i = 0; i < c::movement::auto_duck_ticks; i++) {
 		if (g::local->flags() & fl_onground)
@@ -2214,18 +2457,33 @@ void features::movement::auto_duck(c_usercmd* cmd) {
 	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 
 	if (m_autoduck_data.m_did_land_ducking && m_autoduck_data.m_did_land_standing) {
-		if (m_autoduck_data.m_ducking_vert > m_autoduck_data.m_standing_vert)
+		if (m_autoduck_data.m_ducking_vert > m_autoduck_data.m_standing_vert) {
 			cmd->buttons |= in_duck;
+			auto_duck_founded = true;
+		}
+		else {
+			auto_duck_founded = false;
+		}
 	}
-	else if (m_autoduck_data.m_did_land_ducking && !m_autoduck_data.m_did_land_standing)
+	else if (m_autoduck_data.m_did_land_ducking && !m_autoduck_data.m_did_land_standing) {
 		cmd->buttons |= in_duck;
-
+		auto_duck_founded = true;
+	}
+	else {
+		auto_duck_founded = false;
+	}
 }
 
+//funny thingy
+//doesnt work how it should to
+//if u bounce ur z vel will be instantly set to 0
+//idk how to make it properly
+bool avoid_founded;
 void features::movement::avoid_collision(c_usercmd* cmd) {
 	if (!g::local || !g::local->is_alive()) {
 		m_avoid_collision.m_ducking_velo = 0.f;
 		m_avoid_collision.m_standing_velo = 0.f;
+		avoid_founded = false;
 		return;
 	}
 
@@ -2233,6 +2491,7 @@ void features::movement::avoid_collision(c_usercmd* cmd) {
 	if (move_type == movetype_ladder || move_type == movetype_noclip || move_type == movetype_fly || move_type == movetype_observer) {
 		m_avoid_collision.m_ducking_velo = 0.f;
 		m_avoid_collision.m_standing_velo = 0.f;
+		avoid_founded = false;
 		return;
 	}
 
@@ -2243,22 +2502,16 @@ void features::movement::avoid_collision(c_usercmd* cmd) {
 
 		m_avoid_collision.m_ducking_velo = 0.f;
 		m_avoid_collision.m_standing_velo = 0.f;
+		avoid_founded = false;
 		return;
 	}
 
 	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 
-	trace_filter tf(g::local);
-	trace_t tr;
-	vec3_t unpredicted_pos = g::local->abs_origin();
-	ray_t r;
-	//))))
-	r.initialize(unpredicted_pos, unpredicted_pos + vec3_t(0, 0, 77.f));
-	interfaces::trace_ray->trace_ray(r, MASK_PLAYERSOLID, &tf, &tr);
-
 	for (int i = 0; i < c::movement::auto_duck_collision_ticks; i++) {
-		if (g::local->flags() & fl_onground)
-			break;
+		//m_avoid_collision.m_ducking_velo = FLT_MIN;
+		//m_avoid_collision.m_standing_velo = FLT_MIN;
+
 		for (int o = 0; o < 2; o++) {
 			c_usercmd* simulated_cmd = new c_usercmd(*cmd);
 
@@ -2273,25 +2526,50 @@ void features::movement::avoid_collision(c_usercmd* cmd) {
 			prediction::begin(simulated_cmd);
 			prediction::end();
 
-			trace_filter tf(g::local);
-			trace_t tr;
+			trace_filter tf2(g::local);
+			trace_t tr2;
 			vec3_t predicted_pos = g::local->abs_origin();
-			ray_t r;
+			ray_t r2;
 			//))))
-			r.initialize(predicted_pos, predicted_pos + vec3_t(0, 0, 77.f));
-			interfaces::trace_ray->trace_ray(r, MASK_PLAYERSOLID, &tf, &tr);
+			const auto mins2 = g::local->collideable()->mins();
+			const auto maxs2 = g::local->collideable()->maxs();
+			r2.initialize(predicted_pos, predicted_pos + vec3_t(0, 0, 2.f), mins2, maxs2);
+			interfaces::trace_ray->trace_ray(r2, MASK_PLAYERSOLID, &tf2, &tr2);
 
-			if (tr.flFraction < 1.0f) {
+			trace_filter tf3(g::local);
+			trace_t tr3;
+			ray_t r3;
+			r3.initialize(predicted_pos, predicted_pos + vec3_t(0, 0, 77.f));
+			interfaces::trace_ray->trace_ray(r3, MASK_PLAYERSOLID, &tf3, &tr3);
+
+			if (tr2.did_hit()) {
 				if (o == 0) {
 					m_avoid_collision.m_ducking_velo = g::local->velocity().z;
+					m_avoid_collision.m_ducking_origin = g::local->origin().z;
 				}
 				else {
 					m_avoid_collision.m_standing_velo = g::local->velocity().z;
+					m_avoid_collision.m_standing_origin = g::local->origin().z;
+				}
+			}
+			else if (tr3.did_hit()) {
+				if (o == 0) {
+					m_avoid_collision.m_ducking_velo = g::local->velocity().z;
+					m_avoid_collision.m_ducking_origin = g::local->origin().z;
+				}
+				else {
+					m_avoid_collision.m_standing_velo = g::local->velocity().z;
+					m_avoid_collision.m_standing_origin = g::local->origin().z;
 				}
 			}
 
 			delete simulated_cmd;
 		}
+		if (m_avoid_collision.m_ducking_velo > m_avoid_collision.m_standing_velo) {
+			avoid_founded = true;
+			break;
+		}
+		avoid_founded = false;
 	}
 
 	prediction::begin(cmd);
@@ -2299,14 +2577,12 @@ void features::movement::avoid_collision(c_usercmd* cmd) {
 
 	prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 
-	if (m_avoid_collision.m_ducking_velo > m_avoid_collision.m_standing_velo) {
-		cmd->buttons |= in_duck;
-	}
-	else if (tr.flFraction < 1.0f) {
+	if (avoid_founded) {
 		cmd->buttons |= in_duck;
 	}
 }
 
+//by @flowars
 void features::movement::fast_ladder(c_usercmd* cmd)
 {
 	if (!c::movement::fast_ladder || !menu::checkkey(c::movement::fast_ladder_key, c::movement::fast_ladder_key_s))
@@ -2346,7 +2622,7 @@ void features::movement::fake_backwards(c_usercmd* cmd) {
 		return;
 	}
 
-	if (!interfaces::engine->is_in_game() || !g::local->is_alive()) 
+	if (!interfaces::engine->is_in_game() || !g::local->is_alive())
 		return;
 
 
@@ -2360,7 +2636,7 @@ auto interpolate(const color_t first_color, const color_t& second_color, const f
 		first_color.a() + std::clamp(multiplier, 0.f, 1.f) * (second_color.a() - first_color.a()));
 }
 
-void features::movement::velocity_indicator( ) {
+void features::movement::velocity_indicator() {
 	if (!g::local || !g::local->is_alive() || !interfaces::engine->is_in_game()) {
 		return;
 	}
@@ -2392,10 +2668,10 @@ void features::movement::velocity_indicator( ) {
 			if (velocity > 0)
 				return color_t(c::movement::velocity_indicator_positive_clr[0], c::movement::velocity_indicator_positive_clr[1], c::movement::velocity_indicator_positive_clr[2], 255.f);
 			else if (velocity < 0)
-				return color_t(c::movement::velocity_indicator_negative_clr[0], c::movement::velocity_indicator_negative_clr[1], c::movement::velocity_indicator_negative_clr[2],255.f);
+				return color_t(c::movement::velocity_indicator_negative_clr[0], c::movement::velocity_indicator_negative_clr[1], c::movement::velocity_indicator_negative_clr[2], 255.f);
 			else if (velocity > -1 && velocity < 1)
 				return color_t(c::movement::velocity_indicator_neutral_clr[0], c::movement::velocity_indicator_neutral_clr[1], c::movement::velocity_indicator_neutral_clr[2], 255.f);
-		};
+			};
 
 		color_t velocity_clr_int = color_t(c::movement::velocity_indicator_fade_clr3[0], c::movement::velocity_indicator_fade_clr3[1], c::movement::velocity_indicator_fade_clr3[2], c::movement::velocity_indicator_fade_clr3[3]);
 		color_t velocity_clr_custom = color_t(c::movement::velocity_indicator_custom_clr[0], c::movement::velocity_indicator_custom_clr[1], c::movement::velocity_indicator_custom_clr[2], c::movement::velocity_indicator_custom_clr[3]);
@@ -2422,7 +2698,7 @@ void features::movement::velocity_indicator( ) {
 	}
 }
 
-void features::movement::stamina_indicator( ) {
+void features::movement::stamina_indicator() {
 	if (!g::local || !g::local->is_alive() || !interfaces::engine->is_in_game()) {
 		return;
 	}
@@ -2487,7 +2763,7 @@ void render_indicator(int key, int key_s, int& alpha, color_t& clr, const char* 
 	interfaces::engine->get_screen_size(x, y);
 	y -= c::movement::indicators_position;
 
-    color_t default_clr(c::movement::velocity_indicator_custom_clr2[0], c::movement::velocity_indicator_custom_clr2[1], c::movement::velocity_indicator_custom_clr2[2]);
+	color_t default_clr(c::movement::velocity_indicator_custom_clr2[0], c::movement::velocity_indicator_custom_clr2[1], c::movement::velocity_indicator_custom_clr2[2]);
 
 	if (allow_detection_clr) {
 		if (tick_count)
@@ -2498,7 +2774,7 @@ void render_indicator(int key, int key_s, int& alpha, color_t& clr, const char* 
 	else
 		clr = default_clr;
 
-	float fading_speed = (c::movement::indicators_fading_speed*8.f)/100.f;
+	float fading_speed = (c::movement::indicators_fading_speed * 8.f) / 100.f;
 
 	if (menu::checkkey(key, key_s)) {
 		alpha = std::clamp(alpha + fading_speed, 0.f, 255.f);
@@ -2540,8 +2816,8 @@ void features::movement::indicators() {
 	if (should_mj)
 		saved_tick_mj = interfaces::globals->tick_count;
 
-	color_t ps_clr, al_clr, sh_clr, eb_clr, jb_clr, ej_clr, lj_clr, mj_clr, lg_clr, fm_clr, air_clr, ast_clr, bast_clr, as_clr;
-	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, fm_alpha, air_alpha, ast_alpha, bast_alpha, as_alpha = 0;
+	color_t ps_clr, al_clr, sh_clr, eb_clr, jb_clr, ej_clr, lj_clr, mj_clr, lg_clr, ad_clr, ac_clr, fm_clr, air_clr, ast_clr, bast_clr, as_clr;
+	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, ad_alpha, ac_alpha, fm_alpha, air_alpha, ast_alpha, bast_alpha, as_alpha = 0;
 	int position = 0;
 
 	if (c::movement::indicators_show[0]) {
@@ -2552,11 +2828,12 @@ void features::movement::indicators() {
 			render_indicator(c::movement::edge_bug_key, c::movement::edge_bug_key_s, eb_alpha, eb_clr, "eb", false, lobotomy_eb::EdgeBug_Founded, c::movement::detection_clr_for[0], position);
 		}
 	}
+
+	if (c::movement::indicators_show[1])
+		render_indicator(c::movement::jump_bug_key, c::movement::jump_bug_key_s, jb_alpha, jb_clr, "jb", true, detected_normal_jump_bug, c::movement::detection_clr_for[1], position, saved_tick_jb);
+
 	if (c::movement::indicators_show[2])
 		render_indicator(c::movement::long_jump_key, c::movement::long_jump_key_s, lj_alpha, lj_clr, "lj", true, should_lj, c::movement::detection_clr_for[2], position, saved_tick_lj);
-
-	if (c::movement::indicators_show[5])
-		render_indicator(c::movement::edge_jump_key, c::movement::edge_jump_key_s, ej_alpha, ej_clr, "ej", true, should_ej, c::movement::detection_clr_for[5], position, saved_tick_ej);
 
 	if (c::movement::indicators_show[3])
 		render_indicator(c::movement::mini_jump_key, c::movement::mini_jump_key_s, mj_alpha, mj_clr, "mj", true, should_mj, c::movement::detection_clr_for[3], position, saved_tick_mj);
@@ -2569,31 +2846,38 @@ void features::movement::indicators() {
 			render_indicator(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s, p_alpha, ps_clr, "ps", false, m_pixelsurf_data.ps_detect, c::movement::detection_clr_for[4], position);
 		}
 	}
-	if (c::movement::indicators_show[1])
-		render_indicator(c::movement::jump_bug_key, c::movement::jump_bug_key_s, jb_alpha, jb_clr, "jb", true, detected_normal_jump_bug, c::movement::detection_clr_for[1], position, saved_tick_jb);
-	
+
+	if (c::movement::indicators_show[5])
+		render_indicator(c::movement::edge_jump_key, c::movement::edge_jump_key_s, ej_alpha, ej_clr, "ej", true, should_ej, c::movement::detection_clr_for[5], position, saved_tick_ej);
+
 	if (c::movement::indicators_show[6])
 		render_indicator(c::movement::ladder_bug_key, c::movement::ladder_bug_key_s, lb_alpha, lg_clr, "lb", false, should_lb, c::movement::detection_clr_for[6], position);
 
 	if (c::movement::indicators_show[7])
-		render_indicator(c::movement::fireman_key, c::movement::fireman_key_s, fm_alpha, fm_clr, "fm", false, m_fireman_data.is_ladder, c::movement::detection_clr_for[7], position);
+		render_indicator(c::movement::auto_duck_key, c::movement::auto_duck_key_s, ad_alpha, ad_clr, "ad", false, auto_duck_founded, c::movement::detection_clr_for[7], position);
 
 	if (c::movement::indicators_show[8])
-		render_indicator(c::movement::air_stuck_key, c::movement::air_stuck_key_s, air_alpha, air_clr, "air", false, airstuck_data.detected, c::movement::detection_clr_for[7], position);
-
-	if (c::movement::indicators_show[10])
-		render_indicator(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s, ast_alpha, ast_clr, "ast", false, HITGODA, c::movement::detection_clr_for[10], position);
-
-	if (c::movement::indicators_show[11])
-		render_indicator(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s, bast_alpha, bast_clr, "bast", false, HITGODA2, c::movement::detection_clr_for[11], position);
+		render_indicator(c::movement::auto_duck_collision_key, c::movement::auto_duck_collision_key_s, ac_alpha, ac_clr, "ac", false, avoid_founded, c::movement::detection_clr_for[8], position);
 
 	if (c::movement::indicators_show[9])
-		render_indicator(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s, as_alpha, as_clr, "autostrafing", false, false, c::movement::detection_clr_for[9], position);
+		render_indicator(c::movement::fireman_key, c::movement::fireman_key_s, fm_alpha, fm_clr, "fm", false, m_fireman_data.is_ladder, c::movement::detection_clr_for[9], position);
+
+	if (c::movement::indicators_show[10])
+		render_indicator(c::movement::air_stuck_key, c::movement::air_stuck_key_s, air_alpha, air_clr, "air", false, airstuck_data.detected, c::movement::detection_clr_for[10], position);
+
+	if (c::movement::indicators_show[11])
+		render_indicator(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s, as_alpha, as_clr, "autostrafing", false, false, c::movement::detection_clr_for[11], position);
+
+	if (c::movement::indicators_show[12])
+		render_indicator(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s, ast_alpha, ast_clr, "ast", false, HITGODA, c::movement::detection_clr_for[12], position);
+
+	if (c::movement::indicators_show[13])
+		render_indicator(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s, bast_alpha, bast_clr, "bast", false, HITGODA2, c::movement::detection_clr_for[13], position);
 }
 
 features::movement::velocity_data_t current_vel_data;
 static std::deque<std::pair<float, bool>> stamina_data;
-void features::movement::gather_vel_graph_data( ) {
+void features::movement::gather_vel_graph_data() {
 	if (!g::local || !g::local->is_alive() || !c::movement::velocity_graph)
 		return;
 
@@ -2616,20 +2900,20 @@ void features::movement::gather_vel_graph_data( ) {
 		velocity_data.pop_back();
 }
 
-void features::movement::gather_stam_graph_data( ) {
+void features::movement::gather_stam_graph_data() {
 	if (!g::local || !g::local->is_alive() || !c::movement::stamina_graph)
 		return;
 
 	if (!interfaces::engine->is_connected())
 		return;
 
-	stamina_data.push_front({g::local->stamina(), !(g::local->flags() & fl_onground) });
+	stamina_data.push_front({ g::local->stamina(), !(g::local->flags() & fl_onground) });
 
 	if (stamina_data.size() > 185)
 		stamina_data.pop_back();
 }
 
-void features::movement::velocity_graph_draw( ) {
+void features::movement::velocity_graph_draw() {
 	if (!g::local->is_alive() || !g::local)
 		return;
 
@@ -2718,7 +3002,7 @@ void features::movement::velocity_graph_draw( ) {
 				if (eb && c::movement::velocity_graph_show_edge_bug)
 					im_render.text(((x / 2) + (((velocity_data.size() / 2) * c::movement::velocity_linewidth))) - ((i + 1) * c::movement::velocity_linewidth), y * c::movement::graph_xscreenpos - 10 - ((std::clamp(next, 0.f, 450.f) * 75 / 320) * c::movement::velocity_height), 12, fonts::esp_misc, "eb", true, color_t(1.f, 1.f, 1.f, (alpha / 255.f)), true);
 
-				if (jb  && c::movement::velocity_graph_show_jump_bug)
+				if (jb && c::movement::velocity_graph_show_jump_bug)
 					im_render.text(((x / 2) + (((velocity_data.size() / 2) * c::movement::velocity_linewidth))) - ((i + 1) * c::movement::velocity_linewidth), y * c::movement::graph_xscreenpos - 10 - ((std::clamp(next, 0.f, 450.f) * 75 / 320) * c::movement::velocity_height), 12, fonts::esp_misc, "jb", true, color_t(1.f, 1.f, 1.f, (alpha / 255.f)), true);
 
 				if (ps && c::movement::velocity_graph_show_pixel_surf)
@@ -2728,7 +3012,7 @@ void features::movement::velocity_graph_draw( ) {
 	}
 }
 
-void features::movement::stamina_graph_draw( ) {
+void features::movement::stamina_graph_draw() {
 	if (!g::local->is_alive() || !g::local)
 		return;
 

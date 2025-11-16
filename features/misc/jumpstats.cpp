@@ -1,333 +1,388 @@
 #include "../../features/movement/movement.hpp"
+#include "../movement/prediction/prediction.hpp"
 #include "../../menu/config/config.hpp"
 #include "../../menu/menu.hpp"
 #include "../misc/misc.hpp"
 #include <iostream>
 #include <cmath>
+#include "jumpstats.hpp"
 
-class jumpstats_calculations {
-private:
-    static const auto white = '\x08';
-    static const auto violet = '\x0B';
-    static const auto green = '\x06';
-    static const auto red = '\x07';
-    static const auto golden = '\x10';
-public:
-    void resetStats() {
-        units = 0.0f;
-        strafes = 0;
-        pre = 0.0f;
-        max_vel = 0.0f;
-        max_height = 0.0f;
-        jumps = 0;
-        bhops = 0;
-        sync = 0.0f;
-        start_pos = vec3_t{};
-        landing_pos = vec3_t{};
-    }
+//TODO: IM SRY FOR EVERYTTHING IVE DONE TO THAT CODE
 
-    bool show() {
-        if (!onground || jumping || jumpbugged)
-            return false;
+struct JumpStats
+{
+	vec3_t StartJump{};
+	vec3_t EndJump{};
+	float distance{};
+	std::string JumpType{};
+	float sync{};
+	float JumpHeight;
+	int strafes;
+	int pre;
+	int max;
+};
 
-        if (!should_show)
-            return false;
+bool edgebugged = false;
+void features::misc::jumpstats::jumpstats(c_usercmd* cmd)
+{
+	if (!c::misc::jumpstats)
+		return;
+	if (!g::local)
+		return;
+	if (!g::local->is_alive())
+		return;
 
-        units = (start_pos - landing_pos).length_2d() + (is_ladderjump ? 0.0f : 32.0f);
+	static bool OnJump = false;
+	static bool OnLand = false;
+	static bool RecordDuck = false;
+	static int DuckTicks = 0;
+	static int ticksonGround = 0;
+	static int BhopCount = 0;
+	static bool JumpIsJb = false;
+	static int perfectStrafeTicks = 0;
+	static int strafeTicks = 0;
+	static JumpStats js;
+	static bool strafe_right = false;
+	static bool strafe_left = false;
+	if (prediction_backup::flags & 1)
+	{
+		ticksonGround += 1;
+		perfectStrafeTicks = 0;
+		strafeTicks = 0;
+		js.strafes = 0;
+		js.max = 0;
+		js.pre = std::round(prediction_backup::velocity.length_2d());
+	}
+	else
+	{
+		ticksonGround = 0;
+		if (js.max < g::local->velocity().length_2d())
+			js.max = std::round(g::local->velocity().length_2d());
+		if (g::local->velocity().length_2d() > 50.f)
+		{
+			float deltaSpeed = g::local->velocity().length_2d() - prediction_backup::velocity.length_2d();
+			bool gained = deltaSpeed > 0.000001f;
+			bool lost = deltaSpeed < -0.000001f;
+			if (gained)
+			{
+				perfectStrafeTicks++;
+			}
+			strafeTicks++;
+		}
+	}
+	if (strafeTicks > 0)
+		js.sync = (perfectStrafeTicks / static_cast<float>(strafeTicks)) * 100.f;
+	if (ticksonGround > 2)
+		BhopCount = 0;
 
-        const float z = fabsf(start_pos.z - landing_pos.z) - (is_jb ? 9.0f : 0.0f);
-        const bool fail = z >= (is_ladderjump ? 32.0f : (jumps > 0 ? (jumps > 1 ? 46.0f : 2.0f) : 46.0f));
-        const bool simplifyNames = true;
+	if (features::movement::detect_data.ticks_left == 1) {
+		edgebugged = true;
+	}
+	if (prediction_backup::flags & 1 && !(g::local->flags() & 1))
+	{
+		OnJump = true;
+	}
+	if (cmd->mouse_dx < 0 && !strafe_right && !strafe_left)
+		strafe_right = true;
+	else if (cmd->mouse_dx > 0 && !strafe_right && !strafe_left)
+		strafe_left = true;
+	if (cmd->mouse_dx < 0 && !strafe_right && strafe_left)
+	{
+		strafe_right = true;
+		strafe_left = false;
+		js.strafes++;
+	}
+	else if (cmd->mouse_dx > 0 && strafe_right && !strafe_left) {
+		strafe_right = false;
+		strafe_left = true;
+		js.strafes++;
+	}
+	if (features::movement::detected_normal_jump_bug && !JumpIsJb)
+	{
+		js.pre = std::round(prediction_backup::velocity.length_2d());
+		JumpIsJb = true;
+		OnJump = true;
+	}
+	if (g::local->flags() & 1 && !(prediction_backup::flags & 1))
+	{
+		OnLand = true;
+	}
+	if (prediction_backup::velocity.z > 0 && g::local->velocity().z < 0)
+		js.JumpHeight = abs(prediction_backup::origin.z) - abs(js.StartJump.z);
 
-        std::string jump = "null";
+	if (OnJump)
+	{
+		if (cmd->buttons & in_duck)
+			RecordDuck = true;
+		js.StartJump = prediction_backup::origin;
+		if (ticksonGround == 1)
+			BhopCount += 1;
+		js.JumpType = "J: ";
+		if (BhopCount == 1)
+			js.JumpType = "BH: ";
+		if (BhopCount > 1)
+			js.JumpType = "MBH: ";
 
-        auto color = white;
-        switch (jumps) {
-        case 1:
-            if (!is_jb) {
-                jump = "lj";
-                if (units >= 245.f)
-                    color = '\x03';
-                else if (units >= 243.f)
-                    color = '\x10';
-                else if (units >= 240.f)
-                    color = '\x02';
-                else if (units >= 235.f)
-                    color = '\x06';
-                else if (units >= 230.f)
-                    color = '\x0B';
-                else
-                    color = '\x08';
-            }
-            else {
-                jump = "jb";
-                if (units < 250.0f)
-                    color = white;
-                else if (units >= 250.0f && units < 260.0f)
-                    color = violet;
-                else if (units >= 260.0f && units < 265.0f)
-                    color = green;
-                else if (units >= 265.0f && units < 270.0f)
-                    color = red;
-                else if (units >= 270.0f)
-                    color = golden;
-            }
-            break;
-        case 2:
-            jump = "bh";
-            if (units < 230.0f)
-                color = white;
-            else if (units >= 230.0f && units < 233.0f)
-                color = violet;
-            else if (units >= 233.0f && units < 235.0f)
-                color = green;
-            else if (units >= 235.0f && units < 240.0f)
-                color = red;
-            else if (units >= 240.0f)
-                color = golden;
-            break;
-        default:
-            if (jumps >= 3) {
-                jump = "mbh";
-                if (units < 230.0f)
-                    color = white;
-                else if (units >= 230.0f && units < 233.0f)
-                    color = violet;
-                else if (units >= 233.0f && units < 235.0f)
-                    color = green;
-                else if (units >= 235.0f && units < 240.0f)
-                    color = red;
-                else if (units >= 240.0f)
-                    color = golden;
-            }
-            break;
-        }
+		OnJump = false;
+	}
+	if (RecordDuck && cmd->buttons & in_duck)
+	{
+		DuckTicks += 1;
+	}
+	else
+	{
+		DuckTicks = 0;
+		RecordDuck = false;
+	}
 
-        if (is_ladderjump) {
-            jump = "laj";
-            if (units < 80.0f)
-                color = white;
-            else if (units >= 80.0f && units < 90.0f)
-                color = violet;
-            else if (units >= 90.0f && units < 105.0f)
-                color = green;
-            else if (units >= 105.0f && units < 109.0f)
-                color = red;
-            else if (units >= 109.0f)
-                color = golden;
-        }
+	if (BhopCount == 0)
+	{
+		if (RecordDuck)
+		{
+			if (DuckTicks == 1)
+			{
+				js.JumpType = "MJ: ";
+			}
+			if (DuckTicks == 2)
+			{
+				js.JumpType = "LJ: ";
+			}
+		}
+	}
+	if (JumpIsJb)
+		js.JumpType = "JB: ";
 
-        if (!c::misc::jumpstats_show_clr_fail && fail)
-            color = white;
 
-        if (fail)
-            jump += "-f";
+	if (OnLand)
+	{
+		float razn;
+		if (JumpIsJb)
+			razn = 16.f;
+		else
+			razn = 2.f;
+		JumpIsJb = false;
+		js.EndJump = g::local->origin();
+		float absh = abs(js.StartJump.z) - abs(js.EndJump.z);
 
-        //TODO: FIX CHATPRINT
-        
-        const bool show = (is_ladderjump ? units >= 50.0f : units >= 186.0f) && (!(!c::misc::jumpstats_show_fail && fail) || (c::misc::jumpstats_show_fail));
-        if (show && c::misc::jumpstats) {
-            if (jumps > 2) {
-                /*interfaces::chat_element->chatprintf(" \x08 %c%s: %.2f \x08units | \x08 %c%d\x08 strafes | %c%.0f\x08 pre | %c%.0f\x08 max | %c%.1f\x08 height | %c%d\x08 bhops | %c%.0f\x08 sync",
-                    color, jump.c_str(),
-                    jump_stats_cals.units, color, jump_stats_cals.strafes, color, jump_stats_cals.pre, color, jump_stats_cals.max_vel, color, jump_stats_cals.max_height, color, jump_stats_cals.jumps, color, jump_stats_cals.sync);*/
+		//isnt fixed, should be recoded properly
+		if (edgebugged) {
+			edgebugged = false;
+			OnLand = false;
+			return;
+		}
 
-                interfaces::console->console_color_printf({ 255, 0, 0, 255 }, ("[delusional] "));
-                interfaces::console->console_printf("%s: %.2f units | %d strafes | %.0f pre | %.0f max | %.1f height | %d bhops | %.0f sync \n", 
-                    jump.c_str(), jump_stats_cals.units, jump_stats_cals.strafes, jump_stats_cals.pre, jump_stats_cals.max_vel, jump_stats_cals.max_height, jump_stats_cals.jumps, jump_stats_cals.sync);
+		if (absh <razn && absh >-razn)
+		{
+			std::ostringstream distanceStream;
+			distanceStream << std::fixed << std::setprecision(2) << js.StartJump.dist_to_2d(js.EndJump) + 32.0f;
+			std::string distanceStr = distanceStream.str();
 
-            }                
-            else {
-                /*interfaces::chat_element->chatprintf(
-                    " \x08 %c%s: %.2f \x08units | \x08 %c%d\x08 strafes | %c%.0f\x08 pre | %c%.0f\x08 max | %c%.1f\x08 height | %c%.0f\x08 sync",
-                    color, jump.c_str(),
-                    jump_stats_cals.units, color, jump_stats_cals.strafes, color, jump_stats_cals.pre, color, jump_stats_cals.max_vel, color, jump_stats_cals.max_height, color, jump_stats_cals.sync);*/
+			std::ostringstream HeightStream;
+			HeightStream << std::fixed << std::setprecision(2) << js.JumpHeight * -1;
+			std::string HeightStr = HeightStream.str();
+			int syncPercentage = static_cast<int>(js.sync);
 
-                interfaces::console->console_color_printf({ 255, 0, 0, 255 }, ("[delusional] "));
-                interfaces::console->console_printf("%s: %.2f units | %d strafes | %.0f pre | %.0f max | %.1f height | %.0f sync \n", 
-                    jump.c_str(), jump_stats_cals.units, jump_stats_cals.strafes, jump_stats_cals.pre, jump_stats_cals.max_vel, jump_stats_cals.max_height, jump_stats_cals.sync);
-            }
-                
-        }
+			float dist = js.StartJump.dist_to_2d(js.EndJump) + 32.0f;
+			if (js.JumpType == "LJ: ")
+			{
+				if (dist < 230)
+				{
+					jumpstating::JumpInfo = "\x08 " + js.JumpType + distanceStr + " units | " + std::to_string(js.strafes) + " strafe | " + std::to_string(js.pre) + " pre | " + std::to_string(js.max) + " max | " + HeightStr + " height | " + std::to_string(syncPercentage) + " sync";
+				}
+				if (dist >= 230)
+				{
+					jumpstating::JumpInfo = "\x0C " + js.JumpType + distanceStr + " units \x08| \x0C" + std::to_string(js.strafes) + "\x08 strafe | \x0C" + std::to_string(js.pre) + "\x08 pre | \x0C" + std::to_string(js.max) + "\x08 max | \x0C" + HeightStr + "\x08 height | \x0C" + std::to_string(syncPercentage) + "\x08 sync";
 
-        should_show = false;
-        return true;
-    }
+				}
+				if (dist >= 235)
+				{
+					jumpstating::JumpInfo = "\x04 " + js.JumpType + distanceStr + " units \x08| \x04" + std::to_string(js.strafes) + "\x08 strafe | \x04" + std::to_string(js.pre) + "\x08 pre | \x04" + std::to_string(js.max) + "\x08 max | \x04" + HeightStr + "\x08 height | \x04" + std::to_string(syncPercentage) + "\x08 sync";
 
-    void run(c_usercmd* cmd)  {
-        if (g::local->move_type() == movetype_noclip) {
-            resetStats();
-            should_show = false;
-            return;
-        }
+				}
+				if (dist >= 240)
+				{
+					jumpstating::JumpInfo = "\x02 " + js.JumpType + distanceStr + " units \x08| \x02" + std::to_string(js.strafes) + "\x08 strafe | \x02" + std::to_string(js.pre) + "\x08 pre | \x02" + std::to_string(js.max) + "\x08 max | \x02" + HeightStr + "\x08 height | \x02" + std::to_string(syncPercentage) + "\x08 sync";
 
-        velocity = g::local->velocity().length_2d();
-        origin = g::local->abs_origin();
-        onground = g::local->flags() & 1;
-        onladder = g::local->move_type() == movetype_ladder;
-        jumping = cmd->buttons & in_jump && !(lastbuttons & in_jump) && onground;
-        jumpbugged = !jumpped && has_jumped;;
+				}
+				if (dist >= 244)
+				{
+					jumpstating::JumpInfo = "\x09 " + js.JumpType + distanceStr + " units \x08| \x09" + std::to_string(js.strafes) + "\x08 strafe | \x09" + std::to_string(js.pre) + "\x08 pre | \x09" + std::to_string(js.max) + "\x08 max | \x09" + HeightStr + "\x08 height | \x09" + std::to_string(syncPercentage) + "\x08 sync";
 
-        //we jumped so we should show this jump
-        if (jumping || jumpbugged)
-            should_show = true;
+				}
+				if (dist >= 246)
+				{
+					jumpstating::JumpInfo = "\x0D " + js.JumpType + distanceStr + " units \x08| \x0D" + std::to_string(js.strafes) + "\x08 strafe | \x0D" + std::to_string(js.pre) + "\x08 pre | \x0D" + std::to_string(js.max) + "\x08 max | \x0D" + HeightStr + "\x08 height | \x0D" + std::to_string(syncPercentage) + "\x08 sync";
 
-        if (onladder) {
-            start_pos = origin;
-            pre = velocity;
-            startedOnLadder = true;
-        }
+				}
+			}
+			if (js.JumpType == "BH: ")
+			{
+				if (dist < 230)
+				{
+					jumpstating::JumpInfo = "\x08 " + js.JumpType + distanceStr + " units | " + std::to_string(js.strafes) + " strafe | " + std::to_string(js.pre) + " pre | " + std::to_string(js.max) + " max | " + HeightStr + " height | " + std::to_string(syncPercentage) + " sync";
+				}
+				if (dist >= 230)
+				{
+					jumpstating::JumpInfo = "\x0C " + js.JumpType + distanceStr + " units \x08| \x0C" + std::to_string(js.strafes) + "\x08 strafe | \x0C" + std::to_string(js.pre) + "\x08 pre | \x0C" + std::to_string(js.max) + "\x08 max | \x0C" + HeightStr + "\x08 height | \x0C" + std::to_string(syncPercentage) + "\x08 sync";
 
-        if (onground) {
-            if (!onladder) {
-                if (jumping) {
-                    //we save pre velocity and the starting position
-                    start_pos = origin;
-                    pre = velocity;
-                    jumps++;
-                    startedOnLadder = false;
-                    is_ladderjump = false;
-                }
-                else {
-                    landing_pos = origin;
-                    //we reset our jumps after logging them, and incase we do log our jumps and need to reset anyways we do this
-                    if (!should_show)
-                        jumps = 0;
+				}
+				if (dist >= 234)
+				{
+					jumpstating::JumpInfo = "\x04 " + js.JumpType + distanceStr + " units \x08| \x04" + std::to_string(js.strafes) + "\x08 strafe | \x04" + std::to_string(js.pre) + "\x08 pre | \x04" + std::to_string(js.max) + "\x08 max | \x04" + HeightStr + "\x08 height | \x04" + std::to_string(syncPercentage) + "\x08 sync";
 
-                    if (startedOnLadder) {
-                        is_ladderjump = true;
-                        should_show = true;
-                    }
-                    startedOnLadder = false;
-                }
-            }
+				}
+				if (dist >= 235)
+				{
+					jumpstating::JumpInfo = "\x02 " + js.JumpType + distanceStr + " units \x08| \x02" + std::to_string(js.strafes) + "\x08 strafe | \x02" + std::to_string(js.pre) + "\x08 pre | \x02" + std::to_string(js.max) + "\x08 max | \x02" + HeightStr + "\x08 height | \x02" + std::to_string(syncPercentage) + "\x08 sync";
 
-            //Calculate sync
-            if (ticksInAir > 0 && !jumping)
-                sync = (static_cast<float>(ticksSynced) / static_cast<float>(ticksInAir)) * 100.0f;
+				}
+				if (dist >= 238)
+				{
+					jumpstating::JumpInfo = "\x09 " + js.JumpType + distanceStr + " units \x08| \x09" + std::to_string(js.strafes) + "\x08 strafe | \x09" + std::to_string(js.pre) + "\x08 pre | \x09" + std::to_string(js.max) + "\x08 max | \x09" + HeightStr + "\x08 height | \x09" + std::to_string(syncPercentage) + "\x08 sync";
 
-            //Reset both counters used for calculating sync
-            ticksInAir = 0;
-            ticksSynced = 0;
-        }
-        else if (!onground && !onladder) {
-            if (jumpbugged) {
-                if (old_origin.not_null())
-                    start_pos = old_origin;
-                pre = old_vel;
-                jumps = 1;
-                is_jb = true;
-                jumpbugged = false;
-            }
-            //check for strafes
-            if (cmd->mouse_dx != 0 && cmd->side_move != 0.0f) {
-                if (cmd->mouse_dx > 0 && lastmouse_dx <= 0.0f && cmd->side_move > 0.0f) {
-                    strafes++;
-                }
-                if (cmd->mouse_dx < 0 && lastmouse_dx >= 0.0f && cmd->side_move < 0.0f) {
-                    strafes++;
-                }
-            }
+				}
+				if (dist >= 240)
+				{
+					jumpstating::JumpInfo = "\x0D " + js.JumpType + distanceStr + " units \x08| \x0D" + std::to_string(js.strafes) + "\x08 strafe | \x0D" + std::to_string(js.pre) + "\x08 pre | \x0D" + std::to_string(js.max) + "\x08 max | \x0D" + HeightStr + "\x08 height | \x0D" + std::to_string(syncPercentage) + "\x08 sync";
 
-            //if we gain velocity, we gain more sync
-            if (old_vel != 0.0f) {
-                float deltaSpeed = velocity - old_vel;
-                bool gained = deltaSpeed > 0.000001f;
-                bool lost = deltaSpeed < -0.000001f;
-                if (gained)
-                {
-                    ticksSynced++;
-                }
-            }
+				}
+			}
+			if (js.JumpType == "MBH: ")
+			{
+				if (dist < 235)
+				{
+					jumpstating::JumpInfo = "\x08 " + js.JumpType + distanceStr + " units | " + std::to_string(js.strafes) + " strafe | " + std::to_string(js.pre) + " pre | " + std::to_string(js.max) + " max | " + HeightStr + " height | " + std::to_string(syncPercentage) + " sync";
+				}
+				if (dist >= 235)
+				{
+					jumpstating::JumpInfo = "\x0C " + js.JumpType + distanceStr + " units \x08| \x0C" + std::to_string(js.strafes) + "\x08 strafe | \x0C" + std::to_string(js.pre) + "\x08 pre | \x0C" + std::to_string(js.max) + "\x08 max | \x0C" + HeightStr + "\x08 height | \x0C" + std::to_string(syncPercentage) + "\x08 sync";
 
-            //get max height and max velocity
-            max_height = max(fabsf(start_pos.z - origin.z), max_height);
-            max_vel = max(velocity, max_vel);
+				}
+				if (dist >= 237)
+				{
+					jumpstating::JumpInfo = "\x04 " + js.JumpType + distanceStr + " units \x08| \x04" + std::to_string(js.strafes) + "\x08 strafe | \x04" + std::to_string(js.pre) + "\x08 pre | \x04" + std::to_string(js.max) + "\x08 max | \x04" + HeightStr + "\x08 height | \x04" + std::to_string(syncPercentage) + "\x08 sync";
 
-            ticksInAir++; //we are in air
-            sync = 0; //we dont calculate sync yet
-        }
+				}
+				if (dist >= 242)
+				{
+					jumpstating::JumpInfo = "\x02 " + js.JumpType + distanceStr + " units \x08| \x02" + std::to_string(js.strafes) + "\x08 strafe | \x02" + std::to_string(js.pre) + "\x08 pre | \x02" + std::to_string(js.max) + "\x08 max | \x02" + HeightStr + "\x08 height | \x02" + std::to_string(syncPercentage) + "\x08 sync";
 
-        lastmouse_dx = cmd->mouse_dx;
-        lastonground = onground;
-        lastbuttons = cmd->buttons;
-        old_vel = velocity;
-        old_origin = origin;
-        jumpped = jumping;
-        has_jumped = false;
+				}
+				if (dist >= 245)
+				{
+					jumpstating::JumpInfo = "\x09 " + js.JumpType + distanceStr + " units \x08| \x09" + std::to_string(js.strafes) + "\x08 strafe | \x09" + std::to_string(js.pre) + "\x08 pre | \x09" + std::to_string(js.max) + "\x08 max | \x09" + HeightStr + "\x08 height | \x09" + std::to_string(syncPercentage) + "\x08 sync";
 
-        if (show())
-            resetStats();
+				}
+				if (dist >= 247)
+				{
+					jumpstating::JumpInfo = "\x0D " + js.JumpType + distanceStr + " units \x08| \x0D" + std::to_string(js.strafes) + "\x08 strafe | \x0D" + std::to_string(js.pre) + "\x08 pre | \x0D" + std::to_string(js.max) + "\x08 max | \x0D" + HeightStr + "\x08 height | \x0D" + std::to_string(syncPercentage) + "\x08 sync";
 
-        if (onground && !onladder) {
-            is_jb = false;
-        }
-        is_ladderjump = false;
-    }
+				}
+			}
+			if (js.JumpType == "JB: ")
+			{
+				if (dist < 250)
+				{
+					jumpstating::JumpInfo = "\x08 " + js.JumpType + distanceStr + " units | " + std::to_string(js.strafes) + " strafe | " + std::to_string(js.pre) + " pre | " + std::to_string(js.max) + " max | " + HeightStr + " height | " + std::to_string(syncPercentage) + " sync";
+				}
+				if (dist >= 250)
+				{
+					jumpstating::JumpInfo = "\x0C " + js.JumpType + distanceStr + " units \x08| \x0C" + std::to_string(js.strafes) + "\x08 strafe | \x0C" + std::to_string(js.pre) + "\x08 pre | \x0C" + std::to_string(js.max) + "\x08 max | \x0C" + HeightStr + "\x08 height | \x0C" + std::to_string(syncPercentage) + "\x08 sync";
 
-    //last values
-    short lastmouse_dx = 0;
-    bool lastonground = false;
-    int lastbuttons = 0;
-    float old_vel = 0.0f;
-    bool jumpped = false ;
-    vec3_t old_origin;
-    vec3_t start_pos;
+				}
+				if (dist >= 255)
+				{
+					jumpstating::JumpInfo = "\x04 " + js.JumpType + distanceStr + " units \x08| \x04" + std::to_string(js.strafes) + "\x08 strafe | \x04" + std::to_string(js.pre) + "\x08 pre | \x04" + std::to_string(js.max) + "\x08 max | \x04" + HeightStr + "\x08 height | \x04" + std::to_string(syncPercentage) + "\x08 sync";
 
-    //current values
-    float velocity = 0.0f;
-    bool onladder = false;
-    bool onground = false;
-    bool jumping = false;
-    bool jumpbugged = false;
-    bool is_jb = false;
-    bool has_jumped = false;
-    bool startedOnLadder = false;
-    bool is_ladderjump = false;
-    bool should_show = false;
-    int jumps = 0;
-    vec3_t origin;
-    vec3_t landing_pos;
-    int ticksInAir = 0;
-    int ticksSynced = 0;
+				}
+				if (dist >= 260)
+				{
+					jumpstating::JumpInfo = "\x02 " + js.JumpType + distanceStr + " units \x08| \x02" + std::to_string(js.strafes) + "\x08 strafe | \x02" + std::to_string(js.pre) + "\x08 pre | \x02" + std::to_string(js.max) + "\x08 max | \x02" + HeightStr + "\x08 height | \x02" + std::to_string(syncPercentage) + "\x08 sync";
 
-    //final values
-    float units = 0.0f;
-    int strafes = 0;
-    float pre = 0.0f;
-    float max_vel = 0.0f;
-    float max_height = 0.0f;
-    int bhops = 0;
-    float sync = 0.0f;
-} jump_stats_cals;
+				}
+				if (dist >= 265)
+				{
+					jumpstating::JumpInfo = "\x09 " + js.JumpType + distanceStr + " units \x08| \x09" + std::to_string(js.strafes) + "\x08 strafe | \x09" + std::to_string(js.pre) + "\x08 pre | \x09" + std::to_string(js.max) + "\x08 max | \x09" + HeightStr + "\x08 height | \x09" + std::to_string(syncPercentage) + "\x08 sync";
 
-void features::misc::jumpstats::gotjump() {
-    jump_stats_cals.has_jumped = true;
-}
+				}
+				if (dist >= 268)
+				{
+					jumpstating::JumpInfo = "\x0D " + js.JumpType + distanceStr + " units \x08| \x0D" + std::to_string(js.strafes) + "\x08 strafe | \x0D" + std::to_string(js.pre) + "\x08 pre | \x0D" + std::to_string(js.max) + "\x08 max | \x0D" + HeightStr + "\x08 height | \x0D" + std::to_string(syncPercentage) + "\x08 sync";
 
-void features::misc::jumpstats::jumpstats(c_usercmd* cmd) {
-    if (!g::local)
-        return;
+				}
+			}
+			if (js.JumpType == "J: ")
+			{
+				if (dist < 227)
+				{
+					jumpstating::JumpInfo = "\x08 " + js.JumpType + distanceStr + " units | " + std::to_string(js.strafes) + " strafe | " + std::to_string(js.pre) + " pre | " + std::to_string(js.max) + " max | " + HeightStr + " height | " + std::to_string(syncPercentage) + " sync";
+				}
+				if (dist >= 227)
+				{
+					jumpstating::JumpInfo = "\x0C " + js.JumpType + distanceStr + " units \x08| \x0C" + std::to_string(js.strafes) + "\x08 strafe | \x0C" + std::to_string(js.pre) + "\x08 pre | \x0C" + std::to_string(js.max) + "\x08 max | \x0C" + HeightStr + "\x08 height | \x0C" + std::to_string(syncPercentage) + "\x08 sync";
 
-    if (!g::local->is_alive()) {
-        jump_stats_cals = {};
-        return;
-    }
+				}
+				if (dist >= 232)
+				{
+					jumpstating::JumpInfo = "\x04 " + js.JumpType + distanceStr + " units \x08| \x04" + std::to_string(js.strafes) + "\x08 strafe | \x04" + std::to_string(js.pre) + "\x08 pre | \x04" + std::to_string(js.max) + "\x08 max | \x04" + HeightStr + "\x08 height | \x04" + std::to_string(syncPercentage) + "\x08 sync";
 
-    static bool once = true;
-    if (g::local->flags() & (fl_atcontrols)) {
-        if (once) {
-            jump_stats_cals = {};
-            once = false;
-        }
-        return;
-    }
+				}
+				if (dist >= 237)
+				{
+					jumpstating::JumpInfo = "\x02 " + js.JumpType + distanceStr + " units \x08| \x02" + std::to_string(js.strafes) + "\x08 strafe | \x02" + std::to_string(js.pre) + "\x08 pre | \x02" + std::to_string(js.max) + "\x08 max | \x02" + HeightStr + "\x08 height | \x02" + std::to_string(syncPercentage) + "\x08 sync";
 
-    jump_stats_cals.run(cmd);
+				}
+				if (dist >= 241)
+				{
+					jumpstating::JumpInfo = "\x09 " + js.JumpType + distanceStr + " units \x08| \x09" + std::to_string(js.strafes) + "\x08 strafe | \x09" + std::to_string(js.pre) + "\x08 pre | \x09" + std::to_string(js.max) + "\x08 max | \x09" + HeightStr + "\x08 height | \x09" + std::to_string(syncPercentage) + "\x08 sync";
 
-    once = true;
-}
+				}
+				if (dist >= 243)
+				{
+					jumpstating::JumpInfo = "\x0D " + js.JumpType + distanceStr + " units \x08| \x0D" + std::to_string(js.strafes) + "\x08 strafe | \x0D" + std::to_string(js.pre) + "\x08 pre | \x0D" + std::to_string(js.max) + "\x08 max | \x0D" + HeightStr + "\x08 height | \x0D" + std::to_string(syncPercentage) + "\x08 sync";
 
-void features::misc::jumpstats::resetjumpstats() {
-    jump_stats_cals = jumpstats_calculations{};
+				}
+			}
+			if (js.JumpType == "MJ: ")
+			{
+				if (dist < 220)
+				{
+					jumpstating::JumpInfo = "\x08 " + js.JumpType + distanceStr + " units | " + std::to_string(js.strafes) + " strafe | " + std::to_string(js.pre) + " pre | " + std::to_string(js.max) + " max | " + HeightStr + " height | " + std::to_string(syncPercentage) + " sync";
+				}
+				if (dist >= 220)
+				{
+					jumpstating::JumpInfo = "\x0C " + js.JumpType + distanceStr + " units \x08| \x0C" + std::to_string(js.strafes) + "\x08 strafe | \x0C" + std::to_string(js.pre) + "\x08 pre | \x0C" + std::to_string(js.max) + "\x08 max | \x0C" + HeightStr + "\x08 height | \x0C" + std::to_string(syncPercentage) + "\x08 sync";
+
+				}
+				if (dist >= 225)
+				{
+					jumpstating::JumpInfo = "\x04 " + js.JumpType + distanceStr + " units \x08| \x04" + std::to_string(js.strafes) + "\x08 strafe | \x04" + std::to_string(js.pre) + "\x08 pre | \x04" + std::to_string(js.max) + "\x08 max | \x04" + HeightStr + "\x08 height | \x04" + std::to_string(syncPercentage) + "\x08 sync";
+
+				}
+				if (dist >= 230)
+				{
+					jumpstating::JumpInfo = "\x02 " + js.JumpType + distanceStr + " units \x08| \x02" + std::to_string(js.strafes) + "\x08 strafe | \x02" + std::to_string(js.pre) + "\x08 pre | \x02" + std::to_string(js.max) + "\x08 max | \x02" + HeightStr + "\x08 height | \x02" + std::to_string(syncPercentage) + "\x08 sync";
+
+				}
+				if (dist >= 234)
+				{
+					jumpstating::JumpInfo = "\x09 " + js.JumpType + distanceStr + " units \x08| \x09" + std::to_string(js.strafes) + "\x08 strafe | \x09" + std::to_string(js.pre) + "\x08 pre | \x09" + std::to_string(js.max) + "\x08 max | \x09" + HeightStr + "\x08 height | \x09" + std::to_string(syncPercentage) + "\x08 sync";
+
+				}
+				if (dist >= 236)
+				{
+					jumpstating::JumpInfo = "\x0D " + js.JumpType + distanceStr + " units \x08| \x0D" + std::to_string(js.strafes) + "\x08 strafe | \x0D" + std::to_string(js.pre) + "\x08 pre | \x0D" + std::to_string(js.max) + "\x08 max | \x0D" + HeightStr + "\x08 height | \x0D" + std::to_string(syncPercentage) + "\x08 sync";
+
+				}
+			}
+
+			//recode it if u want idc :D
+			if (dist < 280.f && dist > 220.f && !c::misc::jumpstats_show_fail)
+				interfaces::chat_element->chatprintf("#delusional#_jumpstats");
+			else if (dist < 280.f && dist > 150.f && c::misc::jumpstats_show_fail)
+				interfaces::chat_element->chatprintf("#delusional#_jumpstats");
+		}
+		OnLand = false;
+	}
+
 }

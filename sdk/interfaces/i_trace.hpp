@@ -346,4 +346,5 @@ public:
 	virtual void suspend_occlusion_tests() = 0;
 	virtual void resume_occlusion_tests() = 0;
 	virtual void flush_occlusion_queries() = 0;
+	virtual void ClipRayToEntity(const ray_t& ray, unsigned int mask, player_t* pEnt, trace_t* pTrace) = 0;
 };

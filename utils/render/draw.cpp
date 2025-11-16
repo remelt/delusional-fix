@@ -136,6 +136,11 @@ void imgui_render::setup(IDirect3DDevice9* device) {
 	menu::switch_font_cfg(assist_flag, c::fonts::assist_font_flag);
 	fonts::assist_font = io.Fonts->AddFontFromFileTTF(fonts::font_directory_assist_font.c_str(), 12, &assist_flag, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
+	//recorder
+	ImFontConfig recorder_flag;
+	menu::switch_font_cfg(recorder_flag, c::fonts::recorder_font_flag);
+	fonts::recorder_font = io.Fonts->AddFontFromFileTTF(fonts::font_directory_recorder.c_str(), 12, &assist_flag, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
+
 	//lb player
 	ImFontConfig lb_player_flag;
 	menu::switch_font_cfg(lb_player_flag, c::fonts::lb_player_font_flag);
@@ -246,6 +251,10 @@ void imgui_render::drawcircle(const float x, const float y, const float radius, 
 	m_draw_data.emplace_back(std::make_unique<drawing::Circle>(ImVec2{ x, y }, radius, points, color_t::U32(color), thickness));
 }
 
+void imgui_render::drawtriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const color_t& color, const float thickness) {
+	m_draw_data.emplace_back(std::make_unique<drawing::Triangle>(p1, p2, p3, color_t::U32(color), thickness));
+}
+
 void imgui_render::drawtrianglefilled(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const color_t& color) {
 	m_draw_data.emplace_back(std::make_unique<drawing::TriangleFilled>(p1, p2, p3, color_t::U32(color)));
 }
@@ -281,23 +290,72 @@ ImVec2 imgui_render::measure_text(std::string_view text, ImFont* font, float fon
 	return { (float)text_size.x, (float)text_size.y };
 }
 
-void imgui_render::circle_filled_3d(const vec3_t& origin, float radius, const color_t& color) {
-	std::vector< vec3_t > Points3D;
-	float step = static_cast<float>(std::numbers::pi) * 2.0f / 256;
+//void imgui_render::circle_3d(const vec3_t& origin, float radius, const color_t& color, const float thickness) {
+//	std::vector< vec3_t > Points3D;
+//	float step = static_cast<float>(std::numbers::pi) * 2.0f / 256;
+//
+//	for (float a = 0; a < (std::numbers::pi * 2.0f); a += step) {
+//		vec3_t start(radius * cosf(a) + origin.x, radius * sinf(a) + origin.y, origin.z);
+//		vec3_t end(radius * cosf(a + step) + origin.x, radius * sinf(a + step) + origin.y, origin.z);
+//
+//		ImVec2 out, out1, pos3d;
+//
+//		if (world_to_screen(end, &out1) && world_to_screen(start, &out)) {
+//			if (world_to_screen(origin, &pos3d)) {
+//				im_render.drawtriangle(out, out1, pos3d, color, thickness);
+//			}
+//		}
+//	}
+//}
+//
+//void imgui_render::circle_filled_3d(const vec3_t& origin, float radius, const color_t& color) {
+//	std::vector< vec3_t > Points3D;
+//	float step = static_cast<float>(std::numbers::pi) * 2.0f / 256;
+//
+//	for (float a = 0; a < (std::numbers::pi * 2.0f); a += step) {
+//		vec3_t start(radius * cosf(a) + origin.x, radius * sinf(a) + origin.y, origin.z);
+//		vec3_t end(radius * cosf(a + step) + origin.x, radius * sinf(a + step) + origin.y, origin.z);
+//
+//		ImVec2 out, out1, pos3d;
+//
+//		if (world_to_screen(end, &out1) && world_to_screen(start, &out)) {
+//			if (world_to_screen(origin, &pos3d)) {
+//				im_render.drawtrianglefilled(out, out1, pos3d, color);
+//			}
+//		}
+//	}
+//}
 
-	for (float a = 0; a < (std::numbers::pi * 2.0f); a += step) {
-		vec3_t start(radius * cosf(a) + origin.x, radius * sinf(a) + origin.y, origin.z);
-		vec3_t end(radius * cosf(a + step) + origin.x, radius * sinf(a + step) + origin.y, origin.z);
+//TODO: UNDERSTAND HOW TO MAKE 3d FILLED CIRCLES CORRECTLY (SHOULD USE POLYLINE AND POLYLINE FILLED IG)
+//K IM DUMB ASL
 
-		ImVec2 out, out1, pos3d;
+void imgui_render::drawcircle_3d(const vec3_t& location, float radius, const color_t& color, const float thickness) {
+	static constexpr float Step = m_pi * 2.0f / 60;
+	std::vector<ImVec2> points;
+	for (float lat = 0.f; lat <= m_pi * 2.0f; lat += Step) {
+		const auto& point3d = vec3_t(sin(lat), cos(lat), 0.f) * radius;
+		vec3_t point2d;
 
-		if (world_to_screen(end, &out1) && world_to_screen(start, &out)) {
-			if (world_to_screen(origin, &pos3d)) {
-				im_render.drawtrianglefilled(out, out1, pos3d, color);
-			}
-		}
+		if (world_to_screen_vec3(location + point3d, point2d))
+			points.push_back(ImVec2(point2d.x, point2d.y));
 	}
-}
+
+	im_render.drawpolyline(points, color, true, thickness);
+};
+
+void imgui_render::drawcirclefilled_3d(const vec3_t& location, float radius, const color_t& color) {
+	static constexpr float Step = m_pi * 2.0f / 60;
+	std::vector<ImVec2> points;
+	for (float lat = 0.f; lat <= m_pi * 2.0f; lat += Step) {
+		const auto& point3d = vec3_t(sin(lat), cos(lat), 0.f) * radius;
+		vec3_t point2d;
+
+		if (world_to_screen_vec3(location + point3d, point2d))
+			points.push_back(ImVec2(point2d.x, point2d.y));
+	}
+
+	im_render.drawpolygon(points, color);
+};
 
 bool imgui_render::world_to_screen(const vec3_t& origin, ImVec2* screen) {
 	const view_matrix_t& world_to_screen_matrix = interfaces::engine->world_to_screen_matrix();
@@ -320,6 +378,16 @@ bool imgui_render::world_to_screen(const vec3_t& origin, ImVec2* screen) {
 	return true;
 }
 
+bool imgui_render::world_to_screen_vec3(const vec3_t& in, vec3_t& out) {
+	const auto result = math::screen_transform(in, out);
+	int w, h;
+	interfaces::engine->get_screen_size(w, h);
+
+	out.x = (w / 2.0f) + (out.x * w) / 2.0f;
+	out.y = (h / 2.0f) - (out.y * h) / 2.0f;
+
+	return result;
+}
 
 void imgui_render::render_present(ImDrawList* draw) {
 	std::unique_lock<std::shared_mutex> lock{ m_mutex };
@@ -382,6 +450,7 @@ void fonts::reset_fonts( ) {
 	c::fonts::watermark_font = 0;
 	c::fonts::assist_font = 0;
 	c::fonts::lb_player_font = 0;
+	c::fonts::recorder_font = 0;
 
 	//reset size
 	c::fonts::indi_size = 28;
@@ -391,6 +460,7 @@ void fonts::reset_fonts( ) {
 	c::fonts::esp_hp_size = 12;
 	c::fonts::esp_wpn_size = 12;
 	c::fonts::esp_dropped_wpn_size = 12;
+	c::fonts::recorder_size = 12;
 }
 
 void imgui_render::clear_textures() {

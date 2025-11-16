@@ -8,9 +8,10 @@
 #include "../../features/movement/prediction/prediction.hpp"
 #include "../../features/movement/lobotomy_eb.h"
 
-void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
+void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify(int stage) {
 
 	lobotomy_eb::frame_stage(stage);
+	recorder->frame_stage(stage);
 
 	if (stage == frame_render_start) {
 		features::misc::force_crosshair();
@@ -21,13 +22,14 @@ void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
 		features::visuals::apply_zoom();
 		backtrack.setup_records();
 		features::visuals::console();
+		features::visuals::shadows();
 	}
 	else if (stage == frame_render_end) {
 		features::visuals::fog();
 	}
 	else if (stage == frame_net_update_postdataupdate_start) {
-		features::skins::agent_changer( );
-		features::skins::knife_changer( );
+		features::skins::agent_changer();
+		features::skins::knife_changer();
 		features::skins::gloves_changer();
 		features::skins::full_update();
 	}
@@ -38,10 +40,10 @@ void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
 		if (features::movement::detect_data.ticks_left && features::movement::detect_data.strafing) {
 			vec3_t edgebugva = vec3_t{ features::movement::first_viewangles.x, features::movement::detect_data.startingyaw , features::movement::first_viewangles.z };
 
-			float to_eb_time = ticks_to_time(features::movement::detect_data.edgebugtick) - ticks_to_time(features::movement::detect_data.detecttick); 
+			float to_eb_time = ticks_to_time(features::movement::detect_data.edgebugtick) - ticks_to_time(features::movement::detect_data.detecttick);
 			float from_detect_time = interfaces::globals->cur_time - ticks_to_time(features::movement::detect_data.detecttick);
 
-			float addedyaw = math::normalize_yaw(features::movement::detect_data.yawdelta * (features::movement::detect_data.eblength * (from_detect_time / to_eb_time))); 
+			float addedyaw = math::normalize_yaw(features::movement::detect_data.yawdelta * (features::movement::detect_data.eblength * (from_detect_time / to_eb_time)));
 			edgebugva.y += addedyaw;
 
 			//CHILLWARE EXPLOIT
@@ -57,5 +59,5 @@ void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify( int stage ) {
 		return ofunc(interfaces::client, stage);
 	}
 
-	ofunc( interfaces::client, stage );
+	ofunc(interfaces::client, stage);
 }

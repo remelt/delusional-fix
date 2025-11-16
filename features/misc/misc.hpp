@@ -74,8 +74,6 @@ namespace features::misc {
 
 	namespace jumpstats {
 		void jumpstats(c_usercmd* cmd);
-		void resetjumpstats();
-		void gotjump();
 	}
 
 }

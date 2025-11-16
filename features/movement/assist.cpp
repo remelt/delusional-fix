@@ -83,7 +83,7 @@ public:
 
 		ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, info.c_str());		// ?????????????????? //ужас
 		float heightPadding = 22.0f;
-		float windowHeight = (infoTextSize.y + heightPadding) / 1080.0f; 
+		float windowHeight = (infoTextSize.y + heightPadding) / 1080.0f;
 
 		AnimatedWindow newWin;
 		newWin.type = type;
@@ -195,57 +195,82 @@ public:
 
 	void Draw(ImDrawList* draw, const ImVec2& displaySize)
 	{
-
 		for (const auto& win : windows) {
 			// Skip fully faded-out windows to prevent flickering
 			if (win.state == FADE_OUT && win.alpha <= 0.0f) {
 				continue;
 			}
+			if (!c::assist::assist_render_style) {
+				ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, win.info.c_str());
+				float widthPadding = 16.0f;
+				float heightPadding = 10.0f;
+				
+				//pos
+				ImVec2 size = ImVec2(infoTextSize.x + widthPadding, infoTextSize.y + heightPadding);
+				ImVec2 pos = ImVec2(displaySize.x * win.currentPosition.x - size.x * 0.5f, displaySize.y * win.currentPosition.y - size.y * 0.5f);
+				ImVec2 textPos = ImVec2(pos.x + (size.x - infoTextSize.x) * 0.5f, pos.y + (size.y - infoTextSize.y) * 0.5f);
 
-			ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, win.info.c_str());
+				//colors
+				int a = static_cast<int>(win.alpha * 255);
+				ImColor bg_color(0.08f, 0.08f, 0.08f, win.alpha);
+				ImColor outline_start_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], win.alpha);
+				ImColor outline_end_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 0.f);
+				ImU32 textColor = IM_COL32(255, 255, 255, a);
 
-			float widthPadding = 18.0f;
-			float heightPadding = 22.0f;
-			ImVec2 size = ImVec2(infoTextSize.x + widthPadding, infoTextSize.y + heightPadding);
+				draw->AddRectFilledMultiColor(pos + ImVec2(-1, -1), pos + ImVec2(0, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
+				draw->AddRectFilled(pos + ImVec2(0, -1), pos + ImVec2(size.x, 0), outline_start_color);
+				draw->AddRectFilledMultiColor(pos + ImVec2(size.x, -1), pos + ImVec2(size.x + 1, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
+				draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_color);
 
-			ImVec2 pos = ImVec2(displaySize.x * win.currentPosition.x - size.x * 0.5f, displaySize.y * win.currentPosition.y - size.y * 0.5f);
-
-			int a = static_cast<int>(win.alpha * 255);
-			ImU32 bgColor = IM_COL32(14, 14, 14, a);
-			ImU32 textColor = IM_COL32(255, 255, 255, a);
-
-			const float cornerRadius = 4.0f;
-
-			draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bgColor, cornerRadius);
-
-			auto accentColor = ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f);		// ?????????????????????????? ImGuiCol_Accent //без мя даж акцент хакнуть не смог XD
-			accentColor.w = win.alpha;
-
-			const float accentHeight = 1.0f;
-
-			float maxWidth = size.x - 4.0f;
-			float margin = 2.0f;
-
-			float currentWidth = maxWidth * (1.0f - EaseInOutCubic(win.accentProgress));
-			if (currentWidth < 0)
-				currentWidth = 0;
-
-			float startX = pos.x + margin;
-
-			if (currentWidth > 0) {
-				float centerX = pos.x + size.x * 0.5f;
-				float halfWidth = currentWidth * 0.5f;
-				float lineY = pos.y + 0.0f;
-
-				draw->AddRectFilled(ImVec2(centerX - halfWidth, lineY), ImVec2(centerX + halfWidth, lineY + accentHeight),
-					ImGui::GetColorU32(accentColor));
+				draw->AddText(fonts::assist_font, 12.f, ImVec2(textPos.x + 1, textPos.y + 1), IM_COL32(0, 0, 0, a / 4), win.info.c_str());
+				draw->AddText(fonts::assist_font, 12.f, textPos, textColor, win.info.c_str());
 			}
+			else {
+				ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, win.info.c_str());
 
-			ImVec2 textPos = ImVec2(pos.x + (size.x - infoTextSize.x) * 0.5f, pos.y + (size.y - infoTextSize.y) * 0.5f);
+				float widthPadding = 18.0f;
+				float heightPadding = 18.0f;
+				ImVec2 size = ImVec2(infoTextSize.x + widthPadding, infoTextSize.y + heightPadding);
 
-			draw->AddText(fonts::assist_font, 12.f, ImVec2(textPos.x + 1, textPos.y + 1), IM_COL32(0, 0, 0, a / 4), win.info.c_str());
+				ImVec2 pos = ImVec2(displaySize.x * win.currentPosition.x - size.x * 0.5f, displaySize.y * win.currentPosition.y - size.y * 0.5f);
 
-			draw->AddText(fonts::assist_font, 12.f, textPos, textColor, win.info.c_str());
+				int a = static_cast<int>(win.alpha * 255);
+				ImU32 bgColor = IM_COL32(14, 14, 14, a);
+				ImU32 textColor = IM_COL32(255, 255, 255, a);
+
+				const float cornerRadius = 4.0f;
+
+				draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bgColor, cornerRadius);
+
+				auto accentColor = ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f);		// ?????????????????????????? ImGuiCol_Accent //без мя даж акцент хакнуть не смог XD
+				accentColor.w = win.alpha;
+
+				const float accentHeight = 1.0f;
+
+				float maxWidth = size.x - 4.0f;
+				float margin = 2.0f;
+
+				float currentWidth = maxWidth * (1.0f - EaseInOutCubic(win.accentProgress));
+				if (currentWidth < 0)
+					currentWidth = 0;
+
+				float startX = pos.x + margin;
+
+				if (currentWidth > 0) {
+					float centerX = pos.x + size.x * 0.5f;
+					float halfWidth = currentWidth * 0.5f;
+					float lineY = pos.y + 0.0f;
+
+					draw->AddRectFilled(ImVec2(centerX - halfWidth, lineY), ImVec2(centerX + halfWidth, lineY + accentHeight),
+						ImGui::GetColorU32(accentColor));
+				}
+
+				ImVec2 textPos = ImVec2(pos.x + (size.x - infoTextSize.x) * 0.5f, pos.y + (size.y - infoTextSize.y) * 0.5f);
+
+				draw->AddText(fonts::assist_font, 12.f, ImVec2(textPos.x + 1, textPos.y + 1), IM_COL32(0, 0, 0, a / 4), win.info.c_str());
+
+				draw->AddText(fonts::assist_font, 12.f, textPos, textColor, win.info.c_str());
+			}
 		}
 	}
 
@@ -349,7 +374,7 @@ void Pixelsurf_points(std::vector< vec3_t >& Points)
 		}
 		ap.current_size += (target_size - ap.current_size) * (1.f - std::exp(-size_animation_speed * delta_time));
 	}
-	animated_pixelsurf_points.erase(std::remove_if(animated_pixelsurf_points.begin(), animated_pixelsurf_points.end(),[](const AnimatedPoint& ap) { return ap.is_removing && ap.animation_progress <= 0.f; }), animated_pixelsurf_points.end());
+	animated_pixelsurf_points.erase(std::remove_if(animated_pixelsurf_points.begin(), animated_pixelsurf_points.end(), [](const AnimatedPoint& ap) { return ap.is_removing && ap.animation_progress <= 0.f; }), animated_pixelsurf_points.end());
 
 	static int stop = 0;
 	bool point_selected = false;
@@ -359,7 +384,7 @@ void Pixelsurf_points(std::vector< vec3_t >& Points)
 			bool in_crosshair = InCrosshair(screenPos.x, screenPos.y, 9.f);
 			m_assist_t.in_crosshair = in_crosshair;
 
-			
+
 			float filled_alpha = ap.animation_progress * 100.f;
 			float outline_alpha = ap.animation_progress * 255.f;
 
@@ -478,7 +503,7 @@ void Bounce_points(std::vector< vec3_t >& Points)
 				if (menu::open)
 					return;
 				if (stop < GetTickCount64()) {
-					features::movement::m_bounce_points_check.emplace_back(round_pos2(vec3_t(ap.position.x, ap.position.y, ap.position.z + 1.f)),interfaces::engine ->get_level_name());
+					features::movement::m_bounce_points_check.emplace_back(round_pos2(vec3_t(ap.position.x, ap.position.y, ap.position.z + 1.f)), interfaces::engine->get_level_name());
 					bounce_set_point = true;
 					Points.clear();
 					point_selected = true;
@@ -657,14 +682,14 @@ void features::movement::check_ps(c_usercmd* cmd)
 						trace_t trace;
 						trace_filter flt(g::local);
 						ray_t ray;
-						ray.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f),vec3_t(g::local->origin().x, g::local->origin().y,g::local->origin().z - 1000.f));
+						ray.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f), vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z - 1000.f));
 
 						interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &flt, &trace);
 						vec3_t down_point = trace.end;
 						trace_t trace2;
 						trace_filter flt2(g::local);
 						ray_t ray2;
-						ray2.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f), vec3_t(g::local->origin().x, g::local->origin().y,g::local->origin().z + 1000.f));
+						ray2.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f), vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 1000.f));
 
 						interfaces::trace_ray->trace_ray(ray2, MASK_PLAYERSOLID, &flt2, &trace2);
 						vec3_t upper_point = trace2.end;
@@ -741,185 +766,185 @@ void features::movement::check_ps(c_usercmd* cmd)
 				}
 				if (done_and_break)
 					break;
-				}
-				cmd->buttons = buttons;
-				cmd->forward_move = ForwardMove;
+			}
+			cmd->buttons = buttons;
+			cmd->forward_move = ForwardMove;
 
-				prediction::restore_ent_to_predicted_frame(PredictionFrames);
-				Lerp = 0.f;
-				for (int i = 0; i < 10000; i++)
-				{
-					float align = 15.97803f;
+			prediction::restore_ent_to_predicted_frame(PredictionFrames);
+			Lerp = 0.f;
+			for (int i = 0; i < 10000; i++)
+			{
+				float align = 15.97803f;
 
-					cmd->buttons |= in_jump;
-					cmd->buttons |= in_duck;
+				cmd->buttons |= in_jump;
+				cmd->buttons |= in_duck;
 
-					vec3_t Angles{ WallNormal.x * -1.f, WallNormal.y * -1.f, 0.f };
-					vec3_t to_wall = Angles.to_angle();
-					float rotation = deg2rad(to_wall.y - cmd->view_angles.y);
-					float cos_rot = cos(rotation);
-					float sin_rot = sin(rotation);
-					float forwardmove = cos_rot * 10.f;
-					float sidemove = -sin_rot * 10.f;
-					cmd->forward_move = forwardmove;
-					cmd->side_move = sidemove;
+				vec3_t Angles{ WallNormal.x * -1.f, WallNormal.y * -1.f, 0.f };
+				vec3_t to_wall = Angles.to_angle();
+				float rotation = deg2rad(to_wall.y - cmd->view_angles.y);
+				float cos_rot = cos(rotation);
+				float sin_rot = sin(rotation);
+				float forwardmove = cos_rot * 10.f;
+				float sidemove = -sin_rot * 10.f;
+				cmd->forward_move = forwardmove;
+				cmd->side_move = sidemove;
 
-					if (g::local->get_velocity().z < 0) {
-						static float Height = 0.f;
-						if (StartPos.z > EndPos.z) {
-							if (StartPos.z < 0.f)
-								Height = (int)StartPos.z - 0.972092f - Lerp;
-							else
-								Height = (int)StartPos.z + 0.0287018f - Lerp;
-						}
-						else {
-							if (EndPos.z < 0.f)
-								Height = (int)EndPos.z - 0.972092f - Lerp;
-							else
-								Height = (int)EndPos.z + 0.0287018f - Lerp;
-						}
-						int maxLerp;
-						if (StartPos.z > EndPos.z) {
-							maxLerp = StartPos.z - EndPos.z;
-						}
-						else {
-							maxLerp = EndPos.z - StartPos.z;
-						}
-
-						if (Lerp > maxLerp) {
-							cmd->buttons = buttons;
-							cmd->forward_move = ForwardMove;
-							FirstPoint = false;
-
-							break;
-						}
-						else {
-							Lerp += 1.f;
-						}
-
-						if (WallNormal.x < 0 && WallNormal.y < 0.f) {
-							g::local->origin() = vec3_t(StartPos.x - test_al, StartPos.y - test_al, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x < 0 && WallNormal.y > 0.f) {
-							g::local->origin() = vec3_t(StartPos.x - test_al, StartPos.y + test_al, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x > 0 && WallNormal.y < 0.f) {
-							g::local->origin() = vec3_t(StartPos.x + test_al, StartPos.y - test_al, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x > 0 && WallNormal.y > 0.f) {
-							g::local->origin() = vec3_t(StartPos.x + test_al, StartPos.y + test_al, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x == 0.f && WallNormal.y > 0.f) {
-							g::local->origin() = vec3_t(StartPos.x, StartPos.y + test_al, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x == 0.f && WallNormal.y < 0.f) {
-							g::local->origin() = vec3_t(StartPos.x, StartPos.y - test_al, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x < 0 && WallNormal.y == 0.f) {
-							g::local->origin() = vec3_t(StartPos.x - test_al, StartPos.y, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						else if (WallNormal.x > 0 && WallNormal.y == 0.f) {
-							g::local->origin() = vec3_t(StartPos.x + test_al, StartPos.y, Height);
-							g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
-						}
-						trace_t trace;
-						trace_filter flt(g::local);
-						ray_t ray;
-						ray.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f),vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z - 1000.f));
-
-						interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &flt, &trace);
-						vec3_t down_point = trace.end;
-						trace_t trace2;
-						trace_filter flt2(g::local);
-						ray_t ray2;
-						ray2.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f),vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 1000.f));
-
-						interfaces::trace_ray->trace_ray(ray2, MASK_PLAYERSOLID, &flt2, &trace2);
-						vec3_t upper_point = trace2.end;
-
-						if (g::local->origin().z + 1.f < down_point.z)
-							continue;
-						if (g::local->origin().z + 1.f > upper_point.z)
-							continue;
+				if (g::local->get_velocity().z < 0) {
+					static float Height = 0.f;
+					if (StartPos.z > EndPos.z) {
+						if (StartPos.z < 0.f)
+							Height = (int)StartPos.z - 0.972092f - Lerp;
+						else
+							Height = (int)StartPos.z + 0.0287018f - Lerp;
 					}
-					vec3_t un_pred_velo = g::local->get_velocity();
-
-					prediction::begin(cmd);
-					prediction::end();
-
-					vec3_t pred_velo = g::local->get_velocity();
-					if (g::local->get_velocity().z == targetZvelo) {
-						if (WallNormal.x < 0 && WallNormal.y < 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y + test_al,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x < 0 && WallNormal.y > 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y - test_al,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x > 0 && WallNormal.y < 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x - test_al, g::local->origin().y + test_al,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x > 0 && WallNormal.y > 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x - test_al, g::local->origin().y - test_al,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x == 0.f && WallNormal.y > 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x, g::local->origin().y - test_al,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x == 0.f && WallNormal.y < 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x, g::local->origin().y + test_al,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x < 0 && WallNormal.y == 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
-						else if (WallNormal.x > 0 && WallNormal.y == 0.f) {
-							Points.emplace_back(vec3_t(g::local->origin().x - test_al, g::local->origin().y,
-								g::local->origin().z));
-							to_muchPoints += 1;
-							FirstPoint = false;
-						}
+					else {
+						if (EndPos.z < 0.f)
+							Height = (int)EndPos.z - 0.972092f - Lerp;
+						else
+							Height = (int)EndPos.z + 0.0287018f - Lerp;
 					}
+					int maxLerp;
+					if (StartPos.z > EndPos.z) {
+						maxLerp = StartPos.z - EndPos.z;
+					}
+					else {
+						maxLerp = EndPos.z - StartPos.z;
+					}
+
+					if (Lerp > maxLerp) {
+						cmd->buttons = buttons;
+						cmd->forward_move = ForwardMove;
+						FirstPoint = false;
+
+						break;
+					}
+					else {
+						Lerp += 1.f;
+					}
+
+					if (WallNormal.x < 0 && WallNormal.y < 0.f) {
+						g::local->origin() = vec3_t(StartPos.x - test_al, StartPos.y - test_al, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x < 0 && WallNormal.y > 0.f) {
+						g::local->origin() = vec3_t(StartPos.x - test_al, StartPos.y + test_al, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x > 0 && WallNormal.y < 0.f) {
+						g::local->origin() = vec3_t(StartPos.x + test_al, StartPos.y - test_al, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x > 0 && WallNormal.y > 0.f) {
+						g::local->origin() = vec3_t(StartPos.x + test_al, StartPos.y + test_al, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x == 0.f && WallNormal.y > 0.f) {
+						g::local->origin() = vec3_t(StartPos.x, StartPos.y + test_al, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x == 0.f && WallNormal.y < 0.f) {
+						g::local->origin() = vec3_t(StartPos.x, StartPos.y - test_al, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x < 0 && WallNormal.y == 0.f) {
+						g::local->origin() = vec3_t(StartPos.x - test_al, StartPos.y, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					else if (WallNormal.x > 0 && WallNormal.y == 0.f) {
+						g::local->origin() = vec3_t(StartPos.x + test_al, StartPos.y, Height);
+						g::local->set_abs_origin(vec3_t(StartPos.x, StartPos.y, Height));
+					}
+					trace_t trace;
+					trace_filter flt(g::local);
+					ray_t ray;
+					ray.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f), vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z - 1000.f));
+
+					interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &flt, &trace);
+					vec3_t down_point = trace.end;
+					trace_t trace2;
+					trace_filter flt2(g::local);
+					ray_t ray2;
+					ray2.initialize(vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 54.f), vec3_t(g::local->origin().x, g::local->origin().y, g::local->origin().z + 1000.f));
+
+					interfaces::trace_ray->trace_ray(ray2, MASK_PLAYERSOLID, &flt2, &trace2);
+					vec3_t upper_point = trace2.end;
+
+					if (g::local->origin().z + 1.f < down_point.z)
+						continue;
+					if (g::local->origin().z + 1.f > upper_point.z)
+						continue;
 				}
-				cmd->buttons = buttons;
-				cmd->forward_move = ForwardMove;
-				FirstPoint = false;
-				if (Points.size() > 0) {
-					for (int i = 0; i < Points.size() - 1; ) {
-						if ((int)Points[i].z - (int)Points[i + 1].z == 1) {
-							Points.erase(Points.begin() + i);
-						}
-						else {
-							++i;
-						}
+				vec3_t un_pred_velo = g::local->get_velocity();
+
+				prediction::begin(cmd);
+				prediction::end();
+
+				vec3_t pred_velo = g::local->get_velocity();
+				if (g::local->get_velocity().z == targetZvelo) {
+					if (WallNormal.x < 0 && WallNormal.y < 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y + test_al,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x < 0 && WallNormal.y > 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y - test_al,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x > 0 && WallNormal.y < 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x - test_al, g::local->origin().y + test_al,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x > 0 && WallNormal.y > 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x - test_al, g::local->origin().y - test_al,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x == 0.f && WallNormal.y > 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x, g::local->origin().y - test_al,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x == 0.f && WallNormal.y < 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x, g::local->origin().y + test_al,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x < 0 && WallNormal.y == 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
+					}
+					else if (WallNormal.x > 0 && WallNormal.y == 0.f) {
+						Points.emplace_back(vec3_t(g::local->origin().x - test_al, g::local->origin().y,
+							g::local->origin().z));
+						to_muchPoints += 1;
+						FirstPoint = false;
 					}
 				}
 			}
+			cmd->buttons = buttons;
+			cmd->forward_move = ForwardMove;
+			FirstPoint = false;
+			if (Points.size() > 0) {
+				for (int i = 0; i < Points.size() - 1; ) {
+					if ((int)Points[i].z - (int)Points[i + 1].z == 1) {
+						Points.erase(Points.begin() + i);
+					}
+					else {
+						++i;
+					}
+				}
+			}
+		}
 	}
 	else {
 		if (GImGui == nullptr)
@@ -931,7 +956,7 @@ void features::movement::check_ps(c_usercmd* cmd)
 			if (!StartPos.is_zero() && !EndPos.is_zero()) {
 				ImVec2 start2D, end2D;
 				if (im_render.world_to_screen(StartPos, &start2D) && im_render.world_to_screen(EndPos, &end2D)) {
-					im_render.drawline(start2D.x, start2D.y, end2D.x, end2D.y, color_t(200, 215, 215, 255/1.25), 1.5f);
+					im_render.drawline(start2D.x, start2D.y, end2D.x, end2D.y, color_t(200, 215, 215, 255 / 1.25), 1.5f);
 				}
 			}
 		}
@@ -2071,9 +2096,9 @@ void features::movement::bounce_assist(c_usercmd* cmd)
 			cmd->buttons = BackupButtons;
 			cmd->forward_move = ForwaMove;
 			cmd->side_move = SideMove;
-		//restoring twice? why?
-		//prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
-		prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
+			//restoring twice? why?
+			//prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
+			prediction::restore_ent_to_predicted_frame(BackupPredicted - 1);
 			static int TicksOut = 0;
 
 			if (cmd->tick_count > ticks) {
@@ -2414,11 +2439,10 @@ void RenderPoints(std::vector< features::movement::points_check_t >& points, con
 			}
 			else {
 				point.open_settings = false;
-				features::movement::m_opened = false;
 			}
 
 			im_render.drawcirclefilled(screenPos.x, screenPos.y, effectiveRadius, 32, fillColor);
-			
+
 			//outline circle which looks 1000 times better
 			im_render.drawcircle(screenPos.x, screenPos.y, effectiveRadius, 32, outlineColor, outlineThickness);
 
@@ -2524,6 +2548,16 @@ void RenderPoints(std::vector< features::movement::points_check_t >& points, con
 				break;
 			}
 		}
+		bool omaga = false;
+		for (const auto& point : points) {
+			if (point.map == currentMap && point.open_settings) {
+				omaga = true;
+				break;
+			}
+		}
+		if (!omaga) {
+			features::movement::m_opened = false;
+		}
 	}
 
 	if (c::assist::bounce_assist) {
@@ -2580,7 +2614,6 @@ void RenderPoints(std::vector< features::movement::points_check_t >& points, con
 			}
 			else {
 				point.open_settings = false;
-				features::movement::m_opened = false;
 			}
 
 			float targetScale = isHovered ? 1.5f : 1.0f;
@@ -2693,6 +2726,16 @@ void RenderPoints(std::vector< features::movement::points_check_t >& points, con
 				break;
 			}
 		}
+		bool omaga = false;
+		for (const auto& point : points) {
+			if (point.map == currentMap && point.open_settings) {
+				omaga = true;
+				break;
+			}
+		}
+		if (!omaga) {
+			features::movement::m_opened = false;
+		}
 	}
 }
 
@@ -2785,7 +2828,7 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 		if (!c::assist::assist) {
 			features::movement::m_opened = false;
 		}
-		
+
 		//...
 		if (c::movement::px_selection == 1 && c::movement::pixel_surf) {
 			if (m_pixelsurf_data.should_pixel_surf)
@@ -2793,6 +2836,9 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 			if (g::local->flags() & fl_onground)
 				m_pixelsurf_data.should_pixel_surf = false;
 		}
+	}
+	else {
+		features::movement::m_opened = false;
 	}
 }
 
@@ -2895,7 +2941,7 @@ void features::movement::assist_endscene()
 			features::movement::m_opened = true;
 			int width, height;
 			interfaces::engine->get_screen_size(width, height);
-			ImGui::SetNextWindowPos({ static_cast<float>(width) / 2, static_cast<float>(height) / 2});
+			ImGui::SetNextWindowPos({ static_cast<float>(width) / 2, static_cast<float>(height) / 2 });
 			ImGui::Begin("pixelsurf point settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 			const auto window = ImGui::GetCurrentWindow();
 			constexpr auto background_height = 25.f;

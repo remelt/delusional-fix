@@ -39,11 +39,6 @@ namespace c {
 			std::filesystem::create_directory(directory_path);
 		else
 			update_configs();
-
-		directory_path_lua = "C:/delusional/lua";
-		if (!std::filesystem::exists(directory_path_lua))
-			std::filesystem::create_directory(directory_path_lua);
-
 	}
 
 	void update_configs() {
@@ -726,6 +721,10 @@ namespace c {
 		write_value(json[xs("movement")][xs("ump45_wpn_skin_modulation4[2]")], skins::ump45_wpn_skin_modulation4[2]);
 
 		write_value(json[xs("movement")][xs("bhop")], movement::bhop);
+		write_value(json[xs("movement")][xs("auto_duck_collision")], movement::auto_duck_collision);
+		write_value(json[xs("movement")][xs("auto_duck_collision_key")], movement::auto_duck_collision_key);
+		write_value(json[xs("movement")][xs("auto_duck_collision_key_s")], movement::auto_duck_collision_key_s);
+		write_value(json[xs("movement")][xs("auto_duck_collision_ticks")], movement::auto_duck_collision_ticks);
 		write_value(json[xs("movement")][xs("bhopmiss")], movement::bhopmiss);
 		write_value(json[xs("movement")][xs("perfecthops")], movement::whathopmiss);
 		write_value(json[xs("movement")][xs("auto_strafe")], movement::auto_strafe);
@@ -833,6 +832,12 @@ namespace c {
 		write_value(json[xs("movement")][xs("indicators_show[5]")], movement::indicators_show[5]);
 		write_value(json[xs("movement")][xs("indicators_show[6]")], movement::indicators_show[6]);
 		write_value(json[xs("movement")][xs("indicators_show[7]")], movement::indicators_show[7]);
+		write_value(json[xs("movement")][xs("indicators_show[8]")], movement::indicators_show[8]);
+		write_value(json[xs("movement")][xs("indicators_show[9]")], movement::indicators_show[9]);
+		write_value(json[xs("movement")][xs("indicators_show[10]")], movement::indicators_show[10]);
+		write_value(json[xs("movement")][xs("indicators_show[11]")], movement::indicators_show[11]);
+		write_value(json[xs("movement")][xs("indicators_show[12]")], movement::indicators_show[12]);
+		write_value(json[xs("movement")][xs("indicators_show[13]")], movement::indicators_show[13]);
 		write_value(json[xs("movement")][xs("detection_clr_for[0]")], movement::detection_clr_for[0]);
 		write_value(json[xs("movement")][xs("detection_clr_for[1]")], movement::detection_clr_for[1]);
 		write_value(json[xs("movement")][xs("detection_clr_for[2]")], movement::detection_clr_for[2]);
@@ -841,6 +846,12 @@ namespace c {
 		write_value(json[xs("movement")][xs("detection_clr_for[5]")], movement::detection_clr_for[5]);
 		write_value(json[xs("movement")][xs("detection_clr_for[6]")], movement::detection_clr_for[6]);
 		write_value(json[xs("movement")][xs("detection_clr_for[7]")], movement::detection_clr_for[7]);
+		write_value(json[xs("movement")][xs("detection_clr_for[8]")], movement::detection_clr_for[8]);
+		write_value(json[xs("movement")][xs("detection_clr_for[9]")], movement::detection_clr_for[9]);
+		write_value(json[xs("movement")][xs("detection_clr_for[10]")], movement::detection_clr_for[10]);
+		write_value(json[xs("movement")][xs("detection_clr_for[11]")], movement::detection_clr_for[11]);
+		write_value(json[xs("movement")][xs("detection_clr_for[12]")], movement::detection_clr_for[12]);
+		write_value(json[xs("movement")][xs("detection_clr_for[13]")], movement::detection_clr_for[13]);
 		write_value(json[xs("movement")][xs("allow_detection_clr")], movement::allow_detection_clr);
 		write_value(json[xs("movement")][xs("detection_saved_tick")], movement::detection_saved_tick);
 		write_value(json[xs("movement")][xs("indicators_allow_animation")], movement::indicators_allow_animation);
@@ -886,9 +897,16 @@ namespace c {
 		write_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 		write_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
 		write_value(json[xs("misc")][xs("player_type")], misc::player_type);
+		write_value(json[xs("movement")][xs("edgebug_pena")], movement::edgebug_pena);
+		write_value(json[xs("movement")][xs("assist_render_style")], assist::assist_render_style);
+
 		write_value(json[xs("misc")][xs("movement_rec")], misc::movement_rec);
 		write_value(json[xs("misc")][xs("movement_rec_smoothing")], misc::movement_rec_smoothing);
 		write_value(json[xs("misc")][xs("movement_rec_lockva")], misc::movement_rec_lockva);
+		write_value(json[xs("misc")][xs("movement_rec_lockgoingtostart")], misc::movement_rec_lockgoingtostart);
+		write_value(json[xs("misc")][xs("movement_rec_show_line")], misc::movement_rec_show_line);
+		write_value(json[xs("misc")][xs("movement_rec_render")], misc::movement_rec_render);
+		write_value(json[xs("misc")][xs("movement_rec_position")], misc::movement_rec_position);
 		write_value(json[xs("misc")][xs("movement_rec_ringsize")], misc::movement_rec_ringsize);
 		write_value(json[xs("misc")][xs("movement_rec_keystartrecord")], misc::movement_rec_keystartrecord);
 		write_value(json[xs("misc")][xs("movement_rec_keystoprecord")], misc::movement_rec_keystoprecord);
@@ -1010,6 +1028,14 @@ namespace c {
 		write_value(json[xs("visuals")][xs("oof_arrows_size")], visuals::oof_arrows_size);
 		write_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 		write_value(json[xs("visuals")][xs("radar")], visuals::radar);
+
+		write_value(json[xs("visuals")][xs("shadows")], visuals::shadows);
+		write_value(json[xs("visuals")][xs("dynamic_shadows")], visuals::dynamic_shadows);
+		write_value(json[xs("visuals")][xs("shadow_rot_x")], visuals::shadow_rot_x);
+		write_value(json[xs("visuals")][xs("shadow_rot_y")], visuals::shadow_rot_y);
+		write_value(json[xs("visuals")][xs("shadow_rot_z")], visuals::shadow_rot_z);
+		write_value(json[xs("visuals")][xs("shadow_rotation_speed")], visuals::shadow_rotation_speed);
+
 		write_value(json[xs("visuals")][xs("gravity_ragdoll")], visuals::gravity_ragdoll);
 		write_value(json[xs("visuals")][xs("backtrack_chams")], chams::backtrack_chams);
 		write_value(json[xs("visuals")][xs("backtrack_chams_draw_all_ticks")], chams::backtrack_chams_draw_all_ticks);
@@ -2291,6 +2317,10 @@ namespace c {
 			read_value(json[xs("movement")][xs("mini_jump_detection_printf")], movement::mini_jump_detection_printf);			
 			read_value(json[xs("movement")][xs("edge_bug_detection_sound")], movement::edge_bug_detection_sound);
 			read_value(json[xs("movement")][xs("edge_bug_health_boost_effect")], movement::edge_bug_health_boost_effect);
+			read_value(json[xs("movement")][xs("auto_duck_collision")], movement::auto_duck_collision);
+			read_value(json[xs("movement")][xs("auto_duck_collision_key")], movement::auto_duck_collision_key);
+			read_value(json[xs("movement")][xs("auto_duck_collision_key_s")], movement::auto_duck_collision_key_s);
+			read_value(json[xs("movement")][xs("auto_duck_collision_ticks")], movement::auto_duck_collision_ticks);
 
 			read_value(json[xs("movement")][xs("velocity_indicator")], movement::velocity_indicator);
 			read_value(json[xs("movement")][xs("velocity_indicator_position")], movement::velocity_indicator_position);
@@ -2325,6 +2355,12 @@ namespace c {
 			read_value(json[xs("movement")][xs("indicators_show[5]")], movement::indicators_show[5]);
 			read_value(json[xs("movement")][xs("indicators_show[6]")], movement::indicators_show[6]);
 			read_value(json[xs("movement")][xs("indicators_show[7]")], movement::indicators_show[7]);
+			read_value(json[xs("movement")][xs("indicators_show[8]")], movement::indicators_show[8]);
+			read_value(json[xs("movement")][xs("indicators_show[9]")], movement::indicators_show[9]);
+			read_value(json[xs("movement")][xs("indicators_show[10]")], movement::indicators_show[10]);
+			read_value(json[xs("movement")][xs("indicators_show[11]")], movement::indicators_show[11]);
+			read_value(json[xs("movement")][xs("indicators_show[12]")], movement::indicators_show[12]);
+			read_value(json[xs("movement")][xs("indicators_show[13]")], movement::indicators_show[13]);
 			read_value(json[xs("movement")][xs("detection_clr_for[0]")], movement::detection_clr_for[0]);
 			read_value(json[xs("movement")][xs("detection_clr_for[1]")], movement::detection_clr_for[1]);
 			read_value(json[xs("movement")][xs("detection_clr_for[2]")], movement::detection_clr_for[2]);
@@ -2333,6 +2369,12 @@ namespace c {
 			read_value(json[xs("movement")][xs("detection_clr_for[5]")], movement::detection_clr_for[5]);
 			read_value(json[xs("movement")][xs("detection_clr_for[6]")], movement::detection_clr_for[6]);
 			read_value(json[xs("movement")][xs("detection_clr_for[7]")], movement::detection_clr_for[7]);
+			read_value(json[xs("movement")][xs("detection_clr_for[8]")], movement::detection_clr_for[8]);
+			read_value(json[xs("movement")][xs("detection_clr_for[9]")], movement::detection_clr_for[9]);
+			read_value(json[xs("movement")][xs("detection_clr_for[10]")], movement::detection_clr_for[10]);
+			read_value(json[xs("movement")][xs("detection_clr_for[11]")], movement::detection_clr_for[11]);
+			read_value(json[xs("movement")][xs("detection_clr_for[12]")], movement::detection_clr_for[12]);
+			read_value(json[xs("movement")][xs("detection_clr_for[13]")], movement::detection_clr_for[13]);
 			read_value(json[xs("movement")][xs("allow_detection_clr")], movement::allow_detection_clr);
 			read_value(json[xs("movement")][xs("detection_saved_tick")], movement::detection_saved_tick);
 			read_value(json[xs("movement")][xs("indicators_allow_animation")], movement::indicators_allow_animation);
@@ -2381,9 +2423,16 @@ namespace c {
 			read_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 			read_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
 			read_value(json[xs("misc")][xs("player_type")], misc::player_type);
+			read_value(json[xs("movement")][xs("edgebug_pena")], movement::edgebug_pena);
+			read_value(json[xs("movement")][xs("assist_render_style")], assist::assist_render_style);
+
 			read_value(json[xs("misc")][xs("movement_rec")], misc::movement_rec);
 			read_value(json[xs("misc")][xs("movement_rec_smoothing")], misc::movement_rec_smoothing);
 			read_value(json[xs("misc")][xs("movement_rec_lockva")], misc::movement_rec_lockva);
+			read_value(json[xs("misc")][xs("movement_rec_lockgoingtostart")], misc::movement_rec_lockgoingtostart);
+			read_value(json[xs("misc")][xs("movement_rec_show_line")], misc::movement_rec_show_line);
+			read_value(json[xs("misc")][xs("movement_rec_render")], misc::movement_rec_render);
+			read_value(json[xs("misc")][xs("movement_rec_position")], misc::movement_rec_position);
 			read_value(json[xs("misc")][xs("movement_rec_ringsize")], misc::movement_rec_ringsize);
 			read_value(json[xs("misc")][xs("movement_rec_keystartrecord")], misc::movement_rec_keystartrecord);
 			read_value(json[xs("misc")][xs("movement_rec_keystoprecord")], misc::movement_rec_keystoprecord);
@@ -2506,6 +2555,14 @@ namespace c {
 			read_value(json[xs("visuals")][xs("oof_arrows_size")], visuals::oof_arrows_size);
 			read_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 			read_value(json[xs("visuals")][xs("radar")], visuals::radar);
+
+			read_value(json[xs("visuals")][xs("shadows")], visuals::shadows);
+			read_value(json[xs("visuals")][xs("dynamic_shadows")], visuals::dynamic_shadows);
+			read_value(json[xs("visuals")][xs("shadow_rot_x")], visuals::shadow_rot_x);
+			read_value(json[xs("visuals")][xs("shadow_rot_y")], visuals::shadow_rot_y);
+			read_value(json[xs("visuals")][xs("shadow_rot_z")], visuals::shadow_rot_z);
+			read_value(json[xs("visuals")][xs("shadow_rotation_speed")], visuals::shadow_rotation_speed);
+
 			read_value(json[xs("visuals")][xs("gravity_ragdoll")], visuals::gravity_ragdoll);
 			read_value(json[xs("visuals")][xs("backtrack_chams")], chams::backtrack_chams);
 			read_value(json[xs("visuals")][xs("backtrack_chams_draw_all_ticks")], chams::backtrack_chams_draw_all_ticks);
@@ -3176,6 +3233,10 @@ namespace c {
 			input_file >> json;
 
 			read_value(json[xs("movement")][xs("bhop")], movement::bhop);
+			read_value(json[xs("movement")][xs("auto_duck_collision")], movement::auto_duck_collision);
+			read_value(json[xs("movement")][xs("auto_duck_collision_key")], movement::auto_duck_collision_key);
+			read_value(json[xs("movement")][xs("auto_duck_collision_key_s")], movement::auto_duck_collision_key_s);
+			read_value(json[xs("movement")][xs("auto_duck_collision_ticks")], movement::auto_duck_collision_ticks);
 			read_value(json[xs("movement")][xs("bhopmiss")], movement::bhopmiss);
 			read_value(json[xs("movement")][xs("perfecthops")], movement::whathopmiss);
 			read_value(json[xs("movement")][xs("auto_strafe")], movement::auto_strafe);
@@ -3218,6 +3279,8 @@ namespace c {
 			read_value(json[xs("movement")][xs("edge_bug_strafe")], movement::edge_bug_strafe);
 			read_value(json[xs("movement")][xs("movement_fix")], movement::movement_fix);
 			read_value(json[xs("movement")][xs("fix_type")], movement::fix_type);
+			read_value(json[xs("movement")][xs("edgebug_pena")], movement::edgebug_pena);
+			read_value(json[xs("movement")][xs("assist_render_style")], assist::assist_render_style);
 
 			//lb
 			read_value(json[xs("movement")][xs("edgebug_type")], movement::edgebug_type);
@@ -3447,6 +3510,14 @@ namespace c {
 			read_value(json[xs("visuals")][xs("oof_arrows_size")], visuals::oof_arrows_size);
 			read_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 			read_value(json[xs("visuals")][xs("radar")], visuals::radar);
+
+			read_value(json[xs("visuals")][xs("shadows")], visuals::shadows);
+			read_value(json[xs("visuals")][xs("dynamic_shadows")], visuals::dynamic_shadows);
+			read_value(json[xs("visuals")][xs("shadow_rot_x")], visuals::shadow_rot_x);
+			read_value(json[xs("visuals")][xs("shadow_rot_y")], visuals::shadow_rot_y);
+			read_value(json[xs("visuals")][xs("shadow_rot_z")], visuals::shadow_rot_z);
+			read_value(json[xs("visuals")][xs("shadow_rotation_speed")], visuals::shadow_rotation_speed);
+
 			read_value(json[xs("visuals")][xs("gravity_ragdoll")], visuals::gravity_ragdoll);
 			read_value(json[xs("visuals")][xs("backtrack_chams")], chams::backtrack_chams);
 			read_value(json[xs("visuals")][xs("backtrack_chams_draw_all_ticks")], chams::backtrack_chams_draw_all_ticks);
@@ -4386,6 +4457,10 @@ namespace c {
 			read_value(json[xs("misc")][xs("movement_rec")], misc::movement_rec);
 			read_value(json[xs("misc")][xs("movement_rec_smoothing")], misc::movement_rec_smoothing);
 			read_value(json[xs("misc")][xs("movement_rec_lockva")], misc::movement_rec_lockva);
+			read_value(json[xs("misc")][xs("movement_rec_lockgoingtostart")], misc::movement_rec_lockgoingtostart);
+			read_value(json[xs("misc")][xs("movement_rec_show_line")], misc::movement_rec_show_line);
+			read_value(json[xs("misc")][xs("movement_rec_render")], misc::movement_rec_render);
+			read_value(json[xs("misc")][xs("movement_rec_position")], misc::movement_rec_position);
 			read_value(json[xs("misc")][xs("movement_rec_ringsize")], misc::movement_rec_ringsize);
 			read_value(json[xs("misc")][xs("movement_rec_keystartrecord")], misc::movement_rec_keystartrecord);
 			read_value(json[xs("misc")][xs("movement_rec_keystoprecord")], misc::movement_rec_keystoprecord);
@@ -4508,6 +4583,12 @@ namespace c {
 			read_value(json[xs("movement")][xs("indicators_show[5]")], movement::indicators_show[5]);
 			read_value(json[xs("movement")][xs("indicators_show[6]")], movement::indicators_show[6]);
 			read_value(json[xs("movement")][xs("indicators_show[7]")], movement::indicators_show[7]);
+			read_value(json[xs("movement")][xs("indicators_show[8]")], movement::indicators_show[8]);
+			read_value(json[xs("movement")][xs("indicators_show[9]")], movement::indicators_show[9]);
+			read_value(json[xs("movement")][xs("indicators_show[10]")], movement::indicators_show[10]);
+			read_value(json[xs("movement")][xs("indicators_show[11]")], movement::indicators_show[11]);
+			read_value(json[xs("movement")][xs("indicators_show[12]")], movement::indicators_show[12]);
+			read_value(json[xs("movement")][xs("indicators_show[13]")], movement::indicators_show[13]);
 			read_value(json[xs("movement")][xs("detection_clr_for[0]")], movement::detection_clr_for[0]);
 			read_value(json[xs("movement")][xs("detection_clr_for[1]")], movement::detection_clr_for[1]);
 			read_value(json[xs("movement")][xs("detection_clr_for[2]")], movement::detection_clr_for[2]);
@@ -4516,6 +4597,12 @@ namespace c {
 			read_value(json[xs("movement")][xs("detection_clr_for[5]")], movement::detection_clr_for[5]);
 			read_value(json[xs("movement")][xs("detection_clr_for[6]")], movement::detection_clr_for[6]);
 			read_value(json[xs("movement")][xs("detection_clr_for[7]")], movement::detection_clr_for[7]);
+			read_value(json[xs("movement")][xs("detection_clr_for[8]")], movement::detection_clr_for[8]);
+			read_value(json[xs("movement")][xs("detection_clr_for[9]")], movement::detection_clr_for[9]);
+			read_value(json[xs("movement")][xs("detection_clr_for[10]")], movement::detection_clr_for[10]);
+			read_value(json[xs("movement")][xs("detection_clr_for[11]")], movement::detection_clr_for[11]);
+			read_value(json[xs("movement")][xs("detection_clr_for[12]")], movement::detection_clr_for[12]);
+			read_value(json[xs("movement")][xs("detection_clr_for[13]")], movement::detection_clr_for[13]);
 			read_value(json[xs("movement")][xs("allow_detection_clr")], movement::allow_detection_clr);
 			read_value(json[xs("movement")][xs("detection_saved_tick")], movement::detection_saved_tick);
 			read_value(json[xs("movement")][xs("indicators_allow_animation")], movement::indicators_allow_animation);

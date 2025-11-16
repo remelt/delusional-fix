@@ -477,10 +477,20 @@ void apply_clan_tag(const char* tag, const char* name) {
 	apply_clan_tag_fn(tag, name);
 };
 
+bool r3set = false;
 void features::misc::clantag_spammer() {
-	if (!c::misc::misc_clantag_spammer || !interfaces::engine->is_in_game())
+	if (!interfaces::engine->is_in_game()) {
 		return;
+	}
+	if (!c::misc::misc_clantag_spammer) {
+		if (r3set) {
+			apply_clan_tag(xs(""), xs(""));
+			r3set = false;
+		}
+		return;
+	}
 
+	r3set = true;
 	static bool reset = true;
 	static auto lasttime = 0.0f;
 	static std::string torotate = c::misc::misc_clantag_text;
@@ -490,7 +500,7 @@ void features::misc::clantag_spammer() {
 		if (interfaces::globals->realtime - lasttime < 1.0f)
 			return;
 
-		apply_clan_tag(xs(""), xs(""));
+		apply_clan_tag(xs("delusional"), xs("delusional"));
 		lasttime = interfaces::globals->realtime;
 	}
 	else if (c::misc::misc_clantag_type == 1) {

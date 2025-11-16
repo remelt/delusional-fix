@@ -23,6 +23,7 @@ namespace menu {
 	inline bool unhook = true;
 	inline int indicator_tab = 0;
 	inline int indicators_tab = 0;
+	inline int movement_tab = 0;
 	inline int chams_tab = 0;
 	inline int esp_tab = 0;
 	inline int weapon_selection = 0;

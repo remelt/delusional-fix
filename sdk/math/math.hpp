@@ -33,6 +33,21 @@ namespace math {
 		return angle;
 	}
 
+	inline vec3_t Vpenivatel(const vec3_t& source, const vec3_t& destination, const vec3_t& vievAngles)
+	{
+		vec3_t delta = source - destination;
+		vec3_t angles;
+
+		angles.x = rad2deg(atanf(delta.z / std::hypotf(delta.x, delta.y))) - vievAngles.x;
+		angles.y = rad2deg(atanf(delta.y / delta.x)) - vievAngles.y;
+		angles.z = 0.0f;
+
+		if (delta.x >= 0.0)
+			angles.y += 180.0f;
+
+		return angles;
+	}
+
 	inline void angle_vectors_alternative(const vec3_t& angles, vec3_t* forward) {
 		float	sp, sy, cp, cy;
 

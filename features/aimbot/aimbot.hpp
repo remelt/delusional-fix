@@ -1,35 +1,81 @@
 #pragma once
 #include "../../sdk/sdk.hpp"
 
-namespace aimbot {
+class MegaPrivateAimbotOtAntohi {
+public:
+	void RCS(vec3_t& angle);
 	void run(c_usercmd* cmd);
-	void rng_factor(c_usercmd* cmd);
-	void StopMovement(c_usercmd* cmd);
-}
+#define CHECK_VALID( _v ) 0
+	inline void vec3_tSubtract(const vec3_t& a, const vec3_t& b, vec3_t& c)
+	{
+		CHECK_VALID(a);
+		CHECK_VALID(b);
+		c.x = a.x - b.x;
+		c.y = a.y - b.y;
+		c.z = a.z - b.z;
+	}
+
+	inline void sinCos(float radians, PFLOAT sine, PFLOAT cosine)
+	{
+		__asm
+		{
+			fld dword ptr[radians]
+			fsincos
+			mov edx, dword ptr[cosine]
+			mov eax, dword ptr[sine]
+			fstp dword ptr[edx]
+			fstp dword ptr[eax]
+		}
+	}
+	//Чучуть асэма не помешает Приват епта // antosha (rip)
+	void anglevec3_ts(vec3_t& angles, vec3_t& forward)
+	{
+		float	sp, sy, cp, cy;
+
+		DirectX::XMScalarSinCos(&sp, &cp, math::deg2rad(angles[0]));
+		DirectX::XMScalarSinCos(&sy, &cy, math::deg2rad(angles[1]));
+
+		forward.x = cp * cy;
+		forward.y = cp * sy;
+		forward.z = -sp;
+	}
+	//legitbot_s settings;
+	//legitbot_s option;
+	float GetFovToPlayer(vec3_t viewAngle, vec3_t aimAngle)
+	{
+		vec3_t delta = aimAngle - viewAngle;
+		math::fix_angles(delta);
+		return sqrtf(powf(delta.x, 2.0f) + powf(delta.y, 2.0f));
+	}
+
+	inline float GetFov(vec3_t vLocalOrigin, vec3_t vPosition, vec3_t vForward)
+	{
+		vec3_t vLocal;
+
+		vec3_tSubtract(vPosition, vLocalOrigin, vLocal);
+
+		vLocal.NormalizeInPlace();
+
+		float fValue = vForward.dot(vLocal);
+
+		//np for kolo's math skills
+		if (fValue < -1.0f)
+			fValue = -1.0f;
+
+		if (fValue > 1.0f)
+			fValue = 1.0f;
+
+		return math::rad2deg(acos(fValue));
+	}
+
+
+	vec3_t current_punch = { 0, 0, 0 };
+	vec3_t last_punch = { 0, 0, 0 };
+};
+extern MegaPrivateAimbotOtAntohi g_Aimbot;
 
 namespace triggerbot {
 	void run(c_usercmd* cmd);
-}
-
-struct fire_bullet_data {
-	fire_bullet_data(const vec3_t& eyePos, player_t* entity) {
-		src = eyePos;
-		filter.skip = entity;
-	}
-
-	vec3_t          src;
-	trace_t         enter_trace;
-	vec3_t          direction;
-	trace_filter   filter;
-	float           trace_length;
-	float           trace_length_remaining;
-	float           current_damage;
-	int             penetrate_count;
-};
-
-namespace autowall {
-	bool can_hit_floating_point(const vec3_t& point, const vec3_t& source);
-	float damage(const vec3_t& point);
 }
 
 struct backtrack_data {
@@ -38,6 +84,11 @@ struct backtrack_data {
 	studio_hitbox_set_t* hitboxset;
 	vec3_t m_headpos;
 	matrix_t m_matrix[128];
+	vec3_t head;
+	vec3_t chest;
+	vec3_t pelvis;
+	vec3_t neck;
+	vec3_t lchest;
 };
 
 class backtrack_c {

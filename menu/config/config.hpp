@@ -16,7 +16,6 @@ namespace c {
 	void load_skins(const std::size_t index);
 	void load_misc(const std::size_t index);
 	void load_indicators(const std::size_t index);
-	inline std::string directory_path_lua;
 	inline std::string directory_path_fonts;
 	inline std::string directory_path;
 	inline std::string directory;
@@ -45,6 +44,7 @@ namespace c {
 		inline float assist_stamina_value = 100.0f;
 		inline bool assist_render = false;
 		inline bool bounce_assist_render = false;
+		inline int assist_render_style = 0;
 
 		inline bool assist_bounce_broke_hop = false;
 
@@ -172,8 +172,9 @@ namespace c {
 		inline bool auto_strafe = false;
 		inline int  auto_strafe_key = 0;
 		inline int  auto_strafe_key_s = 1;
-		inline bool movement_fix = false;
-		inline int fix_type = 1;
+		inline bool movement_fix = true;
+		inline bool edgebug_pena = false;
+		inline int fix_type = 0;
 		inline bool bhop = false;
 		inline bool bhopmiss = false;
 		inline bool bhopfix = false;
@@ -186,6 +187,8 @@ namespace c {
 		inline int air_stuck_key = 0;
 		inline int air_stuck_key_s = 1;
 		inline bool fireman = false;
+		inline bool fireman_plus_jump_activates_early = false;
+		inline bool fireman_manual_jump = false;
 		inline int fireman_key = 0;
 		inline int fireman_key_s = 1;
 		inline bool delay_hop = false;
@@ -301,10 +304,10 @@ namespace c {
 		inline float velocity_indicator_custom_clr2[4]{ 1.f, 1.f, 1.f };
 		inline float velocity_indicator_fade_clr3[4]{ 1.f, 1.f, 1.f, 0.f };
 		inline float indicator_detect_clr[3]{ 0.195f, 0.750f, 0.269f };
-		inline bool indicators_show[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
+		inline bool indicators_show[14] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool allow_detection_clr = false;
 		inline int detection_saved_tick = 15;
-		inline bool detection_clr_for[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
+		inline bool detection_clr_for[14] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool stamina_indicator = false;
 		inline bool stamina_indicator_fade = false;
 		inline bool stamina_indicator_show_pre = false;
@@ -421,6 +424,8 @@ namespace c {
 		inline char misc_kill_message[256] = "Hello World!";
 		inline int menu_key = 0x2D; //ins
 		inline bool movement_rec = false;
+		inline bool movement_rec_render = true;
+		inline int movement_rec_position = 0;
 		inline bool movement_rec_show_line = true;
 		inline bool movement_rec_infowindow = false;
 		inline float movement_rec_smoothing = 1.f;
@@ -428,7 +433,8 @@ namespace c {
 		inline float movement_rec_infowindowx;
 		inline float movement_rec_infowindowy;
 		inline bool movement_rec_lockva = true;
-		inline float movement_rec_ringsize = 5;
+		inline bool movement_rec_lockgoingtostart = false;
+		inline float movement_rec_ringsize = 40;
 		inline int movement_rec_keystartrecord = 0;
 		inline int movement_rec_keystartrecord_s = 1;
 		inline int movement_rec_keystoprecord = 0;
@@ -902,6 +908,12 @@ namespace c {
 		inline float world_color[4]{ 1.f, 1.f, 1.f, 1.f };
 		inline bool world_modulate = false;
 		inline bool fullbright;
+		inline bool shadows = false;
+		inline bool dynamic_shadows = false;
+		inline float shadow_rot_x = 0.f;
+		inline float shadow_rot_y = 0.f;
+		inline float shadow_rot_z = 0.f;
+		inline float shadow_rotation_speed = 1.f;
 		inline bool dlight = false;
 		inline float dlight_clr[4]{ 1.f, 1.f, 1.f, 255.f };
 		inline bool gravity_ragdoll = false;
@@ -998,6 +1010,10 @@ namespace c {
 		inline int assist_font = 0;
 		inline int assist_size = 12;
 		inline bool assist_font_flag[9] = { false, false, false, true, false, false, true, false, false };
+
+		inline int recorder_font = 0;
+		inline int recorder_size = 12;
+		inline bool recorder_font_flag[9] = { false, false, false, true, false, false, true, false, false };
 
 		inline int lb_player_font = 0;
 		inline int lb_player_size = 12;

@@ -36,7 +36,6 @@ bool unload( HMODULE module ) {
     printf( ( "delusional | unloading hooks\n" ) );
     sdk::hooks::unload( );
     printf( ( "delusional | unloaded hooks\n" ) );
-    //lua::unload();
 
     std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
 
@@ -55,12 +54,10 @@ bool unload( HMODULE module ) {
 
 DWORD WINAPI on_attach(void* instance) {
 	[&]() {
-       // lua::init_state();
         interfaces::initialize();
         sdk::hooks::init();
         surface::initialize();
         c::create_directory();
-        //lua::init_command();
         cvar::init();
         route = std::make_unique<savingroute>("records");
 
@@ -96,9 +93,9 @@ DWORD WINAPI on_attach(void* instance) {
         im_render.unload();
 
 	}();
-    
-    //idk later
-	//FreeLibraryAndExitThread(static_cast<HMODULE>(instance), 0);
+
+    //works only w manual map for some reason
+    FreeLibraryAndExitThread(static_cast<HMODULE>(instance), 0);
 
 	return 0;
 }

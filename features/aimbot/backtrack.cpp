@@ -50,11 +50,18 @@ void backtrack_c::setup_records() {
 		if (!hdr)
 			continue;
 
+		backtrack_data bd;
+
+		bd.head = player->get_hitbox_position(hitbox_head);
+		bd.chest = player->get_hitbox_position(hitbox_chest);
+		bd.pelvis = player->get_hitbox_position(hitbox_pelvis);
+		bd.neck = player->get_hitbox_position(hitbox_neck);
+		bd.lchest = player->get_hitbox_position(hitbox_lower_chest);
+
 		auto hitbox_set = hdr->hitbox_set(player->hitbox_set());
 		auto hitbox_headd = hitbox_set->hitbox(hitbox_head);
 		auto hitbox_center = (hitbox_headd->mins + hitbox_headd->maxs) * 0.5f;
 
-		backtrack_data bd;
 		bd.hitboxset = hitbox_set;
 		bd.sim_time = player->simulation_time();
 		bd.player = player;

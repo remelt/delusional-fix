@@ -5,30 +5,27 @@
 #include "../../includes/imgui/imgui_internal.h"
 #include "../../includes/json/json.h"
 
-bool world_to_screen(const vec3_t& in, vec3_t& out) {
-	const auto result = math::screen_transform(in, out);
-	int w, h;
-	interfaces::engine->get_screen_size(w, h);
+#undef max;
+#undef min;
 
-	out.x = (w / 2.0f) + (out.x * w) / 2.0f;
-	out.y = (h / 2.0f) - (out.y * h) / 2.0f;
-
-	return result;
+float LerpFloatReal(float a, float b, float t)
+{
+	return a + (b - a) * t;
 }
 
-static auto world_circle = [](vec3_t location, float radius, color_t col = color_t(255, 255, 255, 255), bool filled = false) {
-	static constexpr float Step = m_pi * 2.0f / 60;
-	std::vector<ImVec2> points;
-	for (float lat = 0.f; lat <= m_pi * 2.0f; lat += Step) {
-		const auto& point3d = vec3_t(sin(lat), cos(lat), 0.f) * radius;
-		vec3_t point2d;
+struct counter {
+	float alpha = 0.0f;
+	std::string info;
 
-		if (world_to_screen(location + point3d, point2d))
-			points.push_back(ImVec2(point2d.x, point2d.y));
+	void update(bool shouldShow, float deltaTime) {
+		float targetAlpha = shouldShow ? 1.0f : 0.0f;
+		float lerp_factor = 1.0f - std::exp(-6.f * deltaTime);
+
+		alpha += (targetAlpha - alpha) * lerp_factor;
+		alpha = std::clamp(alpha, 0.0f, 1.0f);
 	}
-
-	im_render.drawpolyline(points, col, true, 2.f);
 };
+static counter anim;
 
 struct frame {
 	float viewangles[2];
@@ -55,6 +52,15 @@ struct frame {
 	void replay(c_usercmd* cmd) {
 		cmd->view_angles.x = this->viewangles[0];
 		cmd->view_angles.y = this->viewangles[1];
+		cmd->forward_move = this->forwardmove;
+		cmd->side_move = this->sidemove;
+		cmd->up_move = this->upmove;
+		cmd->buttons = this->buttons;
+		cmd->mouse_dx = this->mousedx;
+		cmd->mouse_dy = this->mousedy;
+	}
+
+	void replay_wo_viewangles(c_usercmd* cmd) {
 		cmd->forward_move = this->forwardmove;
 		cmd->side_move = this->sidemove;
 		cmd->up_move = this->upmove;
@@ -105,6 +111,7 @@ class playback_t {
 private:
 	bool is_playback_active = false;
 	size_t current_frame = 0;
+	int start_tick = 0;
 	const framecontainer& active_demo = framecontainer();
 
 public:
@@ -118,6 +125,7 @@ public:
 	void stopplayback() {
 		this->is_playback_active = false;
 		this->current_frame = 0;
+		this->start_tick = 0;
 	};
 
 	bool isplaybackactive() const {
@@ -135,6 +143,8 @@ public:
 	const framecontainer& getactivedemo() {
 		return this->active_demo;
 	}
+	void set_start_tick(int tick) { start_tick = tick; }
+	int get_start_tick() const { return start_tick; }
 };
 
 playback_t playback;
@@ -170,7 +180,7 @@ void mrecorder::draw() {
 
 	ImGui::Text(("map files"));
 
-	ImGui::ListBoxHeader("", routeItems.size(), 5);
+	ImGui::ListBoxHeader("", routeItems.size(), routeItems.size());
 	for (int i = 0; i < routeItems.size(); i++) {
 		bool isSelected = (currentRoute == i);
 		if (ImGui::Selectable(routeItems[i].c_str(), isSelected))
@@ -178,24 +188,9 @@ void mrecorder::draw() {
 	}
 	ImGui::ListBoxFooter();
 
-	ImGui::InputTextWithHint(("##route name"), ("route name"), buffer, sizeof(buffer));
-
-	if (ImGui::IsItemHovered()) {
-		ImGui::SetTooltip("press enter to create a new record");
-	}
-
-	//for buffer
-	if (currentRoute != -1) {
-
-		if (ImGui::Button("save route", ImVec2(-1, 15))) {
-			route->save(currentRoute, buffer);
-			ZeroMemory(buffer, 32);
-		}
-	}
-
 	if (interfaces::engine->is_in_game()) {
 
-		if (ImGui::Button("create file map", ImVec2(-1, 15))) {
+		if (ImGui::Button("create map file", ImVec2(-1, 15))) {
 			std::string routname = interfaces::engine->get_level_name() + std::to_string(int(1.0f / interfaces::globals->interval_per_tick));
 			route->add(routname.c_str());
 			ZeroMemory(buffer, 32);
@@ -229,30 +224,46 @@ void mrecorder::draw() {
 
 		if (!mapWithRoutes.empty()) {
 
-			std::string text = ("records (") + std::to_string(mapWithRoutes.size()) + ("):");
+			ImGui::PushItemWidth(-1);
 
-			routelist.clear();
+			static int route_index = -1;
 
-			for (int i = 0; i < mapWithRoutes.size(); i++) {
-				std::string item = std::to_string(i) + " - " + mapWithRoutes[i].routename + "\n";
-				routelist += item;
+			ImGui::Text(("routes"));
+
+			if (ImGui::ListBoxHeader(("##rout3s"), mapWithRoutes.size(), mapWithRoutes.size())) {
+				for (int i = 0; i < mapWithRoutes.size(); ++i) {
+					std::string const& route_name = mapWithRoutes[i].routename;
+					if (ImGui::Selectable(route_name.c_str(), i == route_index)) {
+						route_index = i;
+					}
+				}
+				ImGui::ListBoxFooter();
+			}
+			ImGui::PopItemWidth();
+
+			if (ImGui::InputTextWithHint(("##route name"), ("route name"), buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+				route->save(currentRoute, buffer);
+				ZeroMemory(buffer, 32);
 			}
 
-			ImGui::Text(text.c_str());
+			if (ImGui::IsItemHovered()) {
+				ImGui::SetTooltip("press enter to create a new record");
+			}
 
-			ImGui::Text(routelist.c_str());
+			//for buffer
+			if (currentRoute != -1) {
 
-			if (ImGui::Button("delete route")) {
-				if (delselection >= 0 && delselection < mapWithRoutes.size()) {
-					mapWithRoutes.erase(mapWithRoutes.begin() + delselection);
+				if (ImGui::Button("save route", ImVec2(-1, 15))) {
+					route->save(currentRoute, buffer);
+					ZeroMemory(buffer, 32);
 				}
 			}
 
-			std::clamp(delselection, 0, (int)mapWithRoutes.size() - 1);
-			ImGui::SetNextItemWidth(55);
-			ImGui::SameLine();
-			ImGui::InputInt(("record to delete"), &delselection);
-
+			if (ImGui::Button("delete route", ImVec2(-1, 15))) {
+				if (route_index >= 0 && route_index < mapWithRoutes.size()) {
+					mapWithRoutes.erase(mapWithRoutes.begin() + route_index);
+				}
+			}
 		}
 	}
 
@@ -266,9 +277,23 @@ void mrecorder::draw() {
 		ImGui::Text(("playback is active"));;
 }
 
+//TODO: FINISH THE ANIMATION LOGIC
+
+static std::vector<float> point_progress;
+float start_time = 0.0f;
+//static std::vector<float> start_time;
+//static std::vector<float> line_progress;
 void mrecorder::drawroute() {
 	if (!c::misc::movement_rec)
 		return;
+	if (point_progress.size() != mapWithRoutes.size())
+		point_progress.resize(mapWithRoutes.size(), 0.0f);
+
+	//if (start_time.size() != mapWithRoutes.size())
+	//	start_time.resize(mapWithRoutes.size(), 0.0f);
+
+	//if (line_progress.size() != mapWithRoutes.size())
+	//	line_progress.resize(mapWithRoutes.size(), 0.0f);
 
 	auto local_player = reinterpret_cast<player_t*>(interfaces::ent_list->get_client_entity(interfaces::engine->get_local_player()));
 
@@ -280,24 +305,29 @@ void mrecorder::drawroute() {
 						auto& recording = rec.getactiverecording();
 						for (int i = 1; i < recording.size(); i++) {
 							vec3_t from; vec3_t to;
+							auto accentclr = ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f);
 							if (interfaces::debug_overlay->world_to_screen(recording.at(i).position, from) && interfaces::debug_overlay->world_to_screen(recording.at(i - 1).position, to) && c::misc::movement_rec_show_line) {
 								//draw the recording line
-								im_render.drawline(from.x, from.y, to.x, to.y, color_t(255, 255, 255, 255), 0.5);
+								//if (start_time[i] == 0.0f) {
+								//	if (i - 1 == 0 || line_progress[i - 1] == 1.0f) {
+								//		start_time[i] = interfaces::globals->cur_time;
+								//	}
+								//}
+								//float elapsed = (interfaces::globals->cur_time - start_time[i]) * 4;
+								//if (i - 1 == 0 || line_progress[i - 1] == 1.0f) {
+								//	line_progress[i] = std::clamp(elapsed / 1.0f, 0.0f, 1.0f);
+								//}
+								float elapsed = (interfaces::globals->cur_time - start_time) * 4;
+								float progress = std::clamp(elapsed / 1.0f, 0.0f, 1.0f);
+								int alpha = 255 * progress;
+								float accent_red = LerpFloatReal(255.0f, accentclr.x * 255.0f, progress);
+								float accent_blue = LerpFloatReal(255.0f, accentclr.y * 255.0f, progress);
+								float accent_green = LerpFloatReal(255.0f, accentclr.z * 255.0f, progress);
+								im_render.drawline(from.x, from.y, to.x, to.y, color_t(static_cast <int>(accent_red), static_cast <int>(accent_blue), static_cast <int>(accent_green), alpha), 0.5f);
 								//circle @ start
 								if (i == 1) {
-
-									interfaces::surface->draw_outlined_circle(from.x, from.y, 0, 15);
-									if (prediction::origin.distance_to(recording.at(i - 1).position) < 0.5f) {
-										world_circle(recording.at(i - 1).position, 7.f, color_t(255, 255, 255), true);
-
-									}
-									else {
-										world_circle(recording.at(i - 1).position, 7.f, color_t(255, 255, 255), true);
-									}
-								}
-								//circle @ end
-								else if (i == recording.size() - 1 && !rec.isrecordingactive()) {
-									//world_circle(recording.at(i).position, 15.f, color_t(255, 255, 255), true);
+									im_render.drawcirclefilled_3d(recording.at(i - 1).position, 21.f, color_t(0, 0, 0, 100));
+									im_render.drawcircle_3d(recording.at(i - 1).position, 21.f, color_t(static_cast <int>(accent_red), static_cast <int>(accent_blue), static_cast <int>(accent_green), 255));
 								}
 							}
 						}
@@ -310,46 +340,70 @@ void mrecorder::drawroute() {
 		if (!mapWithRoutes.empty()) {
 			if (g::local->is_alive()) {
 				for (size_t i = 0; i < mapWithRoutes.size(); i++) {
-
-					if (c::misc::movement_rec_maxrender != 0) {
-						if (prediction::origin.distance_to(mapWithRoutes.at(i).frames.at(0).position) > c::misc::movement_rec_maxrender) {
-							continue;
-						}
-					}
+					if (GImGui == nullptr)
+						return;
 
 					vec3_t scrpos;
-					if (interfaces::debug_overlay->world_to_screen(vec3_t{ mapWithRoutes.at(i).frames.at(0).position.x, mapWithRoutes.at(i).frames.at(0).position.y, mapWithRoutes.at(i).frames.at(0).position.z }, scrpos)) {
+					if (interfaces::debug_overlay->world_to_screen(mapWithRoutes[i].frames[0].position, scrpos))
+					{
+						auto accentclr = ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f);
+						float distance = g::local->origin().distance_to(mapWithRoutes[i].frames[0].position);
+						float baseRadius = 11.0f;
+						float delta_time = ImGui::GetIO().DeltaTime;
 
-						if (prediction::origin.distance_to(mapWithRoutes.at(i).frames.at(0).position) < 0.5f) {
-							im_render.drawcircle(scrpos.x, scrpos.y + 3, 5.f, 32, color_t(255, 255, 255));
-						}
-						else {
-							im_render.drawcircle(scrpos.x, scrpos.y + 3, 5.f, 32, color_t(255, 255, 255));
+						if (distance > 300.0f) {
+							float t = std::clamp((distance - 300.0f) / 300.0f, 0.0f, 1.0f);
+							baseRadius = LerpFloatReal(11.0f, 8.0f, t);
 						}
 
-						im_render.text(scrpos.x, scrpos.y - 20, 12.f, fonts::esp_misc, mapWithRoutes.at(i).routename.c_str(), true, color_t(255, 255, 255, 255));
+						float targetScale = (distance < 15.f) ? 2.f : 1.f;
+						point_progress[i] = LerpFloatReal(point_progress[i], targetScale, delta_time * 5.f);
+
+						baseRadius = std::max(baseRadius, 3.0f);
+
+						float alphaMultiplier = 1.0f;
+						if (distance > 900.0f) {
+							alphaMultiplier = std::clamp((1000.0f - distance) / 100.0f, 0.0f, 1.0f);
+						}
+
+						float effectiveRadius = baseRadius * point_progress[i];
+						const color_t filled(0, 0, 0, static_cast<int>(100.0f * alphaMultiplier));
+						const color_t outline(255, 255, 255, static_cast<int>(255.0f * alphaMultiplier));
+
+						static float time = 0.0f;
+						time += ImGui::GetIO().DeltaTime;
+						int alpha = 200 - fmod(time * 20.84f, 200.0f); //25 : 1,2
+						float radius = fmod(time * 4.17f, 40.0f); //5 : 1,2
+
+						vec3_t pos2 = mapWithRoutes[i].frames[0].position;
+						pos2.z += 2.f;
+
+						if (distance < 15.f) {
+							im_render.drawcircle_3d(pos2, radius, color_t(255, 255, 255, alpha), 1.0f);
+						}
+
+						im_render.drawcirclefilled_3d(mapWithRoutes[i].frames[0].position, effectiveRadius, filled);
+						im_render.drawcircle_3d(mapWithRoutes[i].frames[0].position, effectiveRadius, outline);
+
+						im_render.text(scrpos.x, scrpos.y - 20, 12.f, fonts::esp_misc,
+							mapWithRoutes[i].routename.c_str(), true, outline);
 					}
 
-					if (prediction::origin.distance_to(mapWithRoutes.at(i).frames.at(0).position) < c::misc::movement_rec_ringsize) {
+					if (g::local->origin().distance_to(mapWithRoutes[i].frames[0].position) < 15.f)
+					{
 						vec3_t o = g::local->get_eye_pos();
-
-						vec3_t angles = { mapWithRoutes.at(i).frames.at(0).viewangles[0], mapWithRoutes.at(i).frames.at(0).viewangles[1], 0.f };
-
+						vec3_t angles = { mapWithRoutes[i].frames[0].viewangles[0],
+										  mapWithRoutes[i].frames[0].viewangles[1], 0.f };
 						vec3_t forward;
 						math::angle_vectors(angles, &forward);
-
 						vec3_t out;
 						if (interfaces::debug_overlay->world_to_screen(o + (forward * 100.f), out)) {
-							auto get_text_size = [=](const std::string& text, ImFont* font = fonts::esp_misc) {
-								return font->CalcTextSizeA(12.f, FLT_MAX, 0.0f, text.c_str());
-							};
-
-							auto text_size = get_text_size("aim here", fonts::esp_misc);
-
-							im_render.text(out.x + 7, out.y - (text_size.y / 2), 12.f, fonts::esp_misc, ("aim here"), false, color_t(255, 255, 255, 255));
+							auto text_size = fonts::esp_misc->CalcTextSizeA(12.f, FLT_MAX, 0.0f, "aim here");
+							im_render.text(out.x + 7, out.y - (text_size.y / 2), 12.f, fonts::esp_misc,
+								"aim here", false, color_t(255, 255, 255, 255));
+							im_render.drawcirclefilled(out.x, out.y, 4, 32, color_t(0, 0, 0, 100));
 							im_render.drawcircle(out.x, out.y, 4, 32, color_t(255, 255, 255, 255));
 						}
-
 					}
 				}
 			}
@@ -357,10 +411,71 @@ void mrecorder::drawroute() {
 	}
 }
 
+void mrecorder::endscene(ImDrawList* draw) {
+	if (!c::misc::movement_rec || !c::misc::movement_rec_render)
+		return;
+	if (mapWithRoutes.empty())
+		return;
+	if (!g::local->is_alive())
+		return;
+	if (GImGui == nullptr)
+		return;
+	float deltaTime = ImGui::GetIO().DeltaTime;
+	if (!playback.isplaybackactive() && !rec.isrecordingactive()) {
+		anim.update(false, deltaTime);
+	}
+	else {
+		anim.update(true, deltaTime);
+	}
+	if (anim.alpha <= 0.01f) {
+		return;
+	}
+	//getting text
+	framecontainer& recording = rec.getactiverecording();
+	int currentFrame = playback.getcurrentframe();
+	int maxFrames = recording.size();
+	std::string text = std::to_string(currentFrame) + (" / ") + std::to_string(maxFrames);
+
+	//kinda lazy to make custom font for that
+	ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+	ImVec2 infoTextSize = fonts::recorder_font->CalcTextSizeA(12.f, FLT_MAX, NULL, text.c_str());
+	static const ImVec2& padding = ImVec2(7, 7);
+	static const ImVec2& margin = ImVec2(4, 3);
+	ImVec2 size = ImVec2(infoTextSize.x + margin.x * 2.f, infoTextSize.y + margin.y * 2.f);
+
+	//positions
+	ImVec2 pos;
+	switch (c::misc::movement_rec_position) {
+	case 0:
+		pos = ImVec2(padding.x, padding.y);
+		break;
+	case 1:
+		pos = ImVec2(padding.x, displaySize.y - size.y - padding.y);
+		break;
+	case 2:
+		pos = ImVec2(displaySize.x - size.x - padding.x, displaySize.y - size.y - padding.y);
+		break;
+	}
+	ImVec2 textPos = ImVec2(pos.x + margin.x, pos.y + margin.y);
+
+	//colors
+	ImColor bg_color(0.08f, 0.08f, 0.08f, anim.alpha);
+	ImColor outline_start_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], anim.alpha);
+	ImColor outline_end_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 0.f);
+
+	//drawing
+	draw->AddRectFilledMultiColor(pos + ImVec2(-1, -1), pos + ImVec2(0, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
+	draw->AddRectFilled(pos + ImVec2(0, -1), pos + ImVec2(size.x, 0), outline_start_color);
+	draw->AddRectFilledMultiColor(pos + ImVec2(size.x, -1), pos + ImVec2(size.x + 1, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
+	draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_color);
+	draw->AddText(fonts::recorder_font, 12.f, ImVec2(textPos.x, textPos.y), ImColor(255.f, 255.f, 255.f, anim.alpha), text.c_str());
+}
 
 bool goingtostart = false;
 bool smoothingtostart = false;
 bool wishtostart = false;
+vec3_t aimto;
+
 void mrecorder::create_move(c_usercmd* cmd) {
 	if (!c::misc::movement_rec)
 		return;
@@ -397,7 +512,7 @@ void mrecorder::create_move(c_usercmd* cmd) {
 					return;
 
 				if (mapWithRoutes.at(closestroute).frames.size() > 0) {
-					if (mapWithRoutes.at(closestroute).frames.at(0).position.distance_to(prediction_backup::origin) < c::misc::movement_rec_ringsize) {
+					if (mapWithRoutes.at(closestroute).frames.at(0).position.distance_to(prediction_backup::origin) < 15.f) {
 						rec.setrecording(mapWithRoutes.at(closestroute).frames);
 						goingtostart = true;
 						if (c::misc::movement_rec_lockva)
@@ -444,13 +559,20 @@ void mrecorder::create_move(c_usercmd* cmd) {
 				smoothingtostart = false;
 			}
 
+			if (menu::checkkey(c::misc::movement_rec_keystopplayback, c::misc::movement_rec_keystopplayback_s) && !rec.isrecordingactive()) {
+				goingtostart = false;
+				smoothingtostart = false;
+				return;
+			}
+
 			deltaang.normalize3();
 
 			deltaang.x /= c::misc::movement_rec_smoothing;
 			deltaang.y /= c::misc::movement_rec_smoothing;
 			cmd->view_angles.x += deltaang.x;
 			cmd->view_angles.y += deltaang.y;
-			interfaces::engine->set_view_angles(cmd->view_angles);
+			aimto = cmd->view_angles;
+			interfaces::engine->set_view_angles(aimto);
 		}
 
 		if (wishtostart) {
@@ -459,6 +581,8 @@ void mrecorder::create_move(c_usercmd* cmd) {
 					if (prediction_backup::origin.distance_to(rec.getactiverecording().at(0).position) < 0.1f) {
 						if ((vec3_t{ vec3_t{ rec.getactiverecording().at(0).viewangles[0], rec.getactiverecording().at(0).viewangles[1], 0.f } - cmd->view_angles }.length_2d() < 0.1f) || !c::misc::movement_rec_lockva) {
 							playback.startplayback(rec.getactiverecording());
+							playback.set_start_tick(interfaces::globals->tick_count);
+							start_time = interfaces::globals->cur_time;
 							wishtostart = false;
 							return;
 						}
@@ -470,8 +594,20 @@ void mrecorder::create_move(c_usercmd* cmd) {
 		if (menu::checkkey(c::misc::movement_rec_keystopplayback, c::misc::movement_rec_keystopplayback_s) && playback.isplaybackactive() && !rec.isrecordingactive()) {
 			goingtostart = false;
 			smoothingtostart = false;
-			cmd->view_angles = { playback.getactivedemo().at(playback.getcurrentframe()).viewangles[0], playback.getactivedemo().at(playback.getcurrentframe()).viewangles[1], 0.f };
 			playback.stopplayback();
+		}
+
+		//.............. idk how to fix it im really sorry for thatt
+		if (isplaybackactive) {
+			const size_t current_playback_frame = playback.getcurrentframe();
+			try {
+				if (current_playback_frame + 1 == rec.getactiverecording().size()) {
+					playback.stopplayback();
+				}
+			}
+			catch (std::out_of_range) {
+				playback.stopplayback();
+			}
 		}
 
 		if (isRecordingActive) {
@@ -479,26 +615,19 @@ void mrecorder::create_move(c_usercmd* cmd) {
 			rec.getactiverecording().push_back(frame(cmd, g::local->origin()));
 		}
 
+		//TODO: UNDERSTAND WHY THE IT STILL LAGS FOR THE FIRST TRY
+
 		if (isplaybackactive) {
 			const size_t current_playback_frame = playback.getcurrentframe();
 			try {
 				vec3_t orang = cmd->view_angles;
 				rec.getactiverecording().at(current_playback_frame).replay(cmd);
 				vec3_t tomvfix = cmd->view_angles;
-				if (c::misc::movement_rec_lockva) {
-					interfaces::engine->set_view_angles(cmd->view_angles);
-				}
-				else {
+				if (!c::misc::movement_rec_lockva) {
 					cmd->view_angles = orang;
 					features::movement::fix_movement(cmd, tomvfix);
 				}
-
-				if (current_playback_frame + 1 == rec.getactiverecording().size()) {
-					playback.stopplayback();
-				}
-				else {
-					playback.setcurrentframe(current_playback_frame + 1);
-				}
+				playback.setcurrentframe(current_playback_frame + 1);
 			}
 			catch (std::out_of_range) {
 				playback.stopplayback();
@@ -512,7 +641,68 @@ void mrecorder::create_move(c_usercmd* cmd) {
 		}
 	}
 
+	//???
 	cmd->view_angles.normalize3();
+}
+
+void mrecorder::frame_stage(int stage)
+{
+	if (stage == frame_start) {
+		if (!playback.isplaybackactive() || !c::misc::movement_rec_lockva)
+			return;
+
+		//getting current recorder frame
+		size_t current_idx = playback.getcurrentframe();
+		auto& recording = rec.getactiverecording();
+
+		//if ended
+		if (current_idx >= recording.size() || current_idx + 1 >= recording.size()) {
+			return;
+		}
+
+		//calculating shit
+		auto& frame_current = recording[current_idx];
+		auto& frame_next = recording[current_idx + 1];
+
+		int current_tick = playback.get_start_tick() + current_idx;
+		int next_tick = current_tick + 1;
+
+		float current_frame_time = ticks_to_time(current_tick);
+		float next_frame_time = ticks_to_time(next_tick);
+
+		float total_time = next_frame_time - current_frame_time;
+		float elapsed_time = interfaces::globals->cur_time - current_frame_time;	
+		float progress = elapsed_time / total_time;
+
+		if (progress > 1.0f) progress = 1.0f;
+		if (progress < 0.0f) progress = 0.0f;
+
+		float pitch_interp = frame_current.viewangles[0] +
+			(frame_next.viewangles[0] - frame_current.viewangles[0]) * progress;
+
+		float yaw_delta = math::normalize_yaw(frame_next.viewangles[1] - frame_current.viewangles[1]);
+		float yaw_interp = frame_current.viewangles[1] + (yaw_delta * progress);
+
+		//setting viewangles (instead of doing that in createmove)
+		vec3_t interpolated = { pitch_interp, yaw_interp, 0.0f };
+		interfaces::engine->set_view_angles(interpolated);
+	}
+}
+
+void mrecorder::camera_lock(float& x, float& y)
+{
+	if (playback.isplaybackactive() && c::misc::movement_rec_lockva) {
+		x = 0;
+		y = 0;
+
+	}
+	else if (c::misc::movement_rec_lockgoingtostart && (smoothingtostart || goingtostart)) {
+		x = 0;
+		y = 0;
+	}
+	else {
+		return;
+	}
 }
 
 savingroute::savingroute(const char* name) {
@@ -530,8 +720,7 @@ bool is_empty_file(std::ifstream& file) {
 
 void savingroute::load(size_t id) {
 
-	playback.stopplayback();
-
+	//playback.stopplayback();
 	mapWithRoutes.clear();
 
 	Json::Value json;

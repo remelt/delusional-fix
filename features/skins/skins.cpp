@@ -486,6 +486,7 @@ void features::skins::knife_changer( ) {
 					apply_knife_skin(weapon, WEAPON_KNIFE_T, c::skins::knife_changer_paint_kit, index_t, 3, wear);
 					break;
 				case 17:
+					apply_knife_skin(weapon, WEAPON_KNIFEGG, c::skins::knife_changer_paint_kit, index_gold, 3, wear);
 					break;
 				case 18:
 					apply_knife_skin(weapon, WEAPON_KNIFE_CSS, c::skins::knife_changer_paint_kit, index_css, 3, wear);

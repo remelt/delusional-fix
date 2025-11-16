@@ -61,9 +61,10 @@ namespace features::movement {
 	void pixel_surf_fix_del(c_usercmd* cmd);
 	void pixel_surf_del(c_usercmd* cmd);
 	void jump_bug(c_usercmd* cmd);
+	void jump_bug_crouch(c_usercmd* cmd);
 	void edge_jump(c_usercmd* cmd);
 	void crouch_bug(c_usercmd* cmd);
-	void long_jump(c_usercmd* cmd );
+	void long_jump(c_usercmd* cmd);
 	void ladder_jump(c_usercmd* cmd);
 	void ladder_bug(c_usercmd* cmd);
 	void null_strafing(c_usercmd* cmd);
@@ -85,10 +86,10 @@ namespace features::movement {
 	void indicators();
 	void auto_align(c_usercmd* cmd);
 	void auto_align_lb(c_usercmd* cmd);
-	void gather_vel_graph_data( );
-	void velocity_graph_draw( );
-	void gather_stam_graph_data( );
-	void stamina_graph_draw( );
+	void gather_vel_graph_data();
+	void velocity_graph_draw();
+	void gather_stam_graph_data();
+	void stamina_graph_draw();
 	void visualize_eb();
 	void check_ps(c_usercmd* cmd);
 	void pixelsurf_assist(c_usercmd* cmd);
@@ -127,6 +128,8 @@ namespace features::movement {
 	struct avoid_collision_t {
 		float m_ducking_velo = 0.f;
 		float m_standing_velo = 0.f;
+		float m_ducking_origin = 0.f;
+		float m_standing_origin = 0.f;
 
 	}; inline avoid_collision_t m_avoid_collision;
 
@@ -238,9 +241,12 @@ class mrecorder {
 public:
 	void draw();
 	void create_move(c_usercmd* cmd);
+	void endscene(ImDrawList* draw);
 	void drawroute();
 	void infowindow();
 	void forcestop();
+	void frame_stage(int stage);
+	void camera_lock(float& x, float& y);
 	vec3_t origin_r;
 };
 
