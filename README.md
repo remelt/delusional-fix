@@ -64,7 +64,7 @@
     - added auto duck
     - added avoid collision
     - pasted fireman
-    - added fast ladder (s/o [@flowars](https://github.com/flowars))
+    - added fast ladder (s/o [@clearlyst](https://github.com/clearlyst))
     - added airstuck (s/o [@flowars](https://github.com/flowars))
     - pasted and fixed ps and bounce assists from lobotomy (works a lot better imo) (ofc fixed for all ticks) (big s/o [@flowars](https://github.com/flowars))
 + Visuals
