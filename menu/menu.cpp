@@ -2439,7 +2439,7 @@ void miscellaneous() {
             ImGui::Checkbox(("auto align"), &c::movement::auto_align);
             if (c::movement::auto_align) {
                 ImGui::Text("auto align type");
-                ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
+                ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0experimental\0");
                 switch (c::movement::align_selection) {
                 case 0:
                     ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);

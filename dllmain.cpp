@@ -92,10 +92,11 @@ DWORD WINAPI on_attach(void* instance) {
         sdk::hooks::unload();
         im_render.unload();
 
+        g_Discord.shutdown();
 	}();
 
     //works only w manual map for some reason
-    FreeLibraryAndExitThread(static_cast<HMODULE>(instance), 0);
+    FreeLibraryAndExitThread(static_cast<HMODULE>(instance), 1);
 
 	return 0;
 }
@@ -139,6 +140,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD  call_reason, LPVOID reserved)
         }
     }
     else if (call_reason == DLL_PROCESS_DETACH) {
+        g_Discord.shutdown();
     }
     return TRUE;
 }

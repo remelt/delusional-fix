@@ -12,3 +12,4 @@ public:
     void shutdown();
 
 };
+extern c_discord g_Discord;

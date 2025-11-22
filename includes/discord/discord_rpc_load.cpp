@@ -23,8 +23,10 @@ void c_discord::update() {
     std::string current_status = { "js chillin" };
     if (interfaces::engine->is_connected()) {
 		// get hostname from server
-        current_status = "playing on: ";
-		current_status += interfaces::engine->get_level_name();
+        if (interfaces::engine->get_level_name() && interfaces::engine->get_level_name() != " ") {
+            current_status = "playing on: ";
+            current_status += interfaces::engine->get_level_name();
+        }
     }
 
     discordPresence.largeImageText = "T _T";
@@ -43,3 +45,5 @@ void c_discord::shutdown() {
     Discord_ClearPresence();
     Discord_Shutdown();
 }
+
+c_discord g_Discord;

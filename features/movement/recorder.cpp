@@ -222,47 +222,46 @@ void mrecorder::draw() {
 		if (ImGui::Button("reload records", ImVec2(-1, 15)))
 		route->listroutes();
 
-		if (!mapWithRoutes.empty()) {
+		ImGui::PushItemWidth(-1);
 
-			ImGui::PushItemWidth(-1);
+		static int route_index = -1;
 
-			static int route_index = -1;
+		ImGui::Text(("routes"));
 
-			ImGui::Text(("routes"));
-
-			if (ImGui::ListBoxHeader(("##rout3s"), mapWithRoutes.size(), mapWithRoutes.size())) {
-				for (int i = 0; i < mapWithRoutes.size(); ++i) {
-					std::string const& route_name = mapWithRoutes[i].routename;
-					if (ImGui::Selectable(route_name.c_str(), i == route_index)) {
-						route_index = i;
-					}
+		if (ImGui::ListBoxHeader(("##rout3s"), mapWithRoutes.size(), mapWithRoutes.size())) {
+			for (int i = 0; i < mapWithRoutes.size(); ++i) {
+				std::string const& route_name = mapWithRoutes[i].routename;
+				if (ImGui::Selectable(route_name.c_str(), i == route_index)) {
+					route_index = i;
 				}
-				ImGui::ListBoxFooter();
 			}
-			ImGui::PopItemWidth();
+			ImGui::ListBoxFooter();
+		}
+		ImGui::PopItemWidth();
 
-			if (ImGui::InputTextWithHint(("##route name"), ("route name"), buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+		ImGui::Text(("route name"));
+
+		if (ImGui::InputTextWithHint(("##route name4"), ("route name"), buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+			route->save(currentRoute, buffer);
+			ZeroMemory(buffer, 32);
+		}
+
+		if (ImGui::IsItemHovered()) {
+			ImGui::SetTooltip("press enter to create a new record");
+		}
+
+		//for buffer
+		if (currentRoute != -1) {
+
+			if (ImGui::Button("save route", ImVec2(-1, 15))) {
 				route->save(currentRoute, buffer);
 				ZeroMemory(buffer, 32);
 			}
+		}
 
-			if (ImGui::IsItemHovered()) {
-				ImGui::SetTooltip("press enter to create a new record");
-			}
-
-			//for buffer
-			if (currentRoute != -1) {
-
-				if (ImGui::Button("save route", ImVec2(-1, 15))) {
-					route->save(currentRoute, buffer);
-					ZeroMemory(buffer, 32);
-				}
-			}
-
-			if (ImGui::Button("delete route", ImVec2(-1, 15))) {
-				if (route_index >= 0 && route_index < mapWithRoutes.size()) {
-					mapWithRoutes.erase(mapWithRoutes.begin() + route_index);
-				}
+		if (ImGui::Button("delete route", ImVec2(-1, 15))) {
+			if (route_index >= 0 && route_index < mapWithRoutes.size()) {
+				mapWithRoutes.erase(mapWithRoutes.begin() + route_index);
 			}
 		}
 	}
@@ -280,6 +279,7 @@ void mrecorder::draw() {
 //TODO: FINISH THE ANIMATION LOGIC
 
 static std::vector<float> point_progress;
+static std::vector<float> time_anim2;
 float start_time = 0.0f;
 //static std::vector<float> start_time;
 //static std::vector<float> line_progress;
@@ -288,6 +288,8 @@ void mrecorder::drawroute() {
 		return;
 	if (point_progress.size() != mapWithRoutes.size())
 		point_progress.resize(mapWithRoutes.size(), 0.0f);
+	if (time_anim2.size() != mapWithRoutes.size())
+		time_anim2.resize(mapWithRoutes.size(), 0.0f);
 
 	//if (start_time.size() != mapWithRoutes.size())
 	//	start_time.resize(mapWithRoutes.size(), 0.0f);
@@ -370,16 +372,18 @@ void mrecorder::drawroute() {
 						const color_t filled(0, 0, 0, static_cast<int>(100.0f * alphaMultiplier));
 						const color_t outline(255, 255, 255, static_cast<int>(255.0f * alphaMultiplier));
 
-						static float time = 0.0f;
-						time += ImGui::GetIO().DeltaTime;
-						int alpha = 200 - fmod(time * 20.84f, 200.0f); //25 : 1,2
-						float radius = fmod(time * 4.17f, 40.0f); //5 : 1,2
+						time_anim2[i] += delta_time;
+						int alpha = 200 - static_cast<int>(fmod(time_anim2[i] * 50.f, 200.0f));
+						float radius = fmod(time_anim2[i] * 10.f, 40.0f);
 
 						vec3_t pos2 = mapWithRoutes[i].frames[0].position;
 						pos2.z += 2.f;
 
 						if (distance < 15.f) {
 							im_render.drawcircle_3d(pos2, radius, color_t(255, 255, 255, alpha), 1.0f);
+						}
+						else {
+							time_anim2[i] = 0.f;
 						}
 
 						im_render.drawcirclefilled_3d(mapWithRoutes[i].frames[0].position, effectiveRadius, filled);

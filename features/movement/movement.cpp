@@ -1941,6 +1941,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 		to_wall.normalize();
 		vec3_t velo = g::local->velocity();
 		velo.z = 0.f;
+
 		if (velo.length_2d() > 0.f) {
 			vec3_t velo_ang = velo.to_angle();
 			vec3_t delta = velo_ang - to_wall;
@@ -1972,19 +1973,9 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 
 	float backup_forward_move = cmd->forward_move;
 	float backup_side_move = cmd->side_move;
-	constexpr static float distance_till_adjust = 0.03125f;
-	constexpr auto has_to_align = [](const vec3_t& origin) -> bool {
-		constexpr static float distance_to_stop = 0.00750f;
 
-		const vec2_t remainder1 = vec2_t(1.f - (origin.x - floor(origin.x)), 1.f - (origin.y - floor(origin.y)));
-		const vec2_t remainder2 = vec2_t((origin.x - floor(origin.x)), (origin.y - floor(origin.y)));
-
-		return ((remainder1.x >= distance_to_stop && remainder1.x <= distance_till_adjust) ||
-			(remainder1.y >= distance_to_stop && remainder1.y <= distance_till_adjust)) ||
-			((remainder2.x >= distance_to_stop && remainder2.x <= distance_till_adjust) ||
-				(remainder2.y >= distance_to_stop && remainder2.y <= distance_till_adjust));
-		};
-	for (float multiplayer = 0.f; multiplayer < 100.f; multiplayer += 10.f) {
+	//cp from og align
+	for (float multiplayer = 10.f; multiplayer < 100.f; multiplayer += 10.f) {
 		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 
 		float forwardmove = cos_rot * multiplayer;
@@ -1995,6 +1986,12 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 
 		prediction::begin(cmd);
 		prediction::end();
+
+		//we dont need to waste time on this shit
+		if (g::local->flags() & fl_onground || g::local->move_type() & movetype_ladder) {
+			continue;
+		}
+
 		float new_zspeed = g::local->get_velocity().z;
 		if (new_zspeed == targetZvelo) {
 			cmd->forward_move = forwardmove;
@@ -2003,23 +2000,45 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 			break;
 		}
 	}
-	if (!detect) {
-		float forwardmove = cos_rot * 10.f;
-		float sidemove = -sin_rot * 10.f;
-		cmd->forward_move = forwardmove;
-		cmd->side_move = sidemove;
-	}
 
-	float if_not_slide_fw = cmd->forward_move;
-	float if_not_slide_sw = cmd->side_move;
-	if (!has_to_align(prediction_backup::origin) && prediction_backup::velocity.z != targetZvelo) {
-		if ((cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) ||
-			(cmd->buttons & in_moveright)) {
-			cmd->forward_move = backup_forward_move;
-			cmd->side_move = backup_side_move;
+	//part from delusional
+	if (!detect) {
+		for (int i = 1; i <= 5; i++) {
+			// try different forward and sidemove variations to find one that alignes in 1 tick
+			prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+			float forwardmove = cos_rot * i * 9;
+			float sidemove = -sin_rot * i * 9;
+
+			//uncomment this if not aligning
+			//for (int seph = 0; seph < 2; seph++) {
+				c_usercmd fakecmd = *cmd;
+				fakecmd.forward_move = forwardmove;
+				fakecmd.side_move = sidemove;
+				prediction::begin(&fakecmd);
+				prediction::end();
+
+				if (g::local->move_type() & movetype_ladder) {
+					continue;
+				}
+
+				vec3_t start_pos2 = g::local->abs_origin();
+				const vec3_t end_pos3 = start_pos2 + angles;
+				trace_t trace3;
+				ray_t ray3;
+				ray3.initialize(start_pos2, end_pos3, mins, maxs);
+				interfaces::trace_ray->trace_ray(ray3, MASK_PLAYERSOLID, &fil, &trace3);
+				if (trace3.flFraction < 1.f) {
+					cmd->forward_move = forwardmove;
+					cmd->side_move = sidemove;
+					detect = true;
+					break;
+				}
+			//}
 		}
 	}
-	if (prediction_backup::velocity.z == targetZvelo) {
+
+	//added buttons as a condition to fix that "sticky" effect when using align
+	if (prediction_backup::velocity.z == targetZvelo || (cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) || (cmd->buttons & in_moveright)) {
 		vec3_t wishdir;
 
 		bool done = false;
@@ -2059,26 +2078,6 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 				float sidemove_2 = cmd->side_move;
 				int i_backup_velo = g::local->get_velocity().length_2d();
 				bool do_surf_detected = false;
-				for (int i = 0; i < 450; i += 45) {
-					prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-					if (buttons_2 & in_forward)
-						cmd->forward_move = i;
-					if (buttons_2 & in_back)
-						cmd->forward_move = -i;
-					if (buttons_2 & in_moveleft)
-						cmd->side_move = -i;
-					if (buttons_2 & in_moveright)
-						cmd->side_move = i;
-
-					prediction::begin(cmd);
-					prediction::end();
-					float zvelo = g::local->get_velocity().z;
-					if (zvelo == targetZvelo) {
-						forwardmove_2 = cmd->forward_move;
-						sidemove_2 = cmd->side_move;
-					}
-				}
-
 				int i_preed_velo = g::local->get_velocity().length_2d();
 
 				cmd->forward_move = forwardmove_2;
