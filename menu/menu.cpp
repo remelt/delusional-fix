@@ -2230,7 +2230,7 @@ void visuals() {
             ImGui::ColorEdit4(("##fog color"), c::visuals::fog_color, w_alpha);
             if (c::visuals::fog) {
                 ImGui::Text(("fog distance"));
-                ImGui::SliderInt(("##fog distance"), &c::visuals::fog_distance, 0, 2500);
+                ImGui::SliderInt(("##fog distance"), &c::visuals::fog_distance, 0, 9500);
                 ImGui::Text(("fog density"));
                 ImGui::SliderInt(("##fog density"), &c::visuals::fog_density, 0, 100);
             }
@@ -2247,6 +2247,8 @@ void visuals() {
                     ImGui::Text(("shadows rotation speed"));
                     ImGui::SliderFloat(("##rot4"), &c::visuals::shadow_rotation_speed, 0.f, 20.0f, ("%.1f"));
                 }
+                ImGui::Text(("shadow render distance"));
+                ImGui::SliderFloat(("##distance"), &c::visuals::shadow_dist, 0.f, 2000.f, ("%.0f"));
             }
             ImGui::Text(("skybox changer"));
             ImGui::Combo(("##skybox"), &c::visuals::skybox, "none\0tibet\0baggage\0italy\0aztec\0vertigo\0daylight\0daylight-2\0clouds\0cloulds-2\0gray\0clear\0canals\0cobblestone\0assault\0cloudsdark\0night\0nigh2\0nightflat\0dusty\0rainy");
@@ -2404,7 +2406,6 @@ void miscellaneous() {
                                 ImGui::Checkbox(("silent edgebug"), &c::movement::silent_eb_hacked);
                             }
                         }
-                        ImGui::Checkbox(("extra advanced detection"), &c::movement::edgebug_pena);
                         ImGui::Text(("edge bug ticks"));
                         ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 128);
                         ImGui::Text(("mouse lock factor"));
@@ -2439,7 +2440,7 @@ void miscellaneous() {
             ImGui::Checkbox(("auto align"), &c::movement::auto_align);
             if (c::movement::auto_align) {
                 ImGui::Text("auto align type");
-                ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0experimental\0");
+                ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
                 switch (c::movement::align_selection) {
                 case 0:
                     ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
@@ -2481,12 +2482,6 @@ void miscellaneous() {
                 ImGui::Keybind(("auto duck key"), &c::movement::auto_duck_key, &c::movement::auto_duck_key_s);
                 ImGui::Text(("auto duck ticks"));
                 ImGui::SliderInt(("##auto duck tickss"), &c::movement::auto_duck_ticks, 2, 12);
-            }
-            ImGui::Checkbox(("avoid head collision"), &c::movement::auto_duck_collision);
-            if (c::movement::auto_duck_collision) {
-                ImGui::Keybind(("avoid head collision key"), &c::movement::auto_duck_collision_key, &c::movement::auto_duck_collision_key_s);
-                ImGui::Text(("avoid head collision ticks"));
-                ImGui::SliderInt(("##avoidheadcollisionticks"), &c::movement::auto_duck_collision_ticks, 2, 12);
             }
             ImGui::Checkbox(("fireman"), &c::movement::fireman);
             if (c::movement::fireman) {
@@ -2584,10 +2579,39 @@ void miscellaneous() {
 
             ImGui::PopStyleVar();
 
+            }},
+            ctab{ "experimental", []()
+            {
+
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
+
+            if (c::movement::bhop) {
+                ImGui::Checkbox(("enable if bhop isnt working properly (128t only)"), &c::movement::bhopfix);
+            }
+            if (c::movement::align_selection == 1) {
+                ImGui::Checkbox(("enable experimental auto align"), &c::movement::align_experimental);
+                if (c::movement::align_experimental) {
+                    ImGui::Text(("auto align predict ticks"));
+                    ImGui::SliderInt(("##alticks"), &c::movement::al_exp_pred_ticks, 1, 4);
+                }
+            }
+            if (c::movement::edgebug_type == 0) {
+                ImGui::Checkbox(("edgebug extra advanced detection"), &c::movement::edgebug_pena);
+            }
+            ImGui::Checkbox(("avoid head collision"), &c::movement::auto_duck_collision);
+            if (c::movement::auto_duck_collision) {
+                ImGui::Keybind(("avoid head collision key"), &c::movement::auto_duck_collision_key, &c::movement::auto_duck_collision_key_s);
+                ImGui::Text(("avoid head collision ticks"));
+                ImGui::SliderInt(("##avoidheadcollisionticks"), &c::movement::auto_duck_collision_ticks, 2, 12);
+            }
+            ImGui::Checkbox(("allow cheat unload (f1 + f2)"), &c::misc::unload_shit);
+
+            ImGui::PopStyleVar();
+
             }}
             };
 
-            menu::render_tab("movement_tab", movement_tabs, 2U, &menu::movement_tab, style.Colors[ImGuiCol_TabHovered]);
+            menu::render_tab("movement_tab", movement_tabs, 3U, &menu::movement_tab, style.Colors[ImGuiCol_TabHovered]);
 
             ImGui::EndChild();
         }
@@ -3045,7 +3069,6 @@ void miscellaneous() {
             // s/o flowars
             ImGui::Checkbox(("insecure bypass"), &c::misc::insecure_bypass);
             ImGui::Checkbox(("mouse fix"), &c::misc::mouse_fix);
-            ImGui::Checkbox(("enable if bhop isnt working properly (128t only)"), &c::movement::bhopfix);
             ImGui::Checkbox(("disable movement fix"), &c::movement::movement_fix);
             ImGui::Checkbox(("pixelsurf fix"), &c::movement::pixel_surf_fix);
 

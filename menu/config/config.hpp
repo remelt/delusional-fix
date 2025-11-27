@@ -172,7 +172,7 @@ namespace c {
 		inline bool auto_strafe = false;
 		inline int  auto_strafe_key = 0;
 		inline int  auto_strafe_key_s = 1;
-		inline bool movement_fix = true;
+		inline bool movement_fix = false;
 		inline bool edgebug_pena = false;
 		inline int fix_type = 0;
 		inline bool bhop = false;
@@ -255,6 +255,7 @@ namespace c {
 		inline int jump_bug_key_s = 1;
 		inline bool fastduck = false;
 		inline bool auto_align = false;
+		inline bool align_experimental = true;
 		inline int align_selection = 1;
 		inline int px_selection = 1;
 		inline bool freelook_surf = true;
@@ -278,6 +279,7 @@ namespace c {
 		inline int  pixel_surf_key_s = 1;
 		inline int pixel_surf_ticks = 16;
 		inline int lb_pixel_surf_ticks = 8;
+		inline int al_exp_pred_ticks = 1;
 		inline bool fakebackwards = false;
 		inline int  fakebackwardskey = 0;
 		inline int  fakebackwardskey_s = 1;
@@ -337,6 +339,7 @@ namespace c {
 	}
 
 	namespace misc {
+		inline bool unload_shit = false;
 		inline bool headshot_spoofer = false;
 		inline bool anti_untrusted = true;
 		inline bool insecure_bypass = true;
@@ -914,6 +917,7 @@ namespace c {
 		inline float shadow_rot_y = 0.f;
 		inline float shadow_rot_z = 0.f;
 		inline float shadow_rotation_speed = 1.f;
+		inline float shadow_dist = 0.f;
 		inline bool dlight = false;
 		inline float dlight_clr[4]{ 1.f, 1.f, 1.f, 255.f };
 		inline bool gravity_ragdoll = false;

@@ -80,6 +80,13 @@ public:
 	virtual float		get_timeout_seconds( ) const = 0;
 };
 
+enum SkyboxVisibility_t
+{
+	SKYBOX_NOT_VISIBLE = 0,
+	SKYBOX_3DSKYBOX_VISIBLE,
+	SKYBOX_2DSKYBOX_VISIBLE,
+};
+
 class iv_engine_client {
 public:
 	i_net_channel_info* get_net_channel_info( ) {
@@ -122,6 +129,11 @@ public:
 	bool is_connected( ) {
 		using fn = bool( __thiscall* )( iv_engine_client* );
 		return ( *( fn** ) this )[ 27 ]( this );
+	}
+
+	SkyboxVisibility_t IsSkyboxVisibleFromPoint(vec3_t& origin) {
+		using fn = SkyboxVisibility_t(__thiscall*)(iv_engine_client*, vec3_t&);
+		return (*(fn**)this)[98](this, origin);
 	}
 
 	void execute_client_cmd(const char* cmd) {

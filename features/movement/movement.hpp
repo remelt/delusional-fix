@@ -86,6 +86,7 @@ namespace features::movement {
 	void indicators();
 	void auto_align(c_usercmd* cmd);
 	void auto_align_lb(c_usercmd* cmd);
+	void auto_align_lb_recode(c_usercmd* cmd);
 	void gather_vel_graph_data();
 	void velocity_graph_draw();
 	void gather_stam_graph_data();

@@ -179,8 +179,9 @@ void features::visuals::apply_zoom() {
 	}
 }
 
+//s/o flo
 void features::visuals::fog() {
-	static auto fog_override = interfaces::console->get_convar("fog_override"); 
+	static auto fog_override = interfaces::console->get_convar("fog_override");
 
 	if (!c::visuals::fog) {
 		fog_override->set_value(0);
@@ -189,16 +190,22 @@ void features::visuals::fog() {
 	fog_override->set_value(1);
 
 	static auto fog_start = interfaces::console->get_convar("fog_start");
+	static auto fog_skybox_start = interfaces::console->get_convar("fog_startskybox");
 
 	fog_start->set_value(0);
+	fog_skybox_start->set_value(0);
 
 	static auto fog_end = interfaces::console->get_convar("fog_end");
+	static auto fog_skybox_end = interfaces::console->get_convar("fog_endskybox");
 
 	fog_end->set_value(c::visuals::fog_distance);
+	fog_skybox_end->set_value(c::visuals::fog_distance);
 
 	static auto fog_maxdensity = interfaces::console->get_convar("fog_maxdensity");
+	static auto fog_skybox_maxdensity = interfaces::console->get_convar("fog_maxdensityskybox");
 
 	fog_maxdensity->set_value((float)c::visuals::fog_density * 0.01f);
+	fog_skybox_maxdensity->set_value((float)c::visuals::fog_density * 0.01f);
 
 	int red = c::visuals::fog_color[0] * 255;
 	int green = c::visuals::fog_color[1] * 255;
@@ -207,8 +214,10 @@ void features::visuals::fog() {
 	sprintf_s(buffer_color, 12, "%i %i %i", red, green, blue);
 
 	static auto fog_color = interfaces::console->get_convar("fog_color");
+	static auto fog_skybox_color = interfaces::console->get_convar("fog_colorskybox");
 
 	fog_color->set_value(buffer_color);
+	fog_skybox_color->set_value(buffer_color);
 }
 
 void features::visuals::shadows() {
@@ -223,9 +232,14 @@ void features::visuals::shadows() {
 	if (!cl_csm_rot_override)
 		return;
 
+	static convar* cl_csm_max_shadow_dist = interfaces::console->get_convar("cl_csm_max_shadow_dist");
+	if (!cl_csm_max_shadow_dist)
+		return;
+
 	if (!c::visuals::shadows) {
 		cl_csm_shadows->set_value(1);
 		cl_csm_rot_override->set_value(0);
+		cl_csm_max_shadow_dist->set_value(0);
 		return;
 	}
 
@@ -254,6 +268,8 @@ void features::visuals::shadows() {
 		cl_csm_rot_x->set_value(c::visuals::shadow_rot_x);
 	if (cl_csm_rot_y)
 		cl_csm_rot_y->set_value(c::visuals::shadow_rot_y);
+
+	cl_csm_max_shadow_dist->set_value(c::visuals::shadow_dist);
 }
 
 void features::visuals::gravity_ragdoll() {
@@ -265,6 +281,8 @@ void features::visuals::gravity_ragdoll() {
 }
 
 bool update = false;
+bool founddustsky = false;
+bool foundsky = false;
 void features::visuals::skybox_changer() {
 	if (!g::local)
 		update = true;
@@ -295,14 +313,70 @@ void features::visuals::skybox_changer() {
 	case 20: skybox_name = "vietnam"; break;
 	}
 
+	i_material* skybox_nuke = interfaces::material_system->find_material("models/props/de_nuke/hr_nuke/nuke_skydome_001/nuke_skydome_001", TEXTURE_GROUP_OTHER);
+	i_material* skybox_dust = interfaces::material_system->find_material("models/props/de_dust/hr_dust/dust_skybox/sky_dust2", TEXTURE_GROUP_OTHER);
+
 	if (g::local && (update || saved_skybox != c::visuals::skybox)) {
+
+		std::string mapname = "";
+		if (interfaces::engine->is_connected()) {
+			mapname = interfaces::engine->get_level_name();
+		}
 		if (c::visuals::skybox == 0)
+		{
 			load_skybox(sv_skyname->string);
+
+			if (foundsky && mapname.find("nuke") != std::string::npos) {
+				skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
+				foundsky = false;
+			}
+
+			if (founddustsky && mapname.find("dust") != std::string::npos) {
+				skybox_dust->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
+				founddustsky = false;
+			}
+		}
 		else
+		{
 			load_skybox(skybox_name.c_str());
+
+			if (mapname.find("nuke") != std::string::npos) {
+				if (!(skybox_nuke->is_error_material()) && !foundsky)
+				{
+					skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, true);
+					foundsky = true;
+				}
+			}
+			else
+			{
+				if (foundsky)
+				{
+					skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
+					foundsky = false;
+				}
+			}
+
+			if (mapname.find("dust") != std::string::npos) {
+				if (!(skybox_dust->is_error_material()) && !founddustsky)
+				{
+					skybox_dust->set_material_var_flag(material_var_flags_t::material_var_no_draw, true);
+					founddustsky = true;
+				}
+			}
+			else
+			{
+				if (founddustsky)
+				{
+					skybox_dust->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
+					founddustsky = false;
+				}
+			}
+
+		}
 		saved_skybox = c::visuals::skybox;
 	}
 }
+
 
 void features::visuals::watermark() {
 	if (!c::misc::watermark)
@@ -835,13 +909,6 @@ void features::visuals::key_strokes() {
 	interfaces::engine->get_screen_size(w, h);
 	c_usercmd* cmd = g::cmd;
 
-	color_t clr;
-
-	if (cmd->buttons & in_moveleft && cmd->buttons & in_moveright)
-		clr = color_t(0.6f, 0.2f, 0.2f);
-	else
-		clr = color_t(1.f, 1.f, 1.f);
-
 	im_render.text(w / 2 + 13, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "_", true, color_t(1.f, 1.f, 1.f), true);
 	im_render.text(w / 2 - 14, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "_", true, color_t(1.f, 1.f, 1.f), true);
 	im_render.text(w / 2, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "_", true, color_t(1.f, 1.f, 1.f), true);
@@ -849,29 +916,54 @@ void features::visuals::key_strokes() {
 	im_render.text(w / 2, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "_", true, color_t(1.f, 1.f, 1.f), true);
 	im_render.text(w / 2 + 13, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "_", true, color_t(1.f, 1.f, 1.f), true);
 
+	if (c::movement::movement_fix) {
+		if (cmd->buttons & in_forward)
+			im_render.text(w / 2, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "W", true, color_t(1.f, 1.f, 1.f), true);
+
+		if (cmd->buttons & in_moveleft)
+			im_render.text(w / 2 - 14, c::movement::key_strokes_position + 14, 12, fonts::key_strokes_font, "A", true, color_t(1.f, 1.f, 1.f), true);
+
+		if (cmd->buttons & in_back)
+			im_render.text(w / 2, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "S", true, color_t(1.f, 1.f, 1.f), true);
+
+		if (cmd->buttons & in_moveright)
+			im_render.text(w / 2 + 13, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "D", true, color_t(1.f, 1.f, 1.f), true);
+	}
+	else {
+		if (menu::iskeydown(87))
+			im_render.text(w / 2, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "W", true, color_t(1.f, 1.f, 1.f), true);
+
+		if (menu::iskeydown(65))
+			im_render.text(w / 2 - 14, c::movement::key_strokes_position + 14, 12, fonts::key_strokes_font, "A", true, color_t(1.f, 1.f, 1.f), true);
+
+		if (menu::iskeydown(83))
+			im_render.text(w / 2, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "S", true, color_t(1.f, 1.f, 1.f), true);
+
+		if (menu::iskeydown(68))
+			im_render.text(w / 2 + 13, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "D", true, color_t(1.f, 1.f, 1.f), true);
+	}
 	if (cmd->buttons & in_jump)
 		im_render.text(w / 2 + 13, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "J", true, color_t(1.f, 1.f, 1.f), true);
 
 	if (cmd->buttons & in_duck)
 		im_render.text(w / 2 - 14, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "C", true, color_t(1.f, 1.f, 1.f), true);
 
-	if (cmd->buttons & in_forward)
-		im_render.text(w / 2, c::movement::key_strokes_position, 12, fonts::key_strokes_font, "W", true, color_t(1.f, 1.f, 1.f), true);
-
-	if (cmd->buttons & in_moveleft)
-		im_render.text(w / 2 - 14, c::movement::key_strokes_position + 14, 12, fonts::key_strokes_font, "A", true, color_t(1.f, 1.f, 1.f), true);
-
-	if (cmd->buttons & in_back)
-		im_render.text(w / 2, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "S", true, color_t(1.f, 1.f, 1.f), true);
-
-	if (cmd->buttons & in_moveright)
-		im_render.text(w / 2 + 13, c::movement::key_strokes_position + 13, 12, fonts::key_strokes_font, "D", true, color_t(1.f, 1.f, 1.f), true);
-
-	if (cmd->mouse_dx < 0.f)
-		im_render.text(w / 2 - 14, c::movement::key_strokes_position + 28, 12, fonts::key_strokes_font, "<", true, color_t(1.f, 1.f, 1.f), true);
-
-	if (cmd->mouse_dx > 0.f)
-		im_render.text(w / 2 + 13, c::movement::key_strokes_position + 28, 12, fonts::key_strokes_font, ">", true, color_t(1.f, 1.f, 1.f), true);
+	if (c::misc::mouse_fix) {
+		if (cmd->mouse_dx > 0.f) {
+			im_render.text(w / 2 - 14, c::movement::key_strokes_position + 28, 12, fonts::key_strokes_font, "<", true, color_t(1.f, 1.f, 1.f), true);
+		}
+		if (cmd->mouse_dx < 0.f) {
+			im_render.text(w / 2 + 13, c::movement::key_strokes_position + 28, 12, fonts::key_strokes_font, ">", true, color_t(1.f, 1.f, 1.f), true);
+		}
+	}
+	else {
+		if (cmd->mouse_dx < 0.f) {
+			im_render.text(w / 2 - 14, c::movement::key_strokes_position + 28, 12, fonts::key_strokes_font, "<", true, color_t(1.f, 1.f, 1.f), true);
+		}
+		if (cmd->mouse_dx > 0.f) {
+			im_render.text(w / 2 + 13, c::movement::key_strokes_position + 28, 12, fonts::key_strokes_font, ">", true, color_t(1.f, 1.f, 1.f), true);
+		}
+	}
 }
 
 void features::visuals::console() {

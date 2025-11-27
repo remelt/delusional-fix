@@ -893,6 +893,7 @@ namespace c {
 		write_value(json[xs("movement")][xs("key_strokes")], movement::key_strokes);
 		write_value(json[xs("movement")][xs("key_strokes_position")], movement::key_strokes_position);
 		write_value(json[xs("misc")][xs("watermark")], misc::watermark);
+		write_value(json[xs("misc")][xs("unload_shit")], misc::unload_shit);
 		write_value(json[xs("misc")][xs("unlock_inventory")], misc::unlock_inventory);
 		write_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 		write_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
@@ -1038,6 +1039,7 @@ namespace c {
 		write_value(json[xs("visuals")][xs("shadow_rot_y")], visuals::shadow_rot_y);
 		write_value(json[xs("visuals")][xs("shadow_rot_z")], visuals::shadow_rot_z);
 		write_value(json[xs("visuals")][xs("shadow_rotation_speed")], visuals::shadow_rotation_speed);
+		write_value(json[xs("visuals")][xs("shadow_dist")], visuals::shadow_dist);
 
 		write_value(json[xs("visuals")][xs("gravity_ragdoll")], visuals::gravity_ragdoll);
 		write_value(json[xs("visuals")][xs("backtrack_chams")], chams::backtrack_chams);
@@ -1108,6 +1110,8 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("fake_latency")], backtrack::fake_latency);
 		write_value(json[xs("aimbot")][xs("selected_tick")], backtrack::selected_tick);
 		write_value(json[xs("movement")][xs("auto_align")], movement::auto_align);
+		write_value(json[xs("movement")][xs("align_experimental")], movement::align_experimental);
+		write_value(json[xs("movement")][xs("al_exp_pred_ticks")], movement::al_exp_pred_ticks);
 		write_value(json[xs("aimbot")][xs("aimbot")], aimbot::aim_at_bt);
 		write_value(json[xs("aimbot")][xs("aimbot")], aimbot::aimbot);
 		write_value(json[xs("aimbot")][xs("aimbot_key")], aimbot::aimbot_key);
@@ -2422,6 +2426,7 @@ namespace c {
 			read_value(json[xs("movement")][xs("indicators_gap")], movement::indicators_gap);
 
 			read_value(json[xs("misc")][xs("watermark")], misc::watermark);
+			read_value(json[xs("misc")][xs("unload_shit")], misc::unload_shit);
 			read_value(json[xs("misc")][xs("unlock_inventory")], misc::unlock_inventory);
 			read_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 			read_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
@@ -2568,6 +2573,7 @@ namespace c {
 			read_value(json[xs("visuals")][xs("shadow_rot_y")], visuals::shadow_rot_y);
 			read_value(json[xs("visuals")][xs("shadow_rot_z")], visuals::shadow_rot_z);
 			read_value(json[xs("visuals")][xs("shadow_rotation_speed")], visuals::shadow_rotation_speed);
+			read_value(json[xs("visuals")][xs("shadow_dist")], visuals::shadow_dist);
 
 			read_value(json[xs("visuals")][xs("gravity_ragdoll")], visuals::gravity_ragdoll);
 			read_value(json[xs("visuals")][xs("backtrack_chams")], chams::backtrack_chams);
@@ -2638,6 +2644,8 @@ namespace c {
 			read_value(json[xs("aimbot")][xs("fake_latency")], backtrack::fake_latency);
 			read_value(json[xs("aimbot")][xs("selected_tick")], backtrack::selected_tick);
 			read_value(json[xs("movement")][xs("auto_align")], movement::auto_align);
+			read_value(json[xs("movement")][xs("align_experimental")], movement::align_experimental);
+			read_value(json[xs("movement")][xs("al_exp_pred_ticks")], movement::al_exp_pred_ticks);
 			read_value(json[xs("aimbot")][xs("aimbot")], aimbot::aim_at_bt);
 			read_value(json[xs("aimbot")][xs("aimbot")], aimbot::aimbot);
 			read_value(json[xs("aimbot")][xs("aimbot_key")], aimbot::aimbot_key);
@@ -2761,6 +2769,13 @@ namespace c {
 			read_value(json[xs("visuals")][xs("dropped_weapon_name_clr[1]")], visuals::dropped_weapon_name_clr[1]);
 			read_value(json[xs("visuals")][xs("dropped_weapon_name_clr[2]")], visuals::dropped_weapon_name_clr[2]);
 			read_value(json[xs("visuals")][xs("dropped_weapon_name_clr[3]")], visuals::dropped_weapon_name_clr[3]);
+			read_value(json[xs("visuals")][xs("fog_color[0]")], visuals::fog_color[0]);
+			read_value(json[xs("visuals")][xs("fog_color[1]")], visuals::fog_color[1]);
+			read_value(json[xs("visuals")][xs("fog_color[2]")], visuals::fog_color[2]);
+			read_value(json[xs("visuals")][xs("fog_color[3]")], visuals::fog_color[3]);
+			read_value(json[xs("visuals")][xs("fog")], visuals::fog);
+			read_value(json[xs("visuals")][xs("fog_distance")], visuals::fog_distance);
+			read_value(json[xs("visuals")][xs("fog_density")], visuals::fog_density);
 			read_value(json[xs("misc")][xs("swayscale")], misc::swayscale);
 			read_value(json[xs("misc")][xs("swayscale_value")], misc::swayscale_value);
 			read_value(json[xs("visuals")][xs("skybox")], visuals::skybox);
@@ -3327,6 +3342,8 @@ namespace c {
 			read_value(json[xs("movement")][xs("bhopfix")], movement::bhopfix);
 
 			read_value(json[xs("movement")][xs("auto_align")], movement::auto_align);
+			read_value(json[xs("movement")][xs("align_experimental")], movement::align_experimental);
+			read_value(json[xs("movement")][xs("al_exp_pred_ticks")], movement::al_exp_pred_ticks);
 			read_value(json[xs("movement")][xs("pixel_surf")], movement::pixel_surf);
 			read_value(json[xs("movement")][xs("freelook_surf")], movement::freelook_surf);
 			read_value(json[xs("movement")][xs("adjust_view")], movement::adjust_view);
@@ -3516,6 +3533,13 @@ namespace c {
 			read_value(json[xs("visuals")][xs("oof_arrows_size")], visuals::oof_arrows_size);
 			read_value(json[xs("visuals")][xs("skeletonesp")], visuals::skeletonesp);
 			read_value(json[xs("visuals")][xs("radar")], visuals::radar);
+			read_value(json[xs("visuals")][xs("fog_color[0]")], visuals::fog_color[0]);
+			read_value(json[xs("visuals")][xs("fog_color[1]")], visuals::fog_color[1]);
+			read_value(json[xs("visuals")][xs("fog_color[2]")], visuals::fog_color[2]);
+			read_value(json[xs("visuals")][xs("fog_color[3]")], visuals::fog_color[3]);
+			read_value(json[xs("visuals")][xs("fog")], visuals::fog);
+			read_value(json[xs("visuals")][xs("fog_distance")], visuals::fog_distance);
+			read_value(json[xs("visuals")][xs("fog_density")], visuals::fog_density);
 
 			read_value(json[xs("visuals")][xs("enable_weather")], visuals::enable_weather);
 			read_value(json[xs("visuals")][xs("weather_type")], visuals::weather_type);
@@ -3526,6 +3550,7 @@ namespace c {
 			read_value(json[xs("visuals")][xs("shadow_rot_y")], visuals::shadow_rot_y);
 			read_value(json[xs("visuals")][xs("shadow_rot_z")], visuals::shadow_rot_z);
 			read_value(json[xs("visuals")][xs("shadow_rotation_speed")], visuals::shadow_rotation_speed);
+			read_value(json[xs("visuals")][xs("shadow_dist")], visuals::shadow_dist);
 
 			read_value(json[xs("visuals")][xs("gravity_ragdoll")], visuals::gravity_ragdoll);
 			read_value(json[xs("visuals")][xs("backtrack_chams")], chams::backtrack_chams);
@@ -4459,6 +4484,7 @@ namespace c {
 			input_file >> json;
 
 			read_value(json[xs("misc")][xs("watermark")], misc::watermark);
+			read_value(json[xs("misc")][xs("unload_shit")], misc::unload_shit);
 			read_value(json[xs("misc")][xs("unlock_inventory")], misc::unlock_inventory);
 			read_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 			read_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);

@@ -5,6 +5,7 @@
 #include "../../menu/config/config.hpp"
 #include "../movement/prediction/prediction.hpp"
 #include "lobotomy_eb.h"
+#include "../misc/misc.hpp"
 
 struct air_stuck_datas
 {
@@ -462,6 +463,9 @@ void features::movement::auto_strafe(c_usercmd* cmd, vec3_t& current_angle) {
 void features::movement::fix_movement(c_usercmd* cmd, vec3_t& angle) {
 	if (!g::local)
 		return;
+	if (c::movement::air_stuck && menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
+		return;
+	}
 
 	vec3_t move, dir;
 	vec3_t move_angle;
@@ -1853,9 +1857,11 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	m_pixelsurf_data.px_tick = ps_tick;
 }
 
+//recoded
 //works better imo
+//cant fix fps issues atm
 bool test = false;
-void features::movement::auto_align_lb(c_usercmd* cmd)
+void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 {
 	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
 		should_ps_standing = false;
@@ -1867,6 +1873,10 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 	}
 
 	if (c::movement::align_selection == 0) {
+		return;
+	}
+
+	if (!c::movement::align_experimental) {
 		return;
 	}
 
@@ -2009,8 +2019,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 			float forwardmove = cos_rot * i * 9;
 			float sidemove = -sin_rot * i * 9;
 
-			//uncomment this if not aligning
-			//for (int seph = 0; seph < 2; seph++) {
+			for (int seph = 0; seph < c::movement::al_exp_pred_ticks; seph++) {
 				c_usercmd fakecmd = *cmd;
 				fakecmd.forward_move = forwardmove;
 				fakecmd.side_move = sidemove;
@@ -2033,7 +2042,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 					detect = true;
 					break;
 				}
-			//}
+			}
 		}
 	}
 
@@ -2078,6 +2087,325 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 				float sidemove_2 = cmd->side_move;
 				int i_backup_velo = g::local->get_velocity().length_2d();
 				bool do_surf_detected = false;
+				int i_preed_velo = g::local->get_velocity().length_2d();
+
+				cmd->forward_move = forwardmove_2;
+				cmd->side_move = sidemove_2;
+
+				if (prediction_backup::velocity.length_2d() > 250.f) {
+					std::vector< vec2_t > direction{ };
+					std::vector< float > max_speed{ };
+					if (difference(i_backup_velo, i_preed_velo) < 5) {
+						for (float angle = 15.f; angle < 30.f; angle += 5.f) {
+							prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+							float mVel = hypotf(prediction_backup::velocity.x, prediction_backup::velocity.y);
+							float ideal = math::rad2deg(atanf(angle / mVel));
+							vec3_t dvelo = g::local->get_velocity();
+							dvelo.z = 0.f;
+							vec3_t velo_angle = dvelo.to_angle();
+							vec3_t delta =
+								velo_angle - vec3_t(trace.plane.normal.x * -1.f, trace.plane.normal.y * -1.f, 0.f).to_angle();
+							delta.normalize();
+							if (delta.y >= 0.f)
+								wall_angle.y += ideal;
+							else
+								wall_angle.y -= ideal;
+							float rotation2 = deg2rad(wall_angle.y - cmd->view_angles.y);
+							float cos_rot2 = cos(rotation2);
+							float sin_rot2 = sin(rotation2);
+							float forwardmove2 = cos_rot2 * 450.f;
+							float sidemove2 = -sin_rot2 * 450.f;
+							cmd->forward_move = forwardmove2;
+							cmd->side_move = sidemove2;
+							vec3_t b_velo = g::local->get_velocity();
+							prediction::begin(cmd);
+							prediction::end();
+							vec3_t p_velo = g::local->get_velocity();
+							if (b_velo.z == targetZvelo && p_velo.z == targetZvelo) {
+								if (p_velo.length_2d() > b_velo.length_2d()) {
+									direction.emplace_back(vec2_t(forwardmove2, sidemove2));
+									max_speed.emplace_back(p_velo.length_2d() - b_velo.length_2d());
+								}
+							}
+						}
+					}
+					cmd->forward_move = forwardmove_2;
+					cmd->side_move = sidemove_2;
+					float mxsp = 0;
+					int index_max_speed = -1;
+					for (int k = 0; k < max_speed.size(); k++) {
+						if (max_speed.at(k) > mxsp) {
+							index_max_speed = k;
+							mxsp = max_speed.at(k);
+						}
+					}
+					if (index_max_speed != -1) {
+						cmd->forward_move = direction.at(index_max_speed).x;
+						cmd->side_move = direction.at(index_max_speed).y;
+					}
+				}
+				if (difference(trace_4.end.x, trace_2.end.x) > 1.f && difference(trace_4.end.y, trace_2.end.y) > 1.f) {
+					if (cmd->forward_move < 0.f && cmd->buttons & in_forward)
+						cmd->forward_move = 450.f;
+					if (cmd->forward_move > 0.f && cmd->buttons & in_back)
+						cmd->forward_move = -450.f;
+					if (cmd->side_move < 0.f && cmd->buttons & in_moveright)
+						cmd->side_move = 450.f;
+					if (cmd->side_move > 0.f && cmd->buttons & in_moveleft)
+						cmd->side_move = -450.f;
+				}
+
+			}
+			else {
+				if (cmd->forward_move < 0.f && cmd->buttons & in_forward)
+					cmd->forward_move = 450.f;
+				if (cmd->forward_move > 0.f && cmd->buttons & in_back)
+					cmd->forward_move = -450.f;
+				if (cmd->side_move < 0.f && cmd->buttons & in_moveright)
+					cmd->side_move = 450.f;
+				if (cmd->side_move > 0.f && cmd->buttons & in_moveleft)
+					cmd->side_move = -450.f;
+			}
+		}
+	}
+
+	if (!c::movement::bhopfix) {
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+	}
+}
+
+//og lb v2 align with small changes (pre recode version)
+void features::movement::auto_align_lb(c_usercmd* cmd)
+{
+	if (const auto mt = g::local->move_type(); mt == movetype_ladder || mt == movetype_noclip) {
+		should_ps_standing = false;
+		return;
+	}
+
+	if (!c::movement::auto_align) {
+		return;
+	}
+
+	if (c::movement::align_selection == 0) {
+		return;
+	}
+
+	if (c::movement::align_experimental) {
+		return;
+	}
+
+	if (!g::local || !g::local->is_alive()) {
+		return;
+	}
+
+	if (m_fireman_data.is_ladder) {
+		return;
+	}
+
+	if (c::movement::air_stuck && menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
+		return;
+	}
+
+	float max_radias = m_pi * 2.f;
+	float step = max_radias / 16.f;
+	vec3_t start_pos = g::local->abs_origin();
+	const auto mins = g::local->collideable()->mins();
+	const auto maxs = g::local->collideable()->maxs();
+	trace_world_only fil;
+
+	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
+	float fTickInterval = interfaces::globals->interval_per_tick;
+	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
+	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
+
+	/*if (g_input.check_input(&GET_VARIABLE(g_variables.m_ladder_bug_key, key_bind_t)))
+		return;*/
+	static float start_circle = 0.f;
+	wall_detected = false;
+	trace_t trace;
+	vec3_t save_start_pos = { };
+	vec3_t save_end_pos = { };
+	float saved_cos = 0.f;
+	float saved_sin = 0.f;
+	for (float a = start_circle; a < max_radias; a += step) {
+		vec3_t end_pos;
+		end_pos.x = cos(a) + start_pos.x;
+		end_pos.y = sin(a) + start_pos.y;
+		end_pos.z = start_pos.z;
+		saved_cos = cos(a) * 64.f;
+		saved_sin = sin(a) * 64.f;
+		ray_t ray;
+		ray.initialize(start_pos, end_pos, mins, maxs);
+
+		// traceraying the whole circle around us trying to find a wall
+		interfaces::trace_ray->trace_ray(ray, MASK_PLAYERSOLID, &fil, &trace);
+		if (trace.flFraction != 1.f && trace.plane.normal.z == 0.f) {
+			wall_detected = true;
+			start_circle = a;
+			save_start_pos = start_pos;
+			save_end_pos = end_pos;
+			break;
+		}
+	}
+	if (!wall_detected) {
+		start_circle = 0.f;
+		return;
+	}
+	vec3_t normal_plane = vec3_t(trace.plane.normal.x * -0.005f, trace.plane.normal.y * -0.005f, 0.f);
+
+	//this part is only needed to avoid being "pushed" to the wall while not strafing to the wall
+	//better recode it to find "shape" of the wall
+	test = false;
+	const vec3_t end_pos2 = start_pos + normal_plane;
+	trace_t trace228;
+	ray_t ray228;
+	ray228.initialize(start_pos, end_pos2, mins, maxs);
+	interfaces::trace_ray->trace_ray(ray228, MASK_PLAYERSOLID, &fil, &trace228);
+
+	if (trace228.flFraction == 1.f) {
+		vec3_t to_wall = normal_plane.to_angle();
+		to_wall.normalize();
+		vec3_t velo = g::local->velocity();
+		velo.z = 0.f;
+
+		if (velo.length_2d() > 0.f) {
+			vec3_t velo_ang = velo.to_angle();
+			vec3_t delta = velo_ang - to_wall;
+			delta.normalize();
+			// comparing our velocity with a vector towards the wall to see if we actually want to align
+			//u can do 90, but it will fail on some spots
+			if (fabsf(delta.y) > 92.5f) {
+				test = true;
+			}
+		}
+	}
+
+	if (test) {
+		return;
+	}
+
+	vec3_t wall_angle = normal_plane.to_angle();
+	wall_angle.normalize();
+
+	const vec3_t end_pos2_lb = vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z) + vec3_t(saved_cos, saved_sin, 0.f);
+	float rotation = deg2rad(wall_angle.y - cmd->view_angles.y);
+	float cos_rot = cos(rotation);
+	float sin_rot = sin(rotation);
+	bool detect = false;
+	trace_t trace_2;
+	ray_t ray_2;
+	ray_2.initialize(vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z), end_pos2_lb);
+	interfaces::trace_ray->trace_ray(ray_2, MASK_PLAYERSOLID, &fil, &trace_2);
+
+	float backup_forward_move = cmd->forward_move;
+	float backup_side_move = cmd->side_move;
+	constexpr static float distance_till_adjust = 0.03125f;
+	constexpr auto has_to_align = [](const vec3_t& origin) -> bool {
+		constexpr static float distance_to_stop = 0.00750f;
+
+		const vec2_t remainder1 = vec2_t(1.f - (origin.x - floor(origin.x)), 1.f - (origin.y - floor(origin.y)));
+		const vec2_t remainder2 = vec2_t((origin.x - floor(origin.x)), (origin.y - floor(origin.y)));
+
+		return ((remainder1.x >= distance_to_stop && remainder1.x <= distance_till_adjust) ||
+			(remainder1.y >= distance_to_stop && remainder1.y <= distance_till_adjust)) ||
+			((remainder2.x >= distance_to_stop && remainder2.x <= distance_till_adjust) ||
+				(remainder2.y >= distance_to_stop && remainder2.y <= distance_till_adjust));
+		};
+	for (float multiplayer = 0.f; multiplayer < 100.f; multiplayer += 10.f) {
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+
+		float forwardmove = cos_rot * multiplayer;
+		float sidemove = -sin_rot * multiplayer;
+		cmd->forward_move = forwardmove;
+		cmd->side_move = sidemove;
+		float backup_zspeed = g::local->get_velocity().z;
+
+		prediction::begin(cmd);
+		prediction::end();
+		float new_zspeed = g::local->get_velocity().z;
+		if (new_zspeed == targetZvelo) {
+			cmd->forward_move = forwardmove;
+			cmd->side_move = sidemove;
+			detect = true;
+			break;
+		}
+	}
+	if (!detect) {
+		float forwardmove = cos_rot * 10.f;
+		float sidemove = -sin_rot * 10.f;
+		cmd->forward_move = forwardmove;
+		cmd->side_move = sidemove;
+	}
+
+	float if_not_slide_fw = cmd->forward_move;
+	float if_not_slide_sw = cmd->side_move;
+	if (!has_to_align(prediction_backup::origin) && prediction_backup::velocity.z != targetZvelo) {
+		if ((cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) ||
+			(cmd->buttons & in_moveright)) {
+			cmd->forward_move = backup_forward_move;
+			cmd->side_move = backup_side_move;
+		}
+	}
+	if (prediction_backup::velocity.z == targetZvelo) {
+		vec3_t wishdir;
+
+		bool done = false;
+
+		if ((cmd->buttons & in_forward) && !(cmd->buttons & in_back) && !(cmd->buttons & in_moveleft) &&
+			!(cmd->buttons & in_moveright)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y)) * 128.f, std::sin(deg2rad(cmd->view_angles.y)) * 128.f, 0.f };
+			done = true;
+		}
+		if ((cmd->buttons & in_back) && !(cmd->buttons & in_forward) && !(cmd->buttons & in_moveleft) &&
+			!(cmd->buttons & in_moveright)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y + 180.f)) * 128.f, std::sin(deg2rad(cmd->view_angles.y + 180.f)) * 128.f,
+						0.f };
+			done = true;
+		}
+		if ((cmd->buttons & in_moveleft) && !(cmd->buttons & in_back) && !(cmd->buttons & in_forward) &&
+			!(cmd->buttons & in_moveright)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y + 90.f)) * 128.f, std::sin(deg2rad(cmd->view_angles.y + 90.f)) * 128.f,
+						0.f };
+			done = true;
+		}
+		if ((cmd->buttons & in_moveright) && !(cmd->buttons & in_back) && !(cmd->buttons & in_moveleft) &&
+			!(cmd->buttons & in_forward)) {
+			wishdir = { std::cos(deg2rad(cmd->view_angles.y - 90.f)) * 128.f, std::sin(deg2rad(cmd->view_angles.y - 90.f)) * 128.f,
+						0.f };
+			done = true;
+		}
+		if (done) {
+			trace_t trace_4;
+			vec3_t st = vec3_t(save_start_pos.x, save_start_pos.y, trace.end.z);
+			ray_t ray_4;
+			ray_4.initialize(st, st + wishdir);
+			interfaces::trace_ray->trace_ray(ray_4, MASK_PLAYERSOLID, &fil, &trace_4);
+			if (trace_4.flFraction < 1.f) {
+				int buttons_2 = cmd->buttons;
+				float forwardmove_2 = cmd->forward_move;
+				float sidemove_2 = cmd->side_move;
+				int i_backup_velo = g::local->get_velocity().length_2d();
+				bool do_surf_detected = false;
+				for (int i = 0; i < 450; i += 45) {
+					prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+					if (buttons_2 & in_forward)
+						cmd->forward_move = i;
+					if (buttons_2 & in_back)
+						cmd->forward_move = -i;
+					if (buttons_2 & in_moveleft)
+						cmd->side_move = -i;
+					if (buttons_2 & in_moveright)
+						cmd->side_move = i;
+
+					prediction::begin(cmd);
+					prediction::end();
+					float zvelo = g::local->get_velocity().z;
+					if (zvelo == targetZvelo) {
+						forwardmove_2 = cmd->forward_move;
+						sidemove_2 = cmd->side_move;
+					}
+				}
+
 				int i_preed_velo = g::local->get_velocity().length_2d();
 
 				cmd->forward_move = forwardmove_2;
@@ -2817,7 +3145,7 @@ void features::movement::indicators() {
 	static int p_alpha, al_alpha, sh_alpha, eb_alpha, jb_alpha, ej_alpha, lj_alpha, mj_alpha, lb_alpha, ad_alpha, ac_alpha, fm_alpha, air_alpha, ast_alpha, bast_alpha, as_alpha = 0;
 	int position = 0;
 
-	if (c::movement::indicators_show[0]) {
+	if (c::movement::indicators_show[0] && c::movement::edge_bug) {
 		if (c::movement::edgebug_type == 0) {
 			render_indicator(c::movement::edge_bug_key, c::movement::edge_bug_key_s, eb_alpha, eb_clr, "eb", false, should_edge_bug, c::movement::detection_clr_for[0], position);
 		}
@@ -2826,16 +3154,16 @@ void features::movement::indicators() {
 		}
 	}
 
-	if (c::movement::indicators_show[1])
+	if (c::movement::indicators_show[1] && c::movement::jump_bug)
 		render_indicator(c::movement::jump_bug_key, c::movement::jump_bug_key_s, jb_alpha, jb_clr, "jb", true, detected_normal_jump_bug, c::movement::detection_clr_for[1], position, saved_tick_jb);
 
-	if (c::movement::indicators_show[2])
+	if (c::movement::indicators_show[2] && c::movement::long_jump_on_edge)
 		render_indicator(c::movement::long_jump_key, c::movement::long_jump_key_s, lj_alpha, lj_clr, "lj", true, should_lj, c::movement::detection_clr_for[2], position, saved_tick_lj);
 
-	if (c::movement::indicators_show[3])
+	if (c::movement::indicators_show[3] && c::movement::mini_jump)
 		render_indicator(c::movement::mini_jump_key, c::movement::mini_jump_key_s, mj_alpha, mj_clr, "mj", true, should_mj, c::movement::detection_clr_for[3], position, saved_tick_mj);
 
-	if (c::movement::indicators_show[4]) {
+	if (c::movement::indicators_show[4] && c::movement::pixel_surf) {
 		if (c::movement::px_selection == 0) {
 			render_indicator(c::movement::pixel_surf_key, c::movement::pixel_surf_key_s, p_alpha, ps_clr, "ps", false, should_ps, c::movement::detection_clr_for[4], position);
 		}
@@ -2844,31 +3172,31 @@ void features::movement::indicators() {
 		}
 	}
 
-	if (c::movement::indicators_show[5])
+	if (c::movement::indicators_show[5] && c::movement::edge_jump)
 		render_indicator(c::movement::edge_jump_key, c::movement::edge_jump_key_s, ej_alpha, ej_clr, "ej", true, should_ej, c::movement::detection_clr_for[5], position, saved_tick_ej);
 
-	if (c::movement::indicators_show[6])
+	if (c::movement::indicators_show[6] && c::movement::ladder_bug)
 		render_indicator(c::movement::ladder_bug_key, c::movement::ladder_bug_key_s, lb_alpha, lg_clr, "lb", false, should_lb, c::movement::detection_clr_for[6], position);
 
-	if (c::movement::indicators_show[7])
+	if (c::movement::indicators_show[7] && c::movement::auto_duck)
 		render_indicator(c::movement::auto_duck_key, c::movement::auto_duck_key_s, ad_alpha, ad_clr, "ad", false, auto_duck_founded, c::movement::detection_clr_for[7], position);
 
-	if (c::movement::indicators_show[8])
+	if (c::movement::indicators_show[8] && c::movement::auto_duck_collision)
 		render_indicator(c::movement::auto_duck_collision_key, c::movement::auto_duck_collision_key_s, ac_alpha, ac_clr, "ac", false, avoid_founded, c::movement::detection_clr_for[8], position);
 
-	if (c::movement::indicators_show[9])
+	if (c::movement::indicators_show[9] && c::movement::fireman)
 		render_indicator(c::movement::fireman_key, c::movement::fireman_key_s, fm_alpha, fm_clr, "fm", false, m_fireman_data.is_ladder, c::movement::detection_clr_for[9], position);
 
-	if (c::movement::indicators_show[10])
+	if (c::movement::indicators_show[10] && c::movement::air_stuck)
 		render_indicator(c::movement::air_stuck_key, c::movement::air_stuck_key_s, air_alpha, air_clr, "air", false, airstuck_data.detected, c::movement::detection_clr_for[10], position);
 
-	if (c::movement::indicators_show[11])
+	if (c::movement::indicators_show[11] && c::movement::auto_strafe)
 		render_indicator(c::movement::auto_strafe_key, c::movement::auto_strafe_key_s, as_alpha, as_clr, "autostrafing", false, false, c::movement::detection_clr_for[11], position);
 
-	if (c::movement::indicators_show[12])
+	if (c::movement::indicators_show[12] && c::assist::pixelsurf_assist)
 		render_indicator(c::assist::pixelsurf_assist_key, c::assist::pixelsurf_assist_key_s, ast_alpha, ast_clr, "ast", false, HITGODA, c::movement::detection_clr_for[12], position);
 
-	if (c::movement::indicators_show[13])
+	if (c::movement::indicators_show[13] && c::assist::bounce_assist)
 		render_indicator(c::assist::bounce_assist_key, c::assist::bounce_assist_key_s, bast_alpha, bast_clr, "bast", false, HITGODA2, c::movement::detection_clr_for[13], position);
 }
 

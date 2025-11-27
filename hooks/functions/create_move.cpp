@@ -53,7 +53,12 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	features::movement::assist_createmove(cmd);
 	if ((c::movement::auto_align) && (c::movement::align_selection == 1) && !(prediction_backup::flags & 1)) {
-		features::movement::auto_align_lb(cmd);
+		if (!c::movement::align_experimental) {
+			features::movement::auto_align_lb(cmd);
+		}
+		else {
+			features::movement::auto_align_lb_recode(cmd);
+		}
 	}
 	features::movement::fast_ladder(cmd);
 	features::movement::air_stuck(cmd);
@@ -93,7 +98,7 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::auto_duck(cmd);
 	features::movement::avoid_collision(cmd);
 
-	if (!c::movement::movement_fix && !menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s)) {
+	if (!c::movement::movement_fix) {
 		features::movement::fix_movement(cmd, features::movement::first_viewangles);
 	}
 
