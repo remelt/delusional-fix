@@ -58,9 +58,9 @@ bool unload( HMODULE module ) {
 LONG WINAPI cheat_crashed_lol(EXCEPTION_POINTERS* pExceptionInfo) {
 
     //if we close csgo it wont work
-    //if (pExceptionInfo->ExceptionRecord->ExceptionCode == 0xc0000005) {
-    //    return EXCEPTION_CONTINUE_SEARCH;
-    //}
+    if (pExceptionInfo->ExceptionRecord->ExceptionCode == 0xc0000005) {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
 
     //creating crashes folder dir
     std::string dir = "C:/delusional/crashes";

@@ -2047,6 +2047,7 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 	}
 
 	//added buttons as a condition to fix that "sticky" effect when using align
+	//TODO: RECODE ALL THIS SHIT
 	if (prediction_backup::velocity.z == targetZvelo || (cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) || (cmd->buttons & in_moveright)) {
 		vec3_t wishdir;
 
@@ -2087,63 +2088,98 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 				float sidemove_2 = cmd->side_move;
 				int i_backup_velo = g::local->get_velocity().length_2d();
 				bool do_surf_detected = false;
-				int i_preed_velo = g::local->get_velocity().length_2d();
 
-				cmd->forward_move = forwardmove_2;
-				cmd->side_move = sidemove_2;
+				if (prediction_backup::velocity.z == targetZvelo || g::local->velocity().z == targetZvelo) {
+					if (prediction_backup::velocity.length_2d() != 0.f && g::local->velocity().length_2d() != 0.f) {
 
-				if (prediction_backup::velocity.length_2d() > 250.f) {
-					std::vector< vec2_t > direction{ };
-					std::vector< float > max_speed{ };
-					if (difference(i_backup_velo, i_preed_velo) < 5) {
-						for (float angle = 15.f; angle < 30.f; angle += 5.f) {
+						//better than og impl imO
+						for (int i = 450; i > 0; i -= 45) {
 							prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-							float mVel = hypotf(prediction_backup::velocity.x, prediction_backup::velocity.y);
-							float ideal = math::rad2deg(atanf(angle / mVel));
-							vec3_t dvelo = g::local->get_velocity();
-							dvelo.z = 0.f;
-							vec3_t velo_angle = dvelo.to_angle();
-							vec3_t delta =
-								velo_angle - vec3_t(trace.plane.normal.x * -1.f, trace.plane.normal.y * -1.f, 0.f).to_angle();
-							delta.normalize();
-							if (delta.y >= 0.f)
-								wall_angle.y += ideal;
-							else
-								wall_angle.y -= ideal;
-							float rotation2 = deg2rad(wall_angle.y - cmd->view_angles.y);
-							float cos_rot2 = cos(rotation2);
-							float sin_rot2 = sin(rotation2);
-							float forwardmove2 = cos_rot2 * 450.f;
-							float sidemove2 = -sin_rot2 * 450.f;
-							cmd->forward_move = forwardmove2;
-							cmd->side_move = sidemove2;
-							vec3_t b_velo = g::local->get_velocity();
+							if (buttons_2 & in_forward)
+								cmd->forward_move = i;
+							if (buttons_2 & in_back)
+								cmd->forward_move = -i;
+							if (buttons_2 & in_moveleft)
+								cmd->side_move = -i;
+							if (buttons_2 & in_moveright)
+								cmd->side_move = i;
+
 							prediction::begin(cmd);
 							prediction::end();
-							vec3_t p_velo = g::local->get_velocity();
-							if (b_velo.z == targetZvelo && p_velo.z == targetZvelo) {
-								if (p_velo.length_2d() > b_velo.length_2d()) {
-									direction.emplace_back(vec2_t(forwardmove2, sidemove2));
-									max_speed.emplace_back(p_velo.length_2d() - b_velo.length_2d());
+
+							float zvelo = g::local->get_velocity().z;
+							if (zvelo == targetZvelo) {
+								forwardmove_2 = cmd->forward_move;
+								sidemove_2 = cmd->side_move;
+								break;
+							}
+						}
+
+						int i_preed_velo = g::local->get_velocity().length_2d();
+
+						cmd->forward_move = forwardmove_2;
+						cmd->side_move = sidemove_2;
+
+						//finding the best angle to accelerate if not alr
+						//tbh u should run it be4 first prediction and then compare
+						std::vector< vec2_t > direction{ };
+						std::vector< float > max_speed{ };
+						if (difference(i_backup_velo, i_preed_velo) < 5) {
+							for (float angle = 15.f; angle < 30.f; angle += 5.f) {
+								prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+								float mVel = hypotf(prediction_backup::velocity.x, prediction_backup::velocity.y);
+								float ideal = math::rad2deg(atanf(angle / mVel));
+								vec3_t dvelo = g::local->get_velocity();
+								dvelo.z = 0.f;
+								vec3_t velo_angle = dvelo.to_angle();
+								vec3_t delta =
+									velo_angle - vec3_t(trace.plane.normal.x * -1.f, trace.plane.normal.y * -1.f, 0.f).to_angle();
+								delta.normalize();
+								if (delta.y >= 0.f)
+									wall_angle.y += ideal;
+								else
+									wall_angle.y -= ideal;
+								float rotation2 = deg2rad(wall_angle.y - cmd->view_angles.y);
+								float cos_rot2 = cos(rotation2);
+								float sin_rot2 = sin(rotation2);
+								float forwardmove2 = cos_rot2 * 450.f;
+								float sidemove2 = -sin_rot2 * 450.f;
+								cmd->forward_move = forwardmove2;
+								cmd->side_move = sidemove2;
+								vec3_t b_velo = g::local->get_velocity();
+								prediction::begin(cmd);
+								prediction::end();
+								vec3_t p_velo = g::local->get_velocity();
+								if (b_velo.z == targetZvelo && p_velo.z == targetZvelo) {
+									if (p_velo.length_2d() > b_velo.length_2d()) {
+										direction.emplace_back(vec2_t(forwardmove2, sidemove2));
+										max_speed.emplace_back(p_velo.length_2d() - b_velo.length_2d());
+									}
 								}
+							}
+
+							//backup
+							cmd->forward_move = forwardmove_2;
+							cmd->side_move = sidemove_2;
+
+							//comapare
+							//can be done a lot better tho
+							float mxsp = 0;
+							int index_max_speed = -1;
+							for (int k = 0; k < max_speed.size(); k++) {
+								if (max_speed.at(k) > mxsp) {
+									index_max_speed = k;
+									mxsp = max_speed.at(k);
+								}
+							}
+							if (index_max_speed != -1) {
+								cmd->forward_move = direction.at(index_max_speed).x;
+								cmd->side_move = direction.at(index_max_speed).y;
 							}
 						}
 					}
-					cmd->forward_move = forwardmove_2;
-					cmd->side_move = sidemove_2;
-					float mxsp = 0;
-					int index_max_speed = -1;
-					for (int k = 0; k < max_speed.size(); k++) {
-						if (max_speed.at(k) > mxsp) {
-							index_max_speed = k;
-							mxsp = max_speed.at(k);
-						}
-					}
-					if (index_max_speed != -1) {
-						cmd->forward_move = direction.at(index_max_speed).x;
-						cmd->side_move = direction.at(index_max_speed).y;
-					}
 				}
+
 				if (difference(trace_4.end.x, trace_2.end.x) > 1.f && difference(trace_4.end.y, trace_2.end.y) > 1.f) {
 					if (cmd->forward_move < 0.f && cmd->buttons & in_forward)
 						cmd->forward_move = 450.f;

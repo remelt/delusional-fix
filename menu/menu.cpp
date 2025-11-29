@@ -2588,7 +2588,7 @@ void miscellaneous() {
             if (c::movement::bhop) {
                 ImGui::Checkbox(("enable if bhop isnt working properly (128t only)"), &c::movement::bhopfix);
             }
-            if (c::movement::align_selection == 1) {
+            if (c::movement::align_selection == 1 && c::movement::auto_align) {
                 ImGui::Checkbox(("enable experimental auto align"), &c::movement::align_experimental);
                 if (c::movement::align_experimental) {
                     ImGui::Text(("auto align predict ticks"));
