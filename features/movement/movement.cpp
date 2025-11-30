@@ -1238,11 +1238,6 @@ void features::movement::auto_align(c_usercmd* cmd) {
 	const auto maxs = g::local->collideable()->maxs();
 	trace_world_only fil;
 
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
-
 	for (float a = 0.f; a < max_radias; a += step) {
 		vec3_t end_pos;
 		end_pos.x = cos(a) + start_pos.x;
@@ -1377,7 +1372,7 @@ void features::movement::auto_align(c_usercmd* cmd) {
 					prediction::end();
 
 					float zvelo = g::local->velocity().z;
-					if (zvelo == targetZvelo) {
+					if (zvelo == g::target_velocity_z) {
 						prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 						cmd->forward_move = forwardmove;
 						cmd->side_move = sidemove;
@@ -1598,10 +1593,6 @@ void features::movement::air_stuck(c_usercmd* cmd)
 	if (!menu::checkkey(c::movement::air_stuck_key, c::movement::air_stuck_key_s))
 		return;
 
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 	float FoundedForwardMove, FoundedSideMove;
 	vec3_t FoundedViewAngle;
 
@@ -1653,7 +1644,7 @@ void features::movement::air_stuck(c_usercmd* cmd)
 				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 				break;
 			}
-			else if (g::local->velocity().z == targetZvelo)	//velocity in next tick == targetZvelo(64 tick == -6.25) so we airstucked
+			else if (g::local->velocity().z == g::target_velocity_z)	//velocity in next tick == g::target_velocity_z(64 tick == -6.25) so we airstucked
 			{
 				airstuck_data.save_movementkeys(fakecmd.forward_move, fakecmd.side_move, fakecmd.up_move, fakecmd.view_angles.y);
 				airstuck_data.set_detected();
@@ -1683,17 +1674,8 @@ void features::movement::on_create_move_post(c_usercmd* cmd) {
 		return;
 	}
 
-	//i know that using it every time like this is bad but idc
-	//u can recode that shit if u want to
-	//make a function to return this value or so
-	//at least its working
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
-
 	m_pixelsurf_data.m_in_pixel_surf =
-		prediction_backup::velocity.z == targetZvelo || g::local->get_velocity().z == targetZvelo;
+		prediction_backup::velocity.z == g::target_velocity_z || g::local->get_velocity().z == g::target_velocity_z;
 
 	const auto move_type = g::local->move_type();
 	if (move_type != movetype_ladder && move_type != movetype_noclip &&
@@ -1706,7 +1688,7 @@ void features::movement::on_create_move_post(c_usercmd* cmd) {
 		//checking for eb & ps ticks
 		if (m_pixelsurf_data.px_tick < cmd->tick_count && !should_edge_bug && !lobotomy_eb::EdgeBug_Founded) {
 			//checking velo (idk using prepred velo is better imo, u can change it if u want to) and if ps predicted or nah
-			if (prediction_backup::velocity.z == targetZvelo && m_pixelsurf_data.m_predicted_succesful) {
+			if (prediction_backup::velocity.z == g::target_velocity_z && m_pixelsurf_data.m_predicted_succesful) {
 				//variable js to make its work 1 time for 1 ps
 				if (!m_pixelsurf_data.predicted_ps) {
 					if (c::movement::pixel_surf_detection_printf && wall_detected) {
@@ -1798,11 +1780,6 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	if (!should_align && c::movement::align_selection == 0)
 		return;
 
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
-
 	if (!m_pixelsurf_data.should_pixel_surf) {
 		int BackupButtons = cmd->buttons;
 		for (int i = 0; i < 2; i++) {
@@ -1822,7 +1799,7 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 					break;
 				}
 				float zVelo = g::local->velocity().z;
-				m_pixelsurf_data.should_pixel_surf = zVelo == targetZvelo;
+				m_pixelsurf_data.should_pixel_surf = zVelo == g::target_velocity_z;
 				if (m_pixelsurf_data.should_pixel_surf && i == 0) {
 					m_pixelsurf_data.should_pixel_surf = false;
 					m_pixelsurf_data.m_predicted_succesful = true;
@@ -1848,7 +1825,7 @@ void features::movement::pixel_surf(c_usercmd* cmd) {
 	else {
 		cmd->buttons |= in_duck;
 		if (cmd->tick_count > ticks) {
-			if (prediction_backup::velocity.z != targetZvelo) {
+			if (prediction_backup::velocity.z != g::target_velocity_z) {
 				m_pixelsurf_data.should_pixel_surf = false;
 				m_pixelsurf_data.m_predicted_succesful = false;
 			}
@@ -1898,11 +1875,6 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 	const auto mins = g::local->collideable()->mins();
 	const auto maxs = g::local->collideable()->maxs();
 	trace_world_only fil;
-
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 
 	static float start_circle = 0.f;
 	wall_detected = false;
@@ -2003,7 +1975,7 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 		}
 
 		float new_zspeed = g::local->get_velocity().z;
-		if (new_zspeed == targetZvelo) {
+		if (new_zspeed == g::target_velocity_z) {
 			cmd->forward_move = forwardmove;
 			cmd->side_move = sidemove;
 			detect = true;
@@ -2048,7 +2020,7 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 
 	//added buttons as a condition to fix that "sticky" effect when using align
 	//TODO: RECODE ALL THIS SHIT
-	if (prediction_backup::velocity.z == targetZvelo || (cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) || (cmd->buttons & in_moveright)) {
+	if (prediction_backup::velocity.z == g::target_velocity_z || (cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) || (cmd->buttons & in_moveright)) {
 		vec3_t wishdir;
 
 		bool done = false;
@@ -2089,7 +2061,7 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 				int i_backup_velo = g::local->get_velocity().length_2d();
 				bool do_surf_detected = false;
 
-				if (prediction_backup::velocity.z == targetZvelo || g::local->velocity().z == targetZvelo) {
+				if (prediction_backup::velocity.z == g::target_velocity_z || g::local->velocity().z == g::target_velocity_z) {
 					if (prediction_backup::velocity.length_2d() != 0.f && g::local->velocity().length_2d() != 0.f) {
 
 						//better than og impl imO
@@ -2108,7 +2080,7 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 							prediction::end();
 
 							float zvelo = g::local->get_velocity().z;
-							if (zvelo == targetZvelo) {
+							if (zvelo == g::target_velocity_z) {
 								forwardmove_2 = cmd->forward_move;
 								sidemove_2 = cmd->side_move;
 								break;
@@ -2150,7 +2122,7 @@ void features::movement::auto_align_lb_recode(c_usercmd* cmd)
 								prediction::begin(cmd);
 								prediction::end();
 								vec3_t p_velo = g::local->get_velocity();
-								if (b_velo.z == targetZvelo && p_velo.z == targetZvelo) {
+								if (b_velo.z == g::target_velocity_z && p_velo.z == g::target_velocity_z) {
 									if (p_velo.length_2d() > b_velo.length_2d()) {
 										direction.emplace_back(vec2_t(forwardmove2, sidemove2));
 										max_speed.emplace_back(p_velo.length_2d() - b_velo.length_2d());
@@ -2248,11 +2220,6 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 	const auto mins = g::local->collideable()->mins();
 	const auto maxs = g::local->collideable()->maxs();
 	trace_world_only fil;
-
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 
 	/*if (g_input.check_input(&GET_VARIABLE(g_variables.m_ladder_bug_key, key_bind_t)))
 		return;*/
@@ -2359,7 +2326,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 		prediction::begin(cmd);
 		prediction::end();
 		float new_zspeed = g::local->get_velocity().z;
-		if (new_zspeed == targetZvelo) {
+		if (new_zspeed == g::target_velocity_z) {
 			cmd->forward_move = forwardmove;
 			cmd->side_move = sidemove;
 			detect = true;
@@ -2375,14 +2342,14 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 
 	float if_not_slide_fw = cmd->forward_move;
 	float if_not_slide_sw = cmd->side_move;
-	if (!has_to_align(prediction_backup::origin) && prediction_backup::velocity.z != targetZvelo) {
+	if (!has_to_align(prediction_backup::origin) && prediction_backup::velocity.z != g::target_velocity_z) {
 		if ((cmd->buttons & in_forward) || (cmd->buttons & in_back) || (cmd->buttons & in_moveleft) ||
 			(cmd->buttons & in_moveright)) {
 			cmd->forward_move = backup_forward_move;
 			cmd->side_move = backup_side_move;
 		}
 	}
-	if (prediction_backup::velocity.z == targetZvelo) {
+	if (prediction_backup::velocity.z == g::target_velocity_z) {
 		vec3_t wishdir;
 
 		bool done = false;
@@ -2436,7 +2403,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 					prediction::begin(cmd);
 					prediction::end();
 					float zvelo = g::local->get_velocity().z;
-					if (zvelo == targetZvelo) {
+					if (zvelo == g::target_velocity_z) {
 						forwardmove_2 = cmd->forward_move;
 						sidemove_2 = cmd->side_move;
 					}
@@ -2476,7 +2443,7 @@ void features::movement::auto_align_lb(c_usercmd* cmd)
 							prediction::begin(cmd);
 							prediction::end();
 							vec3_t p_velo = g::local->get_velocity();
-							if (b_velo.z == targetZvelo && p_velo.z == targetZvelo) {
+							if (b_velo.z == g::target_velocity_z && p_velo.z == g::target_velocity_z) {
 								if (p_velo.length_2d() > b_velo.length_2d()) {
 									direction.emplace_back(vec2_t(forwardmove2, sidemove2));
 									max_speed.emplace_back(p_velo.length_2d() - b_velo.length_2d());
@@ -2547,11 +2514,6 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 		return;
 	}
 
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
-
 	if (ps_data.pixelsurfing) {
 
 		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
@@ -2596,7 +2558,7 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 
 		//sometimes the second one doesnt work
 		//mostly useless tbh
-		if (prediction_backup::velocity.z == targetZvelo) {
+		if (prediction_backup::velocity.z == g::target_velocity_z) {
 			if (cmd->buttons & in_duck)
 				cmd->buttons |= in_duck;
 		}
@@ -2606,7 +2568,7 @@ void features::movement::pixel_surf_lock(c_usercmd* cmd) {
 		else
 			cmd->buttons &= ~in_duck;
 
-		if (ps_data.predicted_ps && !(g::local->velocity().z == targetZvelo)) {
+		if (ps_data.predicted_ps && !(g::local->velocity().z == g::target_velocity_z)) {
 			should_ps = false;
 			ps_data.pixelsurfing = false;
 			ps_data.predicted_ps = false;
@@ -2635,11 +2597,6 @@ void features::movement::pixel_surf_del(c_usercmd* cmd) {
 	if (ps_data.pixelsurfing)
 		return;
 
-	float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
-
 	for (int s = 0; s < 2; s++) {
 		if (ps_data.pixelsurfing)
 			break;
@@ -2662,7 +2619,7 @@ void features::movement::pixel_surf_del(c_usercmd* cmd) {
 			if (flags & fl_onground)
 				break;
 
-			if (g::local->velocity().z == targetZvelo && velocity.z == targetZvelo) {
+			if (g::local->velocity().z == g::target_velocity_z && velocity.z == g::target_velocity_z) {
 				ps_data.pixeltick = cmd->tick_count + i;
 				ps_data.pixelsurf_cmd = predictcmd;
 				ps_data.pixelducking = (s == 0);

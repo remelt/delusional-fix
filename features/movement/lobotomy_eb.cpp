@@ -49,13 +49,8 @@ bool lobotomy_eb::EdgeBugCheck(c_usercmd* cmd)
 	if (edgebug_velocity_backup.z < -gravity_vel && round(g::local->get_velocity().z) == -round(gravity_vel)) {
 		return true;
 	}
-	float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float veloZoftick = (((sv_gravity2 / 2) / fTickRate) + 0.25f);
-	float targetZvelo = (veloZoftick * 6.0f / 6.25f) * -1.f;
-	if (edgebug_velocity_backup.z < targetZvelo && g::local->get_velocity().z > edgebug_velocity_backup.z &&
-		g::local->get_velocity().z < targetZvelo) {
+	if (edgebug_velocity_backup.z < g::target_velocity_z && g::local->get_velocity().z > edgebug_velocity_backup.z &&
+		g::local->get_velocity().z < g::target_velocity_z) {
 		float velocty_before_engineprediction = g::local->get_velocity().z;
 		vec3_t CheckEbOrigin = g::local->abs_origin();
 		CheckEbOrigin.z += 200.f;

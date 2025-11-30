@@ -531,10 +531,6 @@ void features::movement::check_ps(c_usercmd* cmd)
 
 	if (cmd != nullptr)
 	{
-		float sv_gravity = interfaces::console->get_convar(("sv_gravity"))->get_float();
-		float fTickInterval = interfaces::globals->interval_per_tick;
-		float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-		float targetZvelo = ((sv_gravity / 2) / fTickRate) * -1.f;
 		ViewAngles = vec3_t(cmd->view_angles.x, cmd->view_angles.y, 0.f);
 		static bool FirstPoint = FALSE;
 		if (menu::checkkey(c::assist::pixelsurf_line_key, c::assist::pixelsurf_line_key_s))
@@ -706,7 +702,7 @@ void features::movement::check_ps(c_usercmd* cmd)
 
 					vec3_t pred_velo = g::local->get_velocity();
 					{
-						if (g::local->get_velocity().z == targetZvelo) {
+						if (g::local->get_velocity().z == g::target_velocity_z) {
 							if (WallNormal.x < 0 && WallNormal.y < 0.f) {
 								Point_bounce.emplace_back(vec3_t(g::local->origin().x + test_al,
 									g::local->origin().y + test_al,
@@ -880,7 +876,7 @@ void features::movement::check_ps(c_usercmd* cmd)
 				prediction::end();
 
 				vec3_t pred_velo = g::local->get_velocity();
-				if (g::local->get_velocity().z == targetZvelo) {
+				if (g::local->get_velocity().z == g::target_velocity_z) {
 					if (WallNormal.x < 0 && WallNormal.y < 0.f) {
 						Points.emplace_back(vec3_t(g::local->origin().x + test_al, g::local->origin().y + test_al,
 							g::local->origin().z));

@@ -18,6 +18,7 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	g::local = static_cast<player_t*>(interfaces::ent_list->get_client_entity(interfaces::engine->get_local_player()));
 	g::cmd = cmd;
+	g::target_velocity_z = (((interfaces::console->get_convar(("sv_gravity"))->get_float()) / 2) * interfaces::globals->interval_per_tick) * -1.f;
 	features::movement::first_viewangles = cmd->view_angles;
 	features::movement::previous_tick = interfaces::globals->tick_count;
 	i_net_channel* net_channel = interfaces::client_state->net_channel;

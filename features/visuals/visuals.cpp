@@ -281,8 +281,8 @@ void features::visuals::gravity_ragdoll() {
 }
 
 bool update = false;
-bool founddustsky = false;
-bool foundsky = false;
+bool found_dust2_sky = false;
+bool found_nuke_sky = false;
 void features::visuals::skybox_changer() {
 	if (!g::local)
 		update = true;
@@ -313,8 +313,43 @@ void features::visuals::skybox_changer() {
 	case 20: skybox_name = "vietnam"; break;
 	}
 
+	i_material* skybox_dust2 = interfaces::material_system->find_material("models/props/de_dust/hr_dust/dust_skybox/sky_dust2", TEXTURE_GROUP_OTHER);
 	i_material* skybox_nuke = interfaces::material_system->find_material("models/props/de_nuke/hr_nuke/nuke_skydome_001/nuke_skydome_001", TEXTURE_GROUP_OTHER);
-	i_material* skybox_dust = interfaces::material_system->find_material("models/props/de_dust/hr_dust/dust_skybox/sky_dust2", TEXTURE_GROUP_OTHER);
+
+	if (interfaces::engine->is_connected() && g::local)
+	{
+		//Nuke
+		bool bFound_nuke;
+		i_material_var* pMaterialVar_nuke = skybox_nuke->find_var("$basetexture", &bFound_nuke, false);
+
+		if ((!bFound_nuke || pMaterialVar_nuke->get_type() != MATERIAL_VAR_TYPE_TEXTURE) && found_nuke_sky)		//https://github.com/lua9520/source-engine-2018-cstrike15_src/blob/master/engine/cdll_engine_int.cpp#L1818
+		{
+			skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
+			found_nuke_sky = false;
+		}
+
+		if (bFound_nuke && pMaterialVar_nuke->get_type() == MATERIAL_VAR_TYPE_TEXTURE && !found_nuke_sky)
+		{
+			skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, true);
+			found_nuke_sky = true;
+		}
+
+		//Dust2
+		bool bFound_dust2;
+		i_material_var* pMaterialVar_dust2 = skybox_dust2->find_var("$basetexture", &bFound_dust2, false);
+
+		if ((!bFound_dust2 || pMaterialVar_dust2->get_type() != MATERIAL_VAR_TYPE_TEXTURE) && found_dust2_sky)
+		{
+			skybox_dust2->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
+			found_dust2_sky = false;
+		}
+
+		if (bFound_dust2 && pMaterialVar_dust2->get_type() == MATERIAL_VAR_TYPE_TEXTURE && !found_dust2_sky)
+		{
+			skybox_dust2->set_material_var_flag(material_var_flags_t::material_var_no_draw, true);
+			found_dust2_sky = true;
+		}
+	}
 
 	if (g::local && (update || saved_skybox != c::visuals::skybox)) {
 
@@ -325,52 +360,10 @@ void features::visuals::skybox_changer() {
 		if (c::visuals::skybox == 0)
 		{
 			load_skybox(sv_skyname->string);
-
-			if (foundsky && mapname.find("nuke") != std::string::npos) {
-				skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
-				foundsky = false;
-			}
-
-			if (founddustsky && mapname.find("dust") != std::string::npos) {
-				skybox_dust->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
-				founddustsky = false;
-			}
 		}
 		else
 		{
 			load_skybox(skybox_name.c_str());
-
-			if (mapname.find("nuke") != std::string::npos) {
-				if (!(skybox_nuke->is_error_material()) && !foundsky)
-				{
-					skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, true);
-					foundsky = true;
-				}
-			}
-			else
-			{
-				if (foundsky)
-				{
-					skybox_nuke->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
-					foundsky = false;
-				}
-			}
-
-			if (mapname.find("dust") != std::string::npos) {
-				if (!(skybox_dust->is_error_material()) && !founddustsky)
-				{
-					skybox_dust->set_material_var_flag(material_var_flags_t::material_var_no_draw, true);
-					founddustsky = true;
-				}
-			}
-			else
-			{
-				if (founddustsky)
-				{
-					skybox_dust->set_material_var_flag(material_var_flags_t::material_var_no_draw, false);
-					founddustsky = false;
-				}
-			}
 
 		}
 		saved_skybox = c::visuals::skybox;

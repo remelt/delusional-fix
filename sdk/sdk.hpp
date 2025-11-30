@@ -1373,4 +1373,5 @@ public:
 namespace g {
 	inline player_t* local = nullptr;
 	inline c_usercmd* cmd = nullptr;
+	inline float target_velocity_z = 0.f;
 }

@@ -93,7 +93,7 @@ void features::weather::update_weather() {
 
     memset(&precipitation_collideable, 0, sizeof(precipitation_collideable));
 
-    if (!created_rain && c::visuals::enable_weather || c::visuals::enable_weather && !last_state || !reinterpret_cast<precipitation_t*>(interfaces::ent_list->get_client_entity(MAX_EDICTS - 1)) && rain_entity && c::visuals::enable_weather) {
+    if (!created_rain && c::visuals::enable_weather || c::visuals::enable_weather && !last_state || interfaces::engine->is_connected() && !reinterpret_cast<precipitation_t*>(interfaces::ent_list->get_client_entity(MAX_EDICTS - 1)) && rain_entity && c::visuals::enable_weather) {
         if (created_rain && rain_entity)
             reset_weather();
 
