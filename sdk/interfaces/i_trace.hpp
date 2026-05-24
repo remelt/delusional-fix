@@ -326,7 +326,30 @@ public:
 	void* p_skip1;
 };
 
+class trace_everything_only : public i_trace_filter {
+public:
+	bool should_hit_entity(void* pEntityHandle, int contentsMask) override {
+		return false;
+	}
+
+	trace_type get_trace_type() const override {
+		return e_trace_everything;
+	}
+
+	void* p_skip1;
+};
+
 class collideable_t;
+
+class ITraceListData
+{
+public:
+	virtual ~ITraceListData() {}
+
+	virtual void Reset() = 0;
+	virtual bool IsEmpty() = 0;
+	virtual bool CanTraceRay(const ray_t& ray) = 0;
+};
 
 class trace {
 public:
@@ -336,9 +359,9 @@ public:
 	virtual void clip_ray_to_entity(const ray_t& ray, unsigned int mask, i_handle_entity* entity, trace_t* trace) = 0;
 	virtual void clip_ray_to_collideable(const ray_t& ray, unsigned int mask, collideable_t* pCollide, trace_t* trace) = 0;
 	virtual void trace_ray(const ray_t& ray, unsigned int mask, i_trace_filter* filter, trace_t* trace) = 0;
-	virtual void sweep_collideable(collideable_t* collide, const vec3_t& abs_start, const vec3_t& abs_end, const vec3_t& angles, unsigned int mask, i_trace_filter* trace_filter, trace_t* trace) = 0;
-	virtual collideable_t* get_collideable(i_handle_entity* entity) = 0;
-	virtual int get_stat_by_index(int index, bool clear) = 0;
+	virtual void	SetupLeafAndEntityListRay(const ray_t& ray, ITraceListData* pTraceData) = 0;
+	virtual void    SetupLeafAndEntityListBox(const vec3_t& vecBoxMin, const vec3_t& vecBoxMax, ITraceListData* pTraceData) = 0;
+	virtual void	TraceRayAgainstLeafAndEntityList(const ray_t& ray, ITraceListData* pTraceData, unsigned int fMask, i_trace_filter* pTraceFilter, trace_t* pTrace) = 0;
 	virtual void get_brushes_in_aabb(const vec3_t& mins, const vec3_t& maxs,CUtlVector<int>* output, int contents_mask = MASK_ALL) = 0;
 	virtual int get_num_displacements() = 0;
 	virtual bool point_outside_world(const vec3_t& point) = 0;
@@ -346,5 +369,13 @@ public:
 	virtual void suspend_occlusion_tests() = 0;
 	virtual void resume_occlusion_tests() = 0;
 	virtual void flush_occlusion_queries() = 0;
-	virtual void ClipRayToEntity(const ray_t& ray, unsigned int mask, player_t* pEnt, trace_t* pTrace) = 0;
+
+	ITraceListData* AllocTraceListData()
+	{
+		return call_vfunc<ITraceListData*>(this, 21);
+	}
+	void FreeTraceListData(ITraceListData* pTraceListData)
+	{
+		return call_vfunc<void>(this, 22, pTraceListData);
+	}
 };

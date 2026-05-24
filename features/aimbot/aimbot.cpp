@@ -1,20 +1,8 @@
 ﻿#include "aimbot.hpp"
+#include "autowall.hpp"
 #include "../../sdk/math/math.hpp"
 #include "../../menu/config/config.hpp"
 #include "../misc/misc.hpp"
-#include "autowall.hpp"
-
-std::vector<int> hitboxes;
-int hitbox;
-float smooth;
-int rcs_p;
-int aimbot_fov;
-int autowall_dmg;
-bool autowall_lethal;
-bool autowall_b;
-bool silent;
-bool rcs;
-bool katai = true;
 
 bool is_knife(void* weapon) {
 	if (!weapon)
@@ -139,108 +127,23 @@ std::vector<int> get_selected_hitboxes(const bool(&hitboxes)[N]) {
 	return selected_hitboxes;
 }
 
-void get_aimbot_settings(void* weapon) {
-	static int hitbox_num;
+bool get_aimbot_settings(aimbot_settings& settings, std::vector<int>& hitboxes, void* weapon) {
+	const bool groups[] = { is_pistol(weapon), is_heavy_pistol(weapon), is_shotgun(weapon), is_heavy(weapon), is_smg(weapon), is_rifle(weapon), is_sniper(weapon), is_auto_sniper(weapon) };
 
-	if (is_pistol(weapon))
-	{
-		aimbot_fov = c::aimbot::pistol_aimbot_fov;
-		silent = c::aimbot::pistol_aimbot_silent;
-		smooth = c::aimbot::pistol_aimbot_smooth;
-		rcs = c::aimbot::pistol_aimbot_rcs;
-		rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-		autowall_b = c::aimbot::pistol_autowall;
-		autowall_dmg = c::aimbot::pistol_autowall_dmg;
-		autowall_lethal = c::aimbot::pistol_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_pistol);
-	}
-	else if (is_heavy_pistol(weapon)) {
-		aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-		silent = c::aimbot::heavy_pistol_aimbot_silent;
-		smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-		rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-		rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-		autowall_b = c::aimbot::heavy_pistol_autowall;
-		autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-		autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_heavy_pistol);
-	}
-	else if (is_shotgun(weapon)) {
-		aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-		silent = c::aimbot::shotgun_aimbot_silent;
-		smooth = c::aimbot::shotgun_aimbot_smooth;
-		rcs = c::aimbot::shotgun_aimbot_rcs;
-		rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-		autowall_b = c::aimbot::shotgun_autowall;
-		autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-		autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_shotgun);
-	}
-	else if (is_heavy(weapon)) {
-		aimbot_fov = c::aimbot::heavy_aimbot_fov;
-		silent = c::aimbot::heavy_aimbot_silent;
-		smooth = c::aimbot::heavy_aimbot_smooth;
-		rcs = c::aimbot::heavy_aimbot_rcs;
-		rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-		autowall_b = c::aimbot::heavy_autowall;
-		autowall_dmg = c::aimbot::heavy_autowall_dmg;
-		autowall_lethal = c::aimbot::heavy_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_heavy);
-	}
-	else if (is_smg(weapon)) {
-		aimbot_fov = c::aimbot::smg_aimbot_fov;
-		silent = c::aimbot::smg_aimbot_silent;
-		smooth = c::aimbot::smg_aimbot_smooth;
-		rcs = c::aimbot::smg_aimbot_rcs;
-		rcs_p = c::aimbot::smg_aimbot_rcs_p;
-		autowall_b = c::aimbot::smg_autowall;
-		autowall_dmg = c::aimbot::smg_autowall_dmg;
-		autowall_lethal = c::aimbot::smg_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_smg);
-	}
-	else if (is_rifle(weapon)) {
-		aimbot_fov = c::aimbot::rifle_aimbot_fov;
-		silent = c::aimbot::rifle_aimbot_silent;
-		smooth = c::aimbot::rifle_aimbot_smooth;
-		rcs = c::aimbot::rifle_aimbot_rcs;
-		rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-		autowall_b = c::aimbot::rifle_autowall;
-		autowall_dmg = c::aimbot::rifle_autowall_dmg;
-		autowall_lethal = c::aimbot::rifle_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_rifle);
-	}
-	else if (is_sniper(weapon)) {
-		aimbot_fov = c::aimbot::sniper_aimbot_fov;
-		silent = c::aimbot::sniper_aimbot_silent;
-		smooth = c::aimbot::sniper_aimbot_smooth;
-		rcs = c::aimbot::sniper_aimbot_rcs;
-		rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-		autowall_b = c::aimbot::sniper_autowall;
-		autowall_dmg = c::aimbot::sniper_autowall_dmg;
-		autowall_lethal = c::aimbot::sniper_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_sniper);
-	}
-	else if (is_auto_sniper(weapon)) {
-		aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-		silent = c::aimbot::autosniper_aimbot_silent;
-		smooth = c::aimbot::autosniper_aimbot_smooth;
-		rcs = c::aimbot::autosniper_aimbot_rcs;
-		rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-		autowall_b = c::aimbot::autosniper_autowall;
-		autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-		autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-		hitboxes = get_selected_hitboxes(c::aimbot::hitboxes_autosniper);
-	}
-}
+	for (int i = 0; i < IM_ARRAYSIZE(groups); i++) {
+		if (groups[i]) {
+			settings = aimbot.settings[i];
+			menu::weapon_selection = i;
 
-vec3_t calculateRelativeAngle(const vec3_t& source, const vec3_t& destination, const vec3_t& viewAngles) noexcept
-{
-	vec3_t delta = destination - source;
-	vec3_t angles{ math::rad2deg(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
-				   math::rad2deg(atan2f(delta.y, delta.x)) - viewAngles.y ,
-					0.f };
-	angles.normalize();
-	return angles;
+			hitboxes = get_selected_hitboxes(settings.hitboxes);
+			if (hitboxes.empty()) {
+				hitboxes.emplace_back(hitbox_head);
+			}
+
+			return true;
+		}
+	}
+	return false;
 }
 
 bool can_fire(weapon_t* weap, c_usercmd* cmd) {
@@ -253,137 +156,89 @@ bool can_fire(weapon_t* weap, c_usercmd* cmd) {
 	return false;
 }
 
-void MegaPrivateAimbotOtAntohi::run(c_usercmd* cmd)
+void aimbot_c::run(c_usercmd* cmd)
 {
-
 	if (!c::aimbot::aimbot || !g::local->is_alive() || !interfaces::engine->is_connected())
 		return;
 
+	auto weapon = g::local->active_weapon();
+	if (!weapon)
+		return;
+
+	// ugly2
+	static bool once = true;
 	if (c::aimbot::aimbot_panic && menu::checkkey(c::aimbot::aimbot_panic_key, c::aimbot::aimbot_panic_key_s)) {
-		if (katai) {
+		if (once) {
 			features::misc::notify(("aimbot is off"), color(255, 255, 255, 255));
-			katai = false;
+			once = false;
 		}
 		return;
 	}
-	if (!katai) {
+	if (!once) {
 		features::misc::notify(("aimbot is on"), color(255, 255, 255, 255));
-		katai = true;
+		once = true;
 	}
 
-	auto pukolki = g::local->active_weapon();
-	if (!pukolki)
-		return;
-	if (!menu::open) {
-		if (is_pistol(pukolki)) {
-			menu::weapon_selection = 0;
-		}
-		else if (is_heavy_pistol(pukolki)) {
-			menu::weapon_selection = 1;
-		}
-		else if (is_shotgun(pukolki)) {
-			menu::weapon_selection = 2;
-		}
-		else if (is_heavy(pukolki)) {
-			menu::weapon_selection = 3;
-		}
-		else if (is_smg(pukolki)) {
-			menu::weapon_selection = 4;
-		}
-		else if (is_rifle(pukolki)) {
-			menu::weapon_selection = 5;
-		}
-		else if (is_sniper(pukolki)) {
-			menu::weapon_selection = 6;
-		}
-		else if (is_auto_sniper(pukolki)) {
-			menu::weapon_selection = 7;
-		}
-	}
-	if (!GetAsyncKeyState(c::aimbot::aimbot_key))
-		return;
 	if (menu::open)
 		return;
-	if (!is_rifle(pukolki) && !is_shotgun(pukolki) && !is_heavy_pistol(pukolki) && !is_auto_sniper(pukolki) && !is_pistol(pukolki) && !is_sniper(pukolki) && !is_smg(pukolki) && !is_heavy(pukolki))
+
+	aimbot_settings settings;
+	std::vector<int> hitboxes;
+	if (!get_aimbot_settings(settings, hitboxes, weapon))
 		return;
 
-	get_aimbot_settings(pukolki);
-	if (smooth == 0) {
-		smooth = 1;
+	// ugly
+	float best_fov = settings.fov;
+	if (settings.fov == 180) {
+		best_fov = FLT_MAX;
 	}
-	if (silent) {
-		smooth = 1;
-	}
-	if (hitboxes.empty()) {
-		hitboxes.emplace_back(hitbox_head);
-	}
+
+	if (!menu::checkkey(c::aimbot::aimbot_key, c::aimbot::aimbot_key_s))
+		return;
+
 	if (!(cmd->buttons & in_attack) && c::aimbot::non_sticky_aimbot)
 		return;
-	if (!can_fire(pukolki, cmd))
-		return;
-	if (pukolki->clip1_count() <= 0) {
-		return;
-	}
 
-	float typofovchik = aimbot_fov;
-	vec3_t NuKudastrealyat = vec3_t(0, 0, 0);
-	vec3_t NashiOkiEpta = g::local->get_eye_pos();
+	if (!can_fire(weapon, cmd))
+		return;
 
-	const auto aimPunch = g::local->aim_punch_angle();
-	float ebuchiirngexploit = interfaces::console->get_convar("weapon_recoil_scale")->get_float();
-	static vec3_t vAngle;
-	static vec3_t vClientViewAngles;
-	interfaces::engine->get_view_angles(vClientViewAngles);
-	anglevec3_ts(vClientViewAngles, vAngle);
+	if (weapon->clip1_count() <= 0)
+		return;
+
+	vec3_t final_position = vec3_t(0, 0, 0);
+	vec3_t client_eye_pos = g::local->get_eye_pos();
+
+	const auto aim_punch = g::local->aim_punch_angle();
+	auto weapon_recoil_scale = interfaces::console->get_convar("weapon_recoil_scale")->get_float();
+
+	vec3_t vAngle;
+	vec3_t client_view_angles;
+
+	client_view_angles = cmd->view_angles;
+	AngleVectors(client_view_angles, vAngle);
+
 	for (auto i = 1; i <= interfaces::globals->max_clients; i++)
 	{
-		player_t* eblanchik = player_t::get_player_by_index(i);
-		if (!eblanchik || eblanchik == g::local || eblanchik->dormant() || !eblanchik->is_alive() || eblanchik->has_gun_game_immunity())
+		player_t* target = player_t::get_player_by_index(i);
+		if (!target || target == g::local || target->dormant() || !target->is_alive() || target->has_gun_game_immunity()|| target->team() == g::local->team() || !target->is_alive())
 			continue;
-		if (eblanchik->team() == g::local->team())
-			continue;
-		if (!eblanchik->is_alive())
-			continue;
-		auto localPlayerEyePosition = g::local->get_eye_pos();
-		for (const auto AhuetYapernul : hitboxes)
+
+		target->pvs_fix();
+
+		for (const auto hitbox : hitboxes)
 		{
-
-			vec3_t GdeKostyanchik = eblanchik->get_hitbox_position(AhuetYapernul);
-			const auto angle = calculateRelativeAngle(NashiOkiEpta, GdeKostyanchik, cmd->view_angles + aimPunch);
-			const auto fovss = std::hypot(angle.y, angle.x);
-
-			if (fovss > typofovchik)
-				continue;
-
-			if (!g::local->can_see_player_pos(eblanchik, GdeKostyanchik))
-			{
-
-				//const auto damage = c_autowall::get()->autowall(g::local->GetEyePos(), hitboxPos, g::local, player).damage;
-				const auto damage = Autowall::GetDamage(GdeKostyanchik);
-
-				if (damage < autowall_dmg && !autowall_lethal || !autowall_b || autowall_lethal && damage < eblanchik->health())
-					continue;
-			}
-			if (pukolki->is_knife())
-				continue;
-			vec3_t NenuzhnayaZalupaDlyaFov = calculateRelativeAngle(NashiOkiEpta, GdeKostyanchik, cmd->view_angles + aimPunch);
-			float avotetouzhenuzhno = GetFov(NashiOkiEpta, GdeKostyanchik, vAngle);
-			if (fovss < typofovchik)
-			{
-				// KOSTYAN DETECTED
-				typofovchik = fovss;
-				NuKudastrealyat = GdeKostyanchik;
-			}
+			vec3_t target_hitbox_position = target->get_hitbox_position(hitbox);
+			const auto angle = GetFov(client_eye_pos, target_hitbox_position, vAngle);
 
 			if (c::backtrack::backtrack && c::aimbot::aim_at_bt) {
 				int bone_id = 8;
 				auto& record = backtrack.data[i];
 
-				if (auto modelStudio = interfaces::model_info->get_studio_model(eblanchik->model()); modelStudio != nullptr) {
+				if (auto modelStudio = interfaces::model_info->get_studio_model(target->model()); modelStudio != nullptr) {
 					auto hitboxSet = modelStudio->hitbox_set(0);
 
 					if (hitboxSet != nullptr) {
-						auto hitbox_ = hitboxSet->hitbox(AhuetYapernul);
+						auto hitbox_ = hitboxSet->hitbox(hitbox);
 
 						if (hitbox_ != nullptr) {
 							bone_id = hitbox_->bone;
@@ -391,62 +246,82 @@ void MegaPrivateAimbotOtAntohi::run(c_usercmd* cmd)
 					}
 				}
 
-				float best_record = FLT_MAX;
-				int best_index = -1;
-				vec3_t position;
-
 				for (int j = 0; j < static_cast<int>(record.size()) - 2; j++) {
 					auto& a = record[j];
-					auto angle_a = math::calculate_angle(g::local->get_eye_pos(), a.m_matrix[bone_id].get_origin(), cmd->view_angles);
-					auto hypot_a = angle_a.length_2d();
+					vec3_t target_hitbox_position_bt = a.m_matrix[bone_id].get_origin();
+					const auto bt_angle = GetFov(client_eye_pos, target_hitbox_position_bt, vAngle);
 
-					if (hypot_a < best_record) {
-						best_record = hypot_a;
-						best_index = j;
+					if (!g::local->can_see_player_pos(target_hitbox_position_bt))
+					{
+						// doesnt work properly
+						// should be fixed
+						float damage = Autowall::GetDamage(target_hitbox_position_bt);
+						if (damage < settings.autowall_dmg && !settings.autowall_lethal || !settings.autowall_b || settings.autowall_lethal && damage < target->health())
+							continue;
+					}
+
+					if (bt_angle < best_fov) {
+						best_fov = bt_angle;
+						final_position = target_hitbox_position_bt;
 					}
 				}
+			}
 
-				if (best_index != -1) {
-					position = record[best_index].m_matrix[bone_id].get_origin();
-				}
-				else {
-					position = eblanchik->get_hitbox_position(AhuetYapernul);
-				}
+			if (!g::local->can_see_player_pos(target, target_hitbox_position))
+			{
+				const auto damage = Autowall::GetDamage(target_hitbox_position);
+				if (damage < settings.autowall_dmg && !settings.autowall_lethal || !settings.autowall_b || settings.autowall_lethal && damage < target->health())
+					continue;
+			}
 
-				if (!g::local->can_see_player_pos(eblanchik, position))
-				{
-					float ebatshasvpenu = Autowall::GetDamage(position);
-					if (ebatshasvpenu < autowall_dmg && !autowall_lethal || !autowall_b || autowall_lethal && ebatshasvpenu < eblanchik->health())
-						continue;
-				}
-				NuKudastrealyat = position;
+			if (angle < best_fov)
+			{
+				best_fov = angle;
+				final_position = target_hitbox_position;
 			}
 		}
 	}
 
-	if (NuKudastrealyat.wtf())
+	if (final_position.null())
 		return;
 
-	vec3_t NeNushasBuduebat = math::Vpenivatel(NashiOkiEpta, NuKudastrealyat, cmd->view_angles).normalized();
+	const vec3_t aim_angles = CalcAngle(client_eye_pos, final_position);
+	const auto rcs_value = float(settings.rcs_p) / 100.f;
 
-	auto ZV = float(rcs_p) / 50.f;
-	if (rcs)
-	{
-		cmd->view_angles += (NeNushasBuduebat.clamped() - g::local->aim_punch_angle() * ZV) / smooth;
-	}
-	else
-	{
-		cmd->view_angles += (NeNushasBuduebat.clamped()) / smooth;
-	}
+	if (aim_angles.null())
+		return;
 
-	if (!silent)
+	cmd->view_angles = aim_angles;
+
+	if (settings.rcs) // move it lower if u dont want smooth to be applied to rcs
+	{
+		cmd->view_angles = cmd->view_angles - (aim_punch * weapon_recoil_scale * rcs_value);
+	}
+	if (settings.smooth > 0) // too basic, too bad, but who uses it anyways ?
+	{
+		client_view_angles.x = AngleNormalize(client_view_angles.x);
+		client_view_angles.y = AngleNormalize(client_view_angles.y);
+
+		vec3_t qDelta = cmd->view_angles - client_view_angles;
+
+		qDelta.x = AngleNormalize(qDelta.x);
+		qDelta.y = AngleNormalize(qDelta.y);
+
+		cmd->view_angles.x = client_view_angles.x + qDelta.x / (float)settings.smooth;
+		cmd->view_angles.y = client_view_angles.y + qDelta.y / (float)settings.smooth;
+
+		cmd->view_angles.x = AngleNormalize(cmd->view_angles.x);
+		cmd->view_angles.y = AngleNormalize(cmd->view_angles.y);
+	}
+	if (!settings.silent)
 	{
 		interfaces::engine->set_view_angles(cmd->view_angles);
 	}
 
-	auto weapon = g::local->active_weapon();
-	auto weapon_data = weapon->get_weapon_data();
-
+#ifdef _DEBUG
+	interfaces::console->console_printf("Hitbox: x = %.20f, y = %.20f, z = %.20f\n", final_position.x, final_position.y, final_position.z);
+	interfaces::console->console_printf("Angles: x = %.20f, y = %.20f, z = %.20f\n", aim_angles.x, aim_angles.y, aim_angles.z);
+#endif
 }
 
-MegaPrivateAimbotOtAntohi g_Aimbot;
+aimbot_c aimbot;

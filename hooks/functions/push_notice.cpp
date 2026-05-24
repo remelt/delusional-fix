@@ -174,9 +174,9 @@ void __fastcall sdk::hooks::push_notice::push_notice(int ecx, int edx, const cha
 	case FNV1A::HashConst(("#delusional#_spotify_advertisement")):
 		return spotify_text(ecx, edx, xs("advertisement is now playing"));
 		break;
-	case FNV1A::HashConst(("#delusional#_spotify_switch")):
-		return spotify_text(ecx, edx, std::vformat(xs("now playing: {}"), std::make_format_args(strtitle)));
-		break;
+	//case FNV1A::HashConst(("#delusional#_spotify_switch")): // do it urself if u really need it
+	//	return spotify_text(ecx, edx, std::vformat(xs("now playing: {}"), std::make_format_args(strtitle)));
+	//	break;
 	case FNV1A::HashConst(("#delusional#_jumpstats")):
 		return print_text2(ecx, edx, xs(jumpstating::JumpInfo));
 		break;

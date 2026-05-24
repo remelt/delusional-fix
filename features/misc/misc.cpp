@@ -43,19 +43,19 @@ void features::misc::notify( std::string text, color _color ) {
 }
 
 void renderbox(int x, int y, int w, int h) {
-	interfaces::surface->draw_filled_rectangle(features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y, w, h);
+	interfaces::surface->draw_filled_rectangle(c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y, w, h);
 }
 
 void renderlineh(int x, int y, int size) {
-	interfaces::surface->draw_line(features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y, features::misc::iwebzspec.add_x + x + size, features::misc::iwebzspec.add_y + y);
+	interfaces::surface->draw_line(c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y, c::misc::spectatorlist_x + x + size, c::misc::spectatorlist_y + y);
 }
 
 void renderlinev(int x, int y, int size) {
-	interfaces::surface->draw_line(features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y, features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y + size);
+	interfaces::surface->draw_line(c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y, c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y + size);
 }
 
 void renderdiagonalr(int x, int y, int size) {
-	interfaces::surface->draw_line(features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y + size, features::misc::iwebzspec.add_x + x + size, features::misc::iwebzspec.add_y + y);
+	interfaces::surface->draw_line(c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y + size, c::misc::spectatorlist_x + x + size, c::misc::spectatorlist_y + y);
 }
 
 void render_background(int x, int y, int width) {
@@ -66,11 +66,11 @@ void render_background(int x, int y, int width) {
 	for (int i = 1; i <= features::misc::iwebzspec.count; i++) {
 		if (i % 2 == 0) {
 			interfaces::surface->set_drawing_color(75, 75, 75, 255);
-			interfaces::surface->draw_filled_rectangle(features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y + (i * 20), width, 20);
+			interfaces::surface->draw_filled_rectangle(c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y + (i * 20), width, 20);
 		}
 		else {
 			interfaces::surface->set_drawing_color(45, 45, 45, 255);
-			interfaces::surface->draw_filled_rectangle(features::misc::iwebzspec.add_x + x, features::misc::iwebzspec.add_y + y + (i * 20), width, 20);
+			interfaces::surface->draw_filled_rectangle(c::misc::spectatorlist_x + x, c::misc::spectatorlist_y + y + (i * 20), width, 20);
 		}
 	}
 	interfaces::surface->set_drawing_color(85, 85, 85, 255);
@@ -94,13 +94,13 @@ void features::misc::spectators_list_iwebz() {
 
 		auto mouse_pos = get_mouse_position();
 
-		bool is_pos = (mouse_pos.x >= features::misc::iwebzspec.add_x && mouse_pos.x <= features::misc::iwebzspec.add_x + features::misc::iwebzspec.width + 20 &&
-			mouse_pos.y >= features::misc::iwebzspec.add_y && mouse_pos.y <= features::misc::iwebzspec.add_y + features::misc::iwebzspec.height);
+		bool is_pos = (mouse_pos.x >= c::misc::spectatorlist_x && mouse_pos.x <= c::misc::spectatorlist_x + c::misc::spectatorlist_w + 20 &&
+			mouse_pos.y >= c::misc::spectatorlist_y && mouse_pos.y <= c::misc::spectatorlist_y + features::misc::iwebzspec.height);
 		bool is_press = GetAsyncKeyState(VK_LBUTTON) & 0x8000;
 
 		if (is_pos && is_press) {
 			if (!is_dragging) {
-				drag_offset = ImVec2(mouse_pos.x - features::misc::iwebzspec.add_x, mouse_pos.y - features::misc::iwebzspec.add_y);
+				drag_offset = ImVec2(mouse_pos.x - c::misc::spectatorlist_x, mouse_pos.y - c::misc::spectatorlist_y);
 			}
 			is_dragging = true;
 		}
@@ -109,13 +109,13 @@ void features::misc::spectators_list_iwebz() {
 		}
 
 		if (is_dragging) {
-			features::misc::iwebzspec.add_x = static_cast<int>(mouse_pos.x - drag_offset.x);
-			features::misc::iwebzspec.add_y = static_cast<int>(mouse_pos.y - drag_offset.y);
+			c::misc::spectatorlist_x = static_cast<int>(mouse_pos.x - drag_offset.x);
+			c::misc::spectatorlist_y = static_cast<int>(mouse_pos.y - drag_offset.y);
 		}
 
-		render_background(0, 0, features::misc::iwebzspec.width);
+		render_background(0, 0, c::misc::spectatorlist_w);
 
-		surface::text(features::misc::iwebzspec.add_x + (features::misc::iwebzspec.width / 2) - 42, features::misc::iwebzspec.add_y + 4, surface::fonts::esp, "SPECTATOR LIST", false, color(c::misc::spectators_list_color_1[0] * 255, c::misc::spectators_list_color_1[1] * 255, c::misc::spectators_list_color_1[2] * 255));
+		surface::text(c::misc::spectatorlist_x + (c::misc::spectatorlist_w / 2) - 42, c::misc::spectatorlist_y + 4, surface::fonts::esp, "SPECTATOR LIST", false, color(c::misc::spectators_list_color_1[0] * 255, c::misc::spectators_list_color_1[1] * 255, c::misc::spectators_list_color_1[2] * 255));
 
 		features::misc::iwebzspec.count = 0;
 		std::vector<std::string> spectator_names;
@@ -157,13 +157,24 @@ void features::misc::spectators_list_iwebz() {
 						col_text = color(c::misc::spectators_list_color_1[0] * 255, c::misc::spectators_list_color_1[1] * 255, c::misc::spectators_list_color_1[2] * 255);
 					}
 
-					surface::text(features::misc::iwebzspec.add_x + 4, features::misc::iwebzspec.add_y + 4 + (features::misc::iwebzspec.count * 20), surface::fonts::watermark, spectate_buffer, false, col_text);
-					features::misc::iwebzspec.t_size = surface::get_text_size(surface::fonts::esp, spectate_buffer).x;
+					interfaces::surface->m_bClippingEnabled(true);
+					int nOldClipX0, nOldClipY0, nOldClipX1, nOldClipY1;
+					interfaces::surface->get_clip_rect(nOldClipX0, nOldClipY0, nOldClipX1, nOldClipY1);
+					interfaces::surface->set_clip_rect(c::misc::spectatorlist_x, nOldClipY0, c::misc::spectatorlist_x + c::misc::spectatorlist_w, nOldClipY1);
+					surface::text(c::misc::spectatorlist_x + 4, c::misc::spectatorlist_y + 4 + (features::misc::iwebzspec.count * 20), surface::fonts::watermark, spectate_buffer, false, col_text);
+					interfaces::surface->set_clip_rect(nOldClipX0, nOldClipY0, nOldClipX1, nOldClipY1);
+					interfaces::surface->m_bClippingEnabled(false);
 				}
 				else if (!spectated_player && c::misc::spectatorlist_show_target) {
 					features::misc::iwebzspec.count++;
-					surface::text(features::misc::iwebzspec.add_x + 4, features::misc::iwebzspec.add_y + 4 + (features::misc::iwebzspec.count * 20), surface::fonts::watermark, info.name, false, color(255, 255, 255, 255));
-					features::misc::iwebzspec.t_size = surface::get_text_size(surface::fonts::esp, info.name).x;
+
+					interfaces::surface->m_bClippingEnabled(true);
+					int nOldClipX0, nOldClipY0, nOldClipX1, nOldClipY1;
+					interfaces::surface->get_clip_rect(nOldClipX0, nOldClipY0, nOldClipX1, nOldClipY1);
+					interfaces::surface->set_clip_rect(c::misc::spectatorlist_x, nOldClipY0, c::misc::spectatorlist_x + c::misc::spectatorlist_w, nOldClipY1);
+					surface::text(c::misc::spectatorlist_x + 4, c::misc::spectatorlist_y + 4 + (features::misc::iwebzspec.count * 20), surface::fonts::watermark, info.name, false, color(255, 255, 255, 255));
+					interfaces::surface->set_clip_rect(nOldClipX0, nOldClipY0, nOldClipX1, nOldClipY1);
+					interfaces::surface->m_bClippingEnabled(false);
 				}
 			}
 		}
@@ -214,26 +225,23 @@ void features::misc::spectators_list() {
 			}
 
 			int y = 5;
-
 			if (c::misc::watermark) {
-				if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0)
-					y = 45;
-				else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1)
-					if (c::misc::progressbar_enable)
-						y = 77;
-					else
-						y = 68;
-				else
-					y = 30;
+				y += 6 + 19;
 			}
-			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0) {
-				y = 20;
+			if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0) {
+				y += 15;
 			}
-			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1) {
-				if (c::misc::progressbar_enable)
-					y = 52;
+			if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1) {
+				const int progressbar = mplayer.thumb && c::misc::progressbar_enable ? 10 : 0;
+				int size;
+				if (mplayer.Title == "" && mplayer.Artist == "" && !mplayer.thumb)
+					size = 0;
+				else if (mplayer.Title == "" && !mplayer.thumb)
+					size = 18; // 6 + 12
 				else
-					y = 43;
+					size = 30;
+
+				y += 6 + size + progressbar;
 			}
 
 			ImColor spec_clr = ImColor(c::misc::spectators_list_color_2[0], c::misc::spectators_list_color_2[1], c::misc::spectators_list_color_2[2]);
@@ -755,86 +763,3 @@ void features::misc::sniper_crosshair() {
 
 	im_render.drawrectfilled(x / 2, y / 2, 2, 2, color_t(255, 255, 255));
 }
-
-void features::misc::vote_revealer(i_game_event* event) {
-	/*
-	if (!c::misc::vote_revealer || !interfaces::engine->is_in_game())
-		return;
-
-	int vote = event->get_int("vote_option");
-	int id = event->get_int("entityid");
-	player_info_t player;
-	interfaces::engine->get_player_info(id, &player);
-	interfaces::chat_element->chatprintf(0, 0, " \x07 %s\x08 voted %s\x08.\n", player.name, vote == 0 ? "\x07yes" : "\x02no");
-	*/
-}
-
-void features::misc::handle_spotify() {
-	/*static HWND spotify_hwnd = nullptr;
-	static float last_hwnd_time = 0.f;
-	if ((!spotify_hwnd || spotify_hwnd == INVALID_HANDLE_VALUE) && last_hwnd_time < interfaces::globals->realtime + 2.f) {
-		for (HWND hwnd = GetTopWindow(0); hwnd; hwnd = GetWindow(hwnd, GW_HWNDNEXT)) {
-			last_hwnd_time = interfaces::globals->realtime;
-
-			if (!(IsWindowVisible)(hwnd))
-				continue;
-
-			int length = (GetWindowTextLengthW)(hwnd);
-			if (length == 0)
-				continue;
-
-			WCHAR filename[300];
-			DWORD pid;
-			(GetWindowThreadProcessId)(hwnd, &pid);
-
-			const auto spotify_handle = (OpenProcess)(PROCESS_QUERY_INFORMATION, FALSE, pid);
-			(K32GetModuleFileNameExW)(spotify_handle, nullptr, filename, 300);
-
-			std::wstring sane_filename{ filename };
-
-			(CloseHandle)(spotify_handle);
-
-			if (sane_filename.find((L"Spotify.exe")) != std::string::npos)
-				spotify_hwnd = hwnd;
-		}
-	}
-	else if (spotify_hwnd && spotify_hwnd != INVALID_HANDLE_VALUE) {
-		WCHAR title[300];
-
-		if (!(GetWindowTextW)(spotify_hwnd, title, 300)) {
-			spotify_hwnd = nullptr;
-		}
-		else {
-			std::wstring sane_title{ title };
-			std::string song(sane_title.begin(), sane_title.end());
-			if (sane_title.find((L"-")) != std::string::npos) {
-				features::visuals::current_spotify_song = song;
-			}
-			else if (sane_title.find((L"Advertisment")) != std::string::npos) {
-				features::visuals::current_spotify_song = (" advertisment");
-			}
-			else if (sane_title.find((L"Spotify")) != std::string::npos) {
-				features::visuals::current_spotify_song = (" stopped / not playing");
-			}
-			else {
-				features::visuals::current_spotify_song = (" advertisment");
-			}
-		}
-	}
-
-	static std::string old_song = features::visuals::current_spotify_song;
-	if (old_song != features::visuals::current_spotify_song) {
-		if (c::misc::show_spotify_currently_playing) {
-			if (features::visuals::current_spotify_song.find(" stopped / not playing") != std::string::npos)
-				interfaces::chat_element->chatprintf("#delusional#_spotify_paused");
-			else if (features::visuals::current_spotify_song.find(" advertisment") != std::string::npos)
-				interfaces::chat_element->chatprintf("#delusional#_spotify_advertisement");
-			else
-				interfaces::chat_element->chatprintf("#delusional#_spotify_switch");
-		}
-
-		old_song = features::visuals::current_spotify_song;
-	}*/
-}
-
-

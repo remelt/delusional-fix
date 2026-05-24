@@ -228,11 +228,14 @@ void features::chams::run_bt(i_mat_render_context* ctx, const draw_model_state_t
 			return;
 
 		if (player->team() != g::local->team()) {
-			if (c::chams::backtrack_chams && c::backtrack::backtrack && player->is_moving() && g::local->is_alive()) {
+			if (c::chams::backtrack_chams && c::backtrack::backtrack && g::local->is_alive()) {
 				auto record = &backtrack.data[player->index()];
 				if (c::chams::backtrack_chams_draw_all_ticks) {
 					for (int i = 0; i < record->size(); i++) {
 						if (record && !record->empty() && record->size() && (record->at(i).sim_time)) {
+							if (!(record->at(i).velocity.length_2d() > 0.1f) && !player->is_moving()) {
+								continue;
+							}
 							float h, s, v, a;
 							h = (math::rgbtoh(c::chams::backtrack_chams_clr2[0], c::chams::backtrack_chams_clr2[1], c::chams::backtrack_chams_clr2[2]) - math::rgbtoh(c::chams::backtrack_chams_clr1[0], c::chams::backtrack_chams_clr1[1], c::chams::backtrack_chams_clr1[2])) / backtrack.data[player->index()].size();
 							s = (math::rgbtos(c::chams::backtrack_chams_clr2[0], c::chams::backtrack_chams_clr2[1], c::chams::backtrack_chams_clr2[2]) - math::rgbtos(c::chams::backtrack_chams_clr1[0], c::chams::backtrack_chams_clr1[1], c::chams::backtrack_chams_clr1[2])) / backtrack.data[player->index()].size();
@@ -257,6 +260,9 @@ void features::chams::run_bt(i_mat_render_context* ctx, const draw_model_state_t
 				}
 				else  {
 					if (record && !record->empty() && record->size() && (record->front().sim_time)) {
+						if (!(record->front().velocity.length_2d() > 0.1f) && !player->is_moving()) {
+							return;
+						}
 						override_material_bt(c::chams::backtrack_chams_invisible, false, c::chams::cham_type_bt, color_t(c::chams::backtrack_chams_clr2[0], c::chams::backtrack_chams_clr2[1], c::chams::backtrack_chams_clr2[2], c::chams::backtrack_chams_clr2[3]));
 						sdk::hooks::draw_model_execute::draw_model_execute_original(interfaces::model_render, 0, ctx, state, info, record->back().m_matrix);
 						interfaces::model_render->override_material(nullptr);

@@ -145,6 +145,16 @@ struct CStickerKit
 	std::uint32_t pad0[4];
 };
 
+struct weapon_skins {
+	int wear;
+	int vector_paint_kit = 0;
+	int paint_kit_index = 0;
+	bool wpn_skin_custom_clr = false;
+	float wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+	float wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+	float wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+	float wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
+};
 
 namespace features::skins {
 	struct hud_weapons_t {
@@ -153,10 +163,15 @@ namespace features::skins {
 		}
 	};
 
+	inline std::map<short, weapon_skins> weapon_skin;
+
 	void agent_changer( );
 	void gloves_changer();
 	void knife_changer( );
-	void init_knife_proxy( );
+	void hooked_recvproxy_viewmodel(c_recv_proxy_data* p_data, void* p_struct, void* p_out);
+	void set_view_model_sequence(const c_recv_proxy_data* pDataConst, void* p_struct, void* p_out);
+	void animation_hook();
+	void animation_unhook();
 	void init_parser( );
 	void full_update();
 	inline bool forcing_update = false;

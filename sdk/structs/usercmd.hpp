@@ -1,6 +1,7 @@
 #pragma once
 #include "../../utils/padding.hpp"
 #include "../math/vec3.hpp"
+#include "crc32/crc32.h"
 
 enum cmd_buttons {
 	in_attack = ( 1 << 0 ),
@@ -33,10 +34,7 @@ enum cmd_buttons {
 
 class c_usercmd {
 public:
-	c_usercmd( )
-	{};
-	virtual ~c_usercmd( )
-	{};
+	virtual ~c_usercmd( ){};
 
 	int command_number;
 	int tick_count;
@@ -53,5 +51,37 @@ public:
 	short mouse_dx;
 	short mouse_dy;
 	bool has_been_predicted;
-	char pad_0x4c[ 0x18 ];
+	vec3_t m_head_angles;
+	vec3_t m_head_offset;
+
+	unsigned int get_check_sum() const
+	{
+		unsigned int hash_crc = 0UL;
+
+		crc32::init(&hash_crc);
+		crc32::process_buffer(&hash_crc, &this->command_number, sizeof(this->command_number));
+		crc32::process_buffer(&hash_crc, &this->tick_count, sizeof(this->tick_count));
+		crc32::process_buffer(&hash_crc, &this->view_angles, sizeof(this->view_angles));
+		crc32::process_buffer(&hash_crc, &this->aim_direction, sizeof(this->aim_direction));
+		crc32::process_buffer(&hash_crc, &this->forward_move, sizeof(this->forward_move));
+		crc32::process_buffer(&hash_crc, &this->side_move, sizeof(this->side_move));
+		crc32::process_buffer(&hash_crc, &this->up_move, sizeof(this->up_move));
+		crc32::process_buffer(&hash_crc, &this->buttons, sizeof(this->buttons));
+		crc32::process_buffer(&hash_crc, &this->impulse, sizeof(this->impulse));
+		crc32::process_buffer(&hash_crc, &this->weapon_select, sizeof(this->weapon_select));
+		crc32::process_buffer(&hash_crc, &this->weapon_subtype, sizeof(this->weapon_subtype));
+		crc32::process_buffer(&hash_crc, &this->random_seed, sizeof(this->random_seed));
+		crc32::process_buffer(&hash_crc, &this->mouse_dx, sizeof(this->mouse_dx));
+		crc32::process_buffer(&hash_crc, &this->mouse_dy, sizeof(this->mouse_dy));
+		crc32::end(&hash_crc);
+
+		return hash_crc;
+	}
+};
+
+class c_verified_user_cmd
+{
+public:
+	c_usercmd m_user_cmd;
+	unsigned int m_hash_crc;
 };

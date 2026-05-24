@@ -25,6 +25,7 @@ bool interfaces::initialize() {
 	effects = get_interface<iv_effects, interface_type::index>("engine.dll", "VEngineEffects001");
 	filesystem = get_interface<i_filesystem, interface_type::index>("filesystem_stdio.dll", "VFileSystem017");
 	physics_collision = get_interface<c_physics_collison, interface_type::index>("vphysics.dll", "VPhysicsCollision007");
+	mem_alloc = *reinterpret_cast<IMemAlloc**>(GetProcAddress(GetModuleHandleA("tier0.dll"), "g_pMemAlloc"));
 
 	/*custom interfaces*/
 	input = *reinterpret_cast<i_input**>(find_pattern("client.dll", "B9 ? ? ? ? F3 0F 11 04 24 FF 50 10") + 1);

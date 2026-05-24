@@ -6,11 +6,9 @@
 #include "../../features/misc/misc.hpp"
 #include "../../features/movement/movement.hpp"
 #include "../../features/movement/prediction/prediction.hpp"
-#include "../../features/movement/lobotomy_eb.h"
 
 void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify(int stage) {
 
-	lobotomy_eb::frame_stage(stage);
 	recorder->frame_stage(stage);
 
 	if (stage == frame_render_start) {
@@ -48,7 +46,7 @@ void __stdcall sdk::hooks::frame_stage_notify::frame_stage_notify(int stage) {
 
 			//CHILLWARE EXPLOIT
 			//SOLD FOR 10k
-			if (!c::movement::silent_eb_hacked) {
+			if (!c::movement::edge_bug_silent) {
 				interfaces::engine->set_view_angles(edgebugva);
 			}
 		}

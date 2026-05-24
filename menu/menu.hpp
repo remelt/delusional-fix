@@ -20,7 +20,7 @@ namespace menu {
 	inline float delta_time = 0;
 	inline int main_tab = 0;
 	inline bool initialized = false;
-	inline bool unhook = true;
+	inline bool unhook = false;
 	inline int indicator_tab = 0;
 	inline int indicators_tab = 0;
 	inline int movement_tab = 0;

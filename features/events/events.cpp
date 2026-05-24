@@ -21,12 +21,6 @@ void hooked_events::fire_game_event(i_game_event* event) {
 	if (!strcmp(event_name, "round_prestart")) {
 		recorder->forcestop();
 	}
-	if (strstr(event_name, "player_footstep")) {
-
-	}
-	if (strstr(event_name, "vote_cast")) {
-		features::misc::vote_revealer(event);
-	}
 
 	panorama::scaleform_after_event(event_name);
 }

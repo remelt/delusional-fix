@@ -8,13 +8,15 @@
 #include "../../sdk/math/math.hpp"
 #include "../../sdk/sdk.hpp"
 #include "../hooks.hpp"
-#include "../../features/movement/lobotomy_eb.h"
 
-bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime, c_usercmd* cmd ) {
-	bool ret = sdk::hooks::create_move::ofunc(ecx, edx, sampletime, cmd);
+void __stdcall sdk::hooks::create_move_proxy::create_move_proxy(int sequence_number, float input_sample_frametime, bool active) {
+	
+	sdk::hooks::create_move_proxy::ofunc(interfaces::client, 0, sequence_number, input_sample_frametime, active);
 
-	if (!cmd || !cmd->command_number)
-		return ret;
+	c_usercmd* cmd = interfaces::input->get_user_cmd(sequence_number);
+	c_verified_user_cmd* verified_cmd = interfaces::input->get_verified_cmd(sequence_number);
+	if (!cmd || !verified_cmd || !cmd->command_number)
+		return;
 
 	g::local = static_cast<player_t*>(interfaces::ent_list->get_client_entity(interfaces::engine->get_local_player()));
 	g::cmd = cmd;
@@ -22,17 +24,13 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::first_viewangles = cmd->view_angles;
 	features::movement::previous_tick = interfaces::globals->tick_count;
 	i_net_channel* net_channel = interfaces::client_state->net_channel;
-
+	prediction::update();
 	features::misc::fix_mouse_delta(cmd);
 	features::visuals::jump_trail();
 	features::misc::clantag_spammer();
 	features::misc::reveal_server_ranks(cmd);
 	panorama::scaleform_tick(g::local);
 
-	features::movement::auto_align(cmd);
-	if (c::movement::px_selection == 0) {
-		features::movement::pixel_surf_fix_del(cmd);
-	}
 	features::movement::bhop(cmd);
 
 	features::movement::delay_hop(cmd);
@@ -43,33 +41,23 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	features::grenade_prediction::run(cmd);
 
-	prediction::backup_originals(cmd);
-
-	lobotomy_eb::PrePredictionEdgeBug(cmd);
-
 	//dont even call this shit if not enabled
 	if (c::assist::assist) {
 		features::movement::check_ps(cmd);
 	}
 
 	features::movement::assist_createmove(cmd);
-	if ((c::movement::auto_align) && (c::movement::align_selection == 1) && !(prediction_backup::flags & 1)) {
-		if (!c::movement::align_experimental) {
-			features::movement::auto_align_lb(cmd);
-		}
-		else {
-			features::movement::auto_align_lb_recode(cmd);
-		}
+	if ((c::movement::auto_align) && !(prediction_backup::flags & 1)) {
+		features::movement::auto_align(cmd);
 	}
 	features::movement::fast_ladder(cmd);
 	features::movement::air_stuck(cmd);
 	features::movement::jump_bug_crouch(cmd);
-
+	//prediction::backup_originals(cmd);
 	prediction::begin(cmd); {
 
 		features::movement::null_strafing(cmd);
-		g_Aimbot.run(cmd);
-		lobotomy_eb::edgebug_detect(cmd);
+		aimbot.run(cmd);
 		triggerbot::run(cmd);
 		backtrack.on_move(cmd);
 
@@ -80,9 +68,9 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 	features::movement::edge_jump(cmd);
 	features::movement::long_jump(cmd);
 	features::movement::mini_jump(cmd);
-	features::misc::jumpstats::jumpstats(cmd);
+	features::misc::jumpstats::jumpstats(cmd); // meh
 	features::movement::ladder_jump(cmd);
-	features::movement::ladder_bug(cmd);
+	features::movement::ladder_glide(cmd);
 	features::movement::jump_bug(cmd);
 
 	features::movement::auto_strafe(cmd, features::movement::first_viewangles);
@@ -90,30 +78,19 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	features::misc::kz_practice_logic(cmd);
 
-	//lb pixelsurf
-	if (c::movement::px_selection == 1) {
-		features::movement::on_create_move_post(cmd);
-	}
+	features::movement::on_create_move_post(cmd);
 
 	features::movement::fire_man(cmd);
 	features::movement::auto_duck(cmd);
-	features::movement::avoid_collision(cmd);
 
 	if (!c::movement::movement_fix) {
 		features::movement::fix_movement(cmd, features::movement::first_viewangles);
 	}
 
-	if (c::movement::px_selection == 0) {
-		features::movement::pixel_surf_del(cmd);
-		features::movement::pixel_surf_lock(cmd);
-	}
-
 	features::movement::edge_bug(cmd);
 
-	lobotomy_eb::EdgeBugPostPredict(cmd);
-
 	if (interfaces::prediction->split->commands_predicted > 1)
-				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
+		prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 
 	if (net_channel != nullptr) {
 		if (c::backtrack::fake_latency)
@@ -132,5 +109,6 @@ bool __fastcall sdk::hooks::create_move::create_move(registers, float sampletime
 
 	features::movement::last_tick_y = cmd->view_angles.y;
 
-	return false;
+	verified_cmd->m_user_cmd = *cmd;
+	verified_cmd->m_hash_crc = cmd->get_check_sum();
 }

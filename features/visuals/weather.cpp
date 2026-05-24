@@ -42,11 +42,6 @@ void* features::weather::getv_collideble()
 
 void features::weather::update_weather() {
 
-    //if (features::skins::forcing_update && created_rain) {
-    //    reset_weather();
-    //    return;
-    //}
-
     if (!precipitation) {
         for (auto client_class = interfaces::client->get_all_classes(); client_class && !precipitation;
             client_class = client_class->next_ptr) {

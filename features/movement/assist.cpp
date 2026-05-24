@@ -80,9 +80,8 @@ public:
 
 		constexpr int MAX_VISIBLE_WINDOWS = 5;
 
-
-		ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, info.c_str());		// ?????????????????? //ужас
-		float heightPadding = 22.0f;
+		ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, info.c_str());
+		float heightPadding = 14.0f;
 		float windowHeight = (infoTextSize.y + heightPadding) / 1080.0f;
 
 		AnimatedWindow newWin;
@@ -200,77 +199,30 @@ public:
 			if (win.state == FADE_OUT && win.alpha <= 0.0f) {
 				continue;
 			}
-			if (!c::assist::assist_render_style) {
-				ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, win.info.c_str());
-				float widthPadding = 16.0f;
-				float heightPadding = 10.0f;
+
+			ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, win.info.c_str());
+			float widthPadding = 16.0f;
+			float heightPadding = 10.0f;
 				
-				//pos
-				ImVec2 size = ImVec2(infoTextSize.x + widthPadding, infoTextSize.y + heightPadding);
-				ImVec2 pos = ImVec2(displaySize.x * win.currentPosition.x - size.x * 0.5f, displaySize.y * win.currentPosition.y - size.y * 0.5f);
-				ImVec2 textPos = ImVec2(pos.x + (size.x - infoTextSize.x) * 0.5f, pos.y + (size.y - infoTextSize.y) * 0.5f);
+			//pos
+			ImVec2 size = ImVec2(infoTextSize.x + widthPadding, infoTextSize.y + heightPadding);
+			ImVec2 pos = ImVec2(displaySize.x * win.currentPosition.x - size.x * 0.5f, displaySize.y * win.currentPosition.y - size.y * 0.5f);
+			ImVec2 textPos = ImVec2(pos.x + (size.x - infoTextSize.x) * 0.5f, pos.y + (size.y - infoTextSize.y) * 0.5f);
 
-				//colors
-				int a = static_cast<int>(win.alpha * 255);
-				ImColor bg_color(0.08f, 0.08f, 0.08f, win.alpha);
-				ImColor outline_start_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], win.alpha);
-				ImColor outline_end_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 0.f);
-				ImU32 textColor = IM_COL32(255, 255, 255, a);
+			//colors
+			int a = static_cast<int>(win.alpha * 255);
+			ImColor bg_color(0.08f, 0.08f, 0.08f, win.alpha);
+			ImColor outline_start_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], win.alpha);
+			ImColor outline_end_color(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 0.f);
+			ImU32 textColor = IM_COL32(255, 255, 255, a);
 
-				draw->AddRectFilledMultiColor(pos + ImVec2(-1, -1), pos + ImVec2(0, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
-				draw->AddRectFilled(pos + ImVec2(0, -1), pos + ImVec2(size.x, 0), outline_start_color);
-				draw->AddRectFilledMultiColor(pos + ImVec2(size.x, -1), pos + ImVec2(size.x + 1, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
-				draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_color);
+			draw->AddRectFilledMultiColor(pos + ImVec2(-1, -1), pos + ImVec2(0, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
+			draw->AddRectFilled(pos + ImVec2(0, -1), pos + ImVec2(size.x, 0), outline_start_color);
+			draw->AddRectFilledMultiColor(pos + ImVec2(size.x, -1), pos + ImVec2(size.x + 1, size.y + 1), outline_start_color, outline_start_color, outline_end_color, outline_end_color);
+			draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_color);
 
-				draw->AddText(fonts::assist_font, 12.f, ImVec2(textPos.x + 1, textPos.y + 1), IM_COL32(0, 0, 0, a / 4), win.info.c_str());
-				draw->AddText(fonts::assist_font, 12.f, textPos, textColor, win.info.c_str());
-			}
-			else {
-				ImVec2 infoTextSize = fonts::assist_font->CalcTextSizeA(12.f, FLT_MAX, NULL, win.info.c_str());
-
-				float widthPadding = 18.0f;
-				float heightPadding = 18.0f;
-				ImVec2 size = ImVec2(infoTextSize.x + widthPadding, infoTextSize.y + heightPadding);
-
-				ImVec2 pos = ImVec2(displaySize.x * win.currentPosition.x - size.x * 0.5f, displaySize.y * win.currentPosition.y - size.y * 0.5f);
-
-				int a = static_cast<int>(win.alpha * 255);
-				ImU32 bgColor = IM_COL32(14, 14, 14, a);
-				ImU32 textColor = IM_COL32(255, 255, 255, a);
-
-				const float cornerRadius = 4.0f;
-
-				draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bgColor, cornerRadius);
-
-				auto accentColor = ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f);		// ?????????????????????????? ImGuiCol_Accent //без мя даж акцент хакнуть не смог XD
-				accentColor.w = win.alpha;
-
-				const float accentHeight = 1.0f;
-
-				float maxWidth = size.x - 4.0f;
-				float margin = 2.0f;
-
-				float currentWidth = maxWidth * (1.0f - EaseInOutCubic(win.accentProgress));
-				if (currentWidth < 0)
-					currentWidth = 0;
-
-				float startX = pos.x + margin;
-
-				if (currentWidth > 0) {
-					float centerX = pos.x + size.x * 0.5f;
-					float halfWidth = currentWidth * 0.5f;
-					float lineY = pos.y + 0.0f;
-
-					draw->AddRectFilled(ImVec2(centerX - halfWidth, lineY), ImVec2(centerX + halfWidth, lineY + accentHeight),
-						ImGui::GetColorU32(accentColor));
-				}
-
-				ImVec2 textPos = ImVec2(pos.x + (size.x - infoTextSize.x) * 0.5f, pos.y + (size.y - infoTextSize.y) * 0.5f);
-
-				draw->AddText(fonts::assist_font, 12.f, ImVec2(textPos.x + 1, textPos.y + 1), IM_COL32(0, 0, 0, a / 4), win.info.c_str());
-
-				draw->AddText(fonts::assist_font, 12.f, textPos, textColor, win.info.c_str());
-			}
+			draw->AddText(fonts::assist_font, 12.f, ImVec2(textPos.x + 1, textPos.y + 1), IM_COL32(0, 0, 0, a / 4), win.info.c_str());
+			draw->AddText(fonts::assist_font, 12.f, textPos, textColor, win.info.c_str());
 		}
 	}
 
@@ -1018,17 +970,12 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 		return;
 	if (!g::local->is_alive())
 		return;
-	if (m_pixelsurf_data.should_pixel_surf)
-		return;
 
-	float sv_gravity2 = interfaces::console->get_convar(("sv_gravity"))->get_float();
-	float fTickInterval = interfaces::globals->interval_per_tick;
-	float fTickRate = (fTickInterval > 0) ? (1.0f / fTickInterval) : 0.0f;
-	float veloZoftick = (((sv_gravity2 / 2) / fTickRate) * -1.f);
+	//we dont need to use the bind while pixelsurfing
+	if (m_pixelsurf_data.ps_detect) {
+		return;
+	}
 	vec3_t ray_shit = g::local->abs_origin() + vec3_t(0.f, 0.f, 64.f);
-	if (prediction_backup::velocity.z == veloZoftick)
-		return;
-
 	static bool off = false;
 	static int timer_to_point = 0;
 	if (menu::checkkey(c::assist::pixelsurf_point_key, c::assist::pixelsurf_point_key_s)) {
@@ -1127,19 +1074,13 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 				static int ticks = 0;
 				static int ljticks = 0;
 
-				//we dont need to use the bind while pixelsurfing
-				if (ps_data.pixelsurfing)
-					return;
 				if (!c::assist::assist_broke_hop) {
 					if (cmd->tick_count > ticks && prediction_backup::flags & 1 && g::local->stamina() != 0.f)
 						return;
-				}
-
-				//TODO: MAKE IT WORK PROPERLY (IT MAKES A LITTLE MORE THAN ZERO SENSE TO DO IT LIKE THIS)
-				if (c::assist::assist_broke_hop) {
 					if (cmd->tick_count > ticks && prediction_backup::flags & 1 && g::local->stamina() > c::assist::assist_stamina_value)
 						return;
 				}
+
 				if (prediction_backup::velocity.z < 0.f)
 					ljticks = 0;
 
@@ -1186,10 +1127,8 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 								if (c::assist::pixelsurf_assist_type == 1) {
 									if (!isLargeAngleDifference(currentAngle.y, angViewPointBackup.y))
 										currentAngle = (currentAngle + DeltaAngle).normalized().clamped();
-									cmd->view_angles = currentAngle;
-									features::movement::start_movement_fix(cmd);
 									cmd->view_angles = angViewPointBackup;
-									features::movement::end_movement_fix(cmd);
+									features::movement::fix_movement(cmd, currentAngle);
 								}
 							}
 							if (c::movement::pixel_surf_fix) {
@@ -1592,10 +1531,8 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 							cmd->forward_move = NewCmd_assist[cmd_i].forwardmove;
 							cmd->side_move = NewCmd_assist[cmd_i].sideMove;
 							if (c::assist::pixelsurf_assist_type == 1) {
-								cmd->view_angles = NewCmd_assist[cmd_i].viewangle;
-								features::movement::start_movement_fix(cmd);
 								cmd->view_angles = angViewPointBackup;
-								features::movement::end_movement_fix(cmd);
+								features::movement::fix_movement(cmd, NewCmd_assist[cmd_i].viewangle);
 							}
 							cmd_i += 1;
 						}
@@ -1654,9 +1591,6 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 			}
 			if (HITGODA || HitJump || HitMiniJump || HitLongJump || HitCHop || HitJumpBug || HitMiniChop) {
 				break;
-			}
-			if (!c::movement::bhopfix) {
-				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
 			}
 		}
 	}
@@ -2307,9 +2241,6 @@ void features::movement::bounce_assist(c_usercmd* cmd)
 			else {
 				HITGODA2 = false;
 			}
-			if (!c::movement::bhopfix) {
-				prediction::restore_ent_to_predicted_frame(interfaces::prediction->split->commands_predicted - 1);
-			}
 		}
 	}
 }
@@ -2826,9 +2757,10 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 		}
 
 		//...
-		if (c::movement::px_selection == 1 && c::movement::pixel_surf) {
-			if (m_pixelsurf_data.should_pixel_surf)
+		if (c::movement::pixel_surf) {
+			if (m_pixelsurf_data.should_pixel_surf) {
 				cmd->buttons |= in_duck;
+			}
 			if (g::local->flags() & fl_onground)
 				m_pixelsurf_data.should_pixel_surf = false;
 		}

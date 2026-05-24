@@ -51,6 +51,7 @@ void Autowall::ClipTraceToPlayers(const vec3_t& vecAbsStart, const vec3_t& vecAb
 
 	for (int i = 1; i <= interfaces::globals->max_clients; ++i) {
 		auto ent = player_t::get_player_by_index(i);
+
 		if (!ent || ent->dormant() || ent->life_state() != LIFE_ALIVE)
 			continue;
 
@@ -81,7 +82,7 @@ void Autowall::ClipTraceToPlayers(const vec3_t& vecAbsStart, const vec3_t& vecAb
 
 		if (range >= 0.0f && range <= maxRange) {
 			trace_t playerTrace;
-			interfaces::trace_ray->ClipRayToEntity(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, ent, &playerTrace);
+			interfaces::trace_ray->clip_ray_to_entity(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, reinterpret_cast<i_handle_entity*>(ent), &playerTrace);
 			if (playerTrace.flFraction < smallestFraction) {
 				*tr = playerTrace;
 				smallestFraction = playerTrace.flFraction;
@@ -92,10 +93,10 @@ void Autowall::ClipTraceToPlayers(const vec3_t& vecAbsStart, const vec3_t& vecAb
 
 void Autowall::ScaleDamage(int hitgroup, player_t* enemy, float weapon_armor_ratio, float& current_damage)
 {
-	static auto mp_damage_scale_ct_head = interfaces::console->get_convar("mp_damage_scale_ct_head");
-	static auto mp_damage_scale_t_head = interfaces::console->get_convar("mp_damage_scale_t_head");
-	static auto mp_damage_scale_ct_body = interfaces::console->get_convar("mp_damage_scale_ct_body");
-	static auto mp_damage_scale_t_body = interfaces::console->get_convar("mp_damage_scale_t_body");
+	auto mp_damage_scale_ct_head = interfaces::console->get_convar("mp_damage_scale_ct_head");
+	auto mp_damage_scale_t_head = interfaces::console->get_convar("mp_damage_scale_t_head");
+	auto mp_damage_scale_ct_body = interfaces::console->get_convar("mp_damage_scale_ct_body");
+	auto mp_damage_scale_t_body = interfaces::console->get_convar("mp_damage_scale_t_body");
 
 	auto team = enemy->team();
 	auto head_scale = team == 2 ? mp_damage_scale_ct_head->get_float() : mp_damage_scale_t_head->get_float();

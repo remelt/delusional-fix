@@ -10,8 +10,14 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(get_vfunc<void*>( interfaces::device, 17 ), &present::present, ( void** ) &present::ofunc ))
 		printf(( "present hook failed.\n" ));
 
-	if (MH_CreateHook( get_vfunc<void*>( interfaces::client_mode, 24 ), &create_move::create_move, ( void** ) &create_move::ofunc ))
-		printf(( "create move hook failed.\n" ));
+	if (MH_CreateHook(get_vfunc<void*>(interfaces::device, 16), &reset::reset, (void**)&reset::ofunc))
+		printf(("reset hook failed.\n"));
+
+	//if (MH_CreateHook(get_vfunc<void*>(interfaces::device, 42), &endscene::endscene, (void**)&endscene::ofunc))
+	//	printf(("endscene hook failed.\n"));
+
+	if (MH_CreateHook(get_vfunc<void*>(interfaces::client, 22), &create_move_proxy::create_move_proxy, (void**)&create_move_proxy::ofunc))
+		printf(("create move proxy hook failed.\n"));
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::client_mode, 27), &should_draw_viewmodel::should_draw_viewmodel, (void**)&should_draw_viewmodel::ofunc))
 		printf(("should draw viewmodel hook failed.\n"));
@@ -67,8 +73,8 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::engine, 27), &is_connected::is_connected, (void**)&is_connected::ofunc))
 		printf(("is connected hook failed.\n"));
 
-	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 E4 F8 83 EC 70 56 57 8B F9 89 7C 24 14 83 7F 60")), &modify_eye_position::modify_eye_position, (void**)&modify_eye_position::ofunc))
-		printf(("modify eye position hook failed.\n"));
+	//if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 E4 F8 83 EC 70 56 57 8B F9 89 7C 24 14 83 7F 60")), &modify_eye_position::modify_eye_position, (void**)&modify_eye_position::ofunc))
+	//	printf(("modify eye position hook failed.\n"));
 
 	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 EC 14 53 56 57 FF 75 18")), &calcultate_view::calcultate_view, (void**)&calcultate_view::ofunc))
 		printf(("calculate view hook failed.\n"));
@@ -105,6 +111,10 @@ void sdk::hooks::init( ) {
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::event_manager, 9), &fire_event::fire_event, (void**)&fire_event::ofunc))
 		printf(("is connected hook failed.\n"));
+
+	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 E4 F0 81 EC ? ? ? ? F3 0F 7E")), &fire_bullet::fire_bullet, (void**)&fire_bullet::ofunc))
+		printf(("fire bullet hook failed.\n"));
+
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::model_info, 6), &get_vcollide::get_vcollide, (void**)&get_vcollide::ofunc))
 		printf(("get_vcollide hook failed.\n"));
 
@@ -114,7 +124,7 @@ void sdk::hooks::init( ) {
 	window = FindWindowW( ( L"Valve001" ), NULL );
 
 	features::skins::init_parser( );
-	features::skins::init_knife_proxy( );
+	features::skins::animation_hook();
 	panorama::scaleform_init();
 	//events.setup();
 

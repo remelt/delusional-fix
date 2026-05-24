@@ -1,6 +1,11 @@
 #pragma once
+
 #include "../../sdk/sdk.hpp"
 #include "../../hooks/hooks.hpp"
+#include "../mplayer/mplayer.h"
+#include "../../includes/imgui/imgui_internal.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
 
 inline constexpr const static char collide_data[] = {
 	char(0xB8), char(0x01), char(0x00), char(0x00), char(0x56), char(0x50), char(0x48), char(0x59), char(0x00), char(0x01),
@@ -78,13 +83,6 @@ struct bbox_t {
 	}
 };
 
-struct IDirect3DTexture9;
-inline std::string oldtitle;
-inline std::string oldartist;
-inline IDirect3DTexture9* albumArtTexture = nullptr;
-inline std::string strartist;
-inline std::string strtitle;
-
 namespace features::visuals {
 	inline bool console_vis = false;
 	inline int tick;
@@ -122,7 +120,8 @@ namespace features::visuals {
 	}
 
 	void watermark();
-	void RenderMediaPlayer();
+	std::pair<std::string, std::string> get_real_name(std::string title, std::string artist);
+	void render_media_player();
 	void display_spotify();
 	void jump_trail();
 	void removals();

@@ -43,8 +43,29 @@ void features::skins::init_parser() {
 					}
 					parser_skins.push_back({ paint_kit->id, name, paint_kit });
 				}
-				else {
+				else {			
+					// prob doing it wrong
+					if (auto pos = gameItems.find('_' + std::string{ paint_kit->name.buffer } + '='); pos != std::string::npos && gameItems.substr(pos + paint_kit->name.length).find('_' + std::string{ paint_kit->name.buffer } + '=') == std::string::npos) {
+						static const std::string types[] = { "brokenfang", "bloodhound", "sporty", "slick", "handwrap", "motorcycle", "specialist", "hydra" };
+						auto start = gameItems.rfind('\n', pos);
+						if (start == std::string::npos)
+							start = 0;
+						else
+							start++;
 
+						std::string final;
+						for (const auto& type : types) {
+							if (auto weaponName = gameItems.substr(start, pos - start).find(type); weaponName != std::string::npos) {
+								final = type;
+								break;
+							}
+						}
+
+						if (!final.empty()) {
+							name.back() = ' ';
+							name += '(' + final + ')';
+						}
+					}
 					parser_gloves.push_back({ paint_kit->id, name, paint_kit });
 
 				}

@@ -7,9 +7,9 @@ class recv_table;
 class recv_prop;
 class c_recv_proxy_data;
 
-using recv_var_proxy_fn = void( * )( const c_recv_proxy_data* data, void* struct_ptr, void* out_ptr );
-using array_length_recv_proxy_fn = void( * )( void* struct_ptr, int object_id, int current_array_length );
-using data_table_recv_var_proxy_fn = void( * )( const recv_prop* prop, void** out_ptr, void* data_ptr, int object_id );
+using recv_var_proxy_fn = void(*)(const c_recv_proxy_data* data, void* struct_ptr, void* out_ptr);
+using array_length_recv_proxy_fn = void(*)(void* struct_ptr, int object_id, int current_array_length);
+using data_table_recv_var_proxy_fn = void(*)(const recv_prop* prop, void** out_ptr, void* data_ptr, int object_id);
 
 enum send_prop_type {
 	_int = 0,
@@ -21,7 +21,6 @@ enum send_prop_type {
 	_data_table,
 	_int_64,
 };
-
 class d_variant {
 public:
 	union {
@@ -29,12 +28,11 @@ public:
 		long m_int;
 		char* m_string;
 		void* m_data;
-		float m_vector[ 3 ];
+		float m_vector[3];
 		__int64 m_int64;
 	};
 	send_prop_type type;
 };
-
 class c_recv_proxy_data {
 public:
 	const recv_prop* recv_prop;
@@ -42,7 +40,6 @@ public:
 	int element_index;
 	int object_id;
 };
-
 class recv_prop {
 public:
 	char* prop_name;
@@ -61,7 +58,6 @@ public:
 	int elements_count;
 	const char* parent_array_prop_name;
 };
-
 class recv_table {
 public:
 	recv_prop* props;

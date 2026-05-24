@@ -121,8 +121,8 @@
     <OutDir>.\bin</OutDir>
     <IntDir>.\intermediate</IntDir>
     <TargetName>debug</TargetName>
-    <IncludePath>C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\src;includes\imgui\freetype\include;includes;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\julio\Desktop\Main\Projects\delusional-master\includes\lua\lib;includes\imgui\freetype\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>includes\imgui\freetype\include;includes;$(IncludePath)</IncludePath>
+    <LibraryPath>includes\imgui\freetype\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -361,7 +361,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="features\aimbot\aimbot_old.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="features\aimbot\aimbot.cpp" />
     <ClCompile Include="features\aimbot\autowall.cpp" />
@@ -377,7 +376,6 @@
     <ClCompile Include="features\mplayer\mplayer.cpp" />
     <ClCompile Include="features\panorama\scaleform.cpp" />
     <ClCompile Include="features\movement\prediction\prediction.cpp" />
-    <ClCompile Include="features\skins\knife_proxy.cpp" />
     <ClCompile Include="features\skins\parser.cpp" />
     <ClCompile Include="features\skins\skins.cpp" />
     <ClCompile Include="features\visuals\chams.cpp" />
@@ -394,6 +392,7 @@
     <ClCompile Include="hooks\functions\draw_model_execute.cpp" />
     <ClCompile Include="hooks\functions\draw_set_color.cpp" />
     <ClCompile Include="hooks\functions\emit_sound.cpp" />
+    <ClCompile Include="hooks\functions\fire_bullet.cpp" />
     <ClCompile Include="hooks\functions\fire_event.cpp" />
     <ClCompile Include="hooks\functions\frame_stage_notify.cpp" />
     <ClCompile Include="hooks\functions\get_color_modulation.cpp" />
@@ -436,7 +435,6 @@
     <ClCompile Include="includes\minhook\hde\hde64.c" />
     <ClCompile Include="includes\minhook\hook.c" />
     <ClCompile Include="includes\minhook\trampoline.c" />
-    <ClCompile Include="features\movement\lobotomy_eb.cpp" />
     <ClCompile Include="menu\config\config.cpp" />
     <ClCompile Include="menu\custom.cpp" />
     <ClCompile Include="menu\menu.cpp" />
@@ -445,13 +443,14 @@
     <ClCompile Include="sdk\netvars\netvars.cpp" />
     <ClCompile Include="sdk\sdk.cpp" />
     <ClCompile Include="sdk\structs\color.cpp" />
+    <ClCompile Include="sdk\structs\crc32\crc32.cpp" />
     <ClCompile Include="utils\render\draw.cpp" />
     <ClCompile Include="utils\render\render.cpp" />
     <ClCompile Include="utils\render\structures.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="features\aimbot\autowall.hpp" />
     <ClInclude Include="features\aimbot\aimbot.hpp" />
+    <ClInclude Include="features\aimbot\autowall.hpp" />
     <ClInclude Include="features\cache\cache.hpp" />
     <ClInclude Include="features\events\events.hpp" />
     <ClInclude Include="features\misc\misc.hpp" />
@@ -461,7 +460,6 @@
     <ClInclude Include="features\panorama\icons.hpp" />
     <ClInclude Include="features\panorama\scaleform.hpp" />
     <ClInclude Include="features\movement\prediction\prediction.hpp" />
-    <ClInclude Include="features\skins\proxy_hook.hpp" />
     <ClInclude Include="features\visuals\vcollide_t.h" />
     <ClInclude Include="features\visuals\visuals.hpp" />
     <ClInclude Include="hooks\hooks.hpp" />
@@ -697,7 +695,6 @@
     <ClInclude Include="includes\nlohmann\ordered_map.hpp" />
     <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="includes\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
-    <ClInclude Include="features\movement\lobotomy_eb.h" />
     <ClInclude Include="features\misc\jumpstats.hpp" />
     <ClInclude Include="menu\config\config.hpp" />
     <ClInclude Include="menu\fonts\icon.h" />
@@ -716,11 +713,13 @@
     <ClInclude Include="sdk\interfaces\glow_manager.hpp" />
     <ClInclude Include="sdk\interfaces\iappsystem.hpp" />
     <ClInclude Include="sdk\interfaces\ibaseclientdll.hpp" />
+    <ClInclude Include="sdk\interfaces\iclientrenderable.hpp" />
     <ClInclude Include="sdk\interfaces\iclientstate.hpp" />
     <ClInclude Include="sdk\interfaces\iconsole.hpp" />
     <ClInclude Include="sdk\interfaces\ilocalize.hpp" />
     <ClInclude Include="sdk\interfaces\imaterialsystem.hpp" />
     <ClInclude Include="sdk\interfaces\imdlcache.hpp" />
+    <ClInclude Include="sdk\interfaces\imemalloc.h" />
     <ClInclude Include="sdk\interfaces\ipanel.hpp" />
     <ClInclude Include="sdk\interfaces\isurface.hpp" />
     <ClInclude Include="sdk\interfaces\ivcliententitylist.hpp" />
@@ -747,6 +746,7 @@
     <ClInclude Include="sdk\netvars\netvars.hpp" />
     <ClInclude Include="sdk\sdk.hpp" />
     <ClInclude Include="sdk\structs\color.hpp" />
+    <ClInclude Include="sdk\structs\crc32\crc32.h" />
     <ClInclude Include="sdk\structs\dlight.hpp" />
     <ClInclude Include="sdk\structs\imageformats.h" />
     <ClInclude Include="sdk\structs\materials.hpp" />
@@ -761,6 +761,7 @@
     <ClInclude Include="utils\singleton.hpp" />
     <ClInclude Include="utils\steamtypes.h" />
     <ClInclude Include="utils\utilities.hpp" />
+    <ClInclude Include="utils\utlsymbol.h" />
     <ClInclude Include="utils\utlvector.hpp" />
     <ClInclude Include="utils\fnv.hpp" />
     <ClInclude Include="utils\padding.hpp" />

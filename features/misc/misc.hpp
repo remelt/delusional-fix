@@ -36,7 +36,6 @@ namespace features::misc {
 	struct iwebz_t {
 		int add_x = 300;
 		int add_y = 100;
-		int width = 195;
 		int height = 20;
 		int drag_pos_x = 0;
 		int drag_pos_y = 0;
@@ -47,7 +46,6 @@ namespace features::misc {
 	inline iwebz_t iwebzspec;
 
 	void draw();
-	void handle_spotify();
 	void notify( std::string text, color _color );
 	void spectators_list();
 	void spectators_list_iwebz();
@@ -63,7 +61,6 @@ namespace features::misc {
 	void force_crosshair();
 	void sniper_crosshair();
 	void radaringame(player_t* p);
-	void vote_revealer(i_game_event* event);
 	void hit_info(i_game_event* event);
 	void kill_say(i_game_event* event);
 
@@ -75,5 +72,4 @@ namespace features::misc {
 	namespace jumpstats {
 		void jumpstats(c_usercmd* cmd);
 	}
-
 }

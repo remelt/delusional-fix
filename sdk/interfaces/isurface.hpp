@@ -78,7 +78,12 @@ public:
 		return (*(original_fn**)this)[66](this);
 	}
 
-	void set_clip_rect(int x, int y, int w, int h) {
+	void get_clip_rect(int& x, int& y, int& w, int& h) {
+		using original_fn = void(__thiscall*)(i_surface*, int&, int&, int&, int&);
+		return (*(original_fn**)this)[146](this, x, y, w, h);
+	}
+
+	void set_clip_rect(int x, int y, int w, int h) { // w != width
 		using original_fn = void(__thiscall*)(i_surface*, int, int, int, int);
 		return (*(original_fn**)this)[147](this, x, y, w, h);
 	}
@@ -126,6 +131,11 @@ public:
 	void draw_textured_rect(int x, int y, int width, int height) {
 		using original_fn = void(__thiscall*)(i_surface*, int, int, int, int);
 		return (*(original_fn**)this)[41](this, x, y, width, height);
+	}
+
+	void m_bClippingEnabled(bool enabled) {
+		//https://www.unknowncheats.me/forum/counterstrike-global-offensive/333981-using-clipping-viewports-isurface.html
+		*(bool*)((uintptr_t)this + 0x280) = enabled;
 	}
 };
 

@@ -1,10 +1,8 @@
 #include "../visuals/visuals.hpp"
 #include "../../menu/config/config.hpp"
 #include "../../menu/menu.hpp"
-#include "../mplayer/mplayer.h"
 #include "../misc/misc.hpp"
 #include <imgui/imgui_internal.h>
-//#include "../visuals/display/display.hpp"
 
 void draw_screen_effect(i_material* material) {
 	static auto fn = find_pattern("client.dll", "55 8B EC 83 E4 ? 83 EC ? 53 56 57 8D 44 24 ? 89 4C 24 ?");
@@ -421,11 +419,13 @@ void features::visuals::watermark() {
 	ImGui::GetBackgroundDrawList()->AddText( fonts::watermark_font, 12.f, ImVec2(w - text_size.x - padding.x - margin.x, padding.y + margin.y), ImColor(255, 255, 255), main.c_str());
 }
 
+
 static std::chrono::steady_clock::time_point progressStartTime = std::chrono::steady_clock::now();
 static double calculatedPositionMs = 0.0;
 static std::string lastTitle = "";
 int last;
 
+// should be recoded but works
 void UpdateCalculatedTrackPosition(mPlayer& mplayer)
 {
 	if (lastTitle != mplayer.Title) {
@@ -449,8 +449,22 @@ void UpdateCalculatedTrackPosition(mPlayer& mplayer)
 	}
 }
 
+std::pair<std::string, std::string> features::visuals::get_real_name(std::string title, std::string artist) {
+	//simple check for " - " in the track name
+	//cuz its usually used when artist name is in the track title
+	const auto pos = title.find(" - ");
+	if (pos != std::string::npos) {
+		const auto real_artist = title.empty() ? artist : title.substr(0, pos);
+		const auto real_title = title.empty() ? title : title.substr(pos + 3);
 
-void features::visuals::RenderMediaPlayer()
+		return { real_artist, real_title };
+	}
+	else {
+		return { artist, title };
+	}
+}
+
+void features::visuals::render_media_player()
 {
 	if (!c::misc::show_spotify_currently_playing || c::misc::player_type == 0)
 		return;
@@ -472,63 +486,59 @@ void features::visuals::RenderMediaPlayer()
 	static ImVec2 sz{ };
 	int x, y;
 	interfaces::engine->get_screen_size(x, y);
-	float m = c::misc::watermark ? 25: 0;
-	ImGui::SetNextWindowPos({ x - sz.x + 2, 4.5f + m });
+	float m = c::misc::watermark ? 25 : 0;
 
-	ImGui::Begin("Media Player", nullptr,
-		ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	const auto [artist, title] = get_real_name(mplayer.Title, mplayer.Artist);
 
-	float padding = 10.0f;
-	float imageWidth = 30.0f;
-	float imageHeight = 30.0f;
+	ImGui::SetNextWindowPos({ x - sz.x + 2, 5.f + m });
+	ImGui::Begin("Media Player", nullptr, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
+	const float padding = 10.0f;
+	const float imageWidth = 30.0f;
+	const float imageHeight = 30.0f;
 
-	auto sizex1 = ImGui::CalcTextSize(strartist.c_str()).x;
-	auto sizex2 = ImGui::CalcTextSize(strtitle.c_str()).x;
-
-	float sizey1 = y * 1.5f / 720.f;
-	float sizey2 = y * 1.5f / 720.f;
-
-	auto text_size1 = im_render.measure_text(strartist.c_str(), fonts::lb_player_font, 12.f);
-	auto text_size2 = im_render.measure_text(strtitle.c_str(), fonts::lb_player_font, 12.f);
+	const auto text_size1 = im_render.measure_text(artist, fonts::lb_player_font, 12.f);
+	const auto text_size2 = im_render.measure_text(title, fonts::lb_player_font, 12.f);
 
 	float windowWidth = ImGui::GetWindowSize().x;
 
 	ImGui::PushFont(fonts::lb_player_font);
 
-	if (albumArtTexture) {
+	const auto thumb = mplayer.thumb; // could be changed while executing, making a copy to feel safer
+	const bool is_thumb = mplayer.thumb && mplayer.Thumbnail_buffer && mplayer.Thumbnail_size; // making sure everything is ok and we are good to execute the code
+
+	// the ugliest shit ive ever seen
+	if (is_thumb) {
 		ImGui::SetCursorPos(ImVec2(windowWidth - imageWidth - padding, 3));
-		ImGui::Image(albumArtTexture, ImVec2(imageWidth, imageWidth));
+		ImGui::Image(thumb, ImVec2(imageWidth, imageWidth));
 	}
-	if (albumArtTexture)
-		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size1.x - padding + 1 + 2, 3 + imageHeight / 2 - (text_size1.y) / 2 + 6 + 1 });
+	if (is_thumb)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size1.x - padding + 1 + 2, 3 + imageHeight / 2 - (text_size2.y) / 2 + 6 + 1 });
 	else
 		ImGui::SetCursorPos({ windowWidth - padding - text_size1.x - padding + 1 + 2, 3 + imageHeight / 2 - (text_size1.y) / 2 + 6 + 1 });
 
-	ImGui::TextColored(ImVec4(0.f, 0.f, 0.f, 1.f), strartist.c_str());
-	if (albumArtTexture)
-		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size1.x - padding + 2, 3 + imageHeight / 2 - (text_size1.y) / 2 + 6 });
+	ImGui::TextColored(ImVec4(0.f, 0.f, 0.f, 1.f), artist.c_str());
+	if (is_thumb)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size1.x - padding + 2, 3 + imageHeight / 2 - (text_size2.y) / 2 + 6 });
 	else
 		ImGui::SetCursorPos({ windowWidth - padding - text_size1.x - padding + 2, 3 + imageHeight / 2 - (text_size1.y) / 2 + 6 });
-	ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.f), strartist.c_str());
-	if (albumArtTexture)
-		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size2.x - padding + 1 + 2, 3 + imageHeight / 2 - (text_size2.y) / 2 - 6 + 1 });
+	ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.f), artist.c_str());
+	if (is_thumb)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size2.x - padding + 1 + 2, 3 + imageHeight / 2 - (text_size1.y) / 2 - 6 + 1 });
 	else
 		ImGui::SetCursorPos({ windowWidth - padding - text_size2.x - padding + 1 + 2, 3 + imageHeight / 2 - (text_size2.y) / 2 - 6 + 1 });
 
-	ImGui::TextColored(ImVec4(0.f, 0.f, 0.f, 1.f), strtitle.c_str());
-	if (albumArtTexture)
-		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size2.x - padding + 2, 3 + imageHeight / 2 - (text_size2.y) / 2 - 6 });
+	ImGui::TextColored(ImVec4(0.f, 0.f, 0.f, 1.f), title.c_str());
+	if (is_thumb)
+		ImGui::SetCursorPos({ windowWidth - imageWidth - padding - text_size2.x - padding + 2, 3 + imageHeight / 2 - (text_size1.y) / 2 - 6 });
 	else
 		ImGui::SetCursorPos({ windowWidth - padding - text_size2.x - padding + 2, 3 + imageHeight / 2 - (text_size2.y) / 2 - 6 });
-	ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), strtitle.c_str());
+	ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), title.c_str());
 
-	if (albumArtTexture && c::misc::progressbar_enable) {
+	if (is_thumb && c::misc::progressbar_enable) {
 		ImGui::PushItemWidth(108);
 		ImGui::SetCursorPos({ sz.x - imageWidth - padding - 78, 40 });
 
-		//should be here but idc
-		//u can fix that if u want ig
 		ImGui::PushStyleColor(ImGuiCol_MPlayer_ProgressbarBg, ImVec4(0.05f, 0.05f, 0.05f, 0.03f));
 		ImGui::PushStyleColor(ImGuiCol_MPlayer_Progressbar, ImVec4(1.f, 1.f, 1.f, 0.85f));
 		ImGui::ProgressBar(smoothProgress, ImVec2(0.0f, 2.0f));
@@ -550,30 +560,26 @@ void features::visuals::display_spotify() {
 		return;
 
 	int w, h;
-	std::string name;
 	interfaces::engine->get_screen_size(w, h);
 	h = c::misc::watermark ? 30 : 5;
 
-	//simple check for " - " in the track name
-	//cuz its usually used when artist name is in the track title
-	if (strtitle.find(" - ") == std::string::npos && !strartist.empty()) {
-		name = strartist + " - " + strtitle;
+	const auto [artist, title] = get_real_name(mplayer.Title, mplayer.Artist);
+	std::string name;
+	if (!artist.empty()) {
+		name += artist;
+		name += " - ";
+		name += title;
+	}
+	else if (!mplayer.isPlaying) {
+		name += "stopped / paused";
 	}
 	else {
-		name = strtitle;
+		name += title;
 	}
+	const auto text_size = im_render.get_text_size(name.c_str(), fonts::main_spec_font, 0.f, 12.f);
 
-	auto text_size = im_render.get_text_size(name.c_str(), fonts::main_spec_font, 0.f, 12.f);
-	auto paused_size = im_render.get_text_size("stopped / paused", fonts::main_spec_font, 0.f, 12.f);
-
-	if (mplayer.isPlaying) {
-		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), name.c_str());
-		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), name.c_str());
-	}
-	else {
-		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - paused_size + 1, h + 1), ImColor(0, 0, 0, 255), "stopped / paused");
-		ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - paused_size, h), ImColor(255, 255, 255, 255), "stopped / paused");
-	}
+	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size + 1, h + 1), ImColor(0, 0, 0, 255), name.c_str());
+	ImGui::GetBackgroundDrawList()->AddText(fonts::main_spec_font, 12.f, ImVec2(w - 6 - text_size, h), ImColor(255, 255, 255, 255), name.c_str());
 }
 
 
@@ -603,17 +609,17 @@ void features::visuals::removals() {
 		shadows->set_value(1);
 	}
 	if (c::visuals::removals[3]) {
-		mat_postprocess_enable->set_value(0);
-	}
-	else {
 		mat_postprocess_enable->set_value(1);
 	}
+	else {
+		mat_postprocess_enable->set_value(0);
+	}
 	if (c::visuals::removals[4] && !once) {
-		blur->set_value(0);
+		blur->set_value(1);
 		once = true;
 	}
 	else if (once && !c::visuals::removals[4]) {
-		blur->set_value(1);
+		blur->set_value(0);
 		once = false;
 	}
 }

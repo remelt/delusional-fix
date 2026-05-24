@@ -1,4 +1,4 @@
-#include "../../sdk/sdk.hpp"
+﻿#include "../../sdk/sdk.hpp"
 
 namespace Autowall
 {

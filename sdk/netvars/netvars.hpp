@@ -68,6 +68,14 @@ namespace netvar_manager {
     return *reinterpret_cast<type*>(uintptr_t(this) + offset); \
 }
 
+#define FINDPDATAMAP(map, prop, func_name, type) type* func_name() { \
+    static uintptr_t offset = 0; \
+    if (!offset) { \
+        offset = netvar_manager::find_in_datamap(map, fnv::hash(prop)); \
+    } \
+    return reinterpret_cast<type*>(uintptr_t(this) + offset); \
+}
+
 #define NETVAR_PTR( table, prop, func_name, type ) type* func_name() { \
     static uintptr_t offset = 0; \
     if( !offset ) { \
@@ -75,6 +83,16 @@ namespace netvar_manager {
     } \
     return reinterpret_cast< type* >( uintptr_t( this ) + offset ); \
 }
+
+#define NETVAR_VARIABLE_OFFSET( type, function_name, class_name, netvar, additional ) \
+	[[nodiscard]] type& function_name() \
+	{ \
+		static uintptr_t offset = 0; \
+		if( !offset ) { \
+			offset = netvar_manager::get_net_var( fnv::hash( class_name ), fnv::hash( netvar ) ); \
+		} \
+		return *reinterpret_cast< type* >( uintptr_t( this ) + offset + additional ); \
+	}
 
 #define OFFSET( type, var, offset ) type& var() { \
     return *( type* )( uintptr_t( this ) + offset ); \

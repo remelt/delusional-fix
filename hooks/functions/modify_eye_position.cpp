@@ -1,6 +1,20 @@
 #include "../hooks.hpp"
 #include "../../menu/config/config.hpp"
 
+//void __fastcall sdk::hooks::modify_eye_position::modify_eye_position(void* thisPointer, void* edx, vec3_t& input_eye_pos) {
+//	const auto anim_state = static_cast<c_anim_state*>(thisPointer);
+//
+//	if (g::local || !anim_state)
+//		return ofunc(thisPointer, edx, input_eye_pos);
+//
+//	static auto calc_view_return_address = reinterpret_cast<void*>(find_pattern("client.dll", "8B ? ? ? ? ? 30 ? ? ? ? C0 ? 50"));
+//
+//	if (_ReturnAddress() == calc_view_return_address)
+//		return;
+//
+//	return anim_state->m_player->modify_eye_position(anim_state, input_eye_pos);
+//}
+
 void __fastcall sdk::hooks::modify_eye_position::modify_eye_position(void* thisPointer, void* edx, vec3_t& input_eye_pos) {
 	const auto anim_state = static_cast<c_anim_state*>(thisPointer);
 

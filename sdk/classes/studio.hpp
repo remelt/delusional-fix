@@ -34,6 +34,7 @@ using rad_euler = float[ 3 ];
 
 #define MAX_NUM_LODS 8
 #define MAXSTUDIOBONES		256		// total bones actually used
+#define MAXSTUDIOPOSEPARAM	24		
 
 #define BONE_TYPE_MASK                  0x00F00000
 #define BONE_FIXED_ALIGNMENT            0x00100000    // bone can't spin 360 degrees, all interpolation is normalized around a fixed orientation
@@ -160,7 +161,7 @@ struct studio_box_t {
 	vec3_t mins;
 	vec3_t maxs;
 	int name_index;
-	int pad01[ 3 ];
+	vec3_t angOffsetOrientation; // 0x24
 	float radius;
 	int pad02[ 4 ];
 };

@@ -46,6 +46,8 @@
 #include "../utils/xor.hpp"
 #include "../utils/utilities.hpp"
 #include "interfaces/c_physics_collison.h"
+#include "interfaces/iclientrenderable.hpp"
+#include "interfaces/imemalloc.h"
 
 namespace interfaces {
 	enum class interface_type { index, bruteforce };
@@ -120,6 +122,7 @@ namespace interfaces {
 	inline i_input* input = nullptr;
 	inline i_filesystem* filesystem;
 	inline c_physics_collison* physics_collision = nullptr;
+	inline IMemAlloc* mem_alloc = nullptr;
 	inline std::uint8_t* key_values_engine = nullptr;
 	inline std::uint8_t* key_values_client = nullptr;
 
@@ -349,6 +352,7 @@ enum item_definition_indexes {
 	WEAPON_KNIFE_TALON,
 	WEAPON_KNIFE_OUTDOOR = 521,
 	WEAPON_KNIFE_SKELETON = 525,
+	GLOVE_STUDDED_BROKENFANG = 4725,
 	GLOVE_STUDDED_BLOODHOUND = 5027,
 	GLOVE_T_SIDE = 5028,
 	GLOVE_CT_SIDE = 5029,
@@ -441,7 +445,13 @@ public:
 		return (*(original_fn**)animating())[13](animating(), out, max_bones, mask, time);
 	}
 
-
+	// s/o clearlyst
+	void pvs_fix() {
+		//https://www.unknowncheats.me/forum/counterstrike-global-offensive/211594-fix-inaccurate-setupbones-target-player-pvs-fix.html
+		//https://www.unknowncheats.me/forum/1688595-post7.html
+		*(int*)((uintptr_t)this + 0xA30) = interfaces::globals->frame_count; //we'll skip occlusion checks now
+		*(int*)((uintptr_t)this + 0xA28) = 0; //clear occlusion flags
+	}
 
 	vec3_t get_absolute_origin() {
 		__asm {
@@ -533,32 +543,33 @@ public:
 	}
 
 	NETVAR("DT_CSPlayer", "m_fFlags", flags, int)
-	NETVAR("DT_BaseEntity", "m_hOwnerEntity", owner_handle, unsigned long)
-	NETVAR("DT_CSPlayer", "m_flSimulationTime", simulation_time, float)
-	NETVAR("DT_BasePlayer", "m_vecOrigin", origin, vec3_t)
-	NETVAR("DT_BasePlayer", "m_vecViewOffset[0]", view_offset, vec3_t)
-	NETVAR("DT_BaseEntity", "m_iTeamNum", team, int)
-	NETVAR("DT_BaseEntity", "m_bSpotted", spotted, bool)
-	NETVAR("DT_CSPlayer", "m_nSurvivalTeam", survival_team, int)
-	NETVAR("DT_CSPlayer", "m_flHealthShotBoostExpirationTime", health_boost_time, float)
-	NETVAR("DT_CSPlayer", "m_bHasDefuser", has_defuser, bool)
-	NETVAR("DT_PlantedC4", "m_flC4Blow", c4_blow_time, float)
-	NETVAR("DT_PlantedC4", "m_flDefuseCountDown", c4_defuse_countdown, float)
-	NETVAR("DT_PlantedC4", "m_hBombDefuser", c4_gets_defused, unsigned long)
-	NETVAR("DT_PlantedC4", "m_bBombTicking", c4_is_ticking, bool)
-	NETVAR("DT_PlantedC4", "m_flTimerLength", c4_timer_length, float)
-	NETVAR("DT_PlantedC4", "m_nBombSite", c4_bomb_site, int)
-	NETVAR("DT_PlantedC4", "m_flDefuseLength", c4_defuse_length, float)
-	NETVAR("DT_PlantedC4", "m_bBombDefused", c4_is_defused, bool)
+		NETVAR("DT_BaseEntity", "m_hOwnerEntity", owner_handle, unsigned long)
+		NETVAR("DT_CSPlayer", "m_flSimulationTime", simulation_time, float)
+		NETVAR("DT_BasePlayer", "m_vecOrigin", origin, vec3_t)
+		NETVAR("DT_BasePlayer", "m_vecViewOffset[0]", view_offset, vec3_t)
+		NETVAR("DT_BaseEntity", "m_iTeamNum", team, int)
+		NETVAR("DT_BaseEntity", "m_bSpotted", spotted, bool)
+		NETVAR("DT_CSPlayer", "m_nSurvivalTeam", survival_team, int)
+		NETVAR("DT_CSPlayer", "m_flHealthShotBoostExpirationTime", health_boost_time, float)
+		NETVAR("DT_CSPlayer", "m_bHasDefuser", has_defuser, bool)
+		NETVAR("DT_PlantedC4", "m_flC4Blow", c4_blow_time, float)
+		NETVAR("DT_PlantedC4", "m_flDefuseCountDown", c4_defuse_countdown, float)
+		NETVAR("DT_PlantedC4", "m_hBombDefuser", c4_gets_defused, unsigned long)
+		NETVAR("DT_PlantedC4", "m_bBombTicking", c4_is_ticking, bool)
+		NETVAR("DT_PlantedC4", "m_flTimerLength", c4_timer_length, float)
+		NETVAR("DT_PlantedC4", "m_nBombSite", c4_bomb_site, int)
+		NETVAR("DT_PlantedC4", "m_flDefuseLength", c4_defuse_length, float)
+		NETVAR("DT_PlantedC4", "m_bBombDefused", c4_is_defused, bool)
 
-	OFFSET(std::uint32_t, idex, 0x64);
+		OFFSET(std::uint32_t, idex, 0x64);
+	NETVAR_VARIABLE_OFFSET(float, old_simulation_time, "DT_BaseEntity", "m_flSimulationTime", 0x4);
 };
 
 class precipitation_t {
 public:
 	NETVAR("DT_Precipitation", "m_nPrecipType", precip_type, precipitation_type_t)
-	NETVAR("DT_BaseEntity", "m_nModelIndex", get_model_index, int)
-	OFFSET(unsigned int, get_index, 0x64)
+		NETVAR("DT_BaseEntity", "m_nModelIndex", get_model_index, int)
+		OFFSET(unsigned int, get_index, 0x64)
 
 	void* networkable() {
 		return reinterpret_cast<void*>(uintptr_t(this) + 0x8);
@@ -600,7 +611,7 @@ public:
 
 class weapon_t : public entity_t {
 public:
-	    NETVAR("DT_BaseCombatWeapon", "m_flNextPrimaryAttack", next_primary_attack, float)
+	NETVAR("DT_BaseCombatWeapon", "m_flNextPrimaryAttack", next_primary_attack, float)
 		NETVAR("DT_BaseCombatWeapon", "m_flNextSecondaryAttack", next_secondary_attack, float)
 		NETVAR("DT_BaseCombatWeapon", "m_iClip1", clip1_count, int)
 		NETVAR("DT_BaseCombatWeapon", "m_iClip2", clip2_count, int)
@@ -612,8 +623,8 @@ public:
 		NETVAR("DT_BaseCombatWeapon", "m_iEntityQuality", entity_quality, int)
 
 	float inaccuracy() {
-	    using original_fn = float(__thiscall*)(void*);
-	    return (*(original_fn**)this)[482](this);
+		using original_fn = float(__thiscall*)(void*);
+		return (*(original_fn**)this)[482](this);
 	}
 
 	float get_spread() {
@@ -933,61 +944,69 @@ public:
 	}
 
 	NETVAR("DT_CSPlayer", "m_hRagdoll", ragdoll, int)
-	NETVAR("DT_CSPlayer", "m_iHideHUD", m_iHideHUD, int)
-	NETVAR("DT_BasePlayer", "m_hViewModel[0]", view_model, int)
-	NETVAR("DT_CSPlayer", "m_bGunGameImmunity", has_gun_game_immunity, bool)
-	NETVAR("DT_CSPlayer", "m_iShotsFired", shots_fired, int)
-	NETVAR("DT_CSPlayer", "m_angEyeAngles", eye_angles, vec3_t)
-	NETVAR("DT_CSPlayer", "m_ArmorValue", armor, int)
-	NETVAR("DT_CSPlayer", "m_bHasHelmet", has_helmet, bool)
-	NETVAR("DT_CSPlayer", "m_bIsScoped", is_scoped, bool)
-	NETVAR("DT_CSPlayer", "m_bIsDefusing", is_defusing, bool)
-	NETVAR("DT_CSPlayer", "m_bWaitForNoAttack", wait_for_no_attack, bool)
-	NETVAR("DT_CSPlayer", "m_iAccount", money, int)
-	NETVAR("DT_CSPlayer", "m_flLowerBodyYawTarget", lower_body_yaw, float)
-	NETVAR("DT_CSPlayer", "m_flNextAttack", next_attack, float)
-	NETVAR("DT_CSPlayer", "m_flFlashDuration", flash_duration, float)
-	NETVAR("DT_CSPlayer", "m_flFlashMaxAlpha", flash_alpha, float)
-	NETVAR("DT_CSPlayer", "m_bHasNightVision", has_night_vision, bool)
-	NETVAR("DT_CSPlayer", "m_bNightVisionOn", night_vision_on, bool)
-	NETVAR("DT_CSPlayer", "m_iHealth", health, int)
-	NETVAR("DT_CSPlayer", "m_lifeState", life_state, int)
-	NETVAR("DT_CSPlayer", "m_fFlags", flags, int)
-	NETVAR("DT_BasePlayer", "m_nNextThinkTick", next_think_tick, int)
-	NETVAR("DT_BasePlayer", "m_flFallVelocity", fall_velocity, float)
-	NETVAR("DT_BaseAnimating", "m_nSequence", get_sequence, int)
-	NETVAR("DT_BaseAnimating", "m_nBody", body, int)
-	NETVAR("DT_BasePlayer", "m_viewPunchAngle", punch_angle, vec3_t)
-	NETVAR("DT_BasePlayer", "m_aimPunchAngle", aim_punch_angle, vec3_t)
-	NETVAR("DT_BasePlayer", "m_vecMins", m_vecMins, vec3_t)
-	NETVAR("DT_BasePlayer", "m_vecMaxs", m_vecMaxs, vec3_t)
-	NETVAR("DT_BasePlayer", "m_vecVelocity[0]", velocity, vec3_t)
-	NETVAR("DT_BasePlayer", "m_hGroundEntity", g_entity, entity_handle_t)
-	NETVAR("DT_CSPlayer", "m_flStamina", stamina, float);
+		NETVAR("DT_CSPlayer", "m_iHideHUD", m_iHideHUD, int)
+		NETVAR("DT_BasePlayer", "m_hViewModel[0]", view_model, int)
+		NETVAR("DT_CSPlayer", "m_bGunGameImmunity", has_gun_game_immunity, bool)
+		NETVAR("DT_CSPlayer", "m_iShotsFired", shots_fired, int)
+		NETVAR("DT_CSPlayer", "m_angEyeAngles", eye_angles, vec3_t)
+		NETVAR("DT_CSPlayer", "m_ArmorValue", armor, int)
+		NETVAR("DT_CSPlayer", "m_bHasHelmet", has_helmet, bool)
+		NETVAR("DT_CSPlayer", "m_bIsScoped", is_scoped, bool)
+		NETVAR("DT_CSPlayer", "m_bIsDefusing", is_defusing, bool)
+		NETVAR("DT_CSPlayer", "m_bWaitForNoAttack", wait_for_no_attack, bool)
+		NETVAR("DT_CSPlayer", "m_iAccount", money, int)
+		NETVAR("DT_CSPlayer", "m_flLowerBodyYawTarget", lower_body_yaw, float)
+		NETVAR("DT_CSPlayer", "m_flNextAttack", next_attack, float)
+		NETVAR("DT_CSPlayer", "m_flFlashDuration", flash_duration, float)
+		NETVAR("DT_CSPlayer", "m_flFlashMaxAlpha", flash_alpha, float)
+		NETVAR("DT_CSPlayer", "m_bHasNightVision", has_night_vision, bool)
+		NETVAR("DT_CSPlayer", "m_bNightVisionOn", night_vision_on, bool)
+		NETVAR("DT_CSPlayer", "m_iHealth", health, int)
+		NETVAR("DT_CSPlayer", "m_lifeState", life_state, int)
+		NETVAR("DT_CSPlayer", "m_fFlags", flags, int)
+		NETVAR_PTR("DT_CSPlayer", "m_nNextThinkTick", next_think_tick, int)
+		NETVAR_PTR("DT_CSPlayer", "m_flFallVelocity", fall_velocity, float)
+		NETVAR("DT_BaseAnimating", "m_nSequence", get_sequence, int)
+		NETVAR("DT_BaseAnimating", "m_nBody", body, int)
+		NETVAR("DT_BasePlayer", "m_viewPunchAngle", punch_angle, vec3_t)
+		NETVAR("DT_BasePlayer", "m_aimPunchAngle", aim_punch_angle, vec3_t)
+		NETVAR("DT_BasePlayer", "m_vecMins", m_vecMins, vec3_t)
+		NETVAR("DT_BasePlayer", "m_vecMaxs", m_vecMaxs, vec3_t)
+		NETVAR("DT_BasePlayer", "m_vecVelocity[0]", velocity, vec3_t)
+		NETVAR("DT_BasePlayer", "m_hGroundEntity", g_entity, entity_handle_t)
+		NETVAR("DT_CSPlayer", "m_flStamina", stamina, float);
 	NETVAR("DT_BasePlayer", "m_flMaxspeed", max_speed, float)
-	NETVAR("DT_BaseEntity", "m_flShadowCastDistance", fov_time, float)
-	NETVAR("DT_CSPlayer", "m_iFOV", fov, int)
-	NETVAR("DT_CSPlayer", "m_iFOVStart", fov_start, int)
-	NETVAR("DT_BaseViewModel", "m_hOwner", owner, int)
-	NETVAR("DT_BaseViewModel", "m_hWeapon", weapon, int)
-	NETVAR("DT_BasePlayer", "m_hObserverTarget", observer_target, unsigned long)
-	NETVAR("DT_BasePlayer", "m_iObserverMode", observer_mode, int)
-	NETVAR("DT_BasePlayer", "m_nHitboxSet", hitbox_set, int)
-	NETVAR("DT_CSPlayer", "m_flDuckAmount", duck_amount, float)
-	NETVAR("DT_CSPlayer", "m_bHasHeavyArmor", has_heavy_armor, bool)
-	NETVAR("DT_SmokeGrenadeProjectile", "m_nSmokeEffectTickBegin", smoke_grenade_tick_begin, int)
-	NETVAR("DT_CSPlayer", "m_nTickBase", get_tick_base, int)
-	NETVAR("DT_CSPlayer", "m_flHealthShotBoostExpirationTime", m_flHealthShotBoostExpirationTime, float)
-	NETVAR("CBaseEntity", "m_nModelIndex", model_index, unsigned)
-	NETVAR("DT_CSPlayer", "m_bHasDefuser", has_defuser, bool)
-	NETVAR("DT_PlantedC4", "m_flC4Blow", c4_blow_time, float)
-	NETVAR("DT_PlantedC4", "m_flDefuseCountDown", c4_defuse_countdown, float)
-	NETVAR("DT_PlantedC4", "m_hBombDefuser", c4_gets_defused, unsigned long)
-	NETVAR("DT_PlantedC4", "m_bBombTicking", c4_is_ticking, bool)
-	NETVAR("DT_PlantedC4", "m_flTimerLength", c4_timer_length, float)
-	NETVAR("DT_PlantedC4", "m_nBombSite", c4_bomb_site, int)
-	NETVAR("DT_PlantedC4", "m_flDefuseLength", c4_defuse_length, float)
-	NETVAR("DT_PlantedC4", "m_bBombDefused", c4_is_defused, bool)
+		NETVAR("DT_BaseEntity", "m_flShadowCastDistance", fov_time, float)
+		NETVAR("DT_CSPlayer", "m_iFOV", fov, int)
+		NETVAR("DT_CSPlayer", "m_iFOVStart", fov_start, int)
+		NETVAR("DT_BaseViewModel", "m_hOwner", owner, int)
+		NETVAR("DT_BaseViewModel", "m_hWeapon", weapon, int)
+		NETVAR("DT_BasePlayer", "m_hObserverTarget", observer_target, unsigned long)
+		NETVAR("DT_BasePlayer", "m_iObserverMode", observer_mode, int)
+		NETVAR("DT_BasePlayer", "m_nHitboxSet", hitbox_set, int)
+		NETVAR("DT_CSPlayer", "m_flDuckAmount", duck_amount, float)
+		NETVAR("DT_CSPlayer", "m_bHasHeavyArmor", has_heavy_armor, bool)
+		NETVAR("DT_SmokeGrenadeProjectile", "m_nSmokeEffectTickBegin", smoke_grenade_tick_begin, int)
+		NETVAR("DT_CSPlayer", "m_nTickBase", get_tick_base, int)
+		NETVAR("DT_BaseEntity", "m_nModelIndex", model_index, unsigned)
+		NETVAR("DT_CSPlayer", "m_bHasDefuser", has_defuser, bool)
+		NETVAR("DT_PlantedC4", "m_flC4Blow", c4_blow_time, float)
+		NETVAR("DT_PlantedC4", "m_flDefuseCountDown", c4_defuse_countdown, float)
+		NETVAR("DT_PlantedC4", "m_hBombDefuser", c4_gets_defused, unsigned long)
+		NETVAR("DT_PlantedC4", "m_bBombTicking", c4_is_ticking, bool)
+		NETVAR("DT_PlantedC4", "m_flTimerLength", c4_timer_length, float)
+		NETVAR("DT_PlantedC4", "m_nBombSite", c4_bomb_site, int)
+		NETVAR("DT_PlantedC4", "m_flDefuseLength", c4_defuse_length, float)
+		NETVAR("DT_PlantedC4", "m_bBombDefused", c4_is_defused, bool)
+		NETVAR("DT_BasePlayer", "m_hViewEntity", m_hViewEntity, int)
+		NETVAR("DT_BaseAnimating", "m_bClientSideAnimation", IsClientSideAnimation, bool)
+
+		NETVAR_VARIABLE_OFFSET(int, get_button_disabled, "DT_CSPlayer", "m_hViewEntity", -0xc)
+		NETVAR_VARIABLE_OFFSET(int, get_button_forced, "DT_CSPlayer", "m_hViewEntity", -0x8)
+		NETVAR_VARIABLE_OFFSET(int, is_used_new_animation_state, "DT_CSPlayer", "m_flLastExoJumpTime", 0x8);
+	NETVAR_VARIABLE_OFFSET(float, get_last_spawn_time_index, "DT_CSPlayer", "m_iAddonBits", -0x4);
+	NETVAR_VARIABLE_OFFSET(studio_hdr_t*, get_studio_hdr, "DT_BaseAnimating", "m_hLightingOrigin", 0x8);
+	NETVAR_VARIABLE_OFFSET(vec3_t, get_view_angles, "DT_PlayerState", "deadflag", 0x4);
 
 	OFFSET(bool, should_use_new_anim_state, 0x9B14);
 	OFFSET(bool, get_jiggle_bones, 0x2930);
@@ -1000,13 +1019,13 @@ public:
 	}
 
 	FINDDATAMAP(pred_datamap(), "m_hGroundEntity", ground_entity, int)
-	FINDDATAMAP(pred_datamap(), "m_nButtons", buttons, int)
-	FINDDATAMAP(pred_datamap(), "m_afButtonLast", button_last, int)
-	FINDDATAMAP(pred_datamap(), "m_afButtonPressed", button_pressed, int)
-	FINDDATAMAP(pred_datamap(), "m_afButtonReleased", button_released, int)
-	FINDDATAMAP(pred_datamap(), "m_nImpulse", impulse, byte)
+		FINDPDATAMAP(pred_datamap(), "m_nButtons", buttons, int)
+		FINDDATAMAP(pred_datamap(), "m_afButtonLast", button_last, int)
+		FINDDATAMAP(pred_datamap(), "m_afButtonPressed", button_pressed, int)
+		FINDDATAMAP(pred_datamap(), "m_afButtonReleased", button_released, int)
+		FINDDATAMAP(pred_datamap(), "m_nImpulse", impulse, byte)
 
-	weapon_t* active_weapon() {
+		weapon_t* active_weapon() {
 		auto active_weapon = read<uintptr_t>(netvar_manager::get_net_var(fnv::hash("DT_CSPlayer"), fnv::hash("m_hActiveWeapon"))) & 0xFFF;
 		return reinterpret_cast<weapon_t*>(interfaces::ent_list->get_client_entity(active_weapon));
 	}
@@ -1048,6 +1067,21 @@ public:
 		return tr.entity == player || tr.flFraction > 0.97f;
 	}
 
+	bool can_see_player_pos(const vec3_t& pos) {
+		trace_t tr;
+		ray_t ray;
+		trace_filter filter;
+		filter.skip = this;
+
+		auto start = get_eye_pos();
+		auto dir = (pos - start).normalized();
+
+		ray.initialize(start, pos);
+		interfaces::trace_ray->trace_ray(ray, MASK_SHOT | CONTENTS_GRATE, &filter, &tr);
+
+		return tr.flFraction > 0.97f;
+	}
+
 	vec3_t get_bone_position(int bone) {
 		matrix_t bone_matrices[128];
 		if (setup_bones(bone_matrices, 128, 256, 0.0f))
@@ -1055,7 +1089,6 @@ public:
 		else
 			return vec3_t{ };
 	}
-
 
 	vec3_t get_hitbox_position(int hitbox_id) {
 		matrix_t bone_matrix[MAXSTUDIOBONES];
@@ -1205,7 +1238,7 @@ public:
 
 	void update_client_side_animations() {
 		using original_fn = void(__thiscall*)(void*);
-		(*(original_fn**)this)[223](this);
+		(*(original_fn**)this)[223](this); // prob should be 224
 	}
 
 	vec3_t& abs_origin() {
@@ -1218,6 +1251,22 @@ public:
 		static fn abs_origin = (fn)find_pattern("client.dll", "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8");
 
 		abs_origin(this, origin);
+	}
+
+	void set_abs_angles(vec3_t angles)
+	{
+		using fn = void(__thiscall*)(void*, const vec3_t& angles);
+		static fn set_abs_angles = (fn)find_pattern("client.dll", "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1");
+
+		set_abs_angles(this, angles);
+	}
+
+	void set_abs_velocity(vec3_t velocity)
+	{
+		using fn = void(__thiscall*)(void*, const vec3_t& velocity);
+		static fn abs_velocity = (fn)find_pattern("client.dll", "55 8B EC 83 E4 F8 83 EC 0C 53 56 57 8B 7D 08 8B F1 F3");
+
+		abs_velocity(this, velocity);
 	}
 
 	bool lookup_bone(const char* pos) {
@@ -1284,14 +1333,14 @@ public:
 	}
 
 	c_usercmd** current_command() {
-		auto offset = netvar_manager::get_net_var(fnv::hash("CBasePlayer"), fnv::hash("m_hViewEntity")) - 0x4;
+		auto offset = netvar_manager::get_net_var(fnv::hash("DT_CSPlayer"), fnv::hash("m_hViewEntity")) - 0x4;
 		return reinterpret_cast<c_usercmd**>(uintptr_t(this) + offset);
 	}
 
 	c_usercmd& last_command() {
-		static const std::uintptr_t last_command_fn =
-			*reinterpret_cast<std::uintptr_t*>(find_pattern("client.dll", "8D 8E ? ? ? ? 89 5C 24 3C") + 2);
-		return *reinterpret_cast<c_usercmd*>(reinterpret_cast<std::uintptr_t>(this) + last_command_fn);
+		static const unsigned int last_command_fn =
+			*reinterpret_cast<unsigned int*>(find_pattern("client.dll", "8D 8E ? ? ? ? 89 5C 24 3C") + 0x2);
+		return *reinterpret_cast<c_usercmd*>(reinterpret_cast<unsigned int>(this) + last_command_fn);
 	}
 
 	void set_next_think(int think) {
@@ -1318,6 +1367,16 @@ public:
 		unsigned long model_bone_counter = **(unsigned long**)(addr + 10);
 		*(unsigned int*)((DWORD)this + 0x2924) = 0xFF7FFFFF; // m_flLastBoneSetupTime = -FLT_MAX;
 		*(unsigned int*)((DWORD)this + 0x2690) = (model_bone_counter - 1); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
+	}
+
+	bool is_bone_cache_valid() {
+		static DWORD addr = (DWORD)find_pattern("client.dll", "80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81");
+
+		*(int*)((uintptr_t)this + 0xA30) = interfaces::globals->frame_count; //we'll skip occlusion checks now
+		*(int*)((uintptr_t)this + 0xA28) = 0; //clear occlusion flags
+
+		unsigned long model_bone_counter = **(unsigned long**)(addr + 10);
+		return (*(unsigned int*)((DWORD)this + 0x2690) == model_bone_counter); // m_iMostRecentModelBoneCounter == g_iModelBoneCounter;
 	}
 
 	c_anim_state* get_anim_state() {
@@ -1373,5 +1432,22 @@ public:
 namespace g {
 	inline player_t* local = nullptr;
 	inline c_usercmd* cmd = nullptr;
+
 	inline float target_velocity_z = 0.f;
+	inline int max_allocation = 0;
+
+	inline float ServerTime(c_usercmd* cmd)
+	{
+		static int tick;
+		static c_usercmd* lastCmd;
+
+		if (cmd) {
+			if (g::local && (!lastCmd || lastCmd->has_been_predicted))
+				tick = g::local->get_tick_base();
+			else
+				tick++;
+			lastCmd = cmd;
+		}
+		return tick * interfaces::globals->interval_per_tick;
+	}
 }

@@ -16,9 +16,10 @@
 #include <ppltasks.h>
 
 #include <d3d9.h>
-#include <../includes/june2010/Include/d3dx9tex.h>
 #include <sdkddkver.h>
 #include "optimization.h"
+
+#include <../includes/june2010/Include/d3dx9tex.h>
 #pragma comment( lib, "d3d9.lib" )
 #pragma comment( lib, "d3dx9.lib" )
 
@@ -49,6 +50,7 @@ public:
 	int TrackNumber;
 	int AlbumTrackCount;
 	void* Thumbnail_buffer;
+	unsigned int Thumbnail_hash = 0;
 	int Thumbnail_size;
 	bool hasthumnnail = false;
 	bool isPlaying;

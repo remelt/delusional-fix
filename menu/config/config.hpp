@@ -44,7 +44,6 @@ namespace c {
 		inline float assist_stamina_value = 100.0f;
 		inline bool assist_render = false;
 		inline bool bounce_assist_render = false;
-		inline int assist_render_style = 0;
 
 		inline bool assist_bounce_broke_hop = false;
 
@@ -79,91 +78,8 @@ namespace c {
 		inline int aimbot_panic_key;
 		inline int aimbot_panic_key_s = 1;
 		inline int aimbot_only_enemy;
-		inline bool aimbot_silent;
-		inline bool aimbot_autoshoot = 0;
-		inline bool rcs;
 		inline bool non_sticky_aimbot;
 		inline bool aim_at_bt;
-		inline bool pistol_autowall;
-		inline int pistol_autowall_dmg = 1;
-		inline bool pistol_autowall_lethal;
-		inline int pistol_aimbot_fov;
-		inline bool pistol_aimbot_rcs;
-		inline int pistol_aimbot_rcs_p;
-		inline bool pistol_aimbot_silent;
-		inline int pistol_aimbot_smooth;
-		inline bool hitboxes_pistol[4];
-		inline int pistol_hitbox;
-		inline bool heavy_pistol_autowall;
-		inline int heavy_pistol_autowall_dmg = 1;
-		inline bool heavy_pistol_autowall_lethal;
-		inline int heavy_pistol_aimbot_fov;
-		inline bool heavy_pistol_aimbot_rcs;
-		inline int heavy_pistol_aimbot_rcs_p;
-		inline bool heavy_pistol_aimbot_silent;
-		inline int heavy_pistol_aimbot_smooth;
-		inline bool hitboxes_heavy_pistol[4];
-		inline int heavy_pistol_hitbox;
-		inline bool shotgun_autowall;
-		inline int shotgun_autowall_dmg = 1;
-		inline bool shotgun_autowall_lethal;
-		inline int shotgun_aimbot_fov;
-		inline bool shotgun_aimbot_rcs;
-		inline int shotgun_aimbot_rcs_p;
-		inline bool shotgun_aimbot_silent;
-		inline int shotgun_aimbot_smooth;
-		inline bool hitboxes_shotgun[4];
-		inline int shotgun_hitbox;
-		inline bool heavy_autowall;
-		inline int heavy_autowall_dmg = 1;
-		inline bool heavy_autowall_lethal;
-		inline int heavy_aimbot_fov;
-		inline bool heavy_aimbot_rcs;
-		inline int heavy_aimbot_rcs_p;
-		inline bool heavy_aimbot_silent;
-		inline int heavy_aimbot_smooth;
-		inline bool hitboxes_heavy[4];
-		inline int heavy_hitbox;
-		inline bool smg_autowall;
-		inline int smg_autowall_dmg = 1;
-		inline bool smg_autowall_lethal;
-		inline int smg_aimbot_fov;
-		inline bool smg_aimbot_rcs;
-		inline int smg_aimbot_rcs_p;
-		inline bool smg_aimbot_silent;
-		inline int smg_aimbot_smooth;
-		inline bool hitboxes_smg[4];
-		inline int smg_hitbox;
-		inline bool rifle_autowall;
-		inline int rifle_autowall_dmg = 1;
-		inline bool rifle_autowall_lethal;
-		inline int rifle_aimbot_fov;
-		inline bool rifle_aimbot_rcs;
-		inline int rifle_aimbot_rcs_p;
-		inline bool rifle_aimbot_silent;
-		inline int rifle_aimbot_smooth;
-		inline bool hitboxes_rifle[4];
-		inline int rifle_hitbox;
-		inline bool sniper_autowall;
-		inline int sniper_autowall_dmg = 1;
-		inline bool sniper_autowall_lethal;
-		inline int sniper_aimbot_fov;
-		inline bool sniper_aimbot_rcs;
-		inline int sniper_aimbot_rcs_p;
-		inline bool sniper_aimbot_silent;
-		inline int sniper_aimbot_smooth;
-		inline bool hitboxes_sniper[4];
-		inline int sniper_hitbox;
-		inline bool autosniper_autowall;
-		inline int autosniper_autowall_dmg = 1;
-		inline bool autosniper_autowall_lethal;
-		inline int autosniper_aimbot_fov;
-		inline bool autosniper_aimbot_rcs;
-		inline int autosniper_aimbot_rcs_p;
-		inline bool autosniper_aimbot_silent;
-		inline int autosniper_aimbot_smooth;
-		inline bool hitboxes_autosniper[4];
-		inline int autosniper_hitbox;
 	}
 
 	namespace movement {
@@ -173,11 +89,9 @@ namespace c {
 		inline int  auto_strafe_key = 0;
 		inline int  auto_strafe_key_s = 1;
 		inline bool movement_fix = false;
-		inline bool edgebug_pena = false;
 		inline int fix_type = 0;
 		inline bool bhop = false;
 		inline bool bhopmiss = false;
-		inline bool bhopfix = false;
 		inline int whathopmiss = 6;
 		inline bool null_strafing = false;
 		inline bool ladder_bug = false;
@@ -186,6 +100,8 @@ namespace c {
 		inline bool air_stuck = false;
 		inline int air_stuck_key = 0;
 		inline int air_stuck_key_s = 1;
+		inline bool set_view_angles = true;
+		inline float wall_reach = 0.5f;
 		inline bool fireman = false;
 		inline bool fireman_plus_jump_activates_early = false;
 		inline bool fireman_manual_jump = false;
@@ -205,19 +121,9 @@ namespace c {
 		inline int edge_bug_priority = 0;
 		inline int edge_bug_key = 0;
 		inline int edge_bug_key_s = 1;
-		inline int edgebug_type = 0;
-		inline bool AutoStrafeEdgeBug = false;
-		inline bool EdgeBugAdvanceSearch = false;
-		inline bool SiletEdgeBug = false;
-		inline bool MegaEdgeBug = false;
-		inline int EdgeBugCircle = 2;
-		inline float deltascaler = 1.f;
-		inline int DeltaType = 0;
-		inline int EdgeBugTicks = 64;
-		inline float EdgeBugMouseLock = 0.f;
 		inline int edge_bug_ticks = 64;
 		inline int edge_bug_rape = 5;
-		inline bool silent_eb_hacked = false;
+		inline bool edge_bug_silent = false;
 		inline float edge_bug_angle_limit = 50.0f;
 		inline float edge_bug_lock_amount = 0.01f;
 		inline int edge_bug_lock_type = 0;
@@ -227,11 +133,14 @@ namespace c {
 		inline bool edge_bug_counter = false;
 		inline bool edge_jump = false;
 		inline bool edge_jump_on_ladder = false;
+		inline int ladder_jump_key = 0;
+		inline int ladder_jump_key_s = 1;
 		inline int edge_jump_key = 0;
 		inline int edge_jump_key_s = 1;
 		inline int long_jump_key = 0;
 		inline int long_jump_key_s = 1;
-		inline bool long_jump_on_edge = false;
+		inline bool long_jump = false;
+		inline bool long_jump_ej = false;
 		inline bool lj_null[4] = { false, false, false, false };
 		inline bool mini_jump = false;
 		inline bool mini_jump_ej = false;
@@ -255,18 +164,10 @@ namespace c {
 		inline int jump_bug_key_s = 1;
 		inline bool fastduck = false;
 		inline bool auto_align = false;
-		inline bool align_experimental = true;
-		inline int align_selection = 1;
-		inline int px_selection = 1;
-		inline bool freelook_surf = true;
 		inline bool fast_ladder = false;
 		inline int fast_ladder_key = 0;
 		inline int fast_ladder_key_s = 1;
 		inline bool auto_duck = false;
-		inline bool auto_duck_collision = false;
-		inline int auto_duck_collision_key = 0;
-		inline int auto_duck_collision_key_s = 1;
-		inline int auto_duck_collision_ticks = 6;
 		inline int  auto_duck_key = 0;
 		inline int  auto_duck_key_s = 1;
 		inline int  auto_duck_ticks = 6;
@@ -277,13 +178,7 @@ namespace c {
 		inline bool crouch_fix = false;
 		inline int  pixel_surf_key = 0;
 		inline int  pixel_surf_key_s = 1;
-		inline int pixel_surf_ticks = 16;
-		inline int lb_pixel_surf_ticks = 8;
-		inline int al_exp_pred_ticks = 1;
-		inline bool fakebackwards = false;
-		inline int  fakebackwardskey = 0;
-		inline int  fakebackwardskey_s = 1;
-		inline int  fakebackwards_angle = 0;
+		inline int pixel_surf_ticks = 12;
 		inline bool edge_bug_detection_printf = false;
 		inline bool jump_bug_detection_printf = false;
 		inline bool long_jump_detection_printf = false;
@@ -306,10 +201,10 @@ namespace c {
 		inline float velocity_indicator_custom_clr2[4]{ 1.f, 1.f, 1.f };
 		inline float velocity_indicator_fade_clr3[4]{ 1.f, 1.f, 1.f, 0.f };
 		inline float indicator_detect_clr[3]{ 0.195f, 0.750f, 0.269f };
-		inline bool indicators_show[14] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+		inline bool indicators_show[13] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool allow_detection_clr = false;
 		inline int detection_saved_tick = 15;
-		inline bool detection_clr_for[14] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+		inline bool detection_clr_for[13] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool stamina_indicator = false;
 		inline bool stamina_indicator_fade = false;
 		inline bool stamina_indicator_show_pre = false;
@@ -346,7 +241,7 @@ namespace c {
 		inline bool unlock_inventory = false;
 		inline bool custom_region = false;
 		inline int custom_region_selection = 0;
-		inline bool mouse_fix = false;
+		inline bool mouse_fix = true;
 		inline bool keybind_list = false;
 		inline bool door_spam = false;
 		inline int door_spam_key = 0;
@@ -366,9 +261,9 @@ namespace c {
 		inline int spectatorlist_type = 0;
 		inline bool spectator_local = false;
 		inline bool spectatorlist_show_target = true;
-		inline int spectatorlist_x = 100;
-		inline int spectatorlist_y = 50;
-		inline int spectatorlist_w;
+		inline int spectatorlist_x = 300;
+		inline int spectatorlist_y = 100;
+		inline int spectatorlist_w = 230;
 		inline int spectatorlist_h;
 		inline bool practice = false;
 		inline bool practice_window = false;
@@ -470,350 +365,7 @@ namespace c {
 		inline int gloves_skin_id = 0;
 		inline int gloves_wear = 0;
 		inline int agent_model = 0;
-
-		//1
 		inline int weapon_model = 0;
-
-		//usp
-		inline int wear_usp = 0;
-		inline int vector_paint_kit_usp = 0;
-		inline int paint_kit_index_usp = 0;
-		inline bool usp_wpn_skin_custom_clr = false;
-		inline float usp_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float usp_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float usp_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float usp_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//p2000
-		inline int wear_p2000 = 0;
-		inline int vector_paint_kit_p2000 = 0;
-		inline int paint_kit_index_p2000 = 0;
-		inline bool p2000_wpn_skin_custom_clr = false;
-		inline float p2000_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float p2000_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float p2000_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float p2000_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//glock
-		inline int wear_glock = 0;
-		inline int vector_paint_kit_glock = 0;
-		inline int paint_kit_index_glock = 0;
-		inline bool glock_wpn_skin_custom_clr = false;
-		inline float glock_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float glock_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float glock_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float glock_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//p250
-		inline int wear_p250 = 0;
-		inline int vector_paint_kit_p250 = 0;
-		inline int paint_kit_index_p250 = 0;
-		inline bool p250_wpn_skin_custom_clr = false;
-		inline float p250_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float p250_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float p250_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float p250_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//fiveseven
-		inline int wear_fiveseven = 0;
-		inline int vector_paint_kit_fiveseven = 0;
-		inline int paint_kit_index_fiveseven = 0;
-		inline bool fiveseven_wpn_skin_custom_clr = false;
-		inline float fiveseven_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float fiveseven_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float fiveseven_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float fiveseven_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//tec
-		inline int wear_tec = 0;
-		inline int vector_paint_kit_tec = 0;
-		inline int paint_kit_index_tec = 0;
-		inline bool tec_wpn_skin_custom_clr = false;
-		inline float tec_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float tec_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float tec_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float tec_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//cz
-		inline int wear_cz = 0;
-		inline int vector_paint_kit_cz = 0;
-		inline int paint_kit_index_cz = 0;
-		inline bool cz_wpn_skin_custom_clr = false;
-		inline float cz_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float cz_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float cz_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float cz_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//duals
-		inline int wear_duals = 0;
-		inline int vector_paint_kit_duals = 0;
-		inline int paint_kit_index_duals = 0;
-		inline bool duals_wpn_skin_custom_clr = false;
-		inline float duals_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float duals_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float duals_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float duals_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//deagle
-		inline int wear_deagle = 0;
-		inline int vector_paint_kit_deagle = 0;
-		inline int paint_kit_index_deagle = 0;
-		inline bool deagle_wpn_skin_custom_clr = false;
-		inline float deagle_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float deagle_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float deagle_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float deagle_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//revolver
-		inline int wear_revolver = 0;
-		inline int vector_paint_kit_revolver = 0;
-		inline int paint_kit_index_revolver = 0;
-		inline bool revolver_wpn_skin_custom_clr = false;
-		inline float revolver_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float revolver_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float revolver_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float revolver_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//famas
-		inline int wear_famas = 0;
-		inline int vector_paint_kit_famas = 0;
-		inline int paint_kit_index_famas = 0;
-		inline bool famas_wpn_skin_custom_clr = false;
-		inline float famas_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float famas_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float famas_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float famas_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//galil
-		inline int wear_galil = 0;
-		inline int vector_paint_kit_galil = 0;
-		inline int paint_kit_index_galil = 0;
-		inline bool galil_wpn_skin_custom_clr = false;
-		inline float galil_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float galil_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float galil_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float galil_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//m4a4
-		inline int wear_m4a4 = 0;
-		inline int vector_paint_kit_m4a4 = 0;
-		inline int paint_kit_index_m4a4 = 0;
-		inline bool m4a4_wpn_skin_custom_clr = false;
-		inline float m4a4_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float m4a4_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float m4a4_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float m4a4_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//m4a1
-		inline int wear_m4a1 = 0;
-		inline int vector_paint_kit_m4a1 = 0;
-		inline int paint_kit_index_m4a1 = 0;
-		inline bool m4a1_wpn_skin_custom_clr = false;
-		inline float m4a1_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float m4a1_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float m4a1_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float m4a1_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//ak47
-		inline int wear_ak47 = 0;
-		inline int vector_paint_kit_ak47 = 0;
-		inline int paint_kit_index_ak47 = 0;
-		inline bool ak47_wpn_skin_custom_clr = false;
-		inline float ak47_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float ak47_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float ak47_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float ak47_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//sg553
-		inline int wear_sg553 = 0;
-		inline int vector_paint_kit_sg553 = 0;
-		inline int paint_kit_index_sg553 = 0;
-		inline bool sg553_wpn_skin_custom_clr = false;
-		inline float sg553_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float sg553_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float sg553_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float sg553_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//aug
-		inline int wear_aug = 0;
-		inline int vector_paint_kit_aug = 0;
-		inline int paint_kit_index_aug = 0;
-		inline bool aug_wpn_skin_custom_clr = false;
-		inline float aug_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float aug_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float aug_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float aug_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//ssg08
-		inline int wear_ssg08 = 0;
-		inline int vector_paint_kit_ssg08 = 0;
-		inline int paint_kit_index_ssg08 = 0;
-		inline bool ssg08_wpn_skin_custom_clr = false;
-		inline float ssg08_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float ssg08_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float ssg08_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float ssg08_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//awp
-		inline int wear_awp = 0;
-		inline int vector_paint_kit_awp = 0;
-		inline int paint_kit_index_awp = 0;
-		inline bool awp_wpn_skin_custom_clr = false;
-		inline float awp_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float awp_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float awp_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float awp_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//scar
-		inline int wear_scar = 0;
-		inline int vector_paint_kit_scar = 0;
-		inline int paint_kit_index_scar = 0;
-		inline bool scar_wpn_skin_custom_clr = false;
-		inline float scar_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float scar_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float scar_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float scar_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//g3sg1
-		inline int wear_g3sg1 = 0;
-		inline int vector_paint_kit_g3sg1 = 0;
-		inline int paint_kit_index_g3sg1 = 0;
-		inline bool g3sg1_wpn_skin_custom_clr = false;
-		inline float g3sg1_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float g3sg1_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float g3sg1_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float g3sg1_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//sawoff
-		inline int wear_sawoff = 0;
-		inline int vector_paint_kit_sawoff = 0;
-		inline int paint_kit_index_sawoff = 0;
-		inline bool sawoff_wpn_skin_custom_clr = false;
-		inline float sawoff_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float sawoff_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float sawoff_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float sawoff_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//m249
-		inline int wear_m249 = 0;
-		inline int vector_paint_kit_m249 = 0;
-		inline int paint_kit_index_m249 = 0;
-		inline bool m249_wpn_skin_custom_clr = false;
-		inline float m249_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float m249_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float m249_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float m249_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//negev
-		inline int wear_negev = 0;
-		inline int vector_paint_kit_negev = 0;
-		inline int paint_kit_index_negev = 0;
-		inline bool negev_wpn_skin_custom_clr = false;
-		inline float negev_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float negev_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float negev_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float negev_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//mag7
-		inline int wear_mag7 = 0;
-		inline int vector_paint_kit_mag7 = 0;
-		inline int paint_kit_index_mag7 = 0;
-		inline bool mag7_wpn_skin_custom_clr = false;
-		inline float mag7_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float mag7_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float mag7_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float mag7_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//xm1014
-		inline int wear_xm1014 = 0;
-		inline int vector_paint_kit_xm1014 = 0;
-		inline int paint_kit_index_xm1014 = 0;
-		inline bool xm1014_wpn_skin_custom_clr = false;
-		inline float xm1014_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float xm1014_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float xm1014_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float xm1014_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//nova
-		inline int wear_nova = 0;
-		inline int vector_paint_kit_nova = 0;
-		inline int paint_kit_index_nova = 0;
-		inline bool nova_wpn_skin_custom_clr = false;
-		inline float nova_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float nova_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float nova_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float nova_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//bizon
-		inline int wear_bizon = 0;
-		inline int vector_paint_kit_bizon = 0;
-		inline int paint_kit_index_bizon = 0;
-		inline bool bizon_wpn_skin_custom_clr = false;
-		inline float bizon_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float bizon_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float bizon_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float bizon_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//mp5sd
-		inline int wear_mp5sd = 0;
-		inline int vector_paint_kit_mp5sd = 0;
-		inline int paint_kit_index_mp5sd = 0;
-		inline bool mp5sd_wpn_skin_custom_clr = false;
-		inline float mp5sd_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float mp5sd_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float mp5sd_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float mp5sd_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//mp7
-		inline int wear_mp7 = 0;
-		inline int vector_paint_kit_mp7 = 0;
-		inline int paint_kit_index_mp7 = 0;
-		inline bool mp7_wpn_skin_custom_clr = false;
-		inline float mp7_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float mp7_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float mp7_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float mp7_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//mp9
-		inline int wear_mp9 = 0;
-		inline int vector_paint_kit_mp9 = 0;
-		inline int paint_kit_index_mp9 = 0;
-		inline bool mp9_wpn_skin_custom_clr = false;
-		inline float mp9_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float mp9_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float mp9_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float mp9_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//mac10
-		inline int wear_mac10 = 0;
-		inline int vector_paint_kit_mac10 = 0;
-		inline int paint_kit_index_mac10 = 0;
-		inline bool mac10_wpn_skin_custom_clr = false;
-		inline float mac10_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float mac10_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float mac10_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float mac10_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//p90
-		inline int wear_p90 = 0;
-		inline int vector_paint_kit_p90 = 0;
-		inline int paint_kit_index_p90 = 0;
-		inline bool p90_wpn_skin_custom_clr = false;
-		inline float p90_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float p90_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float p90_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float p90_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-		//ump45
-		inline int wear_ump45 = 0;
-		inline int vector_paint_kit_ump45 = 0;
-		inline int paint_kit_index_ump45 = 0;
-		inline bool ump45_wpn_skin_custom_clr = false;
-		inline float ump45_wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-		inline float ump45_wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-		inline float ump45_wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-		inline float ump45_wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
 
 		inline bool skin_custom_clr = false;
 		inline float skin_modulation1[3]{ 1.f, 1.f, 1.f };

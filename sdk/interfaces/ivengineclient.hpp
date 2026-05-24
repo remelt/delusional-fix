@@ -97,6 +97,13 @@ public:
 		using fn = int( __thiscall* )( iv_engine_client* );
 		return ( *( fn** ) this )[ 12 ]( this );
 	}
+
+	bool is_hltv()
+	{
+		using fn = bool(__thiscall*)(iv_engine_client*);
+		return (*(fn**)this)[93](this);
+	}
+
 	int get_player_for_user_id( int user_id ) {
 		using fn = int( __thiscall* )( iv_engine_client*, int );
 		return ( *( fn** ) this )[ 9 ]( this, user_id );
@@ -172,5 +179,9 @@ public:
 	void* get_bsp_query( ) {
 		using fn = void* ( __thiscall* )( iv_engine_client* );
 		return ( *( fn** ) this )[ 43 ]( this );
+	}
+	void* is_active_app() {
+		using fn = void* (__thiscall*)(iv_engine_client*);
+		return (*(fn**)this)[196](this);
 	}
 };

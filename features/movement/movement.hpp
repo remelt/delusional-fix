@@ -12,8 +12,6 @@ namespace assistJb
 	inline bool AlertJB2 = false;
 }
 
-
-
 namespace features::movement {
 	inline bool m_opened = false;
 	inline bool HITGODA = false;
@@ -49,49 +47,41 @@ namespace features::movement {
 	inline float hiteffect_alpha;
 	inline float last_tick_y;
 	inline vec3_t first_viewangles;
-	void bhop(c_usercmd* cmd);//
+
+	void bhop(c_usercmd* cmd);
 	void delay_hop(c_usercmd* cmd);
 	void edge_bug(c_usercmd* cmd);
 	void pixel_surf(c_usercmd* cmd);
-	void pixel_surf_lock(c_usercmd* cmd);
+	void auto_align(c_usercmd* cmd);
 	void on_create_move_post(c_usercmd* cmd);
 	void fire_man(c_usercmd* cmd);
 	void air_stuck(c_usercmd* cmd);
 	void pixel_surf_fix(c_usercmd* cmd);
-	void pixel_surf_fix_del(c_usercmd* cmd);
-	void pixel_surf_del(c_usercmd* cmd);
 	void jump_bug(c_usercmd* cmd);
 	void jump_bug_crouch(c_usercmd* cmd);
 	void edge_jump(c_usercmd* cmd);
 	void crouch_bug(c_usercmd* cmd);
 	void long_jump(c_usercmd* cmd);
 	void ladder_jump(c_usercmd* cmd);
-	void ladder_bug(c_usercmd* cmd);
+	void ladder_glide(c_usercmd* cmd);
 	void null_strafing(c_usercmd* cmd);
 	void mini_jump(c_usercmd* cmd);
 	void auto_duck(c_usercmd* cmd);
-	void avoid_collision(c_usercmd* cmd);
 	void fast_ladder(c_usercmd* cmd);
-	void fake_backwards(c_usercmd* cmd);
 	void auto_strafe(c_usercmd* cmd, vec3_t& current_angle);
 	void fix_movement(c_usercmd* cmd, vec3_t& angle);
-	void fix_movement_lb(c_usercmd* cmd, vec3_t& angle);
-	void start_movement_fix(c_usercmd* cmd);
-	void end_movement_fix(c_usercmd* cmd);
-	void blockbot(c_usercmd* cmd);
 	void strafe_optimizer(c_usercmd* user_cmd);
 	void mouse_strafe_limiter(float* x, float* y);
 	void velocity_indicator();
 	void stamina_indicator();
 	void indicators();
-	void auto_align(c_usercmd* cmd);
-	void auto_align_lb(c_usercmd* cmd);
-	void auto_align_lb_recode(c_usercmd* cmd);
 	void gather_vel_graph_data();
 	void velocity_graph_draw();
 	void gather_stam_graph_data();
 	void stamina_graph_draw();
 	void visualize_eb();
+
+	// assist
 	void check_ps(c_usercmd* cmd);
 	void pixelsurf_assist(c_usercmd* cmd);
 	void bounce_assist(c_usercmd* cmd);
@@ -99,21 +89,6 @@ namespace features::movement {
 	void RenderPoints();
 	void assist_createmove(c_usercmd* cmd);
 	void assist_endscene();
-
-
-	struct ps_data_t {
-		bool predicted_ps = false;
-		bool pixelsurfing = false;
-		bool pixelducking = false;
-		int counter = 0;
-		int pixeltick = 0;
-		float last_set = 0.f;
-		c_usercmd* pixelsurf_cmd = nullptr;
-		vec3_t view_point = vec3_t(0, 0, 0);
-		float forward_move = 0.f;
-		float side_move = 0.f;
-	};
-	inline ps_data_t ps_data;
 
 	//auto-duck hw
 	struct autoduck_data_t {
@@ -154,6 +129,8 @@ namespace features::movement {
 		float startingyaw;
 		int eblength;
 		int ticks_left;
+		std::vector<vec3_t> ebpath;
+		vec3_t ebpos;
 	};
 	inline edge_bug_detection detect_data;
 
@@ -208,13 +185,6 @@ namespace features::movement {
 	inline std::vector< points_check_t > m_pixelsurf_points_check{ };
 }
 
-namespace features::calculator {
-	void run();
-	void draw_info();
-
-
-}
-
 class savingroute {
 public:
 	explicit savingroute(const char*);
@@ -244,7 +214,6 @@ public:
 	void create_move(c_usercmd* cmd);
 	void endscene(ImDrawList* draw);
 	void drawroute();
-	void infowindow();
 	void forcestop();
 	void frame_stage(int stage);
 	void camera_lock(float& x, float& y);

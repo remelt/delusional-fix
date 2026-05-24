@@ -114,9 +114,6 @@
     <ClCompile Include="hooks\functions\get_color_modulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="features\skins\knife_proxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="features\skins\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -261,9 +258,6 @@
     <ClCompile Include="features\aimbot\backtrack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="features\movement\lobotomy_eb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="features\mplayer\mplayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -273,7 +267,10 @@
     <ClCompile Include="hooks\functions\insecure_bypass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="features\aimbot\aimbot_old.cpp">
+    <ClCompile Include="sdk\structs\crc32\crc32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\fire_bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -749,9 +746,6 @@
     <ClInclude Include="sdk\interfaces\ilocalize.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="features\skins\proxy_hook.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="features\visuals\visuals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -984,9 +978,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\model\model.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="features\movement\lobotomy_eb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\mplayer\mplayer.h">
@@ -1223,10 +1214,22 @@
     <ClInclude Include="sdk\interfaces\c_physics_collison.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="features\aimbot\autowall.hpp">
+    <ClInclude Include="features\misc\jumpstats.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="features\misc\jumpstats.hpp">
+    <ClInclude Include="sdk\structs\crc32\crc32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\utlsymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\interfaces\iclientrenderable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\interfaces\imemalloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="features\aimbot\autowall.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -206,6 +206,8 @@ bool menu::iskeyup(int key) {
 }
 
 bool menu::checkkey(int key, int keystyle) {
+    if (!interfaces::engine->is_active_app())
+        return false;
     switch (keystyle) {
     case 0:
         return true;

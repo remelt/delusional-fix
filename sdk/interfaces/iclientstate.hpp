@@ -16,54 +16,66 @@ public:
 	int choked_packets;
 };
 
+class c_event_info
+{
+public:
+	enum {
+		EVENT_INDEX_BITS = 8,
+		EVENT_DATA_LEN_BITS = 11,
+		MAX_EVENT_DATA = 192,
+	};
+
+	short m_class_id;
+	PAD(0x2);
+	float m_fire_delay;
+	const void* m_send_table;
+	const void* m_client_class;
+	int m_packed;
+	int m_flags;
+	int m_filter[8];
+	c_event_info* m_next;
+};
+
 class i_client_state
 {
 public:
-	char pad_0000[ 156 ];
+	unsigned char pad0[0x9c];
 	i_net_channel* net_channel;
-	uint32_t challenge_count;
-	double reconnect_time;
-	int32_t retry_count;
-	char pad_00A8[ 88 ];
-	int32_t signon_state_count;
-	char pad_0104[ 8 ];
+	int m_challenge_nr;
+	unsigned char pad1[0x64];
+	int signon_state_count;
+	unsigned char pad2[0x8];
 	float next_cmd_time;
-	int32_t server_count;
-	uint32_t current_sequence;
-	char pad_0118[ 8 ];
-	char pad_0120[ 0x4C ];
-	int32_t delta_tick;
-	bool is_paused;
-	char pad_0171[ 3 ];
-	int32_t view_entity;
-	int32_t player_slot;
-	char pad_017C[ 4 ];
-	char level_name[ 260 ];
-	char level_name_short[ 40 ];
-	char pad_02AC[ 92 ];
-	int32_t max_clients;
-	char pad_030C[ 4083 ];
-	uint32_t string_table_container;
-	char pad_1303[ 14737 ];
+	int server_count;
+	int current_sequence;
+	unsigned char pad3[0x54];
+	int delta_tick;
+	bool paused;
+	unsigned char pad4[0x7];
+	int view_entity;
+	int player_slot;
+	char level_name[260 /* MAX_PATH */];
+	char level_name_short[80];
+	char map_group_name[80];
+	char mast_level_name_short[80];
+	unsigned char pad5[0xc];
+	int max_clients;
+	unsigned char pad6[0x498c];
 	float last_server_tick_time;
-	bool is_in_simulation;
-	char pad_4C99[ 3 ];
-	uint32_t old_tick_count;
+	bool in_simulation;
+	unsigned char pad7[0x3];
+	int old_tickcount;
 	float tick_remainder;
 	float frame_time;
-	int32_t last_outgoing_command;
-	int32_t choked_commands;
-	int32_t last_command_ack;
-	int32_t command_ack;
-	int32_t sound_sequence;
-	char pad_4CBC[ 80 ];
+	int last_outgoing_command;
+	int choked_commands;
+	int last_command_ack;
+	int command_ack;
+	int sound_sequence;
+	unsigned char pad8[0x50];
 	vec3_t view_angles;
-
-
-	void full_update( )
-	{
-		delta_tick = -1;
-	}
+	unsigned char pad9[0xd0];
+	c_event_info* m_events;
 };
 
 #pragma pack(pop)

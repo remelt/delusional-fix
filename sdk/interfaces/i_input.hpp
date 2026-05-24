@@ -1,6 +1,8 @@
 #pragma once
 #include "../../sdk/structs/usercmd.hpp"
 
+#define MULTIPLAYER_BACKUP 150
+
 class i_input {
 public:
 	std::byte			pad0[0xC];				// 0x00
@@ -13,9 +15,18 @@ public:
 	vec3_t				camera_offset;			// 0xAC
 	std::byte			pad3[0x38];				// 0xB8
 	c_usercmd* pCommands;				// 0xF0
+	c_verified_user_cmd* m_verified_commands;
 
 	c_usercmd* get_user_cmd(int slot, int sequence_num) {
 		using original_fn = c_usercmd * (__thiscall*)(void*, int, int);
 		return (*(original_fn**)this)[8](this, slot, sequence_num);
+	}
+
+	c_usercmd* get_user_cmd(int sequence_number) {
+		return  &this->pCommands[sequence_number % MULTIPLAYER_BACKUP];
+	}
+
+	c_verified_user_cmd* get_verified_cmd(int sequence_number) {
+		return &m_verified_commands[sequence_number % MULTIPLAYER_BACKUP];
 	}
 };

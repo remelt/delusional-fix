@@ -88,6 +88,16 @@ public:
 		return (*(original_fn**)this)[4](this, value);
 	}
 
+	void set_int_value(int value) {
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn**)this)[5](this, value);
+	}
+
+	void set_string_value(const char* value) {
+		using original_fn = void(__thiscall*)(void*, const char*);
+		return (*(original_fn**)this)[6](this, value);
+	}
+
 	void set_vec_value(float x, float y, float z) {
 		using original_fn = void(__thiscall*)(void*, float, float, float);
 		(*(original_fn**)this)[11](this, x, y, z);

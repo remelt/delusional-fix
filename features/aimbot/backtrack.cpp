@@ -65,13 +65,23 @@ void backtrack_c::setup_records() {
 		bd.hitboxset = hitbox_set;
 		bd.sim_time = player->simulation_time();
 		bd.player = player;
+		bd.velocity = player->velocity();
 
-		*(vec3_t*)((uintptr_t)player + 0xA0) = player->origin();
-		*(int*)((uintptr_t)player + 0xA68) = 0;
-		*(int*)((uintptr_t)player + 0xA30) = 0;
+		player->pvs_fix();
+
+		//fixing laggy animations
+		vec3_t backupabsOrigin = player->abs_origin();
+		uintptr_t backupEffects = player->get_effects();
+
+		*(vec3_t*)((uintptr_t)player + 0xA0) = player->origin(); //https://github.com/hotwheels-vip/csgo-internal/blob/main/csgo-sdk/hacks/lagcomp/lagcomp.cpp#L179
+		*(int*)((uintptr_t)player + 0xA68) = 0; //https://github.com/remelt/delusional-fix/blob/main/features/aimbot/backtrack.cpp#L70 //idk
 
 		player->inv_bone_cache();
-		player->setup_bones(bd.m_matrix, 128, 256, interfaces::globals->cur_time);
+		player->get_effects() |= 8;
+
+		auto result = player->setup_bones(bd.m_matrix, 128, 0x7FF00, interfaces::globals->cur_time);
+		player->set_abs_origin(backupabsOrigin);
+		player->get_effects() = backupEffects;
 
 		math::vector_transform(hitbox_center, bd.m_matrix[hitbox_headd->bone], bd.m_headpos);
 		data[i].push_front(bd);

@@ -3,7 +3,7 @@
 
 using md5_pseudo_random_fn = uint32_t(__thiscall*)(uint32_t);
 
-namespace prediction_backup{
+namespace prediction_backup {
 	inline player_move_data data{};
 	inline vec3_t		origin{};
 	inline vec3_t		velocity{};
@@ -41,24 +41,25 @@ namespace prediction {
 		prediction_backup::forward_move = cmd->forward_move;
 	};
 
-	void begin( c_usercmd* cmd );
+	void begin(c_usercmd* cmd);
 	void end();
+	void update();
 	void restore_ent_to_predicted_frame(int i);
+	static int get_corrected_tick_base(c_usercmd* cmd);
+	void update_button_state(c_usercmd* cmd);
 	void repredict();
 	void post_think();
-	void updatepacket();
 
 	inline player_move_data data{};
 	inline c_usercmd* last_command;
-	inline int* prediction_random_seed;
+	inline unsigned int* prediction_random_seed;
 	inline md5_pseudo_random_fn md5_pseudo_random;
 	inline int* prediction_player;
-	inline player_t** prediction_player_real;
 	inline int correct_tickbase;
 	inline bool in_first;
 	inline bool in_pred;
 	inline bool in_prediction;
-	
+
 	inline vec3_t origin;
 	inline vec3_t velocity;
 	inline vec3_t original_angle;

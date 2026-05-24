@@ -3,7 +3,7 @@
 #include "../../menu/config/config.hpp"
 
 void triggerbot::run(c_usercmd* cmd) {
-	if (!interfaces::engine->is_in_game() || !g::local->is_alive()) 
+	if (!interfaces::engine->is_in_game() || !g::local->is_alive())
 		return;
 
 	auto weapon = g::local->active_weapon();
@@ -14,7 +14,7 @@ void triggerbot::run(c_usercmd* cmd) {
 
 	if (weapon->next_primary_attack() > g::local->get_tick_base() * interfaces::globals->interval_per_tick) return;
 
-	if (menu::open) 
+	if (menu::open)
 		return;
 
 	if (!c::triggerbot::enabled || !menu::checkkey(c::triggerbot::triggerbot_key, c::triggerbot::triggerbot_key_s))

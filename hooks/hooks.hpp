@@ -21,11 +21,12 @@ namespace sdk {
 
 		inline unsigned int get_virtual(void* _class, unsigned int index) { return static_cast<unsigned int>((*reinterpret_cast<int**>(_class))[index]); }
 
-		namespace create_move {
-			using fn = bool(__fastcall* )(void*, void*, float, c_usercmd* );
+		namespace create_move_proxy {
+			using fn = void(__fastcall*)(void*, void*, int, float, bool);
 			inline fn ofunc;
-			bool __fastcall create_move(registers, float sample_time, c_usercmd* cmd );
+			void __stdcall create_move_proxy(int sequence_number, float input_sample_frametime, bool active);
 		}
+
 
 		namespace get_color_modulation {
 			using fn = void(__fastcall*)(i_material*, void*, float*, float*, float* );
@@ -69,6 +70,12 @@ namespace sdk {
 			void __fastcall push_notice(int ecx, int edx, const char* text, int str_len, const char* null);
 		}
 
+		namespace fire_bullet {
+			using fn = void(__fastcall*)(player_t*, void*, vec3_t, const vec3_t*, float, float, int, int, int, float, player_t*, bool, float, float);
+			inline fn ofunc;
+			void __fastcall fire_bullet(player_t* _this, void* edx, vec3_t vecSource, const vec3_t* pangShootView, float flDistance, float flPenetration, int nPenetrationCount, int nBulletType, int iDamage, float flRangeModifier, player_t* pAttacker, bool bDoEffects, float flSpreadX, float flSpreadY);
+		}
+
 		namespace get_unverified_file_hashes {
 			using fn = int(__stdcall*)(void*, int);
 			inline fn ofunc;
@@ -103,6 +110,12 @@ namespace sdk {
 			using fn = long( __stdcall* )( IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
 			inline fn ofunc;
 			long __stdcall reset( IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pp );
+		}
+
+		namespace endscene {
+			using fn = long(__stdcall*)(IDirect3DDevice9*);
+			inline fn ofunc;
+			long __stdcall endscene(IDirect3DDevice9* device);
 		}
 
 		namespace lock_cursor {

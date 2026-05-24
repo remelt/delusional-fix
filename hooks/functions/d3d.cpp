@@ -5,7 +5,6 @@
 #include "../../features/movement/movement.hpp"
 #include "../../includes/discord/discord_rpc.h"
 #include "../../sdk/math/math.hpp"
-#include <TlHelp32.h>
 
 LRESULT __stdcall sdk::hooks::wndproc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
 	if (message == WM_KEYDOWN && LOWORD(wparam) == c::misc::menu_key)
@@ -28,6 +27,10 @@ long __stdcall sdk::hooks::present::present(IDirect3DDevice9* device, RECT* sour
 		menu::fonts_initialized = false;
 	}
 
+	device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
+	IDirect3DVertexDeclaration9* vertexDeclaration;
+	device->GetVertexDeclaration(&vertexDeclaration);
+
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame(); {
@@ -38,7 +41,7 @@ long __stdcall sdk::hooks::present::present(IDirect3DDevice9* device, RECT* sour
 		features::visuals::fullbright();
 		features::misc::draw();
 		features::misc::spectators_list();
-		features::visuals::RenderMediaPlayer();
+		features::visuals::render_media_player();
 		features::visuals::display_spotify();
 		features::visuals::watermark();
 		menu::render();
@@ -48,11 +51,14 @@ long __stdcall sdk::hooks::present::present(IDirect3DDevice9* device, RECT* sour
 	}
 	ImGui::EndFrame();
 	ImGui::Render();
-
+	
 	if (device->BeginScene() == D3D_OK) {
 		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 		device->EndScene();
 	}
+
+	device->SetVertexDeclaration(vertexDeclaration);
+	vertexDeclaration->Release();
 
 	return ofunc(device, source_rect, dest_rect, dest_window_override, dirty_region);
 }

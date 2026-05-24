@@ -123,6 +123,20 @@ void imgui_render::setup(IDirect3DDevice9* device) {
 	std::string menu_font_directory = "C:/windows/fonts/verdana.ttf";
 	std::string spec_font_directory = "C:/windows/fonts/tahoma.ttf";
 
+	// u can use them if u want
+
+	//ImFontGlyphRangesBuilder builder;
+	//builder.AddRanges(io.Fonts->GetGlyphRangesDefault());
+	//builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
+	//builder.AddRanges(io.Fonts->GetGlyphRangesThai());
+	//builder.AddRanges(io.Fonts->GetGlyphRangesVietnamese());
+	//builder.AddRanges(io.Fonts->GetGlyphRangesKorean());
+	//builder.AddRanges(io.Fonts->GetGlyphRangesChineseFull());
+	//builder.AddRanges(io.Fonts->GetGlyphRangesJapanese());
+
+	//ImVector<ImWchar> font_ranges;
+	//builder.BuildRanges(&font_ranges);
+
 	//menu
 	fonts::assist_font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 12, &cfg_menu, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
@@ -419,6 +433,14 @@ void imgui_render::unload() {
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+	SetWindowLongW(sdk::hooks::window, GWL_WNDPROC, reinterpret_cast<LONG>(sdk::hooks::wndproc_original));
+
+	if (interfaces::device)
+	{
+		interfaces::device->Release();
+		interfaces::device = NULL;
+	}
 }
 
 void fonts::reset_fonts( ) {

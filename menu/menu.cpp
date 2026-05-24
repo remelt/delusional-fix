@@ -8,17 +8,18 @@
 #include "../features/skins/skins.hpp"
 #include "../features/panorama/scaleform.hpp"
 #include "../includes/imgui/imgui_internal.h"
+#include "../features/visuals/visuals.hpp"
 
 static const char* mov_toggle_type[] = { "always on", "on hotkey", "toggle hotkey" };
+static const char* hitboxes[] = { "head", "neck", "chest", "pelvis" };
 static const char* eb_priority[3] = { "crouching", "standing", "dynamic" };
 static const char* ljnulling[4] = { "-w", "-s", "-a", "-d" };
 static const char* ad_key[3] = { "ej", "mj", "lj" };
 static const char* fb_angles[] = { "right", "backwards", "left" };
 static const char* tabs[] = { "indicators","positions" };
-static const char* indicators[14] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "ad", "ac", "fm", "air", "as", "ast", "bast" };
+static const char* indicators[13] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "ad", "fm", "air", "as", "ast", "bast" };
 const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
 const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "music player font", "assist font"};
-static const char* hitboxes[] = { "head","neck","chest","pelvis" };
 static const char* WeatherTypes[] = { "rain","ash","heavy rain","snow"};
 static const char* render_positions[] = { "top left corner","bottom left corner","bottom right corner" };
 static const char* EdgebugTypes[] = { "delusional (og)","lobotomy" };
@@ -32,858 +33,13 @@ const char* data_center_list_names[] = { "australia", "austria", "brazil", "chil
 std::string data_center_list[] = { "syd", "vie", "gru", "scl", "dxb", "par", "fra", "hkg",
    "maa", "bom", "tyo", "lux", "ams", "limc", "man", "waw", "sgp", "jnb",
    "mad", "sto", "lhr", "atl", "eat", "ord", "lax", "mwh", "okc", "sea", "iad" };
-static const char* choices_copy[]{ "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
-static const char* choices_copy1[]{ "  pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
-static const char* choices_copy2[]{ "  pistol", "  heavy pistol", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper" };
-static const char* choices_copy3[]{ "  pistol", "  heavy pistol", "  shotgun", "  smg", "  rifle", "  sniper", "  auto sniper" };
-static const char* choices_copy4[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  rifle", "  sniper", "  auto sniper" };
-static const char* choices_copy7[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  sniper", "  auto sniper" };
-static const char* choices_copy6[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  auto sniper" };
-static const char* choices_copy5[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper" };
+static const char* choices_copy[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper"};
+static const char* skinchanger_knives[] = { "default", "bayonet", "m9", "karambit", "bowie", "butterfly", "falchion", "flip", "gut", "huntsman", "shaddow-daggers", "navaja", "stiletto", "talon", "ursus", "default ct", "default t", "gold knife", "css", "outdoor", "canis", "paracord", "skeleton" };
+static const char* skinchanger_gloves[] = { "default", "brokenfang", "bloodhound", "sporty", "slick", "handwrap", "motorcycle", "specialist", "hydra" };
+static const char* skinchanger_weapons[] = { "usp-s", "p2000", "glock", "p250", "five-seven", "tec-10", "cz-75", "duals", "deagle", "revolver", "famas", "galil", "m4a4", "m4a1-s", "ak-47", "sg-553", "aug", "ssg-08", "awp", "scar", "g3sg1", "sawed-off", "m-249", "negev", "mag-7", "xm-1014", "nova", "pp-bizon", "mp5-sd", "mp-7", "mp-9", "mac-10", "p-90", "ump-45" };
 
 ImGuiColorEditFlags no_alpha = ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
 ImGuiColorEditFlags w_alpha = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
-
-int weapon_model = -1;
-
-bool skin_custom_clr;
-
-int vector_paint_kit;
-int weapon_skin;
-int wear;
-
-bool wpn_skin_custom_clr = false;
-float wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-float wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-float wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-float wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-
-void getskins() {
-    switch (c::skins::weapon_model) {
-    case 0:
-        wear = c::skins::wear_usp;
-        vector_paint_kit = c::skins::vector_paint_kit_usp;
-        weapon_skin = c::skins::paint_kit_index_usp;
-        wpn_skin_custom_clr = c::skins::usp_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::usp_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::usp_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::usp_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::usp_wpn_skin_modulation4[i];
-        }
-        break;
-    case 1:
-        wear = c::skins::wear_p2000;
-        vector_paint_kit = c::skins::vector_paint_kit_p2000;
-        weapon_skin = c::skins::paint_kit_index_p2000;
-        wpn_skin_custom_clr = c::skins::p2000_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::p2000_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::p2000_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::p2000_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::p2000_wpn_skin_modulation4[i];
-        }
-        break;
-    case 2:
-        wear = c::skins::wear_glock;
-        vector_paint_kit = c::skins::vector_paint_kit_glock;
-        weapon_skin = c::skins::paint_kit_index_glock;
-        wpn_skin_custom_clr = c::skins::glock_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::glock_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::glock_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::glock_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::glock_wpn_skin_modulation4[i];
-        }
-        break;
-    case 3:
-        wear = c::skins::wear_p250;
-        vector_paint_kit = c::skins::vector_paint_kit_p250;
-        weapon_skin = c::skins::paint_kit_index_p250;
-        wpn_skin_custom_clr = c::skins::p250_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::p250_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::p250_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::p250_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::p250_wpn_skin_modulation4[i];
-        }
-        break;
-    case 4:
-        wear = c::skins::wear_fiveseven;
-        vector_paint_kit = c::skins::vector_paint_kit_fiveseven;
-        weapon_skin = c::skins::paint_kit_index_fiveseven;
-        wpn_skin_custom_clr = c::skins::fiveseven_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::fiveseven_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::fiveseven_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::fiveseven_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::fiveseven_wpn_skin_modulation4[i];
-        }
-        break;
-    case 5:
-        wear = c::skins::wear_tec;
-        vector_paint_kit = c::skins::vector_paint_kit_tec;
-        weapon_skin = c::skins::paint_kit_index_tec;
-        wpn_skin_custom_clr = c::skins::tec_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::tec_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::tec_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::tec_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::tec_wpn_skin_modulation4[i];
-        }
-        break;
-    case 6:
-        wear = c::skins::wear_cz;
-        vector_paint_kit = c::skins::vector_paint_kit_cz;
-        weapon_skin = c::skins::paint_kit_index_cz;
-        wpn_skin_custom_clr = c::skins::cz_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::cz_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::cz_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::cz_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::cz_wpn_skin_modulation4[i];
-        }
-        break;
-    case 7:
-        wear = c::skins::wear_duals;
-        vector_paint_kit = c::skins::vector_paint_kit_duals;
-        weapon_skin = c::skins::paint_kit_index_duals;
-        wpn_skin_custom_clr = c::skins::duals_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::duals_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::duals_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::duals_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::duals_wpn_skin_modulation4[i];
-        }
-        break;
-    case 8:
-        wear = c::skins::wear_deagle;
-        vector_paint_kit = c::skins::vector_paint_kit_deagle;
-        weapon_skin = c::skins::paint_kit_index_deagle;
-        wpn_skin_custom_clr = c::skins::deagle_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::deagle_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::deagle_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::deagle_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::deagle_wpn_skin_modulation4[i];
-        }
-        break;
-    case 9:
-        wear = c::skins::wear_revolver;
-        vector_paint_kit = c::skins::vector_paint_kit_revolver;
-        weapon_skin = c::skins::paint_kit_index_revolver;
-        wpn_skin_custom_clr = c::skins::revolver_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::revolver_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::revolver_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::revolver_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::revolver_wpn_skin_modulation4[i];
-        }
-        break;
-    case 10:
-        wear = c::skins::wear_famas;
-        vector_paint_kit = c::skins::vector_paint_kit_famas;
-        weapon_skin = c::skins::paint_kit_index_famas;
-        wpn_skin_custom_clr = c::skins::famas_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::famas_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::famas_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::famas_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::famas_wpn_skin_modulation4[i];
-        }
-        break;
-    case 11:
-        wear = c::skins::wear_galil;
-        vector_paint_kit = c::skins::vector_paint_kit_galil;
-        weapon_skin = c::skins::paint_kit_index_galil;
-        wpn_skin_custom_clr = c::skins::galil_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::galil_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::galil_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::galil_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::galil_wpn_skin_modulation4[i];
-        }
-        break;
-    case 12:
-        wear = c::skins::wear_m4a4;
-        vector_paint_kit = c::skins::vector_paint_kit_m4a4;
-        weapon_skin = c::skins::paint_kit_index_m4a4;
-        wpn_skin_custom_clr = c::skins::m4a4_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::m4a4_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::m4a4_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::m4a4_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::m4a4_wpn_skin_modulation4[i];
-        }
-        break;
-    case 13:
-        wear = c::skins::wear_m4a1;
-        vector_paint_kit = c::skins::vector_paint_kit_m4a1;
-        weapon_skin = c::skins::paint_kit_index_m4a1;
-        wpn_skin_custom_clr = c::skins::m4a1_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::m4a1_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::m4a1_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::m4a1_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::m4a1_wpn_skin_modulation4[i];
-        }
-        break;
-    case 14:
-        wear = c::skins::wear_ak47;
-        vector_paint_kit = c::skins::vector_paint_kit_ak47;
-        weapon_skin = c::skins::paint_kit_index_ak47;
-        wpn_skin_custom_clr = c::skins::ak47_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::ak47_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::ak47_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::ak47_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::ak47_wpn_skin_modulation4[i];
-        }
-        break;
-    case 15:
-        wear = c::skins::wear_sg553;
-        vector_paint_kit = c::skins::vector_paint_kit_sg553;
-        weapon_skin = c::skins::paint_kit_index_sg553;
-        wpn_skin_custom_clr = c::skins::sg553_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::sg553_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::sg553_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::sg553_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::sg553_wpn_skin_modulation4[i];
-        }
-        break;
-    case 16:
-        wear = c::skins::wear_aug;
-        vector_paint_kit = c::skins::vector_paint_kit_aug;
-        weapon_skin = c::skins::paint_kit_index_aug;
-        wpn_skin_custom_clr = c::skins::aug_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::aug_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::aug_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::aug_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::aug_wpn_skin_modulation4[i];
-        }
-        break;
-    case 17:
-        wear = c::skins::wear_ssg08;
-        vector_paint_kit = c::skins::vector_paint_kit_ssg08;
-        weapon_skin = c::skins::paint_kit_index_ssg08;
-        wpn_skin_custom_clr = c::skins::ssg08_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::ssg08_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::ssg08_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::ssg08_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::ssg08_wpn_skin_modulation4[i];
-        }
-        break;
-    case 18:
-        wear = c::skins::wear_awp;
-        vector_paint_kit = c::skins::vector_paint_kit_awp;
-        weapon_skin = c::skins::paint_kit_index_awp;
-        wpn_skin_custom_clr = c::skins::awp_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::awp_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::awp_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::awp_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::awp_wpn_skin_modulation4[i];
-        }
-        break;
-    case 19:
-        wear = c::skins::wear_scar;
-        vector_paint_kit = c::skins::vector_paint_kit_scar;
-        weapon_skin = c::skins::paint_kit_index_scar;
-        wpn_skin_custom_clr = c::skins::scar_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::scar_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::scar_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::scar_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::scar_wpn_skin_modulation4[i];
-        }
-        break;
-    case 20:
-        wear = c::skins::wear_g3sg1;
-        vector_paint_kit = c::skins::vector_paint_kit_g3sg1;
-        weapon_skin = c::skins::paint_kit_index_g3sg1;
-        wpn_skin_custom_clr = c::skins::g3sg1_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::g3sg1_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::g3sg1_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::g3sg1_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::g3sg1_wpn_skin_modulation4[i];
-        }
-        break;
-    case 21:
-        wear = c::skins::wear_sawoff;
-        vector_paint_kit = c::skins::vector_paint_kit_sawoff;
-        weapon_skin = c::skins::paint_kit_index_sawoff;
-        wpn_skin_custom_clr = c::skins::sawoff_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::sawoff_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::sawoff_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::sawoff_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::sawoff_wpn_skin_modulation4[i];
-        }
-        break;
-    case 22:
-        wear = c::skins::wear_m249;
-        vector_paint_kit = c::skins::vector_paint_kit_m249;
-        weapon_skin = c::skins::paint_kit_index_m249;
-        wpn_skin_custom_clr = c::skins::m249_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::m249_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::m249_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::m249_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::m249_wpn_skin_modulation4[i];
-        }
-        break;
-    case 23:
-        wear = c::skins::wear_negev;
-        vector_paint_kit = c::skins::vector_paint_kit_negev;
-        weapon_skin = c::skins::paint_kit_index_negev;
-        wpn_skin_custom_clr = c::skins::negev_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::negev_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::negev_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::negev_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::negev_wpn_skin_modulation4[i];
-        }
-        break;
-    case 24:
-        wear = c::skins::wear_mag7;
-        vector_paint_kit = c::skins::vector_paint_kit_mag7;
-        weapon_skin = c::skins::paint_kit_index_mag7;
-        wpn_skin_custom_clr = c::skins::mag7_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::mag7_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::mag7_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::mag7_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::mag7_wpn_skin_modulation4[i];
-        }
-        break;
-    case 25:
-        wear = c::skins::wear_xm1014;
-        vector_paint_kit = c::skins::vector_paint_kit_xm1014;
-        weapon_skin = c::skins::paint_kit_index_xm1014;
-        wpn_skin_custom_clr = c::skins::xm1014_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::xm1014_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::xm1014_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::xm1014_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::xm1014_wpn_skin_modulation4[i];
-        }
-        break;
-    case 26:
-        wear = c::skins::wear_nova;
-        vector_paint_kit = c::skins::vector_paint_kit_nova;
-        weapon_skin = c::skins::paint_kit_index_nova;
-        wpn_skin_custom_clr = c::skins::nova_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::nova_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::nova_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::nova_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::nova_wpn_skin_modulation4[i];
-        }
-        break;
-    case 27:
-        wear = c::skins::wear_bizon;
-        vector_paint_kit = c::skins::vector_paint_kit_bizon;
-        weapon_skin = c::skins::paint_kit_index_bizon;
-        wpn_skin_custom_clr = c::skins::bizon_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::bizon_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::bizon_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::bizon_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::bizon_wpn_skin_modulation4[i];
-        }
-        break;
-    case 28:
-        wear = c::skins::wear_mp5sd;
-        vector_paint_kit = c::skins::vector_paint_kit_mp5sd;
-        weapon_skin = c::skins::paint_kit_index_mp5sd;
-        wpn_skin_custom_clr = c::skins::mp5sd_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::mp5sd_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::mp5sd_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::mp5sd_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::mp5sd_wpn_skin_modulation4[i];
-        }
-        break;
-    case 29:
-        wear = c::skins::wear_mp7;
-        vector_paint_kit = c::skins::vector_paint_kit_mp7;
-        weapon_skin = c::skins::paint_kit_index_mp7;
-        wpn_skin_custom_clr = c::skins::mp7_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::mp7_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::mp7_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::mp7_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::mp7_wpn_skin_modulation4[i];
-        }
-        break;
-    case 30:
-        wear = c::skins::wear_mp9;
-        vector_paint_kit = c::skins::vector_paint_kit_mp9;
-        weapon_skin = c::skins::paint_kit_index_mp9;
-        wpn_skin_custom_clr = c::skins::mp9_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::mp9_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::mp9_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::mp9_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::mp9_wpn_skin_modulation4[i];
-        }
-        break;
-    case 31:
-        wear = c::skins::wear_mac10;
-        vector_paint_kit = c::skins::vector_paint_kit_mac10;
-        weapon_skin = c::skins::paint_kit_index_mac10;
-        wpn_skin_custom_clr = c::skins::mac10_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::mac10_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::mac10_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::mac10_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::mac10_wpn_skin_modulation4[i];
-        }
-        break;
-    case 32:
-        wear = c::skins::wear_p90;
-        vector_paint_kit = c::skins::vector_paint_kit_p90;
-        weapon_skin = c::skins::paint_kit_index_p90;
-        wpn_skin_custom_clr = c::skins::p90_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::p90_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::p90_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::p90_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::p90_wpn_skin_modulation4[i];
-        }
-        break;
-    case 33:
-        wear = c::skins::wear_ump45;
-        vector_paint_kit = c::skins::vector_paint_kit_ump45;
-        weapon_skin = c::skins::paint_kit_index_ump45;
-        wpn_skin_custom_clr = c::skins::ump45_wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            wpn_skin_modulation1[i] = c::skins::ump45_wpn_skin_modulation1[i];
-            wpn_skin_modulation2[i] = c::skins::ump45_wpn_skin_modulation2[i];
-            wpn_skin_modulation3[i] = c::skins::ump45_wpn_skin_modulation3[i];
-            wpn_skin_modulation4[i] = c::skins::ump45_wpn_skin_modulation4[i];
-        }
-        break;
-    }
-}
-
-void setskins() {
-    switch (c::skins::weapon_model) {
-    case 0:
-        c::skins::wear_usp = wear;
-        c::skins::vector_paint_kit_usp = vector_paint_kit;
-        c::skins::paint_kit_index_usp = weapon_skin;
-        c::skins::usp_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::usp_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::usp_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::usp_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::usp_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 1:
-        c::skins::wear_p2000 = wear;
-        c::skins::vector_paint_kit_p2000 = vector_paint_kit;
-        c::skins::paint_kit_index_p2000 = weapon_skin;
-        c::skins::p2000_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::p2000_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::p2000_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::p2000_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::p2000_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 2:
-        c::skins::wear_glock = wear;
-        c::skins::vector_paint_kit_glock = vector_paint_kit;
-        c::skins::paint_kit_index_glock = weapon_skin;
-        c::skins::glock_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::glock_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::glock_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::glock_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::glock_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 3:
-        c::skins::wear_p250 = wear;
-        c::skins::vector_paint_kit_p250 = vector_paint_kit;
-        c::skins::paint_kit_index_p250 = weapon_skin;
-        c::skins::p250_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::p250_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::p250_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::p250_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::p250_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 4:
-        c::skins::wear_fiveseven = wear;
-        c::skins::vector_paint_kit_fiveseven = vector_paint_kit;
-        c::skins::paint_kit_index_fiveseven = weapon_skin;
-        c::skins::fiveseven_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::fiveseven_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::fiveseven_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::fiveseven_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::fiveseven_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 5:
-        c::skins::wear_tec = wear;
-        c::skins::vector_paint_kit_tec = vector_paint_kit;
-        c::skins::paint_kit_index_tec = weapon_skin;
-        c::skins::tec_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::tec_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::tec_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::tec_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::tec_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 6:
-        c::skins::wear_cz = wear;
-        c::skins::vector_paint_kit_cz = vector_paint_kit;
-        c::skins::paint_kit_index_cz = weapon_skin;
-        c::skins::cz_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::cz_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::cz_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::cz_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::cz_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 7:
-        c::skins::wear_duals = wear;
-        c::skins::vector_paint_kit_duals = vector_paint_kit;
-        c::skins::paint_kit_index_duals = weapon_skin;
-        c::skins::duals_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::duals_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::duals_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::duals_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::duals_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 8:
-        c::skins::wear_deagle = wear;
-        c::skins::vector_paint_kit_deagle = vector_paint_kit;
-        c::skins::paint_kit_index_deagle = weapon_skin;
-        c::skins::deagle_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::deagle_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::deagle_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::deagle_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::deagle_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 9:
-        c::skins::wear_revolver = wear;
-        c::skins::vector_paint_kit_revolver = vector_paint_kit;
-        c::skins::paint_kit_index_revolver = weapon_skin;
-        c::skins::revolver_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::revolver_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::revolver_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::revolver_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::revolver_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 10:
-        c::skins::wear_famas = wear;
-        c::skins::vector_paint_kit_famas = vector_paint_kit;
-        c::skins::paint_kit_index_famas = weapon_skin;
-        c::skins::famas_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::famas_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::famas_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::famas_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::famas_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 11:
-        c::skins::wear_galil = wear;
-        c::skins::vector_paint_kit_galil = vector_paint_kit;
-        c::skins::paint_kit_index_galil = weapon_skin;
-        c::skins::galil_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::galil_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::galil_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::galil_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::galil_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 12:
-        c::skins::wear_m4a4 = wear;
-        c::skins::vector_paint_kit_m4a4 = vector_paint_kit;
-        c::skins::paint_kit_index_m4a4 = weapon_skin;
-        c::skins::m4a4_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::m4a4_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::m4a4_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::m4a4_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::m4a4_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 13:
-        c::skins::wear_m4a1 = wear;
-        c::skins::vector_paint_kit_m4a1 = vector_paint_kit;
-        c::skins::paint_kit_index_m4a1 = weapon_skin;
-        c::skins::m4a1_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::m4a1_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::m4a1_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::m4a1_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::m4a1_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 14:
-        c::skins::wear_ak47 = wear;
-        c::skins::vector_paint_kit_ak47 = vector_paint_kit;
-        c::skins::paint_kit_index_ak47 = weapon_skin;
-        c::skins::ak47_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::ak47_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::ak47_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::ak47_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::ak47_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 15:
-        c::skins::wear_sg553 = wear;
-        c::skins::vector_paint_kit_sg553 = vector_paint_kit;
-        c::skins::paint_kit_index_sg553 = weapon_skin;
-        c::skins::sg553_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::sg553_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::sg553_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::sg553_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::sg553_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 16:
-        c::skins::wear_aug = wear;
-        c::skins::vector_paint_kit_aug = vector_paint_kit;
-        c::skins::paint_kit_index_aug = weapon_skin;
-        c::skins::aug_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::aug_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::aug_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::aug_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::aug_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 17:
-        c::skins::wear_ssg08 = wear;
-        c::skins::vector_paint_kit_ssg08 = vector_paint_kit;
-        c::skins::paint_kit_index_ssg08 = weapon_skin;
-        c::skins::ssg08_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::ssg08_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::ssg08_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::ssg08_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::ssg08_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 18:
-        c::skins::wear_awp = wear;
-        c::skins::vector_paint_kit_awp = vector_paint_kit;
-        c::skins::paint_kit_index_awp = weapon_skin;
-        c::skins::awp_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::awp_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::awp_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::awp_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::awp_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 19:
-        c::skins::wear_scar = wear;
-        c::skins::vector_paint_kit_scar = vector_paint_kit;
-        c::skins::paint_kit_index_scar = weapon_skin;
-        c::skins::scar_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::scar_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::scar_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::scar_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::scar_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 20:
-        c::skins::wear_g3sg1 = wear;
-        c::skins::vector_paint_kit_g3sg1 = vector_paint_kit;
-        c::skins::paint_kit_index_g3sg1 = weapon_skin;
-        c::skins::g3sg1_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::g3sg1_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::g3sg1_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::g3sg1_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::g3sg1_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 21:
-        c::skins::wear_sawoff = wear;
-        c::skins::vector_paint_kit_sawoff = vector_paint_kit;
-        c::skins::paint_kit_index_sawoff = weapon_skin;
-        c::skins::sawoff_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::sawoff_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::sawoff_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::sawoff_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::sawoff_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 22:
-        c::skins::wear_m249 = wear;
-        c::skins::vector_paint_kit_m249 = vector_paint_kit;
-        c::skins::paint_kit_index_m249 = weapon_skin;
-        c::skins::m249_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::m249_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::m249_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::m249_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::m249_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 23:
-        c::skins::wear_negev = wear;
-        c::skins::vector_paint_kit_negev = vector_paint_kit;
-        c::skins::paint_kit_index_negev = weapon_skin;
-        c::skins::negev_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::negev_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::negev_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::negev_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::negev_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 24:
-        c::skins::wear_mag7 = wear;
-        c::skins::vector_paint_kit_mag7 = vector_paint_kit;
-        c::skins::paint_kit_index_mag7 = weapon_skin;
-        c::skins::mag7_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::mag7_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::mag7_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::mag7_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::mag7_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 25:
-        c::skins::wear_xm1014 = wear;
-        c::skins::vector_paint_kit_xm1014 = vector_paint_kit;
-        c::skins::paint_kit_index_xm1014 = weapon_skin;
-        c::skins::xm1014_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::xm1014_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::xm1014_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::xm1014_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::xm1014_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 26:
-        c::skins::wear_nova = wear;
-        c::skins::vector_paint_kit_nova = vector_paint_kit;
-        c::skins::paint_kit_index_nova = weapon_skin;
-        c::skins::nova_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::nova_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::nova_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::nova_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::nova_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 27:
-        c::skins::wear_bizon = wear;
-        c::skins::vector_paint_kit_bizon = vector_paint_kit;
-        c::skins::paint_kit_index_bizon = weapon_skin;
-        c::skins::bizon_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::bizon_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::bizon_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::bizon_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::bizon_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 28:
-        c::skins::wear_mp5sd = wear;
-        c::skins::vector_paint_kit_mp5sd = vector_paint_kit;
-        c::skins::paint_kit_index_mp5sd = weapon_skin;
-        c::skins::mp5sd_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::mp5sd_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::mp5sd_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::mp5sd_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::mp5sd_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 29:
-        c::skins::wear_mp7 = wear;
-        c::skins::vector_paint_kit_mp7 = vector_paint_kit;
-        c::skins::paint_kit_index_mp7 = weapon_skin;
-        c::skins::mp7_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::mp7_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::mp7_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::mp7_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::mp7_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 30:
-        c::skins::wear_mp9 = wear;
-        c::skins::vector_paint_kit_mp9 = vector_paint_kit;
-        c::skins::paint_kit_index_mp9 = weapon_skin;
-        c::skins::mp9_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::mp9_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::mp9_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::mp9_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::mp9_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 31:
-        c::skins::wear_mac10 = wear;
-        c::skins::vector_paint_kit_mac10 = vector_paint_kit;
-        c::skins::paint_kit_index_mac10 = weapon_skin;
-        c::skins::mac10_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::mac10_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::mac10_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::mac10_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::mac10_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 32:
-        c::skins::wear_p90 = wear;
-        c::skins::vector_paint_kit_p90 = vector_paint_kit;
-        c::skins::paint_kit_index_p90 = weapon_skin;
-        c::skins::p90_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::p90_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::p90_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::p90_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::p90_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    case 33:
-        c::skins::wear_ump45 = wear;
-        c::skins::vector_paint_kit_ump45 = vector_paint_kit;
-        c::skins::paint_kit_index_ump45 = weapon_skin;
-        c::skins::ump45_wpn_skin_custom_clr = wpn_skin_custom_clr;
-        for (int i = 0; i < 3; i++) {
-            c::skins::ump45_wpn_skin_modulation1[i] = wpn_skin_modulation1[i];
-            c::skins::ump45_wpn_skin_modulation2[i] = wpn_skin_modulation2[i];
-            c::skins::ump45_wpn_skin_modulation3[i] = wpn_skin_modulation3[i];
-            c::skins::ump45_wpn_skin_modulation4[i] = wpn_skin_modulation4[i];
-        }
-        break;
-    }
-}
-
 
 void legitbot() {
     ImGuiStyle& style = ImGui::GetStyle();
@@ -936,9 +92,6 @@ void legitbot() {
         }
     }
     ImGui::NextColumn(); {
-        //one variable for all multiboxes
-        const char* hitboxes[] = { "head", "neck", "chest", "pelvis" };
-
         ImGui::BeginChild(("legitbot.settings"), ImVec2{ }, true, ImGuiWindowFlags_MenuBar); {
             if (ImGui::BeginMenuBar()) {
                 ImGui::TextUnformatted("settings");
@@ -948,1043 +101,46 @@ void legitbot() {
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
             if (c::aimbot::aimbot) {
-
                 if (ImGui::Button(("copy aimbot settings from ..."), ImVec2(-1, 15))) {
                     ImGui::OpenPopup(("copy from popup"));
                 }
                 ImGui::Separator();
                 ImGui::Text(("weapon"));
                 ImGui::Combo("##wwpn", &menu::weapon_selection, "pistol\0heavy pistol\0shotgun\0heavy\0smg\0rifle\0sniper\0auto sniper");
-                switch (menu::weapon_selection) {
-                case 0:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_pistol, IM_ARRAYSIZE(c::aimbot::hitboxes_pistol));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov1"), &c::aimbot::pistol_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::pistol_aimbot_silent);
-                    if (!c::aimbot::pistol_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth1"), &c::aimbot::pistol_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::pistol_aimbot_rcs);
-                    if (c::aimbot::pistol_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::pistol_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::pistol_autowall);
-                    if (c::aimbot::pistol_autowall) {
+                
+                auto settings = &aimbot.settings[menu::weapon_selection];
 
-
-                        if (!c::aimbot::pistol_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin1"), &c::aimbot::pistol_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::pistol_autowall_lethal);
-                    }
-                    break;
-                case 1:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_heavy_pistol, IM_ARRAYSIZE(c::aimbot::hitboxes_heavy_pistol));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov2"), &c::aimbot::heavy_pistol_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::heavy_pistol_aimbot_silent);
-                    if (!c::aimbot::heavy_pistol_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth2"), &c::aimbot::heavy_pistol_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::heavy_pistol_aimbot_rcs);
-                    if (c::aimbot::heavy_pistol_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::heavy_pistol_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::heavy_pistol_autowall);
-                    if (c::aimbot::heavy_pistol_autowall) {
-
-
-                        if (!c::aimbot::heavy_pistol_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin2"), &c::aimbot::heavy_pistol_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_pistol_autowall_lethal);
-                    }
-                    break;
-                case 2:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_shotgun, IM_ARRAYSIZE(c::aimbot::hitboxes_shotgun));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov3"), &c::aimbot::shotgun_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::shotgun_aimbot_silent);
-                    if (!c::aimbot::shotgun_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth3"), &c::aimbot::shotgun_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::shotgun_aimbot_rcs);
-                    if (c::aimbot::shotgun_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::shotgun_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::shotgun_autowall);
-                    if (c::aimbot::shotgun_autowall) {
-
-
-                        if (!c::aimbot::shotgun_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin3"), &c::aimbot::shotgun_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::shotgun_autowall_lethal);
-                    }
-                    break;
-                case 3:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_heavy, IM_ARRAYSIZE(c::aimbot::hitboxes_heavy));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov4"), &c::aimbot::heavy_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::heavy_aimbot_silent);
-                    if (!c::aimbot::heavy_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth4"), &c::aimbot::heavy_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::heavy_aimbot_rcs);
-                    if (c::aimbot::heavy_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::heavy_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::heavy_autowall);
-                    if (c::aimbot::heavy_autowall) {
-
-
-                        if (!c::aimbot::heavy_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin4"), &c::aimbot::heavy_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::heavy_autowall_lethal);
-                    }
-                    break;
-                case 4:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_smg, IM_ARRAYSIZE(c::aimbot::hitboxes_smg));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov5"), &c::aimbot::smg_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::smg_aimbot_silent);
-                    if (!c::aimbot::smg_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth5"), &c::aimbot::smg_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::smg_aimbot_rcs);
-                    if (c::aimbot::smg_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::smg_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::smg_autowall);
-                    if (c::aimbot::smg_autowall) {
-
-
-                        if (!c::aimbot::smg_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin5"), &c::aimbot::smg_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::smg_autowall_lethal);
-                    }
-                    break;
-                case 5:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_rifle, IM_ARRAYSIZE(c::aimbot::hitboxes_rifle));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov6"), &c::aimbot::rifle_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::rifle_aimbot_silent);
-                    if (!c::aimbot::rifle_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth6"), &c::aimbot::rifle_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::rifle_aimbot_rcs);
-                    if (c::aimbot::rifle_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::rifle_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::rifle_autowall);
-                    if (c::aimbot::rifle_autowall) {
-                    
-
-                        if (!c::aimbot::rifle_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin6"), &c::aimbot::rifle_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::rifle_autowall_lethal);
-                    }
-                    break;
-                case 6:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_sniper, IM_ARRAYSIZE(c::aimbot::hitboxes_sniper));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov7"), &c::aimbot::sniper_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::sniper_aimbot_silent);
-                    if (!c::aimbot::sniper_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth7"), &c::aimbot::sniper_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::sniper_aimbot_rcs);
-                    if (c::aimbot::sniper_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::sniper_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::sniper_autowall);
-                    if (c::aimbot::sniper_autowall) {
-
-                        if (!c::aimbot::sniper_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin7"), &c::aimbot::sniper_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::sniper_autowall_lethal);
-                    }
-                    break;
-                case 7:
-                    ImGui::Text(("hitboxes"));
-                    ImGui::MultiCombo("##hitbox", hitboxes, c::aimbot::hitboxes_autosniper, IM_ARRAYSIZE(c::aimbot::hitboxes_autosniper));
-                    ImGui::Text(("field of view"));
-                    ImGui::SliderInt(("##aimfov8"), &c::aimbot::autosniper_aimbot_fov, 0, 180);
-                    ImGui::Checkbox("silent aim", &c::aimbot::autosniper_aimbot_silent);
-                    if (!c::aimbot::autosniper_aimbot_silent) {
-                        ImGui::Text(("smoothing"));
-                        ImGui::SliderInt(("##aimsmooth8"), &c::aimbot::autosniper_aimbot_smooth, 0, 100);
-                    }
-                    ImGui::Checkbox("enable rcs", &c::aimbot::autosniper_aimbot_rcs);
-                    if (c::aimbot::autosniper_aimbot_rcs) {
-                        ImGui::SliderInt(("##aimrcs1"), &c::aimbot::autosniper_aimbot_rcs_p, 0, 100);
-                    }
-                    ImGui::Checkbox("enable autowall", &c::aimbot::autosniper_autowall);
-                    if (c::aimbot::autosniper_autowall) {
-
-                        if (!c::aimbot::autosniper_autowall_lethal) {
-                            ImGui::Text(("autowall min damage"));
-                            ImGui::SliderInt(("##awmin8"), &c::aimbot::autosniper_autowall_dmg, 1, 100);
-                        }
-
-                        ImGui::Checkbox("autowall if lethal", &c::aimbot::autosniper_autowall_lethal);
-                    }
-                    break;
+                ImGui::Text(("hitboxes"));
+                ImGui::MultiCombo("##hitbox", hitboxes, settings->hitboxes, IM_ARRAYSIZE(settings->hitboxes));
+                ImGui::Text(("field of view"));
+                ImGui::SliderInt(("##aimfov"), &settings->fov, 0, 180);
+                ImGui::Checkbox("silent aim", &settings->silent);
+                if (!settings->silent) {
+                    ImGui::Text(("smoothing"));
+                    ImGui::SliderInt(("##aimsmooth"), &settings->smooth, 0, 100);
                 }
-                if (ImGui::BeginPopup(("copy from popup"))) {
-                    ImGui::Text(("copy aimbot settings from : "));
-                    switch (menu::weapon_selection) {
-                    case 0:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy); i++)
-                            if (ImGui::Selectable(choices_copy[i]))
-                                if (i == 0) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::pistol_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::pistol_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::pistol_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::pistol_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::pistol_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::pistol_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::pistol_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::pistol_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_pistol[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_pistol[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_pistol[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_pistol[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 1:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy1); i++)
-                            if (ImGui::Selectable(choices_copy1[i]))
-                                if (i == 0) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::heavy_pistol_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::heavy_pistol_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::heavy_pistol_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::heavy_pistol_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::heavy_pistol_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::heavy_pistol_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::heavy_pistol_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::heavy_pistol_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy_pistol[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_heavy_pistol[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_heavy_pistol[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_heavy_pistol[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 2:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy2); i++)
-                            if (ImGui::Selectable(choices_copy2[i]))
-                                if (i == 0) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::shotgun_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::shotgun_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::shotgun_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::shotgun_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::shotgun_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::shotgun_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::shotgun_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::shotgun_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_shotgun[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_shotgun[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_shotgun[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_shotgun[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 3:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy3); i++)
-                            if (ImGui::Selectable(choices_copy3[i]))
-                                if (i == 0) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::heavy_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::heavy_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::heavy_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::heavy_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::heavy_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::heavy_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::heavy_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::heavy_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_heavy[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_heavy[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_heavy[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_heavy[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 4:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy4); i++)
-                            if (ImGui::Selectable(choices_copy4[i]))
-                                if (i == 0) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::smg_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::smg_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::smg_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::smg_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::smg_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::smg_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::smg_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::smg_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_smg[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_smg[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_smg[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_smg[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 5:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy7); i++)
-                            if (ImGui::Selectable(choices_copy7[i]))
-                                if (i == 0) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::rifle_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::rifle_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::rifle_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::rifle_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::rifle_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::rifle_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::rifle_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::rifle_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_rifle[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_rifle[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_rifle[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_rifle[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 6:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy6); i++)
-                            if (ImGui::Selectable(choices_copy6[i]))
-                                if (i == 0) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::sniper_aimbot_fov = c::aimbot::autosniper_aimbot_fov;
-                                    c::aimbot::sniper_aimbot_silent = c::aimbot::autosniper_aimbot_silent;
-                                    c::aimbot::sniper_aimbot_smooth = c::aimbot::autosniper_aimbot_smooth;
-                                    c::aimbot::sniper_aimbot_rcs = c::aimbot::autosniper_aimbot_rcs;
-                                    c::aimbot::sniper_aimbot_rcs_p = c::aimbot::autosniper_aimbot_rcs_p;
-                                    c::aimbot::sniper_autowall = c::aimbot::autosniper_autowall;
-                                    c::aimbot::sniper_autowall_dmg = c::aimbot::autosniper_autowall_dmg;
-                                    c::aimbot::sniper_autowall_lethal = c::aimbot::autosniper_autowall_lethal;
-                                    c::aimbot::hitboxes_sniper[0] = c::aimbot::hitboxes_autosniper[0];
-                                    c::aimbot::hitboxes_sniper[1] = c::aimbot::hitboxes_autosniper[1];
-                                    c::aimbot::hitboxes_sniper[2] = c::aimbot::hitboxes_autosniper[2];
-                                    c::aimbot::hitboxes_sniper[3] = c::aimbot::hitboxes_autosniper[3];
-                                }
-                        break;
-                    case 7:
-                        for (auto i = 0; i < IM_ARRAYSIZE(choices_copy5); i++)
-                            if (ImGui::Selectable(choices_copy5[i]))
-                                if (i == 0) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::pistol_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::pistol_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::pistol_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::pistol_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::pistol_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::pistol_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::pistol_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_pistol[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_pistol[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_pistol[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_pistol[3];
-                                }
-                                else if (i == 1) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::heavy_pistol_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::heavy_pistol_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::heavy_pistol_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::heavy_pistol_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::heavy_pistol_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::heavy_pistol_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::heavy_pistol_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::heavy_pistol_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_heavy_pistol[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_heavy_pistol[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_heavy_pistol[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_heavy_pistol[3];
-                                }
-                                else if (i == 2) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::shotgun_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::shotgun_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::shotgun_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::shotgun_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::shotgun_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::shotgun_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::shotgun_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::shotgun_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_shotgun[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_shotgun[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_shotgun[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_shotgun[3];
-                                }
-                                else if (i == 3) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::heavy_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::heavy_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::heavy_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::heavy_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::heavy_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::heavy_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::heavy_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::heavy_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_heavy[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_heavy[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_heavy[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_heavy[3];
-                                }
-                                else if (i == 4) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::smg_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::smg_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::smg_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::smg_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::smg_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::smg_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::smg_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::smg_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_smg[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_smg[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_smg[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_smg[3];
-                                }
-                                else if (i == 5) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::rifle_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::rifle_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::rifle_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::rifle_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::rifle_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::rifle_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::rifle_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::rifle_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_rifle[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_rifle[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_rifle[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_rifle[3];
-                                }
-                                else if (i == 6) {
-                                    c::aimbot::autosniper_aimbot_fov = c::aimbot::sniper_aimbot_fov;
-                                    c::aimbot::autosniper_aimbot_silent = c::aimbot::sniper_aimbot_silent;
-                                    c::aimbot::autosniper_aimbot_smooth = c::aimbot::sniper_aimbot_smooth;
-                                    c::aimbot::autosniper_aimbot_rcs = c::aimbot::sniper_aimbot_rcs;
-                                    c::aimbot::autosniper_aimbot_rcs_p = c::aimbot::sniper_aimbot_rcs_p;
-                                    c::aimbot::autosniper_autowall = c::aimbot::sniper_autowall;
-                                    c::aimbot::autosniper_autowall_dmg = c::aimbot::sniper_autowall_dmg;
-                                    c::aimbot::autosniper_autowall_lethal = c::aimbot::sniper_autowall_lethal;
-                                    c::aimbot::hitboxes_autosniper[0] = c::aimbot::hitboxes_sniper[0];
-                                    c::aimbot::hitboxes_autosniper[1] = c::aimbot::hitboxes_sniper[1];
-                                    c::aimbot::hitboxes_autosniper[2] = c::aimbot::hitboxes_sniper[2];
-                                    c::aimbot::hitboxes_autosniper[3] = c::aimbot::hitboxes_sniper[3];
-                                }
-                        break;
+                ImGui::Checkbox("enable rcs", &settings->rcs);
+                if (settings->rcs) {
+                    ImGui::SliderInt(("##aimrcs"), &settings->rcs_p, 0, 100);
+                }
+                ImGui::Checkbox("enable autowall", &settings->autowall_b);
+                if (settings->autowall_b) {
+                    if (!settings->autowall_lethal) {
+                        ImGui::Text(("autowall min damage"));
+                        ImGui::SliderInt(("##awmin"), &settings->autowall_dmg, 1, 100);
                     }
+                    ImGui::Checkbox("autowall if lethal", &settings->autowall_lethal);
+                }
+            }
 
-                    ImGui::EndPopup();
+            if (ImGui::BeginPopup(("copy from popup"))) {
+                ImGui::Text(("copy aimbot settings from : "));
+                for (auto i = 0; i < IM_ARRAYSIZE(choices_copy); i++) {
+                    if (menu::weapon_selection != i) {
+                        if (ImGui::Selectable(choices_copy[i])) {
+                            aimbot.settings[menu::weapon_selection] = aimbot.settings[i];
+                        }
+                    }
                 }
             }
 
@@ -2328,6 +484,7 @@ void visuals() {
             }
             ImGui::Text(("disable"));
             ImGui::MultiCombo(("##fps"), removals, c::visuals::removals, 5);
+
             ImGui::PopFont();
             ImGui::Spacing();
 
@@ -2369,15 +526,20 @@ void miscellaneous() {
             ImGui::Checkbox(("edgejump"), &c::movement::edge_jump);
             if (c::movement::edge_jump) {
                 ImGui::Keybind(("edgejump key"), &c::movement::edge_jump_key, &c::movement::edge_jump_key_s);
-                ImGui::Checkbox(("edgejump on ladder"), &c::movement::edge_jump_on_ladder);
-                ImGui::Checkbox(("longjump bind"), &c::movement::long_jump_on_edge);
+            }
+            ImGui::Checkbox(("longjump bind"), &c::movement::long_jump); //https://hackvshack.net/threads/delusional-v2-new-version-update-22-11-2025.9923/post-66987 //too hard to enable edgejump ig vro
+            if (c::movement::long_jump) {
                 ImGui::Keybind(("#lj key"), &c::movement::long_jump_key, &c::movement::long_jump_key_s);
+                ImGui::Checkbox(("force edgejump##1"), &c::movement::long_jump_ej);
             }
             ImGui::Checkbox(("minijump"), &c::movement::mini_jump);
             if (c::movement::mini_jump) {
                 ImGui::Keybind(("##minijump key"), &c::movement::mini_jump_key, &c::movement::mini_jump_key_s);
-                ImGui::Checkbox(("force edgejump"), &c::movement::mini_jump_ej);
-                //ImGui::Checkbox(("remain ducked after jump"), &c::movement::mini_jump_remain_crouched);
+                ImGui::Checkbox(("force edgejump##2"), &c::movement::mini_jump_ej);
+            }
+            ImGui::Checkbox(("edgejump on ladder"), &c::movement::edge_jump_on_ladder);
+            if (c::movement::edge_jump_on_ladder) {
+                ImGui::Keybind(("laj key"), &c::movement::ladder_jump_key, &c::movement::ladder_jump_key_s);
             }
             ImGui::Checkbox(("adaptive key cancelling"), &c::movement::adaptive_key_cancelling);
             if (c::movement::adaptive_key_cancelling) {
@@ -2393,84 +555,32 @@ void miscellaneous() {
             if (c::movement::edge_bug) {
                 ImGui::Keybind(("edgebug key"), &c::movement::edge_bug_key, &c::movement::edge_bug_key_s);
                 ImGui::Text("edgebug type");
-                ImGui::Combo(("##edgebug type combo"), &c::movement::edgebug_type, EdgebugTypes, IM_ARRAYSIZE(EdgebugTypes));
-                switch (c::movement::edgebug_type) {
-                    case 0:
-                        ImGui::Checkbox(("advanced detection"), &c::movement::edge_bug_strafe);
-                        if (c::movement::edge_bug_strafe) {
-                            ImGui::Text(("angle limit"));
-                            ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
-                            if (c::movement::edge_bug_angle_limit > 0) {
-                                ImGui::Text(("search amount"));
-                                ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 15);
-                                ImGui::Checkbox(("silent edgebug"), &c::movement::silent_eb_hacked);
-                            }
-                        }
-                        ImGui::Text(("edge bug ticks"));
-                        ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 128);
-                        ImGui::Text(("mouse lock factor"));
-                        ImGui::SliderFloat(("##mouse lock percentage"), &c::movement::edge_bug_lock_amount, 0.f, 100.f, ("%.2f%%"));
-                        break;
-                    case 1:
-                        ImGui::Checkbox("advanced search", &c::movement::EdgeBugAdvanceSearch);
-                        ImGui::Checkbox("silent", &c::movement::SiletEdgeBug);
-                        if (c::movement::EdgeBugAdvanceSearch) {
-                            ImGui::Text("edge bug circle");
-                            ImGui::SliderInt(("##ebcircle"), &c::movement::EdgeBugCircle, 2, 20);
-                            ImGui::Checkbox("extra advanced", &c::movement::MegaEdgeBug);
-                            ImGui::Checkbox("autostrafe to edge", &c::movement::AutoStrafeEdgeBug);
-                            if (!c::movement::AutoStrafeEdgeBug)
-                            {
-                                ImGui::Text("strafe angle");
-                                ImGui::SliderFloat(("##dStrafeClamp"), &c::movement::deltascaler, 1.f, 179.f);
-                                ImGui::Combo("delta scale", &c::movement::DeltaType, "full\0two-fifths\0half\0quarter\0");
-                            }
-                        }
-                        ImGui::Text("edge bug ticks");
-                        ImGui::SliderInt(("##Ticks"), &c::movement::EdgeBugTicks, 1, 128);
-                        ImGui::Text("mouse lock factor");
-                        ImGui::SliderFloat(("##MouseLock"), &c::movement::EdgeBugMouseLock, 0.0f, 100.0f, "%.2f%%");
+                ImGui::Checkbox(("advanced detection"), &c::movement::edge_bug_strafe);
+                if (c::movement::edge_bug_strafe) {
+                    ImGui::Text(("angle limit"));
+                    ImGui::SliderFloat(("##angle limit"), &c::movement::edge_bug_angle_limit, 0.f, 180.f, ("%.2f"));
+                    if (c::movement::edge_bug_angle_limit > 0) {
+                        ImGui::Text(("search amount"));
+                        ImGui::SliderInt(("##eb search amount"), &c::movement::edge_bug_rape, 1, 15);
+                        ImGui::Checkbox(("silent edgebug"), &c::movement::edge_bug_silent);
+                    }
                 }
+                ImGui::Text(("edge bug ticks"));
+                ImGui::SliderInt(("##ticks to predict"), &c::movement::edge_bug_ticks, 0, 128);
+                ImGui::Text(("mouse lock factor"));
+                ImGui::SliderFloat(("##mouse lock percentage"), &c::movement::edge_bug_lock_amount, 0.f, 100.f, ("%.2f%%"));
             }
-            ImGui::Checkbox(("auto ladderbug"), &c::movement::ladder_bug);
+            ImGui::Checkbox(("auto ladderglide"), &c::movement::ladder_bug);
             if (c::movement::ladder_bug) {
                 ImGui::Keybind(("ladderglide key"), &c::movement::ladder_bug_key, &c::movement::ladder_bug_key_s);
             }
 
             ImGui::Checkbox(("auto align"), &c::movement::auto_align);
-            if (c::movement::auto_align) {
-                ImGui::Text("auto align type");
-                ImGui::Combo("##align", &c::movement::align_selection, "delusional (og)\0lobotomy\0");
-                switch (c::movement::align_selection) {
-                case 0:
-                    ImGui::Checkbox(("freelook surf"), &c::movement::freelook_surf);
-                    break;
-                case 1:
-                    //we alr have freelook in auto-align
-                    break;
-                }
-            }
             ImGui::Checkbox(("auto pixelsurf"), &c::movement::pixel_surf);
             if (c::movement::pixel_surf) {
-                ImGui::Text("pixel surf type");
-                ImGui::Combo("##pstype", &c::movement::px_selection, "delusional (og)\0lobotomy\0");
-                switch (c::movement::px_selection) {
-                case 0:
-                    ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
-                    //ImGui::Checkbox(("crouch fix for 128 tick (wip)"), &c::movement::crouch_fix);
-                    ImGui::Checkbox(("adjust viewangles"), &c::movement::adjust_view);
-                    //if (c::movement::adjust_view) {
-                    //    ImGui::Checkbox(("always adjust viewangles"), &c::movement::adjust_view_always);
-                    //}
-                    ImGui::Text(("ps ticks"));
-                    ImGui::SliderInt(("##ps ticks"), &c::movement::pixel_surf_ticks, 1, 64);
-                    break;
-                case 1:
-                    ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
-                    ImGui::Text(("ps ticks"));
-                    ImGui::SliderInt(("##ps ticks2"), &c::movement::lb_pixel_surf_ticks, 1, 64);
-                    break;
-                }
+                ImGui::Keybind(("pixelsurf key"), &c::movement::pixel_surf_key, &c::movement::pixel_surf_key_s);
+                ImGui::Text(("ps ticks"));
+                ImGui::SliderInt(("##ps ticks2"), &c::movement::pixel_surf_ticks, 1, 64);
             }
 
             ImGui::Checkbox(("fast ladder"), &c::movement::fast_ladder);
@@ -2489,7 +599,10 @@ void miscellaneous() {
             }
             ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
             if (c::movement::air_stuck) {
+                ImGui::Checkbox(("set view angles"), &c::movement::set_view_angles);
                 ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
+                ImGui::Text(("search radius"));
+                ImGui::SliderFloat(("##searcradius"), &c::movement::wall_reach, 0.01f, 1.f, "%.2f");
             }
             ImGui::Checkbox(("delay hop"), &c::movement::delay_hop);
             if (c::movement::delay_hop) {
@@ -2538,10 +651,6 @@ void miscellaneous() {
             ImGui::Checkbox(("enable surf and bounce assist"), &c::assist::assist);
             if (c::assist::assist)
             {
-                if (c::assist::assist_render || c::assist::bounce_assist_render) {
-                    ImGui::Text(("assist render style"));
-                    ImGui::Combo(("##asrendertype"), &c::assist::assist_render_style, "delusional\0lobotomy\0");
-                }
                 ImGui::Text(("check line"));
                 ImGui::Keybind(("check line key"), &c::assist::pixelsurf_line_key, &c::assist::pixelsurf_line_key_s);
                 ImGui::Checkbox(("pixelsurf assist"), &c::assist::pixelsurf_assist);
@@ -2553,7 +662,7 @@ void miscellaneous() {
                     ImGui::Checkbox(("pixel surf assist stamina hops"), &c::assist::assist_broke_hop);
                     if (c::assist::assist_broke_hop) {
                         ImGui::Text(("maximum allowed stamina amount"));
-                        ImGui::SliderFloat(("##staminamax"), &c::assist::assist_stamina_value, 0.f, 100.f, ("%.1f%"));
+                        ImGui::SliderFloat(("##staminamax"), &c::assist::assist_stamina_value, 0.f, 80.f, ("%.1f%"));
                     }
                     ImGui::Checkbox(("pixel surf assist render"), &c::assist::assist_render);
 
@@ -2579,39 +688,10 @@ void miscellaneous() {
 
             ImGui::PopStyleVar();
 
-            }},
-            ctab{ "experimental", []()
-            {
-
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
-
-            if (c::movement::bhop) {
-                ImGui::Checkbox(("enable if bhop isnt working properly (128t only)"), &c::movement::bhopfix);
-            }
-            if (c::movement::align_selection == 1 && c::movement::auto_align) {
-                ImGui::Checkbox(("enable experimental auto align"), &c::movement::align_experimental);
-                if (c::movement::align_experimental) {
-                    ImGui::Text(("auto align predict ticks"));
-                    ImGui::SliderInt(("##alticks"), &c::movement::al_exp_pred_ticks, 1, 4);
-                }
-            }
-            if (c::movement::edgebug_type == 0) {
-                ImGui::Checkbox(("edgebug extra advanced detection"), &c::movement::edgebug_pena);
-            }
-            ImGui::Checkbox(("avoid head collision"), &c::movement::auto_duck_collision);
-            if (c::movement::auto_duck_collision) {
-                ImGui::Keybind(("avoid head collision key"), &c::movement::auto_duck_collision_key, &c::movement::auto_duck_collision_key_s);
-                ImGui::Text(("avoid head collision ticks"));
-                ImGui::SliderInt(("##avoidheadcollisionticks"), &c::movement::auto_duck_collision_ticks, 2, 12);
-            }
-            ImGui::Checkbox(("allow cheat unload (f1 + f2)"), &c::misc::unload_shit);
-
-            ImGui::PopStyleVar();
-
             }}
             };
 
-            menu::render_tab("movement_tab", movement_tabs, 3U, &menu::movement_tab, style.Colors[ImGuiCol_TabHovered]);
+            menu::render_tab("movement_tab", movement_tabs, 2U, &menu::movement_tab, style.Colors[ImGuiCol_TabHovered]);
 
             ImGui::EndChild();
         }
@@ -2834,7 +914,6 @@ void miscellaneous() {
                     }
                     else {
                         c::load(config_index);
-                        getskins();
                         //std::stringstream ss;
                         //ss << "\x08" << " \x08" << "%c" << "delusional" << "\x08" << "\x08 | loaded config " << c::configs.at(config_index);
 
@@ -2896,7 +975,6 @@ void miscellaneous() {
                             }
                             else if (i == 4) {
                                 c::load_skins(config_index);
-                                getskins();
                                 if (interfaces::engine->is_in_game()) {
                                     interfaces::chat_element->chatprintf("#delusional#_print_loaded_skins");
                                     features::skins::forcing_update = true;
@@ -2924,14 +1002,9 @@ void miscellaneous() {
             }
 
             ImGui::Columns(1);
-
-
-
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
             ImGui::Separator();
-
-            static const char* chat_priont_acc[] = { "default","red","light purple","green","lime","light green","light red","gray","light steel blue","light blue","blue","purple","pink","light steel red","gold","white" };
 
             if (ImGui::Button(("build info // credits"), ImVec2(-1, 15))) {
                 ImGui::OpenPopup(("info popup"));
@@ -2947,8 +1020,6 @@ void miscellaneous() {
             ImGui::Text(("menu accent"));
             ImGui::SameLine( );
             ImGui::ColorEdit4(("##main_theme"), menu::menu_accent, no_alpha);
-            //ImGui::SameLine();
-            //ImGui::ColorEdit4(("##s_theme"), menu::menu_accent2, no_alpha);
             ImGui::Text("menu key");
             ImGui::Keybind(("##menu key"), &c::misc::menu_key);
             ImGui::PopStyleVar();
@@ -3061,13 +1132,16 @@ void miscellaneous() {
                 if (c::misc::spectatorlist_type == 0) {
                     ImGui::Checkbox(("spectating local player only"), &c::misc::spectator_local);
                 }
+                else {
+                    ImGui::SliderInt("spectator list width", &c::misc::spectatorlist_w, 195, 500);
+                }
             }
 
             ImGui::Separator();
 
-            ImGui::Checkbox(("anti untrusted"), &c::misc::anti_untrusted);
-            // s/o flowars
+            ImGui::Checkbox(("anti untrusted"), &c::misc::anti_untrusted); // s/o flowars
             ImGui::Checkbox(("insecure bypass"), &c::misc::insecure_bypass);
+            ImGui::Checkbox(("allow cheat unload (f1 + f2)"), &c::misc::unload_shit);
             ImGui::Checkbox(("mouse fix"), &c::misc::mouse_fix);
             ImGui::Checkbox(("disable movement fix"), &c::movement::movement_fix);
             ImGui::Checkbox(("pixelsurf fix"), &c::movement::pixel_surf_fix);
@@ -3548,16 +1622,15 @@ void skins() {
             switch (menu::skin_selection) {
             case 0:
                 ImGui::Checkbox(("enabled##knife"), &c::skins::knife_changer_enable);
-                ImGui::Combo(("##knifemodel"), &c::skins::knife_changer_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow-daggers\0navaja\0stiletto\0talon\0ursus\0default ct\0default t\0gold knife\0css\0outdoor\0canis\0paracord\0skeleton\0");
+                ImGui::Combo(("##knifemodel"), &c::skins::knife_changer_model, skinchanger_knives, IM_ARRAYSIZE(skinchanger_knives));
                 break;
-
             case 1:
                 ImGui::Checkbox(("enabled##gloves"), &c::skins::gloves_endable);
-                ImGui::Combo("##glovesmodel", &c::skins::gloves_model, "default\0blood\0sport\0slick\0leather\0moto\0speci\0hydra");
+                ImGui::Combo("##glovesmodel", &c::skins::gloves_model, skinchanger_gloves, IM_ARRAYSIZE(skinchanger_gloves));
                 break;
             case 2:
                 ImGui::Checkbox(("enabled##weapon"), &c::skins::weapon_endable);
-                ImGui::Combo("##weaponmodel", &c::skins::weapon_model, "usp-s\0p2000\0glock\0p250\0five-seven\0tec-10\0cz-75\0duals\0deagle\0revolver\0famas\0galil\0m4a4\0m4a1-s\0ak-47\0sg-553\0aug\0ssg-08\0awp\0scar\0g3sg1\0sawed-off\0m-249\0negev\0mag-7\0xm-1014\0nova\0pp-bizon\0mp5-sd\0mp-7\0mp-9\0mac-10\0p-90\0ump-45\0");
+                ImGui::Combo("##weaponmodel", &c::skins::weapon_model, skinchanger_weapons, IM_ARRAYSIZE(skinchanger_weapons));
                 break;
             }
 
@@ -3592,7 +1665,6 @@ void skins() {
                 ImGui::TextUnformatted(("skins"));
                 ImGui::EndMenuBar();
             }
-
 
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
@@ -3707,16 +1779,14 @@ void skins() {
 
                 break;
             case 2:
-                if (!(weapon_model == c::skins::weapons_model)) {
-                    getskins();
-                    weapon_model = c::skins::weapons_model;
-                }
+                auto settings = &features::skins::weapon_skin[c::skins::weapon_model];
+
                 ImGui::Text(("weapon skin"));
                 ImGui::ListBoxHeader("##weaponskin", ImVec2(-1, 200)); {
                     std::string name = ("elpepe");
 
                     for (int i = 0; i < features::skins::parser_skins.size(); i++) {
-                        bool is_selected = (vector_paint_kit == i);
+                        bool is_selected = (settings->vector_paint_kit == i);
 
                         std::string name = features::skins::parser_skins[i].name;
 
@@ -3726,8 +1796,8 @@ void skins() {
                                 ImGui::PushID(std::hash<std::string>{}(features::skins::parser_skins[i].name)* i);
 
                             if (ImGui::Selectable(features::skins::parser_skins[i].name.c_str(), &is_selected)) {
-                                vector_paint_kit = i;
-                                weapon_skin = features::skins::parser_skins[vector_paint_kit].id;
+                                settings->vector_paint_kit = i;
+                                settings->paint_kit_index = features::skins::parser_skins[settings->vector_paint_kit].id;
                             }
 
                             if (name == features::skins::parser_skins[i].name)
@@ -3746,21 +1816,19 @@ void skins() {
                 filter.Draw("##filter_skin");
 
                 ImGui::Text(("wear"));
-                ImGui::Combo(("##weaponcondition"), &wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
+                ImGui::Combo(("##weaponcondition"), &settings->wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
 
-                ImGui::Checkbox(("custom color"), &wpn_skin_custom_clr);
-                if (wpn_skin_custom_clr) {
+                ImGui::Checkbox(("custom color"), &settings->wpn_skin_custom_clr);
+                if (settings->wpn_skin_custom_clr) {
                     ImGui::SameLine(group_w - 20);
-                    ImGui::ColorEdit4(("##modulate1"), wpn_skin_modulation1, no_alpha);
+                    ImGui::ColorEdit4(("##modulate1"), settings->wpn_skin_modulation1, no_alpha);
                     ImGui::SameLine(group_w - 40);
-                    ImGui::ColorEdit4(("##modulate2"), wpn_skin_modulation2, no_alpha);
+                    ImGui::ColorEdit4(("##modulate2"), settings->wpn_skin_modulation2, no_alpha);
                     ImGui::SameLine(group_w - 60);
-                    ImGui::ColorEdit4(("##modulate3"), wpn_skin_modulation3, no_alpha);
+                    ImGui::ColorEdit4(("##modulate3"), settings->wpn_skin_modulation3, no_alpha);
                     ImGui::SameLine(group_w - 80);
-                    ImGui::ColorEdit4(("##modulate4"), wpn_skin_modulation4, no_alpha);
+                    ImGui::ColorEdit4(("##modulate4"), settings->wpn_skin_modulation4, no_alpha);
                 }
-
-                setskins();
             }
 
             if (ImGui::Button(("update"))) {

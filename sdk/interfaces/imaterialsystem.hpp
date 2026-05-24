@@ -29,7 +29,6 @@
 #define TEXTURE_GROUP_RENDER_TARGET_SURFACE			  "RenderTarget Surfaces"
 #define TEXTURE_GROUP_MORPH_TARGETS					      "Morph Targets"
 
-
 class matrix3x4_t;
 class i_material_render_context;
 
