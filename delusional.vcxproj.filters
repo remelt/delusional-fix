@@ -791,9 +791,6 @@
     <ClInclude Include="sdk\interfaces\iv_render_beams.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="menu\fonts\icon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="includes\imgui\imgui_stdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1230,6 +1227,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\aimbot\autowall.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\fonts\icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\fonts\icon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

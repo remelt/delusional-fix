@@ -1,7 +1,5 @@
 #include "menu.hpp"
 #include "config/config.hpp"
-#include "fonts/menu_font.hpp"
-#include "fonts/icon.h"
 #include "../hooks/hooks.hpp"
 #include "../features/misc/misc.hpp"
 #include "../features/movement/movement.hpp"
