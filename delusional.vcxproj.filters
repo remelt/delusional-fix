@@ -186,9 +186,6 @@
     <ClCompile Include="hooks\functions\sv_pure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\functions\draw_set_color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="features\visuals\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -205,9 +202,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="features\visuals\weather.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\functions\should_draw_viewmodel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hooks\functions\base_player.cpp">
@@ -240,9 +234,6 @@
     <ClCompile Include="hooks\functions\set_visuals_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\functions\is_connected.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="hooks\functions\push_notice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -271,6 +262,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hooks\functions\fire_bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="features\skins\knife_proxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1233,6 +1227,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="menu\fonts\icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="features\skins\knife_proxy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="features\skins\models.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

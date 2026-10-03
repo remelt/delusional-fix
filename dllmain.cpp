@@ -69,7 +69,6 @@ DWORD WINAPI on_attach(void* instance) {
         WaitForSingleObject(player_thread, INFINITE);
         CloseHandle(player_thread);
 
-        events.unload();
         features::skins::animation_unhook();
         sdk::hooks::unload();
         im_render.unload(); // that was the problem with cheat unload // i was too dumb to understand it

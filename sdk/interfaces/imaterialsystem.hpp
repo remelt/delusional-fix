@@ -30,7 +30,43 @@
 #define TEXTURE_GROUP_MORPH_TARGETS					      "Morph Targets"
 
 class matrix3x4_t;
-class i_material_render_context;
+class i_material_render_context
+{
+public:
+	void get_render_target_dimensions(int* width, int* height)
+	{
+		using fn = void(__thiscall*)(i_material_render_context*, int*, int*);
+		return (*(fn**)this)[8](this, width, height);
+	}
+
+	void draw_screen_space_rectangle(i_material* material, int dest_x, int dest_y, int width, int height, float texture_x0, float texture_y0,
+		float texture_x1, float texture_y1, int texture_width, int texture_height, void* client_renderable = nullptr,
+		int x_dice = 1, int y_dice = 1)
+	{
+		using fn = void(__thiscall*)(i_material_render_context*, i_material*, int, int, int, int, float, float, float, float, int, int, void*, int, int);
+		return (*(fn**)this)[114](this, material, dest_x, dest_y, width, height, texture_x0, texture_y0,
+			texture_x1, texture_y1, texture_width, texture_height, client_renderable,
+			x_dice, y_dice);
+	}
+
+	void get_view_port(int* x, int* y, int* width, int* height)
+	{
+		using fn = void(__thiscall*)(i_material_render_context*, int*, int*, int*, int*);
+		return (*(fn**)this)[41](this, x, y, width, height);
+	}
+
+	void copy_render_target_to_texture_ex(i_texture* texture, int unk, rect_t* dst, rect_t* src)
+	{
+		using fn = void(__thiscall*)(i_material_render_context*, i_texture*, int, rect_t*, rect_t*);
+		return (*(fn**)this)[122](this, texture, unk, dst, src);
+	}
+
+	void set_frame_buffer_copy_texture(i_texture* texture, int texture_index)
+	{
+		using fn = void(__thiscall*)(i_material_render_context*, i_texture*, int);
+		return (*(fn**)this)[20](this, texture, texture_index);
+	}
+};
 
 enum {
 	MATERIAL_ADAPTER_NAME_LENGTH = 1 << 9
@@ -54,6 +90,11 @@ public:
 	i_material* find_material(char const* material_name, const char* group_name, bool complain = true, const char* complain_prefix = 0) {
 		using fn = i_material * (__thiscall*)(i_material_system*, char const*, const char*, bool, const char*);
 		return (*(fn**)this)[84](this, material_name, group_name, complain, complain_prefix);
+	}
+	i_texture* find_texture(char const* texture_name, const char* texture_group_name, bool complain = true, int additional_creation_flags = 0)
+	{
+		using fn = i_texture*(__thiscall*)(i_material_system*, char const*, const char*, bool, int);
+		return (*(fn**)this)[91](this, texture_name, texture_group_name, complain, additional_creation_flags);
 	}
 	i_material* create_material(char const* material_name, c_key_values* kv) {
 		using fn = i_material * (__thiscall*)(i_material_system*, char const*, c_key_values*);
@@ -86,5 +127,9 @@ public:
 	void get_display_adapter_info(int adapter, material_adapter_info_t* adapter_info) {
 		using fn = void(__thiscall*)(void*, int, material_adapter_info_t*);
 		return (*(fn**)this)[26](this, adapter, adapter_info);
+	}
+	i_material_render_context* get_render_context() {
+		using fn = i_material_render_context*(__thiscall*)(i_material_system*);
+		return (*(fn**)this)[115](this);
 	}
 };

@@ -46,7 +46,7 @@ void __fastcall sdk::hooks::set_visuals_data::set_visuals_data(void* ecx, void* 
 				if (!c::skins::weapon_endable)
 					return;
 
-				auto settings = features::skins::weapon_skin[i];
+				auto settings = c::skins::weapon_skin[i];
 				if (!settings.wpn_skin_custom_clr)
 					return;
 

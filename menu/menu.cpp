@@ -16,8 +16,8 @@ static const char* ad_key[3] = { "ej", "mj", "lj" };
 static const char* fb_angles[] = { "right", "backwards", "left" };
 static const char* tabs[] = { "indicators","positions" };
 static const char* indicators[13] = { "eb", "jb", "lj", "mj", "ps", "ej", "lb", "ad", "fm", "air", "as", "ast", "bast" };
-const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
-const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "music player font", "assist font"};
+static const char* font_flags[] = { "no hinting","no autohint","light hinting","mono hinting","bold","italic","no antialiasing","load color","bitmap","dropshadow","outline" };
+static const char* fnt_tab[] = { "main indicator font", "sub indicator font", "spec font", "name font", "health font", "player weapon font", "dropped weapon font", "screen logs font", "watermark font", "music player font", "assist font"};
 static const char* WeatherTypes[] = { "rain","ash","heavy rain","snow"};
 static const char* render_positions[] = { "top left corner","bottom left corner","bottom right corner" };
 static const char* EdgebugTypes[] = { "delusional (og)","lobotomy" };
@@ -27,17 +27,13 @@ static const char* chams_overlay_types[] = { "glow", "outline", "metallic", "sno
 static const char* flags[6] = { "bot", "armor", "money", "scoped", "flashed", "defusing" };
 static const char* weapon_type[2] = { "text", "icon" };
 static const char* outline_type[2] = { "outter", "inner" };
-const char* data_center_list_names[] = { "australia", "austria", "brazil", "chile", "dubai", "france", "germany", "hong kong", "india (chennai)", "india (mumbai)", "japan", "luxembourg", "netherlands", "peru", "philipines", "poland", "singapore", "south africa", "spain", "sweden", "uk", "usa (atlanta)", "usa (seattle)", "usa (chicago)", "usa (los angeles)", "usa (moses lake)", "usa (oklahoma)", "usa (seattle)", "usa (washington dc)" };
-std::string data_center_list[] = { "syd", "vie", "gru", "scl", "dxb", "par", "fra", "hkg",
-   "maa", "bom", "tyo", "lux", "ams", "limc", "man", "waw", "sgp", "jnb",
-   "mad", "sto", "lhr", "atl", "eat", "ord", "lax", "mwh", "okc", "sea", "iad" };
 static const char* choices_copy[]{ "  pistol", "  heavy pistol", "  shotgun", "  heavy", "  smg", "  rifle", "  sniper", "  auto sniper"};
-static const char* skinchanger_knives[] = { "default", "bayonet", "m9", "karambit", "bowie", "butterfly", "falchion", "flip", "gut", "huntsman", "shaddow-daggers", "navaja", "stiletto", "talon", "ursus", "default ct", "default t", "gold knife", "css", "outdoor", "canis", "paracord", "skeleton" };
+static const char* skinchanger_knives[] = { "default", "default ct", "default t", "bayonet", "m9", "karambit", "bowie", "butterfly", "falchion", "flip", "gut", "huntsman", "shaddow-daggers", "navaja", "stiletto", "talon", "ursus", "gold knife", "css", "outdoor", "canis", "paracord", "skeleton" };
 static const char* skinchanger_gloves[] = { "default", "brokenfang", "bloodhound", "sporty", "slick", "handwrap", "motorcycle", "specialist", "hydra" };
 static const char* skinchanger_weapons[] = { "usp-s", "p2000", "glock", "p250", "five-seven", "tec-10", "cz-75", "duals", "deagle", "revolver", "famas", "galil", "m4a4", "m4a1-s", "ak-47", "sg-553", "aug", "ssg-08", "awp", "scar", "g3sg1", "sawed-off", "m-249", "negev", "mag-7", "xm-1014", "nova", "pp-bizon", "mp5-sd", "mp-7", "mp-9", "mac-10", "p-90", "ump-45" };
 
-ImGuiColorEditFlags no_alpha = ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
-ImGuiColorEditFlags w_alpha = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
+static const ImGuiColorEditFlags no_alpha = ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
+static const ImGuiColorEditFlags w_alpha = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar;
 
 void legitbot() {
     ImGuiStyle& style = ImGui::GetStyle();
@@ -106,7 +102,7 @@ void legitbot() {
                 ImGui::Text(("weapon"));
                 ImGui::Combo("##wwpn", &menu::weapon_selection, "pistol\0heavy pistol\0shotgun\0heavy\0smg\0rifle\0sniper\0auto sniper");
                 
-                auto settings = &aimbot.settings[menu::weapon_selection];
+                auto settings = &c::aimbot::settings[menu::weapon_selection];
 
                 ImGui::Text(("hitboxes"));
                 ImGui::MultiCombo("##hitbox", hitboxes, settings->hitboxes, IM_ARRAYSIZE(settings->hitboxes));
@@ -136,7 +132,7 @@ void legitbot() {
                 for (auto i = 0; i < IM_ARRAYSIZE(choices_copy); i++) {
                     if (menu::weapon_selection != i) {
                         if (ImGui::Selectable(choices_copy[i])) {
-                            aimbot.settings[menu::weapon_selection] = aimbot.settings[i];
+                            c::aimbot::settings[menu::weapon_selection] = c::aimbot::settings[i];
                         }
                     }
                 }
@@ -525,7 +521,7 @@ void miscellaneous() {
             if (c::movement::edge_jump) {
                 ImGui::Keybind(("edgejump key"), &c::movement::edge_jump_key, &c::movement::edge_jump_key_s);
             }
-            ImGui::Checkbox(("longjump bind"), &c::movement::long_jump); //https://hackvshack.net/threads/delusional-v2-new-version-update-22-11-2025.9923/post-66987 //too hard to enable edgejump ig vro
+            ImGui::Checkbox(("longjump"), &c::movement::long_jump); //https://hackvshack.net/threads/delusional-v2-new-version-update-22-11-2025.9923/post-66987 //too hard to enable edgejump ig vro
             if (c::movement::long_jump) {
                 ImGui::Keybind(("#lj key"), &c::movement::long_jump_key, &c::movement::long_jump_key_s);
                 ImGui::Checkbox(("force edgejump##1"), &c::movement::long_jump_ej);
@@ -552,7 +548,6 @@ void miscellaneous() {
             ImGui::Checkbox(("auto edgebug"), &c::movement::edge_bug);
             if (c::movement::edge_bug) {
                 ImGui::Keybind(("edgebug key"), &c::movement::edge_bug_key, &c::movement::edge_bug_key_s);
-                ImGui::Text("edgebug type");
                 ImGui::Checkbox(("advanced detection"), &c::movement::edge_bug_strafe);
                 if (c::movement::edge_bug_strafe) {
                     ImGui::Text(("angle limit"));
@@ -580,6 +575,7 @@ void miscellaneous() {
                 ImGui::Text(("ps ticks"));
                 ImGui::SliderInt(("##ps ticks2"), &c::movement::pixel_surf_ticks, 1, 64);
             }
+            ImGui::Checkbox(("pixelsurf fix"), &c::movement::pixel_surf_fix);
 
             ImGui::Checkbox(("fast ladder"), &c::movement::fast_ladder);
             if (c::movement::fast_ladder) {
@@ -597,8 +593,8 @@ void miscellaneous() {
             }
             ImGui::Checkbox(("air stuck"), &c::movement::air_stuck);
             if (c::movement::air_stuck) {
-                ImGui::Checkbox(("set view angles"), &c::movement::set_view_angles);
                 ImGui::Keybind(("air stuck key"), &c::movement::air_stuck_key, &c::movement::air_stuck_key_s);
+                ImGui::Checkbox(("set view angles"), &c::movement::set_view_angles);
                 ImGui::Text(("search radius"));
                 ImGui::SliderFloat(("##searcradius"), &c::movement::wall_reach, 0.01f, 1.f, "%.2f");
             }
@@ -607,12 +603,6 @@ void miscellaneous() {
                 ImGui::Keybind(("delay hop key"), &c::movement::delay_hop_key, &c::movement::delay_hop_key_s);
                 ImGui::Text(("delay hop ticks"));
                 ImGui::SliderInt(("##ticks to wait"), &c::movement::dh_tick, 1, 8);
-            }
-
-
-            ImGui::Checkbox(("crouchbug"), &c::movement::crouch_bug);
-            if (c::movement::crouch_bug) {
-                ImGui::Keybind(("##crouch bug key"), &c::movement::crouch_bug_key, &c::movement::crouch_bug_key_s);
             }
 
             ImGui::Checkbox(("fast duck"), &c::movement::fastduck);
@@ -1070,23 +1060,6 @@ void miscellaneous() {
 
             ImGui::Separator();
 
-            ImGui::Checkbox(("auto accept"), &c::misc::autoaccept);
-            ImGui::Checkbox(("reveal ranks"), &c::misc::misc_reveal_ranks);
-            ImGui::Checkbox(("vote revealer"), &c::misc::vote_revealer);
-
-            ImGui::Checkbox(("force matchmaking region"), &c::misc::custom_region);
-            if (c::misc::custom_region) {
-                ImGui::Combo(("##regionselect"), &c::misc::custom_region_selection, data_center_list_names, IM_ARRAYSIZE(data_center_list_names));
-            }
-
-            static std::string* force_relay_cluster_value = *(std::string**)(find_pattern(("steamnetworkingsockets.dll"), ("B8 ? ? ? ? B9 ? ? ? ? 0F 43")) + 1);
-            if (c::misc::custom_region && !interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
-                *force_relay_cluster_value = data_center_list[c::misc::custom_region_selection];
-            else if (!c::misc::custom_region && !interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
-                *force_relay_cluster_value = "";
-
-            ImGui::Separator();
-
             ImGui::Checkbox("jumpstats", &c::misc::jumpstats);
             if (c::misc::jumpstats) {
                 ImGui::Checkbox("jumpstats show fails", &c::misc::jumpstats_show_fail);
@@ -1108,7 +1081,7 @@ void miscellaneous() {
             ImGui::Separator();
 
             // it makes no sense to fix that
-            ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
+            //ImGui::Checkbox("scaleform hud", &c::sfui::sfui_on);
             ImGui::Checkbox(("music display"), &c::misc::show_spotify_currently_playing);
             if (c::misc::show_spotify_currently_playing) {
                 ImGui::Text(("music player look type"));
@@ -1141,14 +1114,13 @@ void miscellaneous() {
             ImGui::Checkbox(("insecure bypass"), &c::misc::insecure_bypass);
             ImGui::Checkbox(("allow cheat unload (f1 + f2)"), &c::misc::unload_shit);
             ImGui::Checkbox(("mouse fix"), &c::misc::mouse_fix);
+            ImGui::Checkbox(("camera fix"), &c::misc::camera_fix);
             ImGui::Checkbox(("disable movement fix"), &c::movement::movement_fix);
-            ImGui::Checkbox(("pixelsurf fix"), &c::movement::pixel_surf_fix);
 
             ImGui::Checkbox(("discord status"), &c::misc::discord_rpc);
             ImGui::Checkbox(("custom console"), &c::misc::custom_console);
             ImGui::SameLine();
             ImGui::ColorEdit4(("##custom console"), c::misc::custom_console_clr, w_alpha);
-            ImGui::Checkbox(("unlock inventory"), &c::misc::unlock_inventory);
             if (ImGui::Button("unlock hidden cvars")) {
                 static bool did_unlock = false;
                 if (!did_unlock) {
@@ -1709,6 +1681,9 @@ void skins() {
                 ImGui::Text(("wear"));
                 ImGui::Combo(("##knifecondition"), &c::skins::knife_changer_wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
 
+                ImGui::Text(("seed"));
+                ImGui::InputInt("##knifeseed", &c::skins::knife_changer_seed, 0, 0);
+
                 ImGui::Checkbox(("custom color"), &c::skins::skin_custom_clr);
                 if (c::skins::skin_custom_clr) {
                     ImGui::SameLine(group_w - 20);
@@ -1772,12 +1747,15 @@ void skins() {
 
                 ImGui::Text(("search skin"));
                 filter.Draw("##filter_skin_gloves");
+
                 ImGui::Text(("wear"));
                 ImGui::Combo("##gloveswear", &c::skins::gloves_wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
 
+                ImGui::Text(("seed"));
+                ImGui::InputInt("##glovesseed", &c::skins::gloves_seed, 0, 0);
                 break;
             case 2:
-                auto settings = &features::skins::weapon_skin[c::skins::weapon_model];
+                auto settings = &c::skins::weapon_skin[c::skins::weapon_model];
 
                 ImGui::Text(("weapon skin"));
                 ImGui::ListBoxHeader("##weaponskin", ImVec2(-1, 200)); {
@@ -1815,6 +1793,9 @@ void skins() {
 
                 ImGui::Text(("wear"));
                 ImGui::Combo(("##weaponcondition"), &settings->wear, "factory-new\0minimal-wear\0field-tested\0well-worn\0battle-scarred");
+
+                ImGui::Text(("seed"));
+                ImGui::InputInt(("##weaponseed"), &settings->seed, 0, 0);
 
                 ImGui::Checkbox(("custom color"), &settings->wpn_skin_custom_clr);
                 if (settings->wpn_skin_custom_clr) {
@@ -1929,13 +1910,8 @@ bool is_closing;
 float progress = 0.f;
 
 void menu::render() {
-    auto& style = ImGui::GetStyle();
-    ImGuiIO& io = ImGui::GetIO();
-    float delta_time = io.DeltaTime;
-    ImVec2 target_size;
-
-    auto flags = ImGuiWindowFlags_::ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_::ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_::ImGuiWindowFlags_NoScrollWithMouse;
-    const ImVec2 s = io.DisplaySize;
+    const auto& style = ImGui::GetStyle();
+    const ImGuiIO& io = ImGui::GetIO();
 
     //animation (ass tbh)
     if (menu::open != prev_state) {
@@ -1946,7 +1922,7 @@ void menu::render() {
     float target_progress = menu::open ? 1.0f : 0.0f;
     ImVec2 target = menu::open ? ImVec2(550, 427) : ImVec2(0, 0);
 
-    float lerp_factor = 1.0f - std::exp(-15.f * delta_time);
+    float lerp_factor = 1.0f - std::exp(-15.f * io.DeltaTime);
     progress += (target_progress - progress) * lerp_factor;
 
     current_size.x += (target.x - current_size.x) * lerp_factor;
@@ -1976,7 +1952,7 @@ void menu::render() {
     ImGui::PushStyleColor(ImGuiCol_DragDropTarget, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
     ImGui::PushStyleColor(ImGuiCol_ScrollbarGrab, ImVec4(menu::menu_accent[0], menu::menu_accent[1], menu::menu_accent[2], 1.f));
 
-    ImGui::SetNextWindowPos(ImVec2(s.x * 0.5f, s.y * 0.5f), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(current_size, ImGuiCond_Always);
 
     ImGui::Begin(("menu"), &menu::open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar); {

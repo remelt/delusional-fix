@@ -23,12 +23,13 @@ void __stdcall sdk::hooks::create_move_proxy::create_move_proxy(int sequence_num
 	g::target_velocity_z = (((interfaces::console->get_convar(("sv_gravity"))->get_float()) / 2) * interfaces::globals->interval_per_tick) * -1.f;
 	features::movement::first_viewangles = cmd->view_angles;
 	features::movement::previous_tick = interfaces::globals->tick_count;
+
 	i_net_channel* net_channel = interfaces::client_state->net_channel;
+
 	prediction::update();
 	features::misc::fix_mouse_delta(cmd);
 	features::visuals::jump_trail();
 	features::misc::clantag_spammer();
-	features::misc::reveal_server_ranks(cmd);
 	panorama::scaleform_tick(g::local);
 
 	features::movement::bhop(cmd);
@@ -47,13 +48,14 @@ void __stdcall sdk::hooks::create_move_proxy::create_move_proxy(int sequence_num
 	}
 
 	features::movement::assist_createmove(cmd);
-	if ((c::movement::auto_align) && !(prediction_backup::flags & 1)) {
-		features::movement::auto_align(cmd);
-	}
+	features::movement::auto_align(cmd);
+
 	features::movement::fast_ladder(cmd);
 	features::movement::air_stuck(cmd);
+	//features::movement::texture_bug(cmd);
 	features::movement::jump_bug_crouch(cmd);
 	//prediction::backup_originals(cmd);
+
 	prediction::begin(cmd); {
 
 		features::movement::null_strafing(cmd);
@@ -64,7 +66,6 @@ void __stdcall sdk::hooks::create_move_proxy::create_move_proxy(int sequence_num
 	}prediction::end();
 
 	features::visuals::run_freecam(cmd, features::movement::first_viewangles);
-	features::movement::crouch_bug(cmd);
 	features::movement::edge_jump(cmd);
 	features::movement::long_jump(cmd);
 	features::movement::mini_jump(cmd);
@@ -78,15 +79,14 @@ void __stdcall sdk::hooks::create_move_proxy::create_move_proxy(int sequence_num
 
 	features::misc::kz_practice_logic(cmd);
 
-	features::movement::on_create_move_post(cmd);
+	features::movement::pixel_surf_fix(cmd);
+	features::movement::pixel_surf(cmd);
+	features::movement::pixel_surf_detect(cmd);
 
 	features::movement::fire_man(cmd);
 	features::movement::auto_duck(cmd);
 
-	if (!c::movement::movement_fix) {
-		features::movement::fix_movement(cmd, features::movement::first_viewangles);
-	}
-
+	features::movement::fix_movement(cmd, features::movement::first_viewangles);
 	features::movement::edge_bug(cmd);
 
 	if (interfaces::prediction->split->commands_predicted > 1)

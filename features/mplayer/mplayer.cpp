@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "mplayer.h"
+
 #include "../../sdk/structs/crc32/crc32.h"
 
 mPlayer mplayer;
@@ -28,14 +29,13 @@ concurrency::task< void > mPlayer::Update(LPDIRECT3DDEVICE9 g_pd3dDevice)
 	pool_.clear();
 
 	static auto sessions = GlobalSystemMediaTransportControlsSessionManager::RequestAsync().get();
-	auto currentSession = sessions.GetCurrentSession();
-	mplayer.session = currentSession;
+	const auto currentSession = sessions.GetCurrentSession();
 
-	if (this->session != nullptr) {
+	if (currentSession) {
 		this->HasMedia = true;
-		this->SourceAppUserModeId = pool_.allocate(this->session->SourceAppUserModelId());
+		this->SourceAppUserModeId = pool_.allocate(currentSession.SourceAppUserModelId());
 
-		auto info = this->session->TryGetMediaPropertiesAsync().get();
+		auto info = currentSession.TryGetMediaPropertiesAsync().get();
 
 		this->Title = wstring_to_utf8(info.Title().c_str());
 		this->Artist = wstring_to_utf8(info.Artist().c_str());
@@ -84,14 +84,14 @@ concurrency::task< void > mPlayer::Update(LPDIRECT3DDEVICE9 g_pd3dDevice)
 			}
 		}
 
-		auto timelineProperties = this->session->GetTimelineProperties();
+		auto timelineProperties = currentSession.GetTimelineProperties();
 		auto duration = timelineProperties.EndTime() - timelineProperties.StartTime();
 		this->TotalTime = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
 		auto currentPos = timelineProperties.Position() - timelineProperties.StartTime();
 		this->CurrentTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentPos).count();
 
-		auto playbackInfo = this->session->GetPlaybackInfo();
+		auto playbackInfo = currentSession.GetPlaybackInfo();
 		if (playbackInfo) {
 			auto playbackStatus = playbackInfo.PlaybackStatus();
 			this->isPlaying = (playbackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus::Playing);

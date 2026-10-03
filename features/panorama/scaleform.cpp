@@ -425,7 +425,7 @@ for(var hudHaBgA of hudHa.FindChildrenWithClassTraverse('hud-HA-bg-a'))
     var healthbgh = $.GetContextPanel().FindChildTraverse('HudHealthArmorBG')
     healthbgh.style.width =  ${isShort} ? '550px' : '310px';
     healthbgh.style.height = '54px'
-    healthbgh.style.backgroundImage = 'url(\'https://images2.imgbox.com/ae/58/LJJizTxL_o.png\')'
+    healthbgh.style.backgroundImage = 'url(\'https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/armor.png\')'
     healthbgh.style.backgroundSize = '100% 100%'
     healthbgh.style.horizontalAlign = 'left'
     healthbgh.style.x = '-1px'
@@ -462,7 +462,7 @@ if(exist('hud-HA-icon-Helmetsf')){
 $.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hud-HA-icon-Helmetsf', {src: "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/healtharmor/helmet.png", style: "height: 20px; width: 20px; y: 21px; x: 226px; -s2-mix-blend-mode: Additive; z-index: 31;"});
 }
 
-	if(exist('hudhabarborder')){
+if(exist('hudhabarborder')){
 $.CreatePanel('Image', $.GetContextPanel().FindChildrenWithClassTraverse('hud-HA')[0], 'hudhabarborder', {src: "https://media.discordapp.net/attachments/1051901947545931857/1051902080207556608/hudhabar.png", style: "height: 14px; width: 84px; y: 29px; x: 114px; opacity: 0.9;"});
 }
 
@@ -559,7 +559,7 @@ for (var dnBackground of contextPanel.FindChildrenWithClassTraverse('DeathNotice
 }
 
 for (var dnBackgroundg of contextPanel.FindChildrenWithClassTraverse('DeathNoticeBG')) {
-	dnBackgroundg.style.backgroundImage = 'url("https://images2.imgbox.com/e4/eb/FdasPVKZ_o.png")';
+	dnBackgroundg.style.backgroundImage = 'url("")';
 	dnBackgroundg.style.backgroundSize = '100% 100%';
 	dnBackgroundg.style.backgroundColor = '#00000000';
 }
@@ -606,11 +606,8 @@ for (var deathnotice of contextPanel.FindChildrenWithClassTraverse('DeathNotice'
 	deathnotice.FindChildTraverse('ThroughSmokeIcon').style.visibility = 'collapse';
 	deathnotice.FindChildTraverse('AttackerBlindIcon').style.visibility = 'collapse';
     deathnotice.FindChildTraverse('Domination').style.visibility = 'collapse';
-    deathnotice.FindChildTraverse('Suicide').style.backgroundColor = '#00000000'
-	deathnotice.FindChildTraverse('Suicide').style.boxShadow = 'inset #e1000000 0px 0px 0px;';
 	deathnotice.FindChildTraverse('HeadShot').SetImage('https://raw.githubusercontent.com/abandonedpools/scaleform/3e4c1f244351844a6236d952356ea087f59ad29e/p_scaleform/materials/panorama/images/hud/deathnotice/icon_headshot.svg')
 	deathnotice.FindChildTraverse('Penetrate').SetImage('https://raw.githubusercontent.com/abandonedpools/scaleform/3e4c1f244351844a6236d952356ea087f59ad29e/p_scaleform/materials/panorama/images/hud/deathnotice/penetrate.svg')
-	deathnotice.FindChildTraverse('Suicide').SetImage('https://cdn.discordapp.com/attachments/1045407846692569120/1073355652535169106/icon-suicide.png')
     deathnotice.style.margin = '0px'
     deathnotice.style.height = '35px'
 	// ---------------- REMOVALS ----------------
@@ -620,7 +617,7 @@ for (var deathnotice of contextPanel.FindChildrenWithClassTraverse('DeathNotice'
 		{
 			for(var content of killer.FindChildrenWithClassTraverse('DeathNoticeBG'))
 			{
-				content.style.backgroundImage = 'url("https://upload.wikimedia.org/wikipedia/commons/8/89/HD_transparent_picture.png")';
+				content.style.backgroundImage = 'url("")';
 				content.style.border = '2px solid #821717';
 				content.style.borderRadius = '4px';
 				content.style.backgroundColor = '#000000E1';
@@ -634,7 +631,7 @@ for (var deathnotice of contextPanel.FindChildrenWithClassTraverse('DeathNotice'
 		{
 		    for(var content of victim.FindChildrenWithClassTraverse('DeathNoticeBG'))
             {
-				content.style.backgroundImage = 'url("https://images2.imgbox.com/e4/eb/FdasPVKZ_o.png")';
+				content.style.backgroundImage = 'url("")';
 				content.style.backgroundSize = '100% 100%';
 				content.style.backgroundColor = '#00000000';
 
@@ -917,9 +914,7 @@ $.Schedule(0.3, runner);
 
 JAVASCRIPT alerts = R"alert(
 var contextPanel = $.GetContextPanel();
-var joinPanelCTBG = "https://images2.imgbox.com/3c/af/3j6BFAy9_o.png";
-var joinPanelTBG = "https://images2.imgbox.com/3c/af/3j6BFAy9_o.png";
-var joinPanelBotBG = "https://images2.imgbox.com/3c/af/3j6BFAy9_o.png";
+var joinPanelFadeBG = "https://raw.githubusercontent.com/abandonedpools/scaleform/refs/heads/master/p_scaleform/materials/panorama/images/hud/fade.png";
 
 for(var hudHint of $.GetContextPanel().FindChildrenWithClassTraverse('hud-hint'))
 {
@@ -1013,7 +1008,7 @@ joinPanelCT.style.width = '630px';
 joinPanelCT.style.height = '56px';
 joinPanelCT.style.horizontalAlign = 'center';
 joinPanelCT.style.flowChildren = 'none';
-joinPanelCT.style.backgroundImage = `url(${joinPanelCTBG})`;
+joinPanelCT.style.backgroundImage = `url(${joinPanelFadeBG})`;
 joinPanelCT.style.backgroundSize = '100% 100%';
 
 var joinPanelT = hudTeamCounter.FindChildTraverse('JoinPanelT');
@@ -1021,7 +1016,7 @@ joinPanelT.style.width = '630px';
 joinPanelT.style.height = '56px';
 joinPanelT.style.horizontalAlign = 'center';
 joinPanelT.style.flowChildren = 'none';
-joinPanelT.style.backgroundImage = `url(${joinPanelTBG})`;
+joinPanelT.style.backgroundImage = `url(${joinPanelFadeBG})`;
 joinPanelT.style.backgroundSize = '100% 100%';
 
 var joinPanelBot = hudTeamCounter.FindChildTraverse('JoinPanelBot');
@@ -1029,7 +1024,7 @@ joinPanelBot.style.width = '630px';
 joinPanelBot.style.height = '56px';
 joinPanelBot.style.horizontalAlign = 'center';
 joinPanelBot.style.flowChildren = 'none';
-joinPanelBot.style.backgroundImage = `url(${joinPanelBotBG})`;
+joinPanelBot.style.backgroundImage = `url(${joinPanelFadeBG})`;
 joinPanelBot.style.backgroundSize = '100% 100%';
 
 var entryTextCt = hudTeamCounter.FindChildTraverse('JoinTextCT');

@@ -3,23 +3,10 @@
 
 #define CHECK_VALID( _v ) 0
 
-struct aimbot_settings {
-	int fov = 0;
-	bool silent = false;
-	int smooth = 0;
-	bool hitboxes[4] = { false, false, false, false };
-	bool rcs = false;
-	int rcs_p = 100;
-	bool autowall_b = false;
-	int autowall_dmg = 1;
-	bool autowall_lethal = false;
-};
-
 class aimbot_c {
 private:
 
 public:
-	std::map<short, aimbot_settings> settings;
 	void run(c_usercmd* cmd);
 
 	inline void vec3_tSubtract(const vec3_t& a, const vec3_t& b, vec3_t& c)

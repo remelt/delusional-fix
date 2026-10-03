@@ -1,6 +1,7 @@
 #pragma once
-#include "../../sdk/sdk.hpp"
 #include <stdio.h>
+
+#include "models.hpp"
 
 class CCStrike15ItemSchema;
 class CCStrike15ItemSystem;
@@ -145,25 +146,12 @@ struct CStickerKit
 	std::uint32_t pad0[4];
 };
 
-struct weapon_skins {
-	int wear;
-	int vector_paint_kit = 0;
-	int paint_kit_index = 0;
-	bool wpn_skin_custom_clr = false;
-	float wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
-	float wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
-	float wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
-	float wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
-};
-
 namespace features::skins {
 	struct hud_weapons_t {
 		std::int32_t* wpn_count( ) {
 			return reinterpret_cast< std::int32_t* >( std::uintptr_t( this ) + 0x80 );
 		}
 	};
-
-	inline std::map<short, weapon_skins> weapon_skin;
 
 	void agent_changer( );
 	void gloves_changer();

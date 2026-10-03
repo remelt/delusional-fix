@@ -8,7 +8,7 @@
 
 template <typename T>
 static auto real2abs(const T& address) {
-    return address + 4 + reinterpret_cast<int>(address);
+    return address + 4 + *reinterpret_cast<int*>(address);
 }
 
 inline uint8_t* find_pattern(const char* mod_name, const char* sig) {
@@ -114,7 +114,7 @@ inline std::uintptr_t* find_hud_element(const char* name) {
 inline vec2_t get_mouse_position() {
     POINT mousePosition;
     GetCursorPos(&mousePosition);
-    ScreenToClient(FindWindow(0, "Counter-Strike: Global Offensive"), &mousePosition);
+    ScreenToClient(FindWindowW((L"Valve001"), NULL), &mousePosition);
     return { static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y) };
 }
 

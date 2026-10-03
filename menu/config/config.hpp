@@ -1,6 +1,7 @@
 #pragma once
 #include <string_view>
 #include <vector>
+
 #include "../../includes/nlohmann/json.hpp"
 
 namespace c {
@@ -16,6 +17,10 @@ namespace c {
 	void load_skins(const std::size_t index);
 	void load_misc(const std::size_t index);
 	void load_indicators(const std::size_t index);
+
+	static const char* group_names[8] = { "pistol", "heavy pistol", "shotgun", "heavy", "smg", "rifle", "sniper", "auto sniper" };
+	static const char* skinchanger_group_names[] = { "usp-s", "p2000", "glock", "p250", "five-seven", "tec-10", "cz-75", "duals", "deagle", "revolver", "famas", "galil", "m4a4", "m4a1-s", "ak-47", "sg-553", "aug", "ssg-08", "awp", "scar", "g3sg1", "sawed-off", "m-249", "negev", "mag-7", "xm-1014", "nova", "pp-bizon", "mp5-sd", "mp-7", "mp-9", "mac-10", "p-90", "ump-45" };
+
 	inline std::string directory_path_fonts;
 	inline std::string directory_path;
 	inline std::string directory;
@@ -80,6 +85,19 @@ namespace c {
 		inline int aimbot_only_enemy;
 		inline bool non_sticky_aimbot;
 		inline bool aim_at_bt;
+
+		struct aimbot_settings {
+			int fov = 0;
+			bool silent = false;
+			int smooth = 0;
+			bool hitboxes[4] = { false, false, false, false };
+			bool rcs = false;
+			int rcs_p = 100;
+			bool autowall_b = false;
+			int autowall_dmg = 1;
+			bool autowall_lethal = false;
+		};
+		inline std::map<short, aimbot_settings> settings;
 	}
 
 	namespace movement {
@@ -100,6 +118,9 @@ namespace c {
 		inline bool air_stuck = false;
 		inline int air_stuck_key = 0;
 		inline int air_stuck_key_s = 1;
+		inline bool texture_bug = false;
+		inline int texture_bug_key = 0;
+		inline int texture_bug_key_s = 1;
 		inline bool set_view_angles = true;
 		inline float wall_reach = 0.5f;
 		inline bool fireman = false;
@@ -110,9 +131,6 @@ namespace c {
 		inline bool delay_hop = false;
 		inline int  delay_hop_key = 0;
 		inline int  delay_hop_key_s = 1;
-		inline bool crouch_bug = false;
-		inline int crouch_bug_key = 0;
-		inline int crouch_bug_key_s = 1;
 		inline bool visualize_edge_bug = false;
 		inline float visualize_edge_bug_clr[4]{ 1.f, 1.f, 1.f };
 		inline bool edge_bug = false;
@@ -201,10 +219,10 @@ namespace c {
 		inline float velocity_indicator_custom_clr2[4]{ 1.f, 1.f, 1.f };
 		inline float velocity_indicator_fade_clr3[4]{ 1.f, 1.f, 1.f, 0.f };
 		inline float indicator_detect_clr[3]{ 0.195f, 0.750f, 0.269f };
-		inline bool indicators_show[13] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
+		inline bool indicators_show[14] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool allow_detection_clr = false;
 		inline int detection_saved_tick = 15;
-		inline bool detection_clr_for[13] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
+		inline bool detection_clr_for[14] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 		inline bool stamina_indicator = false;
 		inline bool stamina_indicator_fade = false;
 		inline bool stamina_indicator_show_pre = false;
@@ -238,10 +256,8 @@ namespace c {
 		inline bool headshot_spoofer = false;
 		inline bool anti_untrusted = true;
 		inline bool insecure_bypass = true;
-		inline bool unlock_inventory = false;
-		inline bool custom_region = false;
-		inline int custom_region_selection = 0;
 		inline bool mouse_fix = true;
+		inline bool camera_fix = true;
 		inline bool keybind_list = false;
 		inline bool door_spam = false;
 		inline int door_spam_key = 0;
@@ -305,11 +321,8 @@ namespace c {
 		inline bool misc_hitmarker_screen_effect = false;
 		inline bool misc_hit_info[2] = { false, false};
 		inline int misc_hitmarker_sound_type = 0;
-		inline bool misc_reveal_ranks = false;
 		inline bool nadepred = false;
 		inline float nadepred_clr[3]{ 1.f, 1.f, 1.f };
-		inline bool autoaccept = false;
-		inline bool vote_revealer = false;
 		inline bool thirdperson = false;
 		inline bool thirdperson_disabled_on_weapon = false;
 		inline int thirdperson_distance = 150;
@@ -353,19 +366,12 @@ namespace c {
 
 		inline bool knife_changer_enable = false;
 		inline int knife_changer_wear = 0;
+		inline int knife_changer_seed = 0;
 		inline int knife_changer_model = 0;
 		inline int knife_changer_skin_id = 0;
 		inline int knife_changer_paint_kit = 0;
 		inline int knife_changer_vector_paint_kit = 0;
 		inline int knife_skin = 0;
-
-		inline bool gloves_endable = false;
-		inline int gloves_model = 0;
-		inline int gloves_skin = 0;
-		inline int gloves_skin_id = 0;
-		inline int gloves_wear = 0;
-		inline int agent_model = 0;
-		inline int weapon_model = 0;
 
 		inline bool skin_custom_clr = false;
 		inline float skin_modulation1[3]{ 1.f, 1.f, 1.f };
@@ -373,10 +379,31 @@ namespace c {
 		inline float skin_modulation3[3]{ 1.f, 1.f, 1.f };
 		inline float skin_modulation4[3]{ 1.f, 1.f, 1.f };
 
+		inline bool gloves_endable = false;
+		inline int gloves_model = 0;
+		inline int gloves_skin = 0;
+		inline int gloves_skin_id = 0;
+		inline int gloves_wear = 0;
+		inline int gloves_seed = 0;
+		inline int agent_model = 0;
+		inline int weapon_model = 0;
+
 		inline bool weapon_endable = false;
 		inline int weapons_page = 0;
 		inline int weapons_model = 0;
 
+		struct weapon_skins {
+			int wear;
+			int seed;
+			int vector_paint_kit = 0;
+			int paint_kit_index = 0;
+			bool wpn_skin_custom_clr = false;
+			float wpn_skin_modulation1[3]{ 1.f, 1.f, 1.f };
+			float wpn_skin_modulation2[3]{ 1.f, 1.f, 1.f };
+			float wpn_skin_modulation3[3]{ 1.f, 1.f, 1.f };
+			float wpn_skin_modulation4[3]{ 1.f, 1.f, 1.f };
+		};
+		inline std::map<short, weapon_skins> weapon_skin;
 	}
 
 	namespace visuals {
@@ -583,34 +610,5 @@ namespace c {
 		inline bool sfui_on = false;
 	}
 
-	namespace calculator {
-		inline bool ps_calcualtor = false;
-		inline int  toggle_wireframe_key = 0;
-		inline int  toggle_wireframe_key_s = 2;
-		inline int  toggle_clipbrushe_key = 0;
-		inline int  toggle_clipbrushe_key_s = 2;
-		inline int  set_point_key = 0;
-		inline int  set_point_key_s = 1;
-		inline int  calculate_point_key = 0;
-		inline int  calculate_point_key_s = 1;
-
-	}
-
 	inline std::vector<std::string> configs;
 }
-
-struct keybind_t {
-	bool enabled;
-	int id;
-	int type;
-};
-
-enum keybind_type {
-	off,
-	hold,
-	toggle,
-	always
-};
-
-struct cvar_t;
-struct cvars_t;

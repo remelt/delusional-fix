@@ -13,26 +13,23 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::device, 16), &reset::reset, (void**)&reset::ofunc))
 		printf(("reset hook failed.\n"));
 
-	//if (MH_CreateHook(get_vfunc<void*>(interfaces::device, 42), &endscene::endscene, (void**)&endscene::ofunc))
-	//	printf(("endscene hook failed.\n"));
-
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::client, 22), &create_move_proxy::create_move_proxy, (void**)&create_move_proxy::ofunc))
 		printf(("create move proxy hook failed.\n"));
 
-	if (MH_CreateHook(get_vfunc<void*>(interfaces::client_mode, 27), &should_draw_viewmodel::should_draw_viewmodel, (void**)&should_draw_viewmodel::ofunc))
-		printf(("should draw viewmodel hook failed.\n"));
+	//if (MH_CreateHook(get_vfunc<void*>(interfaces::client_mode, 27), &should_draw_viewmodel::should_draw_viewmodel, (void**)&should_draw_viewmodel::ofunc))
+	//	printf(("should draw viewmodel hook failed.\n"));
 
 	if (MH_CreateHook( get_vfunc<void*>( interfaces::engine, 101 ), &get_screen_aspect_ratio::get_screen_aspect_ratio, ( void** ) &get_screen_aspect_ratio::ofunc ))
 		printf(( "get screen aspect ratio hook failed.\n" ));
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::panel, 41), &paint_traverse::paint_traverse, (void**)&paint_traverse::ofunc))
-		printf(("override view hook failed.\n"));
+		printf(("paint traverse hook failed.\n"));
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::surface, 116), &on_screen_size_changed::on_screen_size_changed, (void**)&on_screen_size_changed::ofunc))
 		printf(("on_screen_size_changed  hook failed.\n"));
 
 	if (MH_CreateHook( get_vfunc<void*>( interfaces::client_mode, 18 ), &override_view::override_view, ( void** ) &override_view::ofunc ))
-		printf(( "override view hook failed.\n" ));
+		printf(("override view hook failed.\n" ));
 
 	if (MH_CreateHook( get_vfunc<void*>( interfaces::client_mode, 23 ), &override_mouse_input::override_mouse_input, ( void** ) &override_mouse_input::ofunc ))
 		printf(("override mouse input hook failed.\n" ));
@@ -41,7 +38,7 @@ void sdk::hooks::init( ) {
 		printf(("frame stage notify hook failed.\n" ));
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::client_mode, 44), &do_post_screen_effects::do_post_screen_effects, (void**)&do_post_screen_effects::ofunc))
-		printf(("override view hook failed.\n"));
+		printf(("post screen effects hook failed.\n"));
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::model_render, 21), &draw_model_execute::draw_model_execute, (void**)&draw_model_execute::draw_model_execute_original))
 		printf(("draw model execute  hook failed.\n"));
@@ -51,9 +48,6 @@ void sdk::hooks::init( ) {
 
 	if (MH_CreateHook( get_vfunc<void*>( interfaces::surface, 67 ), &lock_cursor::lock_cursor, ( void** ) &lock_cursor::ofunc ))
 		printf( ("lock cursor hook failed."));
-
-	//if (MH_CreateHook(get_vfunc<void*>(interfaces::surface, 15), &draw_set_color::draw_set_color, (void**)&draw_set_color::ofunc))
-		//printf(("draw set color  hook failed.\n"));
 
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::client, 7), &level_shutdown::level_shutdown, (void**)&level_shutdown::ofunc))
 		printf(("level shutdown hook failed.\n"));
@@ -70,11 +64,8 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(get_vfunc<void*>(interfaces::engine->get_bsp_query(), 6), &list_leaves_in_box::list_leaves_in_box, (void**)&list_leaves_in_box::ofunc))
 		printf(("list leaves in box hook failed.\n"));
 
-	if (MH_CreateHook(get_vfunc<void*>(interfaces::engine, 27), &is_connected::is_connected, (void**)&is_connected::ofunc))
-		printf(("is connected hook failed.\n"));
-
-	//if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 E4 F8 83 EC 70 56 57 8B F9 89 7C 24 14 83 7F 60")), &modify_eye_position::modify_eye_position, (void**)&modify_eye_position::ofunc))
-	//	printf(("modify eye position hook failed.\n"));
+	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 E4 F8 83 EC 70 56 57 8B F9 89 7C 24 14 83 7F 60")), &modify_eye_position::modify_eye_position, (void**)&modify_eye_position::ofunc))
+		printf(("modify eye position hook failed.\n"));
 
 	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 83 EC 14 53 56 57 FF 75 18")), &calcultate_view::calcultate_view, (void**)&calcultate_view::ofunc))
 		printf(("calculate view hook failed.\n"));
@@ -94,8 +85,11 @@ void sdk::hooks::init( ) {
 	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 51 56 8B 75 0C 8D 45 14 57 8B 7D 08 8B D6 50 51 FF 75 10 8B CF E8 ? ? ? ? 83 C4 0C 85 C0 78 08 85 F6 7E 0C 3B C6 7C 08 8D 46 FF")), &vsnprintf::vsnprintf, (void**)&vsnprintf::ofunc))
 		printf(("vsnprintf hook failed.\n"));
 
-	if (MH_CreateHook(find_pattern(("client.dll"), ("8B 0D ? ? ? ? 56 8B 01 FF 50 ? 8B F0 85 F6 75 ?")), &is_depth_of_field_enabled::is_depth_of_field_enabled, (void**)&is_depth_of_field_enabled::ofunc))
-		printf(("is depth of field enabled hook failed.\n"));
+	//if (MH_CreateHook(find_pattern(("client.dll"), ("8B 0D ? ? ? ? 56 8B 01 FF 50 ? 8B F0 85 F6 75 ?")), &is_depth_of_field_enabled::is_depth_of_field_enabled, (void**)&is_depth_of_field_enabled::ofunc))
+	//	printf(("is depth of field enabled hook failed.\n"));
+
+	if (MH_CreateHook(reinterpret_cast<void*>(real2abs(reinterpret_cast<unsigned int>(find_pattern(("client.dll"), ("E8 ? ? ? ? 8B 43 10 8D 4D 04")) + 1 ))), &draw_view_models::draw_view_models, (void**)&draw_view_models::ofunc))
+		printf(("draw view models hook failed.\n"));
 
 	if (MH_CreateHook(find_pattern(("client.dll"), ("55 8B EC 81 EC ? ? ? ? 53 8B D9 56 57 8B 53 5C")), &set_visuals_data::set_visuals_data, (void**)&set_visuals_data::ofunc))
 		printf(("set visuals data hook failed.\n"));
@@ -126,7 +120,6 @@ void sdk::hooks::init( ) {
 	features::skins::init_parser( );
 	features::skins::animation_hook();
 	panorama::scaleform_init();
-	//events.setup();
 
 	ctx.c.cl_hud_color = interfaces::console->get_convar("cl_hud_color");
 	ctx.c.cl_hud_background_alpha = interfaces::console->get_convar("cl_hud_background_alpha");

@@ -972,7 +972,7 @@ void features::movement::pixelsurf_assist(c_usercmd* cmd)
 		return;
 
 	//we dont need to use the bind while pixelsurfing
-	if (m_pixelsurf_data.ps_detect) {
+	if (m_pixelsurf_data.m_in_pixel_surf) {
 		return;
 	}
 	vec3_t ray_shit = g::local->abs_origin() + vec3_t(0.f, 0.f, 64.f);
@@ -2758,11 +2758,11 @@ void features::movement::assist_createmove(c_usercmd* cmd)
 
 		//...
 		if (c::movement::pixel_surf) {
-			if (m_pixelsurf_data.should_pixel_surf) {
+			if (m_pixelsurf_data.m_should_duck) {
 				cmd->buttons |= in_duck;
 			}
 			if (g::local->flags() & fl_onground)
-				m_pixelsurf_data.should_pixel_surf = false;
+				m_pixelsurf_data.m_should_duck = false;
 		}
 	}
 	else {

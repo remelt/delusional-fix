@@ -6,13 +6,18 @@
 #include "../../sdk/sdk.hpp"
 
 void features::misc::draw( ) {
-	const auto stay_time = 4.f;
-	const auto fade_time = 0.6f;
+	static const auto stay_time = 4.f;
+	static const auto fade_time = 0.6f;
+
+	if (features::misc::notify_list.empty())
+		return;
+
+	if (!interfaces::engine->is_in_game() || !interfaces::engine->is_connected()) {
+		features::misc::notify_list.clear();
+		return;
+	}
 
 	for (auto i = 0; i < features::misc::notify_list.size(); i++) {
-		if (features::misc::notify_list.empty())
-			continue;
-
 		notify_t notify = features::misc::notify_list[i];
 
 		float elapsed_time = interfaces::globals->cur_time - (notify.time + stay_time);
@@ -24,8 +29,6 @@ void features::misc::draw( ) {
 			i--;
 			continue;
 		}
-
-
 
 		ImGui::PushFont(fonts::logs_font_flag);
 		ImGui::GetForegroundDrawList()->AddText(ImVec2(5 + 1, 5 + (i * 15) + 1), ImColor(0, 0, 0, fade_alpha), notify.text.c_str());
@@ -225,23 +228,26 @@ void features::misc::spectators_list() {
 			}
 
 			int y = 5;
-			if (c::misc::watermark) {
-				y += 6 + 19;
-			}
-			if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0) {
-				y += 15;
-			}
-			if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1) {
-				const int progressbar = mplayer.thumb && c::misc::progressbar_enable ? 10 : 0;
-				int size;
-				if (mplayer.Title == "" && mplayer.Artist == "" && !mplayer.thumb)
-					size = 0;
-				else if (mplayer.Title == "" && !mplayer.thumb)
-					size = 18; // 6 + 12
-				else
-					size = 30;
 
-				y += 6 + size + progressbar;
+			if (c::misc::watermark) {
+				if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0)
+					y = 45;
+				else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1)
+					if (c::misc::progressbar_enable)
+						y = 77;
+					else
+						y = 68;
+				else
+					y = 30;
+			}
+			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 0) {
+				y = 20;
+			}
+			else if (c::misc::show_spotify_currently_playing && c::misc::player_type == 1) {
+				if (c::misc::progressbar_enable)
+					y = 52;
+				else
+					y = 43;
 			}
 
 			ImColor spec_clr = ImColor(c::misc::spectators_list_color_2[0], c::misc::spectators_list_color_2[1], c::misc::spectators_list_color_2[2]);
@@ -336,22 +342,6 @@ void features::misc::kz_practice_logic(c_usercmd* cmd) {
 void features::misc::kz_practice() {
 	if (!c::misc::practice_window )
 		return;
-
-}
-
-void features::misc::reveal_server_ranks(c_usercmd * cmd) {
-	if (!c::misc::misc_reveal_ranks || !interfaces::engine->is_in_game())
-		return;
-
-	if (cmd->buttons & in_score)
-		interfaces::client->dispatch_user_message(50, 0, 0, nullptr);
-}
-
-void features::misc::thirdperson() {
-
-}
-
-void features::misc::reset_thirdperson() {
 
 }
 
@@ -472,11 +462,6 @@ void features::misc::fix_mouse_delta(c_usercmd* cmd) {
 	}
 
 	delta_viewangles = cmd->view_angles;
-}
-
-void features::misc::radaringame(player_t* p) {
-	
-
 }
 
 void apply_clan_tag(const char* tag, const char* name) {

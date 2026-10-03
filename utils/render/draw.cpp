@@ -430,11 +430,18 @@ void imgui_render::add_to_render(const std::function<void()>& fun) {
 }
 
 void imgui_render::unload() {
+
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	SetWindowLongW(sdk::hooks::window, GWL_WNDPROC, reinterpret_cast<LONG>(sdk::hooks::wndproc_original));
+	if (sdk::hooks::wndproc_original) {
+		SetWindowLongW(sdk::hooks::window, GWL_WNDPROC, reinterpret_cast<LONG>(sdk::hooks::wndproc_original));
+		sdk::hooks::wndproc_original = nullptr;
+	}
+
+	if (interfaces::input_system)
+		interfaces::input_system->enable_input(true);
 
 	if (interfaces::device)
 	{

@@ -53,9 +53,10 @@ namespace features::movement {
 	void edge_bug(c_usercmd* cmd);
 	void pixel_surf(c_usercmd* cmd);
 	void auto_align(c_usercmd* cmd);
-	void on_create_move_post(c_usercmd* cmd);
+	void pixel_surf_detect(c_usercmd* cmd);
 	void fire_man(c_usercmd* cmd);
 	void air_stuck(c_usercmd* cmd);
+	//void texture_bug(c_usercmd* cmd);
 	void pixel_surf_fix(c_usercmd* cmd);
 	void jump_bug(c_usercmd* cmd);
 	void jump_bug_crouch(c_usercmd* cmd);
@@ -90,32 +91,69 @@ namespace features::movement {
 	void assist_createmove(c_usercmd* cmd);
 	void assist_endscene();
 
-	//auto-duck hw
+	struct bhop_t {
+		int perfect_hops = 0;
+		int ground_ticks = 0;
+		int miss_ticks_left = 0;
+		bool force_miss_next = false;
+		bool was_on_ground = false;
+	}; inline bhop_t bhop_data;
+
+	// auto-duck
+	struct duck_prediction_state_t {
+		bool m_did_land = false;
+		float m_vert = 0.f;
+		int m_tick = 0.f;
+
+		void reset() {
+			m_did_land = false;
+			m_vert = 0.f;
+			m_tick = 0.f;
+		}
+	};
+
+	//fye maaaan (bad asl, pasted from lb, ofc needed to be recoded)
+	struct fireman_data_t {
+		bool is_ladder = false;
+		bool fr_hit_1 = false;
+		bool fr_hit = false;
+		bool awall = false;
+	}; inline fireman_data_t m_fireman_data;
+
 	struct autoduck_data_t {
-		bool m_did_land_ducking = false;
-		bool m_did_land_standing = false;
+		bool detected = false;
 
-		float m_ducking_vert = 0.f;
-		float m_standing_vert = 0.f;
+		duck_prediction_state_t standing;
+		duck_prediction_state_t ducking;
 
+		void reset() {
+			detected = false;
+
+			standing.reset();
+			ducking.reset();
+		}
 	}; inline autoduck_data_t m_autoduck_data;
 
-	//avoid head collision
-	struct avoid_collision_t {
-		float m_ducking_velo = 0.f;
-		float m_standing_velo = 0.f;
-		float m_ducking_origin = 0.f;
-		float m_standing_origin = 0.f;
+	// auto-align data
+	struct auto_align_data_t {
+		bool wall_detected = false;
+		float start_circle = 0.f;
 
-	}; inline avoid_collision_t m_avoid_collision;
+		void reset() {
+			wall_detected = false;
+			start_circle = 0.f;
+		}
+	}; inline auto_align_data_t m_autoalign_data;
 
-	//lb ps
+	// ps
 	struct pixelsurf_data_t {
 		bool m_predicted_succesful = false, m_in_pixel_surf = false, m_should_duck = false;
-		bool should_pixel_surf = false;
-		bool predicted_ps = false;
 		int px_tick;
-		bool ps_detect = false;
+
+		void reset() {
+			m_predicted_succesful = m_in_pixel_surf = m_should_duck = false;
+			px_tick = 0;
+		}
 	}; inline pixelsurf_data_t m_pixelsurf_data;
 
 	struct edge_bug_detection {

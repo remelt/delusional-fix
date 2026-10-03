@@ -23,7 +23,7 @@ void c_discord::update() {
     std::string current_status = { "js chillin" };
     if (interfaces::engine->is_connected()) {
 		// get hostname from server
-        if (interfaces::engine->get_level_name() && interfaces::engine->get_level_name() != " ") {
+        if (interfaces::engine->get_level_name() && interfaces::engine->get_level_name() != "") {
             current_status = "playing on: ";
             current_status += interfaces::engine->get_level_name();
         }
@@ -31,8 +31,7 @@ void c_discord::update() {
 
     discordPresence.largeImageText = "T _T";
     discordPresence.state = current_status.c_str();
-    //https://github.com/remelt/delusional-fix/blob/main/includes/discord/discord_rpc_image.png?raw=true
-    discordPresence.largeImageKey = "https://images2.imgbox.com/57/b1/7hsWTykc_o.png";
+    discordPresence.largeImageKey = "https://github.com/remelt/delusional-fix/blob/main/includes/discord/discord_rpc_image.png?raw=true";
     discordPresence.startTimestamp = elapsed;
     Discord_UpdatePresence(&discordPresence);
     } else {

@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma comment( lib, "windowsapp" )
-
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Graphics.Imaging.h>
 #include <winrt/Windows.Media.Control.h>
@@ -16,12 +14,9 @@
 #include <ppltasks.h>
 
 #include <d3d9.h>
-#include <sdkddkver.h>
-#include "optimization.h"
-
 #include <../includes/june2010/Include/d3dx9tex.h>
-#pragma comment( lib, "d3d9.lib" )
-#pragma comment( lib, "d3dx9.lib" )
+
+#include "optimization.h"
 
 using namespace winrt;
 using namespace Windows::Graphics::Imaging;
@@ -41,9 +36,6 @@ private:
 	char* Thumbnail_type{ nullptr };
 
 public:
-	std::optional< GlobalSystemMediaTransportControlsSessionManager > sessionManager;
-	std::optional< IRandomAccessStreamWithContentType > thumbnail;
-	std::optional< GlobalSystemMediaTransportControlsSession > session;
 	bool HasMedia = false;
 	std::string Title;
 	std::string Artist;

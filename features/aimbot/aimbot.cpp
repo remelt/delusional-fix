@@ -1,5 +1,6 @@
 ﻿#include "aimbot.hpp"
 #include "autowall.hpp"
+
 #include "../../sdk/math/math.hpp"
 #include "../../menu/config/config.hpp"
 #include "../misc/misc.hpp"
@@ -127,12 +128,12 @@ std::vector<int> get_selected_hitboxes(const bool(&hitboxes)[N]) {
 	return selected_hitboxes;
 }
 
-bool get_aimbot_settings(aimbot_settings& settings, std::vector<int>& hitboxes, void* weapon) {
+bool get_aimbot_settings(c::aimbot::aimbot_settings& settings, std::vector<int>& hitboxes, void* weapon) {
 	const bool groups[] = { is_pistol(weapon), is_heavy_pistol(weapon), is_shotgun(weapon), is_heavy(weapon), is_smg(weapon), is_rifle(weapon), is_sniper(weapon), is_auto_sniper(weapon) };
 
 	for (int i = 0; i < IM_ARRAYSIZE(groups); i++) {
 		if (groups[i]) {
-			settings = aimbot.settings[i];
+			settings = c::aimbot::settings[i];
 			menu::weapon_selection = i;
 
 			hitboxes = get_selected_hitboxes(settings.hitboxes);
@@ -182,7 +183,7 @@ void aimbot_c::run(c_usercmd* cmd)
 	if (menu::open)
 		return;
 
-	aimbot_settings settings;
+	c::aimbot::aimbot_settings settings;
 	std::vector<int> hitboxes;
 	if (!get_aimbot_settings(settings, hitboxes, weapon))
 		return;

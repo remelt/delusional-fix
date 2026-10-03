@@ -2,144 +2,200 @@
 #include "../../menu/config/config.hpp"
 #include "../../menu/menu.hpp"
 #include "../misc/misc.hpp"
-#include <imgui/imgui_internal.h>
 
-void draw_screen_effect(i_material* material) {
-	static auto fn = find_pattern("client.dll", "55 8B EC 83 E4 ? 83 EC ? 53 56 57 8D 44 24 ? 89 4C 24 ?");
-	int w, h;
-	interfaces::engine->get_screen_size(w, h);
-	__asm {
-		push h
-		push w
-		push 0
-		xor edx, edx
-		mov ecx, material
-		call fn
-		add esp, 12
+// https://github.com/clearlyst/hotwheels.vip/blob/5fab4b465c6106e9baafaac36005bd62a6880e7b/csgo-sdk/hacks/visuals/screen/screen.cpp#L198-L239
+void draw_screen_effect(int texture_index, int x, int y, int w, int h, bool dest_fullscreen = false, rect_t* actual_rect = { }) {
+	rect_t src_rect{ x, y, w, h };
+
+	static auto get_full_frame_frame_buffer_texture = [](int texture_index) {
+		static auto get_full_frame_frame_buffer_texture_fn =
+			reinterpret_cast<i_texture*(__thiscall*)(int)>(find_pattern("client.dll", "55 8B EC 81 EC ? ? ? ? 56 8B F1 83 3C"));
+
+		return get_full_frame_frame_buffer_texture_fn(texture_index);
+	};
+
+	i_material_render_context* render_context = interfaces::material_system->get_render_context();
+	i_texture* texture = get_full_frame_frame_buffer_texture(texture_index);
+	int src_width, src_height;
+	render_context->get_render_target_dimensions(&src_width, &src_height);
+	int dest_width = texture->get_actual_width();
+	int dest_height = texture->get_actual_height();
+
+	rect_t dest_rect = src_rect;
+	if (!dest_fullscreen && (src_width > dest_width || src_height > dest_height)) {
+		int scale_x = dest_width / src_width;
+		int scale_y = dest_height / src_height;
+		dest_rect.m_x = src_rect.m_x * scale_x;
+		dest_rect.m_y = src_rect.m_y * scale_y;
+		dest_rect.m_width = src_rect.m_width * scale_x;
+		dest_rect.m_height = src_rect.m_height * scale_y;
+		dest_rect.m_x = std::clamp(dest_rect.m_x, 0, dest_width);
+		dest_rect.m_y = std::clamp(dest_rect.m_y, 0, dest_height);
+		dest_rect.m_width = std::clamp(dest_rect.m_width, 0, dest_width - dest_rect.m_x);
+		dest_rect.m_height = std::clamp(dest_rect.m_height, 0, dest_height - dest_rect.m_y);
+	}
+
+	render_context->copy_render_target_to_texture_ex(texture, 0, &src_rect, dest_fullscreen ? NULL : &dest_rect);
+	render_context->set_frame_buffer_copy_texture(texture, texture_index);
+
+	if (actual_rect) {
+		actual_rect->m_x = dest_rect.m_x;
+		actual_rect->m_y = dest_rect.m_y;
+		actual_rect->m_width = dest_rect.m_width;
+		actual_rect->m_height = dest_rect.m_height;
 	}
 }
 
+// https://github.com/clearlyst/hotwheels.vip/blob/5fab4b465c6106e9baafaac36005bd62a6880e7b/csgo-sdk/hacks/visuals/screen/screen.cpp#L29-L196
 void features::visuals::motion_blur(view_setup_t* setup) {
-	if (!c::visuals::mbenabled)
+	if (!c::visuals::mbenabled || !setup)
 		return;
+
+	static convar* mat_res = interfaces::console->get_convar("mat_resolveFullFrameDepth");
+	if (mat_res->get_int() == 1)
+		mat_res->set_value(0);
 
 	static float motion_blur_values[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	if (setup) {
-		const float time_elapsed = interfaces::globals->realtime - history.last_time_update;
+	static float motion_blur_viewport_values[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-		const auto view_angles = setup->view;
+	const float time_elapsed = interfaces::globals->realtime - history.last_time_update;
 
-		float current_pitch = view_angles.x;
+	const auto view_angles = setup->view;
 
-		while (current_pitch > 180.0f)
-			current_pitch -= 360.0f;
-		while (current_pitch < -180.0f)
-			current_pitch += 360.0f;
+	float current_pitch = view_angles.x;
 
-		float current_yaw = view_angles.y;
+	while (current_pitch > 180.0f)
+		current_pitch -= 360.0f;
+	while (current_pitch < -180.0f)
+		current_pitch += 360.0f;
 
-		while (current_yaw > 180.0f)
-			current_yaw -= 360.0f;
-		while (current_yaw < -180.0f)
-			current_yaw += 360.0f;
+	float current_yaw = view_angles.y;
 
-		vec3_t current_side_vector;
-		vec3_t current_forward_vector;
-		vec3_t current_up_vector;
-		math::angle_vectors(setup->view, &current_forward_vector, &current_side_vector, &current_up_vector);
+	while (current_yaw > 180.0f)
+		current_yaw -= 360.0f;
+	while (current_yaw < -180.0f)
+		current_yaw += 360.0f;
 
-		vec3_t current_position = setup->origin;
-		vec3_t position_change = history.previous_pos - current_position;
+	vec3_t current_side_vector;
+	vec3_t current_forward_vector;
+	vec3_t current_up_vector;
+	math::angle_vectors(setup->view, &current_forward_vector, &current_side_vector, &current_up_vector);
 
-		if ((position_change.length() > 30.0f) && (time_elapsed >= 0.5f)) {
-			motion_blur_values[0] = 0.0f;
-			motion_blur_values[1] = 0.0f;
+	vec3_t current_position = setup->origin;
+	vec3_t position_change = history.previous_pos - current_position;
+
+	if ((position_change.length() > 30.0f) && (time_elapsed >= 0.5f)) {
+		motion_blur_values[0] = 0.0f;
+		motion_blur_values[1] = 0.0f;
+		motion_blur_values[2] = 0.0f;
+		motion_blur_values[3] = 0.0f;
+	}
+	else if (time_elapsed > (1.0f / 15.0f)) {
+		motion_blur_values[0] = 0.0f;
+		motion_blur_values[1] = 0.0f;
+		motion_blur_values[2] = 0.0f;
+		motion_blur_values[3] = 0.0f;
+	}
+	else if (position_change.length() > 50.0f) {
+		history.no_rotational_mb_until = interfaces::globals->realtime + 1.0f;
+	}
+	else {
+		const float horizontal_fov = setup->fov;
+		const float vertical_fov = (setup->aspect_ratio <= 0.0f) ? (setup->fov) : (setup->fov / setup->aspect_ratio);
+		const float viewdot_motion = current_forward_vector.dot_product(position_change);
+
+		if (c::visuals::mbforwardEnabled)
+			motion_blur_values[2] = viewdot_motion;
+
+		const float sidedot_motion = current_side_vector.dot_product(position_change);
+		float yawdiff_original = history.previous_yaw - current_yaw;
+		if (((history.previous_yaw - current_yaw > 180.0f) || (history.previous_yaw - current_yaw < -180.0f)) &&
+			((history.previous_yaw + current_yaw > -180.0f) && (history.previous_yaw + current_yaw < 180.0f)))
+			yawdiff_original = history.previous_yaw + current_yaw;
+
+		float yawdiff_adjusted = yawdiff_original + (sidedot_motion / 3.0f);
+
+		if (yawdiff_original < 0.0f)
+			yawdiff_adjusted = std::clamp(yawdiff_adjusted, yawdiff_original, 0.0f);
+		else
+			yawdiff_adjusted = std::clamp(yawdiff_adjusted, 0.0f, yawdiff_original);
+
+		const float undampened_yaw = yawdiff_adjusted / horizontal_fov;
+		motion_blur_values[0] = undampened_yaw * (1.0f - (fabsf(current_pitch) / 90.0f));
+
+		const float pitch_compensate_mask = 1.0f - ((1.0f - fabsf(current_forward_vector[2])) * (1.0f - fabsf(current_forward_vector[2])));
+		const float pitchdiff_original = history.previous_pitch - current_pitch;
+		float pitchdiff_adjusted = pitchdiff_original;
+
+		if (current_pitch > 0.0f)
+			pitchdiff_adjusted = pitchdiff_original - ((viewdot_motion / 2.0f) * pitch_compensate_mask);
+		else
+			pitchdiff_adjusted = pitchdiff_original + ((viewdot_motion / 2.0f) * pitch_compensate_mask);
+
+
+		if (pitchdiff_original < 0.0f)
+			pitchdiff_adjusted = std::clamp(pitchdiff_adjusted, pitchdiff_original, 0.0f);
+		else
+			pitchdiff_adjusted = std::clamp(pitchdiff_adjusted, 0.0f, pitchdiff_original);
+
+		motion_blur_values[1] = pitchdiff_adjusted / vertical_fov;
+		motion_blur_values[3] = undampened_yaw;
+		motion_blur_values[3] *= (fabs(current_pitch) / 90.0f) * (fabs(current_pitch) / 90.0f) * (fabs(current_pitch) / 90.0f);
+
+		if (time_elapsed > 0.0f)
+			motion_blur_values[2] /= time_elapsed * 30.0f;
+		else
 			motion_blur_values[2] = 0.0f;
-			motion_blur_values[3] = 0.0f;
-		}
-		else if (time_elapsed > (1.0f / 15.0f)) {
-			motion_blur_values[0] = 0.0f;
-			motion_blur_values[1] = 0.0f;
-			motion_blur_values[2] = 0.0f;
-			motion_blur_values[3] = 0.0f;
-		}
-		else if (position_change.length() > 50.0f) {
-			history.no_rotational_mb_until = interfaces::globals->realtime + 1.0f;
-		}
-		else {
-			const float horizontal_fov = setup->fov;
-			const float vertical_fov = (setup->aspect_ratio <= 0.0f) ? (setup->fov) : (setup->fov / setup->aspect_ratio);
-			const float viewdot_motion = current_forward_vector.dot_product(position_change);
 
-			if (c::visuals::mbforwardEnabled)
-				motion_blur_values[2] = viewdot_motion;
-
-			const float sidedot_motion = current_side_vector.dot_product(position_change);
-			float yawdiff_original = history.previous_yaw - current_yaw;
-			if (((history.previous_yaw - current_yaw > 180.0f) || (history.previous_yaw - current_yaw < -180.0f)) &&
-				((history.previous_yaw + current_yaw > -180.0f) && (history.previous_yaw + current_yaw < 180.0f)))
-				yawdiff_original = history.previous_yaw + current_yaw;
-
-			float yawdiff_adjusted = yawdiff_original + (sidedot_motion / 3.0f);
-
-			if (yawdiff_original < 0.0f)
-				yawdiff_adjusted = std::clamp(yawdiff_adjusted, yawdiff_original, 0.0f);
-			else
-				yawdiff_adjusted = std::clamp(yawdiff_adjusted, 0.0f, yawdiff_original);
-
-			const float undampened_yaw = yawdiff_adjusted / horizontal_fov;
-			motion_blur_values[0] = undampened_yaw * (1.0f - (fabsf(current_pitch) / 90.0f));
-
-			const float pitch_compensate_mask = 1.0f - ((1.0f - fabsf(current_forward_vector[2])) * (1.0f - fabsf(current_forward_vector[2])));
-			const float pitchdiff_original = history.previous_pitch - current_pitch;
-			float pitchdiff_adjusted = pitchdiff_original;
-
-			if (current_pitch > 0.0f)
-				pitchdiff_adjusted = pitchdiff_original - ((viewdot_motion / 2.0f) * pitch_compensate_mask);
-			else
-				pitchdiff_adjusted = pitchdiff_original + ((viewdot_motion / 2.0f) * pitch_compensate_mask);
-
-
-			if (pitchdiff_original < 0.0f)
-				pitchdiff_adjusted = std::clamp(pitchdiff_adjusted, pitchdiff_original, 0.0f);
-			else
-				pitchdiff_adjusted = std::clamp(pitchdiff_adjusted, 0.0f, pitchdiff_original);
-
-			motion_blur_values[1] = pitchdiff_adjusted / vertical_fov;
-			motion_blur_values[3] = undampened_yaw;
-			motion_blur_values[3] *= (fabs(current_pitch) / 90.0f) * (fabs(current_pitch) / 90.0f) * (fabs(current_pitch) / 90.0f);
-
-			if (time_elapsed > 0.0f)
-				motion_blur_values[2] /= time_elapsed * 30.0f;
-			else
-				motion_blur_values[2] = 0.0f;
-
-			motion_blur_values[2] = std::clamp((fabsf(motion_blur_values[2]) - c::visuals::mbfallingMin) / (c::visuals::mbfallingMax - c::visuals::mbfallingMin), 0.0f, 1.0f) * (motion_blur_values[2] >= 0.0f ? 1.0f : -1.0f);
-			motion_blur_values[2] /= 30.0f;
-			motion_blur_values[0] *= c::visuals::mbrotationIntensity * .15f * c::visuals::mbstrength;
-			motion_blur_values[1] *= c::visuals::mbrotationIntensity * .15f * c::visuals::mbstrength;
-			motion_blur_values[2] *= c::visuals::mbrotationIntensity * .15f * c::visuals::mbstrength;
-			motion_blur_values[3] *= c::visuals::mbfallingIntensity * .15f * c::visuals::mbstrength;
-		}
-
-		if (interfaces::globals->realtime < history.no_rotational_mb_until) {
-			motion_blur_values[0] = 0.0f;
-			motion_blur_values[1] = 0.0f;
-			motion_blur_values[3] = 0.0f;
-		}
-		else {
-			history.no_rotational_mb_until = 0.0f;
-		}
-		history.previous_pos = current_position;
-
-		history.previous_pitch = current_pitch;
-		history.previous_yaw = current_yaw;
-		history.last_time_update = interfaces::globals->realtime;
-		return;
+		motion_blur_values[2] = std::clamp((fabsf(motion_blur_values[2]) - c::visuals::mbfallingMin) / (c::visuals::mbfallingMax - c::visuals::mbfallingMin), 0.0f, 1.0f) * (motion_blur_values[2] >= 0.0f ? 1.0f : -1.0f);
+		motion_blur_values[2] /= 30.0f;
+		motion_blur_values[0] *= c::visuals::mbrotationIntensity * .15f * c::visuals::mbstrength;
+		motion_blur_values[1] *= c::visuals::mbrotationIntensity * .15f * c::visuals::mbstrength;
+		motion_blur_values[2] *= c::visuals::mbrotationIntensity * .15f * c::visuals::mbstrength;
+		motion_blur_values[3] *= c::visuals::mbfallingIntensity * .15f * c::visuals::mbstrength;
 	}
 
+	if (interfaces::globals->realtime < history.no_rotational_mb_until) {
+		motion_blur_values[0] = 0.0f;
+		motion_blur_values[1] = 0.0f;
+		motion_blur_values[3] = 0.0f;
+	}
+	else {
+		history.no_rotational_mb_until = 0.0f;
+	}
+	history.previous_pos = current_position;
+
+	history.previous_pitch = current_pitch;
+	history.previous_yaw = current_yaw;
+	history.last_time_update = interfaces::globals->realtime;
+
+	i_material_render_context* render_context = interfaces::material_system->get_render_context();
+	i_texture* full_frame = interfaces::material_system->find_texture("_rt_FullFrameFB", TEXTURE_GROUP_RENDER_TARGET);
+
+	const int src_width = full_frame->get_actual_width();
+	const int src_height = full_frame->get_actual_height();
+
+	int offset{ };
+
+	offset = (setup->x > 0) ? 1 : 0;
+	motion_blur_viewport_values[0] = float(setup->x + offset) / (src_width - 1);
+
+	offset = (setup->x < (src_width - 1)) ? -1 : 0;
+	motion_blur_viewport_values[3] = float(setup->x + setup->width + offset) / (src_width - 1);
+
+	offset = (setup->y > 0) ? 1 : 0;
+	motion_blur_viewport_values[1] = float(setup->y + offset) / (src_height - 1);
+
+	offset = (setup->y < (src_height - 1)) ? -1 : 0;
+	motion_blur_viewport_values[2] = float(setup->y + setup->height + offset) / (src_height - 1);
+
+	int vport_width, vport_height, dummy;
+	render_context->get_view_port(&dummy, &dummy, &vport_width, &vport_height);
+
+	draw_screen_effect(0, int(setup->x), int(setup->y), int(setup->width), int(setup->height), false);
+
 	i_material* material = interfaces::material_system->find_material("dev/motion_blur", "RenderTargets", false);
-	if (material->is_error_material())
+	if (!material || material->is_error_material())
 		return;
 
 	const auto motion_blur_internal = material->find_var("$MotionBlurInternal", nullptr, false);
@@ -151,15 +207,14 @@ void features::visuals::motion_blur(view_setup_t* setup) {
 
 	const auto motion_blur_view_port_internal = material->find_var("$MotionBlurViewportInternal", nullptr, false);
 
-	motion_blur_view_port_internal->set_vec_component_value(0.0f, 0);
-	motion_blur_view_port_internal->set_vec_component_value(0.0f, 1);
-	motion_blur_view_port_internal->set_vec_component_value(1.0f, 2);
-	motion_blur_view_port_internal->set_vec_component_value(1.0f, 3);
+	motion_blur_view_port_internal->set_vec_component_value(motion_blur_viewport_values[0], 0);
+	motion_blur_view_port_internal->set_vec_component_value(motion_blur_viewport_values[1], 1);
+	motion_blur_view_port_internal->set_vec_component_value(motion_blur_viewport_values[2], 2);
+	motion_blur_view_port_internal->set_vec_component_value(motion_blur_viewport_values[3], 3);
 
-	//static convar* mat_res = interfaces::console->get_convar("mat_resolveFullFrameDepth");
-	//mat_res->set_value(0);
-
-	draw_screen_effect(material);
+	if (src_width > 0 && src_height > 0) {
+		render_context->draw_screen_space_rectangle(material, 0, 0, vport_width, vport_height, setup->x, setup->y, setup->x + setup->width - 1, setup->y + setup->height - 1, src_width, src_height);
+	}
 }
 
 void features::visuals::apply_zoom() {
@@ -536,14 +591,16 @@ void features::visuals::render_media_player()
 	ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), title.c_str());
 
 	if (is_thumb && c::misc::progressbar_enable) {
-		ImGui::PushItemWidth(108);
 		ImGui::SetCursorPos({ sz.x - imageWidth - padding - 78, 40 });
 
-		ImGui::PushStyleColor(ImGuiCol_MPlayer_ProgressbarBg, ImVec4(0.05f, 0.05f, 0.05f, 0.03f));
-		ImGui::PushStyleColor(ImGuiCol_MPlayer_Progressbar, ImVec4(1.f, 1.f, 1.f, 0.85f));
-		ImGui::ProgressBar(smoothProgress, ImVec2(0.0f, 2.0f));
+		//ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.05f, 0.05f, 0.05f, 0.03f)); // ProgressBar Bg
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1.f, 1.f, 1.f, 0.85f)); // ProgressBar Accent
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.f);
+
+		ImGui::ProgressBar(smoothProgress, ImVec2(108.f, 2.0f));
+
 		ImGui::PopStyleColor();
-		ImGui::PopItemWidth();
+		ImGui::PopStyleVar();
 	}
 	ImGui::Spacing();
 
@@ -634,7 +691,7 @@ void features::visuals::flashalpha() {
 		return;
 
 	if (c::visuals::change_flashalpha) {
-		if (c::visuals::flashalpha <= 0)
+		if (c::visuals::flashalpha < 0)
 			return;
 
 		g::local->flash_alpha() = c::visuals::flashalpha;
@@ -644,11 +701,11 @@ void features::visuals::flashalpha() {
 void features::visuals::nosmoke() {
 	static auto linegoesthrusmoke = find_pattern("client.dll", "A3 ? ? ? ? 57 8B CB");
 	static bool set = true;
-	std::vector<const char*> vistasmoke_wireframe =  {
+	const static std::vector<const char*> vistasmoke_wireframe =  {
 		"particle/vistasmokev1/vistasmokev1_smokegrenade",
 	};
 
-	std::vector<const char*> vistasmoke_nodraw = {
+	const static std::vector<const char*> vistasmoke_nodraw = {
 		"particle/vistasmokev1/vistasmokev1_fire",
 		"particle/vistasmokev1/vistasmokev1_emods",
 		"particle/vistasmokev1/vistasmokev1_emods_impactdust",

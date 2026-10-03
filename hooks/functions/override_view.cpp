@@ -7,15 +7,18 @@ void __fastcall sdk::hooks::override_view::override_view( void* _this, void* _ed
 	if (c::misc::enable_fov && g::local && g::local->is_alive( ) && !g::local->is_scoped())
 		setup->fov += c::misc::field_of_view;
 	
-	features::misc::thirdperson();
 	features::misc::view_model();
 	features::visuals::freecam(setup);
-	features::visuals::motion_blur(setup);
 
 	ofunc( interfaces::client_mode, _this, setup );
 }
 
-bool __stdcall sdk::hooks::is_depth_of_field_enabled::is_depth_of_field_enabled() {
-	features::visuals::motion_blur(nullptr);
-	return false;
+void __fastcall sdk::hooks::draw_view_models::draw_view_models(void* ecx, void* edx, view_setup_t& setup, bool draw_view_model, bool draw_scope_lens_mask) {
+	
+	features::visuals::motion_blur(&setup);
+
+	if (c::visuals::apply_zoom && g::local && g::local->fov() < 45 && g::local->fov_start() < 45)
+		draw_view_model = false;
+
+	ofunc(ecx, edx, setup, draw_view_model, draw_scope_lens_mask);
 }

@@ -112,12 +112,6 @@ namespace sdk {
 			long __stdcall reset( IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pp );
 		}
 
-		namespace endscene {
-			using fn = long(__stdcall*)(IDirect3DDevice9*);
-			inline fn ofunc;
-			long __stdcall endscene(IDirect3DDevice9* device);
-		}
-
 		namespace lock_cursor {
 			using fn = void( __fastcall* )( i_surface* );
 			inline fn ofunc;
@@ -154,10 +148,10 @@ namespace sdk {
 			void __fastcall set_visuals_data(void* ecx, void* edx, const char* shader_name);
 		}
 
-		namespace is_connected {
-			using fn = bool(__thiscall*)(iv_engine_client*);
+		namespace draw_view_models {
+			using fn = void(__fastcall*)(void*, void*, view_setup_t&, bool, bool);
 			inline fn ofunc;
-			bool __stdcall is_connected();
+			void __fastcall draw_view_models(void* ecx, void* edx, view_setup_t& setup, bool draw_view_model, bool draw_scope_lens_mask);
 		}
 
 		namespace supports_full_depth {
@@ -218,12 +212,6 @@ namespace sdk {
 			using fn = void(__thiscall*)(i_panel*, unsigned int, bool, bool);
 			inline fn ofunc;
 			void __stdcall paint_traverse(unsigned int panel, bool force_repaint, bool allow_force);
-		}
-
-		namespace draw_set_color {
-			using fn = void(__fastcall*)(void*, void*, int, int, int, int);
-			inline fn ofunc;
-			void __fastcall draw_set_color(void* ecx, void* edx, int r, int g, int b, int a);
 		}
 
 		namespace send_datagram {

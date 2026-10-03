@@ -155,6 +155,10 @@ void prediction::end() {
 	*m_prediction_player = nullptr;
 
 	interfaces::game_movement->reset();
+
+	if (!interfaces::prediction->engine_paused && interfaces::globals->frame_time > 0.f) {
+		++g::local->get_tick_base();
+	}
 }
 
 int prediction::get_corrected_tick_base(c_usercmd* cmd)

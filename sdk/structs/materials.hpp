@@ -68,10 +68,10 @@ class i_material_var;
 struct studiohwdata_t;
 struct color_mesh_info_t;
 struct draw_model_info_t;
+struct material_render_target_depth_t;
 class i_client_renderable;
 class data_cache_handle_t;
 class i_mat_render_context;
-class i_texture;
 struct material_lighting_state_t;
 typedef int vertex_format_t;
 typedef void* light_cache_handle_t;
@@ -79,6 +79,62 @@ typedef void* studio_decal_handle_t;
 typedef int material_property_types_t;
 typedef unsigned short model_instance_handle_t;
 using material_handle_t = unsigned short;
+
+struct rect_t {
+	int m_x{ }, m_y{ };
+	int m_width{ }, m_height{ };
+};
+
+class i_texture
+{
+public:
+	virtual const char* get_name(void) const = 0;
+	virtual int get_mapping_width() const = 0;
+	virtual int get_mapping_height() const = 0;
+	virtual int get_actual_width() const = 0;
+	virtual int get_actual_height() const = 0;
+	virtual int get_num_animation_frames() const = 0;
+	virtual bool is_translucent() const = 0;
+	virtual bool is_mipmapped() const = 0;
+	virtual void get_low_res_color_sample(float s, float t, float* color) const = 0;
+	virtual void* get_resource_data(uint32_t data_type, size_t* num_bytes) const = 0;
+	virtual void increment_reference_count(void) = 0;
+	virtual void decrement_reference_count(void) = 0;
+	inline void add_ref()
+	{
+		increment_reference_count();
+	}
+	inline void release()
+	{
+		decrement_reference_count();
+	}
+	virtual void set_texture_regenerator(void* texture_regen, bool release_existing = true) = 0;
+	virtual void download(rect_t* rect = 0, int additional_creation_flags = 0) = 0;
+	virtual int get_approximate_vid_bytes(void) const = 0;
+	virtual bool is_error() const = 0;
+	virtual bool is_volume_texture() const = 0;
+	virtual int get_mapping_depth() const = 0;
+	virtual int get_actual_depth() const = 0;
+	virtual void* get_image_format() const = 0;
+	virtual bool is_render_target() const = 0;
+	virtual bool is_cube_map() const = 0;
+	virtual bool is_normal_map() const = 0;
+	virtual bool is_procedural() const = 0;
+	virtual bool is_default_pool() const = 0;
+	virtual void delete_if_unreferenced() = 0;
+	virtual void swap_contents(i_texture* other) = 0;
+	virtual unsigned int get_flags(void) const = 0;
+	virtual void force_lod_override(int num_lods_override_up_or_down) = 0;
+	virtual void force_exclude_override(int exclude_override) = 0;
+	virtual void add_downsized_sub_target(const char* name, int downsize_pow2, material_render_target_depth_t depth) = 0;
+	virtual void set_actuve_sub_target(const char* name) = 0;
+	virtual int get_reference_count() const = 0;
+	virtual bool is_temp_excluded() const = 0;
+	virtual bool can_be_temp_excluded() const = 0;
+	virtual bool finish_async_download(void* context, void* data, int num_read_bytes, bool abort, float max_time_ms) = 0;
+	virtual bool is_force_excluded() const = 0;
+	virtual bool clear_force_exclusion() = 0;
+};
 
 class i_material_var {
 public:

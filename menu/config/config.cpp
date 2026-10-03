@@ -1,12 +1,11 @@
 #include "config.hpp"
-#include <urlmon.h>    
+
 #include <filesystem>
 #include <fstream>
+
 #include "../menu.hpp"
 #include "../../utils/xor.hpp"
 #include "../../features/movement/movement.hpp"
-#include "../../features/aimbot/aimbot.hpp"
-#include "../../features/skins/skins.hpp"
 
 static std::string path = "C:/delusional/config/";
 
@@ -30,10 +29,6 @@ static void write_value(nlohmann::json& dest, const T& src) {
 }
 
 namespace c {
-	aimbot_c* aimbob = &::aimbot; // meh
-	static const char* group_names[8] = { "pistol", "heavy pistol", "shotgun", "heavy", "smg", "rifle", "sniper", "auto sniper" };
-	static const char* skinchanger_group_names[] = { "usp-s", "p2000", "glock", "p250", "five-seven", "tec-10", "cz-75", "duals", "deagle", "revolver", "famas", "galil", "m4a4", "m4a1-s", "ak-47", "sg-553", "aug", "ssg-08", "awp", "scar", "g3sg1", "sawed-off", "m-249", "negev", "mag-7", "xm-1014", "nova", "pp-bizon", "mp5-sd", "mp-7", "mp-9", "mac-10", "p-90", "ump-45" };
-
 	void create_directory() {
 		directory = "C:/delusional";
 		if (!std::filesystem::exists(directory))
@@ -114,7 +109,7 @@ namespace c {
 		write_value(json[xs("skins")][xs("weapon_endable")], skins::weapon_endable);
 
 		for (int i = 0; i < IM_ARRAYSIZE(skinchanger_group_names); i++) {
-			auto settings = &features::skins::weapon_skin[i];
+			auto settings = &c::skins::weapon_skin[i];
 
 			write_value(json[xs("skins")][xs(skinchanger_group_names[i])][xs("wear")], settings->wear);
 			write_value(json[xs("skins")][xs(skinchanger_group_names[i])][xs("vector_paint_kit")], settings->vector_paint_kit);
@@ -162,9 +157,6 @@ namespace c {
 		write_value(json[xs("movement")][xs("mini_jump_key")], movement::mini_jump_key);
 		write_value(json[xs("movement")][xs("jump_bug")], movement::jump_bug);
 		write_value(json[xs("movement")][xs("jump_bug_key")], movement::jump_bug_key);
-		write_value(json[xs("movement")][xs("crouch_bug")], movement::crouch_bug);
-		write_value(json[xs("movement")][xs("crouch_bug_key")], movement::crouch_bug_key);
-		write_value(json[xs("movement")][xs("crouch_bug_key_s")], movement::crouch_bug_key_s);
 		write_value(json[xs("movement")][xs("edge_bug_priority")], movement::edge_bug_priority);
 		write_value(json[xs("movement")][xs("edge_bug")], movement::edge_bug);
 		write_value(json[xs("movement")][xs("visualize_edge_bug")], movement::visualize_edge_bug);
@@ -292,7 +284,6 @@ namespace c {
 		write_value(json[xs("movement")][xs("key_strokes_position")], movement::key_strokes_position);
 		write_value(json[xs("misc")][xs("watermark")], misc::watermark);
 		write_value(json[xs("misc")][xs("unload_shit")], misc::unload_shit);
-		write_value(json[xs("misc")][xs("unlock_inventory")], misc::unlock_inventory);
 		write_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 		write_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
 		write_value(json[xs("misc")][xs("player_type")], misc::player_type);
@@ -352,12 +343,12 @@ namespace c {
 		write_value(json[xs("misc")][xs("undokey")], misc::undokey);
 		write_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 		write_value(json[xs("misc")][xs("mouse_fix")], misc::mouse_fix);
+		read_value(json[xs("misc")][xs("camera_fix")], misc::camera_fix);
 		write_value(json[xs("movement")][xs("movement_fix")], movement::movement_fix);
 		write_value(json[xs("movement")][xs("fix_type")], movement::fix_type);
 		write_value(json[xs("misc")][xs("jumpstats")], misc::jumpstats);
 		write_value(json[xs("misc")][xs("jumpstats_show_clr_fail")], misc::jumpstats_show_clr_fail);
 		write_value(json[xs("misc")][xs("jumpstats_show_fail")], misc::jumpstats_show_fail);
-		write_value(json[xs("misc")][xs("misc_reveal_ranks")], misc::misc_reveal_ranks);
 		write_value(json[xs("misc")][xs("misc_hitmarker_sound_type")], misc::misc_hitmarker_sound_type);
 		write_value(json[xs("misc")][xs("freecam")], misc::freecam);
 		write_value(json[xs("misc")][xs("freecam_key")], misc::freecam_key);
@@ -516,7 +507,7 @@ namespace c {
 		write_value(json[xs("aimbot")][xs("non_sticky_aimbot")], aimbot::non_sticky_aimbot);
 
 		for (int i = 0; i < IM_ARRAYSIZE(group_names); i++) {
-			auto settings = &aimbob->settings[i];
+			auto settings = &c::aimbot::settings[i];
 
 			write_value(json[xs("aimbot")][xs(group_names[i])][xs("fov")], settings->fov);
 			write_value(json[xs("aimbot")][xs(group_names[i])][xs("silent")], settings->silent);
@@ -596,7 +587,6 @@ namespace c {
 		write_value(json[xs("visuals")][xs("flashalpha")], visuals::flashalpha);
 		write_value(json[xs("visuals")][xs("change_flashalpha")], visuals::change_flashalpha);
 		write_value(json[xs("visuals")][xs("nosmoke")], visuals::nosmoke);
-		write_value(json[xs("misc")][xs("autoaccept")], misc::autoaccept);
 		write_value(json[xs("visuals")][xs("trails_clr1[0]")], visuals::trails_clr1[0]);
 		write_value(json[xs("visuals")][xs("trails_clr1[1]")], visuals::trails_clr1[1]);
 		write_value(json[xs("visuals")][xs("trails_clr1[2]")], visuals::trails_clr1[2]);
@@ -614,7 +604,6 @@ namespace c {
 		write_value(json[xs("movement")][xs("indicators_position")], movement::indicators_position);
 		write_value(json[xs("movement")][xs("indicators_gap")], movement::indicators_gap);
 		write_value(json[xs("misc")][xs("menu_key")], misc::menu_key);
-		write_value(json[xs("misc")][xs("vote_revealer")], misc::vote_revealer);
 		write_value(json[xs("misc")][xs("misc_hit_info[0]")], misc::misc_hit_info[0]);
 		write_value(json[xs("misc")][xs("misc_hit_info[1]")], misc::misc_hit_info[1]);
 		write_value(json[xs("visuals")][xs("visuals_flags[0]")], visuals::visuals_flags[0]);
@@ -921,7 +910,7 @@ namespace c {
 			read_value(json[xs("skins")][xs("weapon_endable")], skins::weapon_endable);
 
 			for (int i = 0; i < IM_ARRAYSIZE(skinchanger_group_names); i++) {
-				auto settings = &features::skins::weapon_skin[i];
+				auto settings = &c::skins::weapon_skin[i];
 
 				read_value(json[xs("skins")][xs(skinchanger_group_names[i])][xs("wear")], settings->wear);
 				read_value(json[xs("skins")][xs(skinchanger_group_names[i])][xs("vector_paint_kit")], settings->vector_paint_kit);
@@ -969,9 +958,6 @@ namespace c {
 			read_value(json[xs("movement")][xs("mini_jump_key")], movement::mini_jump_key);
 			read_value(json[xs("movement")][xs("jump_bug")], movement::jump_bug);
 			read_value(json[xs("movement")][xs("jump_bug_key")], movement::jump_bug_key);
-			read_value(json[xs("movement")][xs("crouch_bug")], movement::crouch_bug);
-			read_value(json[xs("movement")][xs("crouch_bug_key")], movement::crouch_bug_key);
-			read_value(json[xs("movement")][xs("crouch_bug_key_s")], movement::crouch_bug_key_s);
 			read_value(json[xs("movement")][xs("edge_bug_priority")], movement::edge_bug_priority);
 			read_value(json[xs("movement")][xs("edge_bug")], movement::edge_bug);
 			read_value(json[xs("movement")][xs("visualize_edge_bug")], movement::visualize_edge_bug);
@@ -1102,7 +1088,6 @@ namespace c {
 			read_value(json[xs("movement")][xs("indicators_gap")], movement::indicators_gap);
 			read_value(json[xs("misc")][xs("watermark")], misc::watermark);
 			read_value(json[xs("misc")][xs("unload_shit")], misc::unload_shit);
-			read_value(json[xs("misc")][xs("unlock_inventory")], misc::unlock_inventory);
 			read_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 			read_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
 			read_value(json[xs("misc")][xs("player_type")], misc::player_type);
@@ -1162,12 +1147,12 @@ namespace c {
 			read_value(json[xs("misc")][xs("undokey")], misc::undokey);
 			read_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 			read_value(json[xs("misc")][xs("mouse_fix")], misc::mouse_fix);
+			read_value(json[xs("misc")][xs("camera_fix")], misc::camera_fix);
 			read_value(json[xs("movement")][xs("movement_fix")], movement::movement_fix);
 			read_value(json[xs("movement")][xs("fix_type")], movement::fix_type);
 			read_value(json[xs("misc")][xs("jumpstats")], misc::jumpstats);
 			read_value(json[xs("misc")][xs("jumpstats_show_clr_fail")], misc::jumpstats_show_clr_fail);
 			read_value(json[xs("misc")][xs("jumpstats_show_fail")], misc::jumpstats_show_fail);
-			read_value(json[xs("misc")][xs("misc_reveal_ranks")], misc::misc_reveal_ranks);
 			read_value(json[xs("misc")][xs("misc_hitmarker_sound_type")], misc::misc_hitmarker_sound_type);
 			read_value(json[xs("misc")][xs("freecam")], misc::freecam);
 			read_value(json[xs("misc")][xs("freecam_key")], misc::freecam_key);
@@ -1328,7 +1313,7 @@ namespace c {
 			read_value(json[xs("aimbot")][xs("non_sticky_aimbot")], aimbot::non_sticky_aimbot);
 
 			for (int i = 0; i < IM_ARRAYSIZE(group_names); i++) {
-				auto settings = &aimbob->settings[i];
+				auto settings = &c::aimbot::settings[i];
 
 				read_value(json[xs("aimbot")][xs(group_names[i])][xs("fov")], settings->fov);
 				read_value(json[xs("aimbot")][xs(group_names[i])][xs("silent")], settings->silent);
@@ -1408,7 +1393,6 @@ namespace c {
 			read_value(json[xs("visuals")][xs("flashalpha")], visuals::flashalpha);
 			read_value(json[xs("visuals")][xs("change_flashalpha")], visuals::change_flashalpha);
 			read_value(json[xs("visuals")][xs("nosmoke")], visuals::nosmoke);
-			read_value(json[xs("misc")][xs("autoaccept")], misc::autoaccept);
 			read_value(json[xs("visuals")][xs("trails_clr1[0]")], visuals::trails_clr1[0]);
 			read_value(json[xs("visuals")][xs("trails_clr1[1]")], visuals::trails_clr1[1]);
 			read_value(json[xs("visuals")][xs("trails_clr1[2]")], visuals::trails_clr1[2]);
@@ -1424,7 +1408,6 @@ namespace c {
 			read_value(json[xs("visuals")][xs("world_color[3]")], visuals::world_color[3]);
 			read_value(json[xs("visuals")][xs("trails")], visuals::trails);
 			read_value(json[xs("misc")][xs("menu_key")], misc::menu_key);
-			read_value(json[xs("misc")][xs("vote_revealer")], misc::vote_revealer);
 			read_value(json[xs("misc")][xs("misc_hit_info[0]")], misc::misc_hit_info[0]);
 			read_value(json[xs("misc")][xs("misc_hit_info[1]")], misc::misc_hit_info[1]);
 		    read_value(json[xs("visuals")][xs("visuals_flags[0]")], visuals::visuals_flags[0]);
@@ -1720,7 +1703,7 @@ namespace c {
 			read_value(json[xs("aimbot")][xs("non_sticky_aimbot")], aimbot::non_sticky_aimbot);
 
 			for (int i = 0; i < IM_ARRAYSIZE(group_names); i++) {
-				auto settings = &aimbob->settings[i];
+				auto settings = &c::aimbot::settings[i];
 
 				read_value(json[xs("aimbot")][xs(group_names[i])][xs("fov")], settings->fov);
 				read_value(json[xs("aimbot")][xs(group_names[i])][xs("silent")], settings->silent);
@@ -1779,9 +1762,6 @@ namespace c {
 			read_value(json[xs("movement")][xs("mini_jump_key")], movement::mini_jump_key);
 			read_value(json[xs("movement")][xs("jump_bug")], movement::jump_bug);
 			read_value(json[xs("movement")][xs("jump_bug_key")], movement::jump_bug_key);
-			read_value(json[xs("movement")][xs("crouch_bug")], movement::crouch_bug);
-			read_value(json[xs("movement")][xs("crouch_bug_key")], movement::crouch_bug_key);
-			read_value(json[xs("movement")][xs("crouch_bug_key_s")], movement::crouch_bug_key_s);
 			read_value(json[xs("movement")][xs("edge_bug_priority")], movement::edge_bug_priority);
 			read_value(json[xs("movement")][xs("edge_bug")], movement::edge_bug);
 			read_value(json[xs("movement")][xs("visualize_edge_bug")], movement::visualize_edge_bug);
@@ -2332,7 +2312,7 @@ namespace c {
 			read_value(json[xs("skins")][xs("weapon_endable")], skins::weapon_endable);
 
 			for (int i = 0; i < IM_ARRAYSIZE(skinchanger_group_names); i++) {
-				auto settings = &features::skins::weapon_skin[i];
+				auto settings = &c::skins::weapon_skin[i];
 
 				read_value(json[xs("skins")][xs(skinchanger_group_names[i])][xs("wear")], settings->wear);
 				read_value(json[xs("skins")][xs(skinchanger_group_names[i])][xs("vector_paint_kit")], settings->vector_paint_kit);
@@ -2363,7 +2343,6 @@ namespace c {
 
 			read_value(json[xs("misc")][xs("watermark")], misc::watermark);
 			read_value(json[xs("misc")][xs("unload_shit")], misc::unload_shit);
-			read_value(json[xs("misc")][xs("unlock_inventory")], misc::unlock_inventory);
 			read_value(json[xs("misc")][xs("show_spotify_currently_playing")], misc::show_spotify_currently_playing);
 			read_value(json[xs("misc")][xs("progressbar_enable")], misc::progressbar_enable);
 			read_value(json[xs("misc")][xs("player_type")], misc::player_type);
@@ -2423,10 +2402,10 @@ namespace c {
 			read_value(json[xs("misc")][xs("undokey")], misc::undokey);
 			read_value(json[xs("misc")][xs("discord_rpc")], misc::discord_rpc);
 			read_value(json[xs("misc")][xs("mouse_fix")], misc::mouse_fix);
+			read_value(json[xs("misc")][xs("camera_fix")], misc::camera_fix);
 			read_value(json[xs("misc")][xs("jumpstats")], misc::jumpstats);
 			read_value(json[xs("misc")][xs("jumpstats_show_clr_fail")], misc::jumpstats_show_clr_fail);
 			read_value(json[xs("misc")][xs("jumpstats_show_fail")], misc::jumpstats_show_fail);
-			read_value(json[xs("misc")][xs("misc_reveal_ranks")], misc::misc_reveal_ranks);
 			read_value(json[xs("misc")][xs("misc_hitmarker_sound_type")], misc::misc_hitmarker_sound_type);
 			read_value(json[xs("misc")][xs("freecam")], misc::freecam);
 			read_value(json[xs("misc")][xs("freecam_key")], misc::freecam_key);
@@ -2447,9 +2426,7 @@ namespace c {
 			read_value(json[xs("misc")][xs("nadepred_clr[0]")], misc::nadepred_clr[0]);
 			read_value(json[xs("misc")][xs("nadepred_clr[1]")], misc::nadepred_clr[1]);
 			read_value(json[xs("misc")][xs("nadepred_clr[2]")], misc::nadepred_clr[2]);
-			read_value(json[xs("misc")][xs("autoaccept")], misc::autoaccept);
 			read_value(json[xs("misc")][xs("menu_key")], misc::menu_key);
-			read_value(json[xs("misc")][xs("vote_revealer")], misc::vote_revealer);
 			read_value(json[xs("misc")][xs("misc_hit_info[0]")], misc::misc_hit_info[0]);
 			read_value(json[xs("misc")][xs("misc_hit_info[1]")], misc::misc_hit_info[1]);
 
